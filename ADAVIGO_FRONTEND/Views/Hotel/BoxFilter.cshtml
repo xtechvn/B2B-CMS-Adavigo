@@ -1,0 +1,226 @@
+﻿@{
+    Layout = null;
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model HotelSearchParamModel
+@{
+    var ArrMemberOfRoom = new List<string>();
+    int count_room = 0, room_total = 0, adult_total = 0, child_total = 0, infant_total = 0;
+    if (Model.rooms != null && Model.rooms.Any())
+    {
+        room_total = Model.rooms.Count();
+        adult_total = Model.rooms.Sum(s => s.number_adult);
+        child_total = Model.rooms.Sum(s => s.number_child);
+        infant_total = Model.rooms.Sum(s => s.number_infant);
+
+        if (room_total > 0) ArrMemberOfRoom.Add(room_total + " Phòng");
+        if (adult_total > 0) ArrMemberOfRoom.Add(adult_total + " Người lớn");
+        if (child_total > 0) ArrMemberOfRoom.Add(child_total + " Trẻ em");
+        if (infant_total > 0) ArrMemberOfRoom.Add(infant_total + " Em bé");
+    }
+    var strMemberOfRoom = string.Join(", ", ArrMemberOfRoom);
+}
+<div class="tab-content">
+    <div class="flex-row building-grid mb8">
+        <div class="address-w flex">
+            <div class="item form-search">
+                <a class="wrap">
+                    <div class="flex icon">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#address"></use>
+                        </svg>
+                        <span>Điểm đến</span>
+                    </div>
+                    <input type="hidden" id="hotel_quick_search" value="@Model.quickSearch" />
+                    <input type="text" class="form-control input-search" id="input__suggest-hotel"
+                           placeholder="Thành phố, khách sạn, điểm đến" value="@Model.hotelName" autocomplete="off" />
+                    <input type="hidden" id="input__search-hotel-id" value="@Model.hotelID" />
+                    <input type="hidden" id="input__search-hotel-type" value="@Model.productType" />
+                </a>
+                <div class="list-address content-search" id="block__suggest-hotel">
+                    <div class="scrollbar-height">
+                        <!--holder for input hotel suggestion-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="date-w flex">
+            <div class="item">
+                <a class="wrap" data-toggle="collapse" href="#">
+                    <div class="flex icon">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#date"></use>
+                        </svg>
+                        <span>Nhận phòng</span>
+                    </div>
+                    <div class="text">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#date"></use>
+                        </svg>
+                        <input class="datepicker-input form-control date-range-fromdate" type="text" value="@Model.arrivalDate" autocomplete="off" />
+                    </div>
+                </a>
+            </div>
+            <div class="note">
+                <a class="day_count">1</a>
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#night2"></use>
+                </svg>
+            </div>
+            <div class="item">
+                <a class="wrap" data-toggle="collapse" href="#">
+                    <div class="flex icon">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#date"></use>
+                        </svg>
+                        <span>Trả phòng</span>
+                    </div>
+                    <div class="text">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#date"></use>
+                        </svg>
+                        <input class="form-control datepicker-input date-range-todate" type="text" value="@Model.departureDate" autocomplete="off" />
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="guest-w flex">
+            <div class="item">
+                <a class="wrap" data-toggle="collapse" href="#collapseGuest">
+                    <div class="flex icon">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#group"></use>
+                        </svg>
+                        <span>Số khách, phòng</span>
+                    </div>
+                    <div class="text" id="text__search_room">@strMemberOfRoom</div>
+                </a>
+                <div class="info-passenger collapse" id="collapseGuest">
+                    <div class="flex space-between align-center line-bottom mb8 pb8">
+                        <div class="bold txt_16">Nhập Phòng</div>
+                        <div class="sl_giohang sl_giohang_room">
+                            <div class="input-group-prepend">
+                                <button class="giam_sl minus-btn">-</button>
+                            </div>
+                            <input type="number" class="qty_input" value="@Model.rooms.Count()" min="1" max="9" disabled>
+                            <div class="input-group-prepend">
+                                <button class="tang_sl plus-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scrollbar-height" id="block_room_search_content" style="overflow-x: hidden ">
+                        @foreach (var room in Model.rooms)
+                        {
+                            count_room++;
+                            <div class="line-bottom mb8 pb8" data-room="@count_room">
+                                <div class="bold mb5">Phòng @count_room</div>
+                                <div class="row">
+                                    <div class="col-4 text-center adult">
+                                        <div class="sl_giohang">
+                                            <div class="input-group-prepend">
+                                                <button class="giam_sl minus-btn">-</button>
+                                            </div>
+                                            <input type="text" class="qty_input" value="@room.number_adult" min="0" disabled>
+                                            <div class="input-group-prepend">
+                                                <button class="tang_sl plus-btn">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="color-gray txt_13">Người lớn</div>
+                                    </div>
+                                    <div class="col-4 text-center baby">
+                                        <div class="sl_giohang">
+                                            <div class="input-group-prepend">
+                                                <button class="giam_sl minus-btn">-</button>
+                                            </div>
+                                            <input type="text" class="qty_input" value="@room.number_child" min="0" disabled>
+                                            <div class="input-group-prepend">
+                                                <button class="tang_sl plus-btn">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="color-gray txt_13">Trẻ em <br>(4-12 tuổi)</div>
+                                    </div>
+                                    <div class="col-4 text-center infant">
+                                        <div class="sl_giohang">
+                                            <div class="input-group-prepend">
+                                                <button class="giam_sl minus-btn">-</button>
+                                            </div>
+                                            <input type="text" class="qty_input" value="@room.number_infant" min="0" disabled>
+                                            <div class="input-group-prepend">
+                                                <button class="tang_sl plus-btn">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="color-gray txt_13">Em bé <br>(0-4 tuổi)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <button type="button" title="Tìm kiếm" class="btn-search btn-default btn__filter_hotel item_vin_filter" style=" height: 100%; ">
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#search"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="fillter-grid mb16 mt16 item_normal_filter" style="display:none;">
+        <div class="row">
+            <div class="col-xl-3 col-sm-6">
+                <div class="mb8">Khoảng giá</div>
+                <div class="form-group mb16">
+                    <select class="select2" name="" style="width: 100%;">
+                        <option value="">Chọn</option>
+                        <option value="">10 triệu</option>
+                        <option value="">20 triệu</option>
+                        <option value="">30 triệu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="mb8">Điều kiện hoàn hủy</div>
+                <div class="form-group mb16">
+                    <select class="select2" name="" style="width: 100%;">
+                        <option value="">Chọn</option>
+                        <option value="">10 triệu</option>
+                        <option value="">20 triệu</option>
+                        <option value="">30 triệu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="mb8">Loại cơ sở lưu trú</div>
+                <div class="form-group mb16">
+                    <select class="select2" name="" style="width: 100%;">
+                        <option value="">Chọn</option>
+                        <option value="">10 triệu</option>
+                        <option value="">20 triệu</option>
+                        <option value="">30 triệu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="mb8">Quyền lợi đi kèm</div>
+                <div class="form-group mb16">
+                    <select class="select2" name="" style="width: 100%;">
+                        <option value="">Chọn</option>
+                        <option value="">10 triệu</option>
+                        <option value="">20 triệu</option>
+                        <option value="">30 triệu</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex align-center justify-end item_normal_filter" style="display:none;">
+        <a class="clear bold color-orange" href="">
+            Xóa bộ lọc
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#refresh"></use>
+            </svg>
+        </a>
+        <a class="btn-default cursor-pointer ml-3 btn__filter_hotel">Áp dụng</a>
+    </div>
+</div>

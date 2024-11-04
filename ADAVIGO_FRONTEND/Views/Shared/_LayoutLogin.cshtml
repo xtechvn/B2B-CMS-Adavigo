@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="" />
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title> @ViewData["Title"] </title>
+    <link rel="icon" type="image/png" href="/images/graphics/logo.svg">
+    <link rel="stylesheet" href="/css/fontAwesome/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" href="/css/bootstrap.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/css/select2.min.css" />
+    <link rel="stylesheet" href="/css/style.css" media="all" />
+    <!-- build:head -->
+    @await RenderSectionAsync("SocialMetaTags", required: false)
+
+</head>
+<body class="homepage bg-login">
+    @RenderBody()
+    <!--Jquery lib-->
+    <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

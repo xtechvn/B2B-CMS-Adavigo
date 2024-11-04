@@ -1,0 +1,190 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@model FilterDataViewModel
+
+@if (!Model.IsNoCacheData)
+{
+    <div class="bg-white radius_10 pd-24">
+        <div class="header-fillter">
+            <div class="flex space-between align-center">
+                <div class="txt_16"><strong>Bộ lọc</strong></div>
+                <a class="clear" href="#">
+                    Xóa lọc&nbsp;
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#refresh"></use>
+                    </svg>
+                </a>
+            </div>
+            <div class="gray hidden">Sắp xếp kết quả theo lựa chọn</div>
+        </div>
+        <div class="price-filter mb24">
+            <div class="mb16"><strong>Khoảng giá</strong></div>
+            <div class="price-filter-container">
+                <div id="slider-range"></div>
+                <form>
+                    <input type="hidden" id="hotel__filter_min_value" name="min-value" value="@(Model.price_range != null ? Model.price_range.min : 0)">
+                    <input type="hidden" id="hotel__filter_max_value" name="max-value" value="@(Model.price_range != null ? Model.price_range.max : 0)">
+                </form>
+                <div class="row slider-labels">
+                    <div class="col-6">
+                        <div class="wrap">
+                            <span id="slider-range-value1">0</span> đ
+                        </div>
+
+                    </div>
+                    <div class="col-6">
+                        <div class="wrap text-right">
+                            <span id="slider-range-value2">0</span> đ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.refundable != null && Model.refundable.Any())
+        {
+            <div class="mb24">
+                <div class="head-title mb0">
+                    <div class="bold">Chính sách đặt phòng</div>
+                    <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse1">
+                        <svg class="icon-svg">
+                            <use xlink:href="images/icons/icon.svg#next2"></use>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="collapse show mt16" id="collapse1">
+                    @foreach (var item in Model.refundable)
+                    {
+                        <label class="confir_res">
+                            @item.description
+                            <input type="checkbox" name="inlineGoi3" id="@item.key">
+                            <span class="checkmark"></span>
+                        </label>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="mb24">
+            <div class="head-title mb0">
+                <div class="bold">Hạng sao</div>
+                <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse2">
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#next2"></use>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="collapse show mt16" id="collapse2">
+                @for (int i = 1; i < 6; i++)
+                {
+                    <label class="confir_res">
+                        <div class="flex list-star">
+                            @for (var j = 1; j <= i; j++)
+                            {
+                                <svg class="icon-svg">
+                                    <use xlink:href="images/icons/icon.svg#star"></use>
+                                </svg>
+                            }
+                        </div>
+                        @if (Model.star != null && Model.star.Any())
+                        {
+                            if (Model.star.Any(s => s.key == i.ToString()))
+                            {
+                                <input type="checkbox" class="cbk__filter_star" checked value="@i">
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="cbk__filter_star" value="@i">
+                            }
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="cbk__filter_star" value="@i">
+                        }
+                        <span class="checkmark"></span>
+                    </label>
+                }
+            </div>
+        </div>
+
+        @if (Model.amenities != null && Model.amenities.Any())
+        {
+            <div class="mb24">
+                <div class="head-title mb0">
+                    <div class="bold">Tiện nghi</div>
+                    <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse3">
+                        <svg class="icon-svg">
+                            <use xlink:href="images/icons/icon.svg#next2"></use>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="collapse show mt16" id="collapse3">
+
+                    @foreach (var item in Model.amenities)
+                    {
+                        <label class="confir_res">
+                            @item.description
+                            <input type="checkbox" class="ckb__filter_amenity" value="@item.key">
+                            <span class="checkmark"></span>
+                        </label>
+                    }
+
+                </div>
+            </div>
+        }
+
+        <div class="mb24 hidden">
+            <div class="head-title mb0">
+                <div class="bold">Ưu tiên nơi nghỉ</div>
+                <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse4">
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#next2"></use>
+                    </svg>
+                </a>
+            </div>
+            <div class="collapse show mt16" id="collapse4">
+                @if (Model.hotel_type != null && Model.hotel_type.Any())
+                {
+                    foreach (var item in Model.hotel_type)
+                    {
+                        <label class="confir_res circle">
+                            @item.description
+                            <input type="checkbox" class="ckb__filter_rssoom_type" value="@item.key">
+                            <span class="checkmark"></span>
+                        </label>
+                    }
+                }
+            </div>
+        </div>
+        @if (Model.type_of_room != null && Model.type_of_room.Any())
+        {
+            <div>
+                <div class="head-title mb0">
+                    <div class="bold">Loại hình lưu trú</div>
+                    <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse5">
+                        <svg class="icon-svg">
+                            <use xlink:href="images/icons/icon.svg#next2"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="collapse show mt16" id="collapse5">
+                    <label class="confir_res">
+                        Tất cả
+                        <input type="checkbox" class="ckb__filter_hotel_type" value="-1" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    @foreach (var item in Model.type_of_room)
+                    {
+                        <label class="confir_res">
+                            @item.description
+                            <input type="checkbox" class="ckb__filter_room_type" value="@item.key">
+                            <span class="checkmark"></span>
+                        </label>
+                    }
+
+                </div>
+            </div>
+        }
+    </div>
+}

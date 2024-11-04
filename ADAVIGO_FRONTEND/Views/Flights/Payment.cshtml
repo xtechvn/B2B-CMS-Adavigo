@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewData["Title"] = "Phương thức thanh toán";
+}
+
+<div id="payment-page">
+    <section class="main-container clearfix">
+        <div class="flex mt20">
+            <div class="col-main">
+                <h2 class="bold txt_24 mb16 mt10">Phương thức thanh toán</h2>
+                <div class="bg-white pd-20 radius10 mb16">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="menu-bank">
+                                <!-- <li class="d-none">
+                                    <img src="~/images/nganhang/ky-quy.png" alt="">
+                                    <span class="content">Thanh toán bằng ký quỹ</span>
+                                </li> -->
+                                <li class="active" data-target="#payment-bank" data-method="transfer">
+                                    <img src="~/images/nganhang/credit-card.png" alt="">
+                                    <span class="content">Chuyển khoản ngân hàng</span>
+                                </li>
+                                <li data-target="#payment-QR" data-method="qr">
+                                    <img src="~/images/nganhang/qr-code.png" alt="">
+                                    <span class="content">Thanh toán QR - PAY</span>
+                                </li>
+                                <li data-target="#payment-atm" data-method="atm">
+                                    <img src="~/images/nganhang/atm.png" alt="">
+                                    <span class="content">Thẻ ATM/ Tài khoản ngân hàng</span>
+                                </li>
+                                <li data-target="#payment-visa" data-method="visa">
+                                    <img src="~/images/nganhang/visa.png" alt="">
+                                    <span class="content">Thẻ Visa, Master Card</span>
+                                </li>
+                                <li id="payment-hold" data-target="#payment-hold" data-method="hold">
+                                    <img src="~/images/nganhang/hold.png" alt="">
+                                    <div class="content">
+                                        <span>Giữ chỗ</span>
+                                        <div class="txt_12 gray">
+                                            Chưa cần thanh toán ngay, đặt chỗ để giữ giá tốt trên trên Adavigo
+                                        </div>
+                                        <span class="note">Giữ chỗ đến: <span id="saving-time"></span></span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="javascript:void(0)" id="back-btn" class="btn btn-default size gray mb8">
+                                <svg class="icon-svg min">
+                                    <use xlink:href="../images/icons/icon.svg#prev2"></use>
+                                </svg>
+                                <span>Quay lại</span>
+                            </a>
+                        </div>
+                        <div class="col-md-6 line-left off-line-mb">
+
+                            <div class="mb24 payment-content" id="payment-bank">
+                                <strong class="bold txt_16">Hướng dẫn chuyển khoản</strong>
+                                <div class="gray txt_12 mb16">Vui lòng chọn một ngân hàng bên dưới để chuyển khoản:</div>
+                                <ul class="list-bank grid grid__3" id="list-bank">
+                                    <li class="active" data-bank="Techcombank">
+                                        <img src="~/images/nganhang/bank-techcombank.svg" alt="">
+                                        <span>Techcombank</span>
+                                    </li>
+                                    <li data-bank="HD">
+                                        <img src="~/images/nganhang/HDB.png" alt=""><br />
+                                        <span>HDBANK</span>
+                                    </li>
+                                    <li data-bank="VIETIN">
+                                        <img src="~/images/nganhang/icon-Vietinbank.png" alt=""><br />
+                                        <span>VIETINBANK</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="mb24 payment-content d-none" id="payment-QR">
+                                <strong class="bold txt_16">Thanh toán QR - Pay</strong>
+                                <div class="gray txt_12 mb16">Vui lòng chọn và bấm thanh toán để hoàn tất</div>
+                                <br>
+                                <br>
+                                <div class="text-center">
+                                    <div class="mb20"><img src="~/images/nganhang/scan.png" alt=""></div>
+                                    <div class="gray mb15">
+                                        Bạn đang sử dụng hình thức thanh toán bằng QR - Pay
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb24 payment-content d-none" id="payment-atm">
+                                <div class="bold txt_16 mb16">
+                                    Thanh toán bằng số dư tài khoản
+                                </div>
+                                <!-- <div class="gray mb5">Số dư</div>
+                                <div class="txt_24 bold color-orange mb5">0 VNĐ</div>
+                                <div class="gray txt_12">Không thu phí, nhận được Mã đặt phòng ngay</div> -->
+                                <ul class="list-bank grid grid__3" id="list-atm">
+                                </ul>
+                            </div>
+
+                            <div class="mb24 payment-content d-none" id="payment-visa">
+                                <strong class="bold txt_16">Thanh toán Thẻ Visa, Master Card</strong>
+                                <div class="gray txt_12 mb16">Vui lòng bấm thanh toán để hoàn tất</div>
+                                <br>
+                                <br>
+                                <div class="text-center">
+                                    <div class="mb20"><img src="~/images/nganhang/VisamasterCard.png" alt=""></div>
+                                    <div class="gray txt_12 mb15">
+                                        Bạn đang sử dụng hình thức thanh toán Thẻ tín dụng/Thẻ ghi nợ
+                                    </div>
+                                    @*<div class="color-orange">
+                                    <strong>Lưu ý:</strong> Có thể phát sinh khoảng phí là <strong>100.000 VND</strong> khi thanh toán bằng thẻ Visa
+                                    </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <partial name="_SidebarPartial" />
+        </div>
+    </section>
+    <!--Modal-->
+    <partial name="/Views/Flights/Payment/_ModalBankTransferPartial.cshtml" />
+    <partial name="_FlightDetailPartial" />
+    <partial name="_ModalExpiredlPartial" />
+
+</div>
+
+@section scripts {
+    <script src="~/js/modules/flight/payment.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <link href="~/css/payment.css" rel="stylesheet" asp-append-version="true" />
+}
+
+

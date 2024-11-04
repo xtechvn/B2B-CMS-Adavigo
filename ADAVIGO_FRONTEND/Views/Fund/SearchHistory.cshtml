@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+
+@using ADAVIGO_FRONTEND.ViewModels
+@using Microsoft.Extensions.Configuration
+@model GenericGridViewModel<DepositHistoryViewMdel>
+@inject IConfiguration Configuration
+@{
+    string domain_image = Configuration["API_UPLOAD_IMAGE"];
+}
+<div class="table-responsive table-default bg-white mb24">
+    <table class="table table-nowrap" border="1">
+        <caption>
+            Lịch sử ký quỹ
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col">Mã giao dịch</th>
+                <th scope="col">Tiêu đề</th>
+                <th scope="col">Số tiền nạp</th>
+                <th scope="col">Loại giao dịch</th>
+                <th scope="col">Hình thức thanh toán</th>
+                <th scope="col">Thời gian giao dịch</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Ảnh giao dịch</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListData != null && Model.ListData.Any())
+            {
+                foreach (var item in Model.ListData)
+                {
+                    <tr>
+                        <td>@item.TransNo</td>
+                        <td>@item.Title</td>
+                        <td><strong>@(item.Price == null ? "" : ((double)item.Price).ToString("N0") + "đ")</strong></td>
+                        <td>@item.ServiceName</td>
+                        <td>@item.PaymentTypeName</td>
+                        <td>@(item.CreateDate == null ? "" : ((DateTime)item.CreateDate).ToString("dd/MM/yyyy HH:mm"))</td>
+                        <td class="medium">
+                            @if (item.Status == 1)
+                            {
+                                <span class="dote-text bg-yellow"></span>
+                                <span class="color-yellow">@item.StatusName</span>
+                            }
+                            else if (item.Status == 2)
+                            {
+                                <span class="dote-text bg-red"></span>
+                                <span class="color-red">@item.StatusName</span>
+                            }
+                            else
+                            {
+                                <span class="dote-text bg-green"></span>
+                                <span class="color-green">@item.StatusName</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!String.IsNullOrEmpty(item.ImageScreen))
+                            {
+                                <a href="@($"{domain_image}{item.ImageScreen}")" target="_blank">Ảnh giao dịch thành công</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@await Component.InvokeAsync("Paging", new
+{
+    pageModel = new PagingModel()
+    {
+        TotalRecord = Model.TotalRecord,
+        TotalPage = Model.TotalPage,
+        CurrentPage = Model.CurrentPage,
+        PageSize = Model.PageSize,
+        RecordName = "giao dịch",
+        PageAction = "fund_history.OnPaging({0})"
+    }
+})
+
+

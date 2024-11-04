@@ -1,0 +1,19 @@
+﻿<div class="wrap-search">
+    <h2 class="title txt_20 bold mb16">Đặt vé nhanh</h2>
+    <div class="tab-menu flex">   
+        <a href="#tab-building" data-id="hotel-box-search" class="active tab-menu-item">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#building"></use>
+            </svg>
+            <span>Khách sạn</span>
+        </a>
+        <a href="#tab-flight" data-id="flight-box-search" class="tab-menu-item">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#flight"></use>
+            </svg>
+            <span>Chuyến bay</span>
+        </a>
+    </div>
+    @await Html.PartialAsync("BoxFilter")
+    @await Html.PartialAsync("FlightBoxFilter")
+</div>

@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Quản lý đơn hàng vé máy bay";
+}
+
+<section class="tab-menu-folder">
+    <a href="#" class="active">Đơn hàng</a>
+</section>
+
+<section class="main-container clearfix">
+    <div class="search-wrapper mb16">
+        <div id="search" class="mb16" style="max-width:470px">
+            <form autocomplate="off" onsubmit="return false;">
+                <input id="input_search" type="text" class="input_search bg-white onclick-togle active" name="" value="" placeholder="Nhập mã đơn hàng hoặc từ khóa cần tìm ...">
+                <span class="search-btn">
+                    <button type="button" onclick="getDataAndRenderPage()">
+                        <svg class="icon-svg">
+                            <use xlink:href="../images/icons/icon.svg#search"></use>
+                        </svg>
+                    </button>
+                </span>
+            </form>
+            <button type="button" class="btn_reset">×</button>
+        </div>
+        <div id="orderHistoryTotal" class="gray mb16" style="padding-left:16px"></div>
+    </div>
+
+    <div class="search-null center mb40">
+        <div class="mb24">
+            <img src="~/images/graphics/icon-search.png" alt="">
+        </div>
+        <h2 class="title txt_24">Không tìm thấy kết quả</h2>
+        <div class="gray">Chúng tôi không tìm thấy thông tin mà bạn cần, vui lòng thử lại</div>
+    </div>   
+
+    <div class="listOrders"></div>
+    <ul class="pagination justify-end mb40">
+    </ul>
+</section>
+
+
+
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/flightBooking/index.js" asp-append-version="true"></script>
+
+}
+
+

@@ -1,0 +1,27 @@
+.error-field {
+    color: #dc3545;
+    font-size: 12px;
+    font-style: italic;
+    display: none;
+}
+
+    .error-field.has-error {
+        display: block;
+    }
+
+.first-time .time, .last-time .time {
+    white-space: nowrap;
+    font-weight: bold !important;
+}
+
+.daterangepicker .calendar {
+    max-width: unset !important;
+}
+
+.daterangepicker_input, input[name="daterangepicker_end"], input[name="daterangepicker_start"] {
+    display: none !important;
+}
+
+.modal-body .trip-info.min .trip-info__right .time-flight .first-time, .modal-body .trip-info.min .trip-info__right .time-flight .last-time {
+    width: 100%;
+}

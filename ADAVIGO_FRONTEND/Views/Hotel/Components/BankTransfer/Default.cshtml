@@ -1,0 +1,19 @@
+﻿@using LIB.ENTITIES.ViewModels.Hotels;
+@model IEnumerable<BankingAccount>
+<ul class="list-bank grid grid__3">
+    @if (Model != null && Model.Any())
+    {
+        int count = 0;
+        foreach (var item in Model)
+        {
+            <li class="@(count++ == 0 ? "active" : string.Empty)" title="@item.AccountName"
+        data-account="@item.AccountNumber"
+        data-code="@item.Bin"
+                data-short-name="@item.BankId"
+                data-id="@item.Id">
+                <img  src="@item.Image" alt="@item.BankId">
+                <span>@item.BankId</span>
+            </li>
+        }
+    }
+</ul>

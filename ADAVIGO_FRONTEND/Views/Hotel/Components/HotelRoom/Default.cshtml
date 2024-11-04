@@ -1,0 +1,146 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@model HotelRoomGridModel
+@{
+    int nights = (int)ViewBag.Nights;
+}
+<style>
+    .swiper-button-next, .swiper-button-prev {
+        font-size: 27px;
+        opacity: 0.7;
+    }
+</style>
+<div style="display:none;" id="hotel_detail_surcharge">
+    @Html.Raw(Model == null || Model.surcharge == null ? "" : Model.surcharge)
+</div>
+
+@if (Model != null && Model.rooms.Any())
+{
+    <input type="hidden" id="hotel_grid_cache_search" value="@Model.cache_id" />
+    <input type="hidden" id="hotel_grid_cache_night_time" value="@Model.night_time" />
+
+    if (Model.rooms != null && Model.rooms.Any())
+    {
+        var room_list = new List<HotelRoomDataModel>();
+        room_list.AddRange(Model.rooms.Where(s => s.min_price > 0).OrderBy(s => s.min_price));
+        room_list.AddRange(Model.rooms.Where(s => s.min_price == 0));
+
+        foreach (var item in room_list)
+        {
+            var image_url = "/images/graphics/thumb1x1.jpg";
+            var is_has_image = false;
+            if (item.img_thumb != null && item.img_thumb.Any())
+            {
+                var image_datas = item.img_thumb.Where(s => !string.IsNullOrEmpty(s.url)).FirstOrDefault();
+                if (image_datas != null)
+                {
+                    is_has_image = true;
+                    image_url = image_datas.url;
+                }
+            }
+
+            <div class="bg-white pd-16 radius10 mb8 room_detail">
+                <div class="article-itemt">
+                    <div class="article-thumb">
+                        @if (is_has_image)
+                        {
+                            @* <div class="slide-image-package">
+                                <div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                @foreach (var img in image_datas)
+                                {
+                                <div class="swiper-slide">
+                                <a class="cursor-pointer" onclick="_hotel.redirectToDetail(this)">
+                                <img class="img_rechange_url" src="" data-url="@img.url" alt="">
+                                </a>
+                                </div>
+                                }
+                                </div>
+                                </div>
+                                <div class="swiper-button-prev"><i class="fa fa-angle-left"></i></div>
+                                <div class="swiper-button-next"><i class="fa fa-angle-right"></i></div>
+                                </div>*@
+                            <a class="thumb_img thumb_5x4">
+                                <img class="img_rechange_url" src="" data-url="@image_url" alt="">
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="thumb_img thumb_5x4">
+                                <img src="@image_url" alt="">
+                            </a>
+                        }
+                    </div>
+                    <div class="article-content">
+                        @if (item.remainming_room <= 5)
+                        {
+                            <div class="tag-title flex">
+                                <span class="orange">Sắp hết phòng</span>
+                            </div>
+                        }
+                        else if (item.remainming_room <= 0)
+                        {
+                            <div class="tag-title flex">
+                                <span class="red">Hết phòng</span>
+                            </div>
+                        }
+
+                        <h3 class="title_new hotel_room_name">
+                            @($"{item.name}")
+                        </h3>
+                        <div class="row flex-end">
+                            <div class="col-4">
+                                <a class="cursor-pointer gray btn__show_popup_room">Xem chi tiết</a>
+                                <div class="popup hidden">
+                                    <div class="article-thumb">
+                                        <a class="thumb_img thumb_5x4" href="#">
+                                            <img src="/images/graphics/thumb1x1.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="article-content">
+                                        <h3 class="title_new">
+                                            <strong>@item.name</strong>
+                                        </h3>
+                                        <p class="mb10">
+                                            Phòng tiêu chuẩn dành cho @item.max_adult người lớn
+                                            @if (@item.max_child > 0)
+                                            {
+                                                <nw>/ @item.max_child trẻ em</nw>
+                                            }.
+                                            <br />Phụ thu theo độ tuổi
+                                        </p>
+                                        <div>@item.description</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="price text-right">
+                                    @if (item.min_price > 0)
+                                    {
+                                        <div class="gray">Chỉ từ</div>
+                                        <div class="txt_18 bold dynamic_price" data-amount="@item.min_price" data-night="@Model.night_time">@((item.min_price / nights).ToString("N0")) đ</div>
+                                        <div class="gray">/ <strong class="night">1</strong> Đêm</div>
+                                        <a class="btn-default cursor-pointer choose-room btn__toggle_room_package" data-toggle="collapse" data-target="#room-info-@item.id" data-id="@item.id" data-code="@item.code">Chọn phòng</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="gray"></div>
+                                        <div class="txt_18 bold">Giá liên hệ</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-room collapse placeholder scrollbar-height" id="room-info-@item.id" style="max-height:400px;">
+                </div>
+            </div>
+        }
+    }
+}
+else
+{
+    <p class="no-result">Hệ thống không tìm thấy kết quả</p>
+}
+
+
+

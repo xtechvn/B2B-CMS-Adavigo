@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<partial name="_FlightTopNavbar" />
+<section class="main-container clearfix">
+    <div class="wrap-search">
+        <h2 class="title txt_20 bold mb16">Đặt vé nhanh</h2>
+        <div class="tab-menu flex">
+            <a href="#tab-flight" class="active">
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#flight"></use>
+                </svg>
+                <span>Chuyến bay</span>
+            </a>
+
+        </div>
+        <div class="tab-content">
+            <div id="tab-flight">
+                <div class="flex-row">
+                    <partial name="_SearchFlightBox" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Index content-->
+    @*    <div class="flex">
+    <div class="col-main">
+    <div class="bg-white pd-20 radius10 mb16">
+    <div class="head-title">
+    <h2 class="title txt_20 bold mb0">Quỹ phòng của tôi</h2>
+    <a class="detail" href="#">Chi tiết</a>
+    </div>
+    <div class="gray mb5">Tổng số tiền đã ký quỹ</div>
+    <div class="flex align-center mb16">
+    <div class="bold color-green txt_24 mr-3">23,000,0000 VNĐ</div>
+    <div class="medium color-green">
+    <img src="images/icons/Add.svg" alt="" style="margin: -2px 5px 0 0;"> Nạp quỹ
+    </div>
+    </div>
+    <div class="line-bottom mb16"></div>
+    <h2 class="title txt_16 bold mb16">Lịch sử ký quỹ</h2>
+    <div class="table-responsive table-default">
+    <table class="table table-nowrap" border="1">
+    <thead>
+    <tr>
+    <th scope="col">Ngày đặt</th>
+    <th scope="col">Mã booking</th>
+    <th scope="col">Tên đơn hàng</th>
+    <th scope="col">Trạng thái</th>
+    <th scope="col">Tên khách hàng</th>
+    <th scope="col">Check in</th>
+    <th scope="col">Check out</th>
+    <th scope="col">Check out</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    <tr>
+    <td>5/4/2021</td>
+    <td>M000021587</td>
+    <td>Fussion Resort Phú Quốc</td>
+    <td>Hoàn thành</td>
+    <td>Trần Ngọc Đại</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    <td>5/4/2021</td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+    <div class="col-300">
+    <div class="bg-white pd-20 radius10 mb16">
+    <div class="head-title">
+    <h2 class="title txt_20 bold mb0">Lịch bay & khuyến mại</h2>
+    </div>
+    <!-- Slide banner -->
+    <div class="slide-banner">
+    <div class="swiper-container">
+    <div class="swiper-wrapper">
+    <div class="swiper-slide">
+    <img src="images/graphics/thumb1.jpg" alt="">
+    </div>
+    <div class="swiper-slide">
+    <img src="images/graphics/thumb1.jpg" alt="">
+    </div>
+    <div class="swiper-slide">
+    <img src="images/graphics/thumb1.jpg" alt="">
+    </div>
+    </div>
+    </div>
+    <div class="swiper-pagination"></div>
+    </div>
+    <div class="list-article">
+    <div class="article-itemt">
+    <div class="article-thumb">
+    <a class="thumb_img thumb_5x3" href="#">
+    <img src="images/graphics/thumb2.jpg" alt="">
+    </a>
+    </div>
+    <div class="article-content">
+    <h3 class="title_new">
+    <a href="#">VN  Trân trọng thông báo lịch bay SGN/HAN-C tần sâut s 2</a>
+    </h3>
+    <div class="date-post">13/7/2022</div>
+    </div>
+    </div>
+    <div class="article-itemt">
+    <div class="article-thumb">
+    <a class="thumb_img thumb_5x3" href="#">
+    <img src="images/graphics/thumb3.jpg" alt="">
+    </a>
+    </div>
+    <div class="article-content">
+    <h3 class="title_new">
+    <a href="#">VN  Trân trọng thông báo lịch bay SGN/HAN-C tần sâut s 2</a>
+    </h3>
+    <div class="date-post">13/7/2022</div>
+    </div>
+    </div>
+    <div class="article-itemt">
+    <div class="article-thumb">
+    <a class="thumb_img thumb_5x3" href="#">
+    <img src="images/graphics/thumb4.jpg" alt="">
+    </a>
+    </div>
+    <div class="article-content">
+    <h3 class="title_new">
+    <a href="#">VN  Trân trọng thông báo lịch bay SGN/HAN-C tần sâut s 2</a>
+    </h3>
+    <div class="date-post">13/7/2022</div>
+    </div>
+    </div>
+    <div class="article-itemt">
+    <div class="article-thumb">
+    <a class="thumb_img thumb_5x3" href="#">
+    <img src="images/graphics/thumb1.jpg" alt="">
+    </a>
+    </div>
+    <div class="article-content">
+    <h3 class="title_new">
+    <a href="#">VN  Trân trọng thông báo lịch bay SGN/HAN-C tần sâut s 2</a>
+    </h3>
+    <div class="date-post">13/7/2022</div>
+    </div>
+    </div>
+    </div>
+    <div class="center mt10"><a class="btn-default" href="#">Xem thêm</a></div>
+    </div>
+    </div>
+    </div>
+    *@
+    <!-- Giá tốt nhất 6 tháng tới -->
+    <h2 class="title-cate txt_32 mb24">Giá tốt nhất 6 tháng tới</h2>
+    <div id="min-price-places" class="tab-default2 tab-blue mr min-price">
+        <a href="javascript:void(0)" class="active min-price__item">
+            <span>Hồ Chí Minh</span>
+            <svg class="icon-svg ml-1 mr-1">
+                <use xlink:href="../images/icons/icon.svg#flight"></use>
+            </svg>
+            <span>Hà Nội</span>
+        </a>
+
+    </div>
+
+    <div id="skeleton-calendar-wrapper">
+        <partial name="_Skeleton" />
+    </div>
+
+    <div id="calendar-wrapper" class="calendar-custom slide-relative mb40 d-none">
+        <div class="swiper-container">
+            <div class="swiper-wrapper" id="calendarWrapper">
+            </div>
+        </div>
+        <div class="swiper-button-prev">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#prev"></use>
+            </svg>
+        </div>
+        <div class="swiper-button-next">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#next"></use>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Khám phá tin tức -->
+    <div id="list-article-wrapper">
+        <h2 class="title-cate txt_32 mb24">Khám phá tin tức</h2>
+        <div id="skeleton-list-article">
+            <partial name="_Skeleton" />
+        </div>
+        <div id="list-article" class="list-article grid grid__4 mb40 d-none">
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script type="text/javascript" src="~/js/modules/flight/index.js" asp-append-version="true"></script>
+}

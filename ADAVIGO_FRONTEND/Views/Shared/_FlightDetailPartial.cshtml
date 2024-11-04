@@ -1,0 +1,248 @@
+﻿    <!--POPUP Chi tiết chuyến bay -->
+<div class="modal fade" id="myModalDetailsFight">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chi tiết chuyến bay</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="flex mb16" id="flight-detail-btn">
+                    <a href="javascript:void(0)" class="btn-default radius_50 btn-modal-details" data-target=".details-go-modal">Chiều đi</a>
+                    <a href="javascript:void(0)" class="btn-default radius_50 gray ml-2 btn-modal-details d-none btn-modal-details-back" data-target=".details-back-modal">Chiều về</a>
+                </div>
+                <div class="details-go-modal block-details-modal">
+                    <div class="line-bottom mb16"></div>
+                    <div class="trip-info trip-info-go min mb16">
+                        <div class="trip-info__right">
+                            <div class="detail-trip">
+                                <div class="name">
+                                    <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                    <div class="hang"></div>
+                                    <p class="code"></p>
+                                </div>
+                                <div class="option no-line">
+                                    <div class="tag">EA</div>
+                                    <span class="seat-class-go"></span>
+                                    <span class="tooltip-new">
+                                        <svg class="icon-svg color-blue min">
+                                            <use xlink:href="../images/icons/icon.svg#info">
+                                            </use>
+                                        </svg>
+                                        <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                    </span>
+                                </div>
+                                <div class="time-flight time-flight__v2">
+                                    <div class="first-time">
+                                        <div class="">
+                                            <div class="time bold">20:20</div>
+                                            <div class="txt_12 gray date">28/7/2022</div>
+                                        </div>
+                                        <div class="detail gray">
+                                            <div class="title-add">
+                                                <svg class="icon-svg">
+                                                    <use xlink:href="../images/icons/icon.svg#flight2">
+                                                    </use>
+                                                </svg>
+                                                <span class="name-code-start-go"></span>
+                                            </div>
+                                            @*<div class="mb16 pl-4">Tân Sơn Nhất</div>*@
+                                            <ul  class="service service-list">
+                                                <li class="handBaggage">
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#hanh-ly">
+                                                        </use>
+                                                    </svg> Hành lý xách tay: <span></span>
+                                                </li>
+                                                <li class="allowanceBaggage">
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#hanh-ly">
+                                                        </use>
+                                                    </svg> Hành lý ký gửi: <span></span>
+                                                </li>
+
+                                                <!--<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket">
+                                                        </use>
+                                                    </svg> Đổi vé mất phí + chênh lệch nếu có.
+                                                </li>
+                                                <li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#hanh-ly">
+                                                        </use>
+                                                    </svg> Hoàn bảo lưu tiền vé tối đa 180 ngày và tính phí theo chính sách hãng, thời hạn 24h so với giờ khởi hành.
+                                                </li>-->
+                                                @*<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#heart">
+                                                        </use>
+                                                    </svg> Ưu tiên chọn chỗ ngồi yêu thích
+                                                </li>*@
+                                                <!--<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket2">
+                                                        </use>
+                                                    </svg> Không đổi vé
+                                                </li>-->
+                                                @*<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket">
+                                                        </use>
+                                                    </svg> Phí hoàn vé 500.000VND, phí bỏ chuyến 500.000VND
+                                                </li>*@
+                                                <!--<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket2">
+                                                        </use>
+                                                    </svg> Không hoàn vé
+                                                </li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="flight">
+                                        <p class="long-time">
+                                            <strong class="duration-fly-item-go"></strong>
+                                        </p>
+                                    </div>
+                                    <div class="last-time">
+                                        <div class="">
+                                            <div class="time bold">21:20</div>
+                                            <div class="txt_12 gray date">28/7/2022</div>
+                                        </div>
+                                        <div class="detail gray">
+                                            <div class="title-add">
+                                                <svg class="icon-svg">
+                                                    <use xlink:href="../images/icons/icon.svg#address">
+                                                    </use>
+                                                </svg>
+                                                <span class="name-code-start-end"></span>
+                                            </div>
+                                            @*<div class="pl-4">Nội Bài</div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="details-back-modal block-details-modal d-none">
+                    <div class="line-bottom mb16"></div>
+                    <div class="trip-info trip-info-back min mb16">
+                        <div class="trip-info__right">
+                            <div class="detail-trip">
+                                <div class="name">
+                                    <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                    <div class="hang"></div>
+                                    <p class="code"></p>
+                                </div>
+                                <div class="option no-line">
+                                    <div class="tag">EA</div>
+                                    <span class="seat-class-back"></span>
+                                    <span class="tooltip-new">
+                                        <svg class="icon-svg color-blue min">
+                                            <use xlink:href="../images/icons/icon.svg#info">
+                                            </use>
+                                        </svg>
+                                        <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                    </span>
+                                </div>
+                                <div class="time-flight time-flight__v2">
+                                    <div class="first-time">
+                                        <div class="">
+                                            <div class="time bold">20:20</div>
+                                            <div class="txt_12 gray date">28/7/2022</div>
+                                        </div>
+                                        <div class="detail gray">
+                                            <div class="title-add">
+                                                <svg class="icon-svg">
+                                                    <use xlink:href="../images/icons/icon.svg#flight2">
+                                                    </use>
+                                                </svg>
+                                                <span class="name-code-back-go"></span>
+                                            </div>
+                                            @*<div class="mb16 pl-4">Tân Sơn Nhất</div>*@
+                                            <ul class="service service-list">
+                                                <li class="handBaggage">
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#hanh-ly">
+                                                        </use>
+                                                    </svg> Hành lý xách tay: <span></span>
+                                                </li>
+                                                <li class="allowanceBaggage">
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#hanh-ly">
+                                                        </use>
+                                                    </svg> Hành lý ký gửi: <span></span>
+                                                </li>
+                                                <!--<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket">
+                                                        </use>
+                                                    </svg> Đổi vé mất phí + chênh lệch nếu có.
+                                                </li>
+                                                <li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#hanh-ly">
+                                                        </use>
+                                                    </svg> Hoàn bảo lưu tiền vé tối đa 180 ngày và tính phí theo chính sách hãng, thời hạn 24h so với giờ khởi hành.
+                                                </li>-->
+                                                @*<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#heart">
+                                                        </use>
+                                                    </svg> Ưu tiên chọn chỗ ngồi yêu thích
+                                                </li>*@
+                                                <!--<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket2">
+                                                        </use>
+                                                    </svg> Không đổi vé
+                                                </li>-->
+                                                @*<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket">
+                                                        </use>
+                                                    </svg> Phí hoàn vé 500.000VND, phí bỏ chuyến 500.000VND
+                                                </li>*@
+                                                <!--<li>
+                                                    <svg class="icon-svg">
+                                                        <use xlink:href="../images/icons/icon.svg#ticket2">
+                                                        </use>
+                                                    </svg> Không hoàn vé
+                                                </li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="flight">
+                                        <p class="long-time">
+                                            <strong class="duration-fly-item-back"></strong>
+                                        </p>
+                                    </div>
+                                    <div class="last-time">
+                                        <div class="">
+                                            <div class="time bold">21:20</div>
+                                            <div class="txt_12 gray date">28/7/2022</div>
+                                        </div>
+                                        <div class="detail gray">
+                                            <div class="title-add">
+                                                <svg class="icon-svg">
+                                                    <use xlink:href="../images/icons/icon.svg#address">
+                                                    </use>
+                                                </svg>
+                                                <span class="name-code-back-end"></span>
+                                            </div>
+                                            @*<div class="pl-4">Nội Bài</div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

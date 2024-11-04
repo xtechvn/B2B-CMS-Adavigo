@@ -1,0 +1,182 @@
+﻿@using ADAVIGO_FRONTEND.Models.AllCode;
+@using ADAVIGO_FRONTEND.ViewModels;
+@using Utilities.Contants;
+@{
+    Layout = null;
+    var PERMISSIONB2B = (List<AllCodeModel>)ViewBag.allcode_PERMISSION_B2B;
+}
+@model AccountModel
+<style>
+    .red {
+        color: red;
+    }
+</style>
+<form id="setup_Ac" onsubmit="return false">
+    @if (Model != null)
+    {
+        <input style="display:none;" class="form-control" id="id" value="@Model.id">
+        <div class="form-group mb10">
+            <label class="gray">Tên đăng nhập<sup class="red">*</sup></label>
+            <div>
+                <input type="text" class="form-control" id="UserName" value="@Model.UserName" name="UserName" disabled>
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Họ tên<sup class="red">*</sup></label>
+            <div>
+                <input type="text" class="form-control" id="ClientName" value="@Model.name" name="ClientName">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Email</label>
+            <div>
+                <input type="text" class="form-control" id="Email" value="@Model.email" name="Email">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Điện thoại</label>
+            <div>
+                <input type="text" class="form-control" id="Phone" value="@Model.phone" name="Phone">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Nhóm quyền<sup class="red">*</sup></label>
+            <div>
+
+                <select class="form-control" type="text" id="GroupPermission" name="GroupPermission" placeholder="Nhóm quyền">
+                    @if (PERMISSIONB2B != null)
+                    {
+                        foreach (var item in PERMISSIONB2B)
+                        {
+                            @if (Model.GroupPermission == item.CodeValue)
+                            {
+                                <option selected="selected" value="@item.CodeValue">@item.Description</option>
+                            }
+                            else
+                            {
+                                <option value="@item.CodeValue">@item.Description</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Mật khẩu<sup class="red">*</sup></label>
+            <div>
+                <input type="password" class="form-control" id="Password" value="@Model.Password" name="Password">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Nhập lại mật khẩu<sup class="red">*</sup></label>
+            <div>
+                <input type="password" class="form-control" id="PasswordBackup" value="@Model.Password" name="PasswordBackup">
+            </div>
+        </div>
+        <div bis_skin_checked="1"><label class="lbl">Trạng thái <sup class="red">*</sup></label></div>
+        <div class="col-md-8 mb10" bis_skin_checked="1">
+            <label class="radio mr-3">
+                @if (Model.Status == (int)ACStatusType.HOAT_DONG)
+                {
+                    <input type="radio" value="0" name="optradio" checked="checked">
+                }
+                else
+                {
+                    <input type="radio" value="0" name="optradio">
+                }
+                <span class="checkmark"></span>
+                Hoạt động
+            </label>
+            <label class="radio mr-3">
+                @if (Model.Status == (int)ACStatusType.KHOA)
+                {
+                    <input value="1" type="radio" name="optradio" checked="checked">
+                }
+                else
+                {
+                    <input value="1" type="radio" name="optradio">
+                }
+                <span class="checkmark"></span>
+                Khóa
+            </label>
+        </div>
+        <div style="text-align:center;">
+            <button type="button" class="btn btn-default " data-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-default " id="btn__submit_add_fund" onclick="Ql_account.SetupAc()">Cập nhật</button>
+        </div>
+
+    }
+    else
+    {
+        <input style="display:none;" class="form-control" id="id" value="0">
+        <div class="form-group mb10">
+            <label class="gray">Tên đăng nhập<sup class="red">*</sup></label>
+            <div>
+                <input type="text" class="form-control" id="UserName" name="UserName" />
+                <label id="emsg-error" name="emsg" class="error emsg hidden" for="emsg"></label>
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Họ tên<sup class="red">*</sup></label>
+            <div>
+                <input type="text" class="form-control" id="ClientName" name="ClientName">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Email</label>
+            <div>
+                <input type="text" class="form-control" id="Email" name="Email">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Điện thoại</label>
+            <div>
+                <input type="text" class="form-control" id="Phone" name="Phone">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Nhóm quyền<sup class="red">*</sup></label>
+            <select class="form-control" type="text" id="GroupPermission" name="GroupPermission" placeholder="Nhóm quyền">
+                <option value="">Tất cả nhóm quyền</option>
+                @if (PERMISSIONB2B != null)
+                {
+                    foreach (var item in PERMISSIONB2B)
+                    {
+                        <option value="@item.CodeValue">@item.Description</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Mật khẩu<sup class="red">*</sup></label>
+            <div>
+                <input type="password" class="form-control" id="Password" name="Password">
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <label class="gray">Nhập lại mật khẩu<sup class="red">*</sup></label>
+            <div>
+                <input type="password" class="form-control" id="PasswordBackup" name="PasswordBackup">
+            </div>
+        </div>
+        <div bis_skin_checked="1"><label class="lbl">Trạng thái <sup class="red">*</sup></label></div>
+        <div class="col-md-8 mb10" bis_skin_checked="1">
+            <label class="radio mr-3">
+                <input type="radio" value="0" name="optradio" checked="checked">
+                <span class="checkmark"></span>
+                Hoạt động
+            </label>
+            <label class="radio mr-3">
+                <input value="1" type="radio" name="optradio">
+                <span class="checkmark"></span>
+                Khóa
+            </label>
+        </div>
+        <div style="text-align:center;">
+            <button type="button" class="btn btn-default " data-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-default " id="btn__submit_add_fund" onclick="Ql_account.SetupAc()">Thêm mới</button>
+        </div>
+
+    }
+</form>
+

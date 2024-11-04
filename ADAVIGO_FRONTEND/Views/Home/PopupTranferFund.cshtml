@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model IEnumerable<FundDataModel>
+<div class="form-group mb10">
+    <label class="gray">Số tiền chuyển</label>
+    <div class="relative currency-gr">
+        <span class="currency">VND</span>
+        <input type="text" class="form-control is-success text-left txt_18 bold ip-currency" id="input__tranfer_fund" value="0">
+    </div>
+</div>
+<div class="bg-agray pd-16 radius10 mb16">
+    <div class="form-default">
+        <div class="form-group mb10">
+            <div class="gray">Từ</div>
+            <div class="select-group mb5">
+                <select class="form-control fund_select" id="sel__from_fund">
+                    <option value="-1" data-value="0">Chọn quỹ</option>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <option value="@item.service_type" data-value="@item.account_blance">@item.service_name</option>
+                        }
+                    }
+                </select>
+                <div class="flex">
+                    <span>Số dư</span>
+                    <div class="price">
+                        <strong>0</strong> VNĐ
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <a class="changer-icons" onclick="_fund_management.changeFundPosition()">Hoán đổi</a>
+            </div>
+        </div>
+        <div class="form-group mb10">
+            <div class="gray">Đến</div>
+            <div class="select-group">
+                <select class="form-control fund_select" id="sel__to_fund">
+                    <option value="-1" data-value="0">Chọn quỹ</option>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <option value="@item.service_type" data-value="@item.account_blance">@item.service_name</option>
+                        }
+                    }
+                </select>
+                <div class="flex">
+                    <span>Số dư</span>
+                    <div class="price">
+                        <strong>0</strong> VNĐ
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-default gray full" id="btn__submit_tranfer_fund">Trích quỹ</button>

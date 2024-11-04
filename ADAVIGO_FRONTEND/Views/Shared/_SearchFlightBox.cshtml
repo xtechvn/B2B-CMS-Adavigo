@@ -1,0 +1,192 @@
+﻿
+<div class="address-w flex">
+    <div class="item form-search">
+        <a id="collapseGo-link" class="wrap changer" href="javascript:;">
+            <div class="flex icon">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#plane"></use>
+                </svg>
+                <span>Từ</span>
+            </div>
+            <div class="text">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#plane"></use>
+                </svg>
+                <select class="select2" name="" id="select-go" style="width: 100%;"></select>
+            </div>
+        </a>
+        <button type="submit" class="change btn-switch-place"></button>
+        <div class="suggest-search list-address collapse" id="collapseGo">
+            <ul></ul>
+        </div>
+    </div>
+    <div class="item form-search">
+        <a id="collapseArrival-link" class="wrap changer"
+           href="javascript:;">
+            <div class="flex icon">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#address"></use>
+                </svg>
+                <span>Đến</span>
+            </div>
+            <div class="text">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#address"></use>
+                </svg>
+                <select class="select2" name="" id="select-arrival" style="width: 100%;"></select>
+            </div>
+        </a>
+
+        <div class="suggest-search list-address collapse" id="collapseArrival">
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+<div class="date-w flex">
+    <div class="item">
+        <a class="wrap date-wrapper" href="javascript:;">
+            <div class="flex icon">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#date"></use>
+                </svg>
+                <span>Ngày đi</span>
+            </div>
+            <div class="text">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#date"></use>
+                </svg>
+                <input class="form-control" id="date-start" hidden readonly autocomplete="off" />
+                <input placeholder="Ngày đi" class="form-control" id="litepicker-date-start-single" name="litepicker-date-start" readonly autocomplete="off" />
+                <input class="form-control d-none" id="litepicker-date-start" name="litepicker-date-start" readonly autocomplete="off" />
+             
+            </div>
+        </a>
+    </div>
+    <div class="item">
+        <a class="wrap date-wrapper" href="javascript:;">
+            <div class="flex icon">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#date"></use>
+                </svg>
+                <span>Ngày về</span>
+                <div class="btn-on-off">
+                    <label class="switch">
+                        <input type="checkbox" id="switch-two-way" autocomplete="off" />
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="text">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#date"></use>
+                </svg>
+                <div id="date-end-value" class="no-date date-value">Chưa có ngày về</div>
+                <input placeholder="Chưa có ngày về" class="form-control d-none" autocomplete="off" readonly id="litepicker-date-end" />
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="guest-w flex">
+    <div class="item">
+        <a class="wrap" data-toggle="collapse" href="#collapseGuest">
+            <div class="flex icon">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#group"></use>
+                </svg>
+                <span>Số khách, hạng ghế</span>
+            </div>
+            <div class="text">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#group"></use>
+                </svg>
+                <span class="text-ellipsis">
+                    <span class="qty-customer">1</span> khách
+                    <span class="class-seat"></span>
+                </span>
+            </div>
+        </a>
+        <div class="info-passenger collapse" id="collapseGuest">
+            <div class="row">
+                <div class="col-6">
+                    <div class="mb16 txt_16"><strong>Số khách</strong></div>
+                    <div class="flex mb16 space-between align-center">
+                        <div>Người lớn</div>
+                        <div class="sl_giohang">
+                            <div class="input-group-prepend">
+                                <button class="giam_sl" id="minus-btn">-</button>
+                            </div>
+                            <input readonly type="text"
+                                   id="qty_input_adt"
+                                   class="qty_input qty_input_adt"
+                                   value="1"
+                                   min="1" />
+                            <div class="input-group-prepend">
+                                <button class="tang_sl" id="plus-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex mb16 space-between align-center">
+                        <div>Trẻ em</div>
+                        <div class="sl_giohang">
+                            <div class="input-group-prepend">
+                                <button class="giam_sl" id="minus-btn">-</button>
+                            </div>
+                            <input readonly type="text"
+                                   id="qty_input_chil"
+                                   class="qty_input"
+                                   value="0"
+                                   min="0" />
+                            <div class="input-group-prepend">
+                                <button class="tang_sl" id="plus-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex mb16 space-between align-center">
+                        <div>Em bé <span class="gray">(&#60; 2 tuổi)</span></div>
+                        <div class="sl_giohang">
+                            <div class="input-group-prepend">
+                                <button class="giam_sl" id="minus-btn">-</button>
+                            </div>
+                            <input readonly type="text"
+                                   id="qty_input_baby"
+                                   class="qty_input"
+                                   value="0"
+                                   min="0" />
+                            <div class="input-group-prepend">
+                                <button class="tang_sl" id="plus-btn">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="error-number-passenger" class="error mt5 error-field">Số em bé phải nhỏ hơn hoặc bằng số người lớn</div>
+
+                </div>
+                <div class="col-6 line-left">
+                    <div class="mb16 txt_16"><strong>Hạng vé</strong></div>
+                    <div class="check-list">
+                        <div class="check-list_item" data-key="economy" data-value="0">
+                            <div class="mb10"><strong class="text-class-seat">Phổ thông</strong></div>
+                            <div class="gray">
+                                Bay tiết kiệm, đáp ứng mọi nhu cầu cơ bản
+                            </div>
+                        </div>
+
+                        <div class="check-list_item" data-key="business" data-value="1">
+                            <div class="mb10"><strong class="text-class-seat">Thương gia</strong></div>
+                            <div class="gray">
+                                Bay đẳng cấp, với quầy làm thủ tục và khu ghế ngồi
+                                riêng
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="submit" title="Tìm kiếm" class="btn-search btn-default">
+    <svg class="icon-svg">
+        <use xlink:href="../images/icons/icon.svg#search"></use>
+    </svg>
+</button>

@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng vé máy bay";
+}
+
+<section class="main-container clearfix">
+    <div class="mb16">
+        <a href="/flightBooking" class="gray">
+            <svg class="icon-svg min">
+                <use xlink:href="../images/icons/icon.svg#prev2"></use>
+            </svg>
+            <span>Quay lại đơn hàng</span>
+        </a>
+    </div>
+    <div class="search-null d-none center mb40">
+        <div class="mb24">
+            <img src="~/images/graphics/icon-search.png" alt="">
+        </div>
+        <h2 class="title txt_24">Không tìm thấy kết quả</h2>
+        <div class="gray">Chúng tôi không tìm thấy thông tin mà bạn cần, vui lòng thử lại</div>
+    </div>
+    <div id="order-detail-content">
+        <div class="bg-white pd-20 radius10 mb16">
+            <div class="flex-detail-order">
+                <div class="item">
+                    <div class="gray mb5">Mã đơn hàng</div>
+                    <div class="bold color-blue" id="orderNo"></div>
+                </div>
+                <div class="item" id="bookingCode">
+                    <div class="gray mb2">Mã đặt chỗ chiều đi</div>
+                    <a href="#" class="btn-default orange min">Đang xử lý</a>
+
+                    <div class="gray mb2">Mã đặt chỗ chiều về</div>
+                    <a href="#" class="btn-default orange min">Đang xử lý</a>
+                </div>
+                <div class="item" id="paymentStatus">
+                    <div class="gray mb2">Trạng thái</div>
+
+                </div>
+                <div class="item">
+                    <div class="gray mb2">Ngày đặt</div>
+                    <div class="bold" id="createTime">18/6/2022, 16:34:22</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white pd-20 radius10 mb16">
+            <div class="detail-order-flight">
+                <div class="grid grid__2 layout">
+                    <div class="detail-order-flight__left">
+                        <div class="mb10 txt_16"><strong>Thông tin liên hệ</strong></div>
+                        <ul id="contact">
+                        </ul>
+                        <div class="mb10 txt_16"><strong>Thông tin hành khách <span id="passengerNum">(1 khách)</span></strong></div>
+                        <ul id="passengers">
+
+                            <li>
+                                <a class="bold color-blue" href="#">Xem chi tiết</a>
+                            </li>
+                        </ul>
+                        <div class="line-bottom mb16"></div>
+                        <div class="mb10 txt_16"><strong>Thanh toán</strong></div>
+                        <ul>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Trạng thái thanh toán</div>
+                                <div id="paymentStatusName">Chưa thanh toán</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Phương thức thanh toán</div>
+                                <div id="paymentTypeName">Chuyển khoản NH</div>
+                            </li>
+                        </ul>
+                        <div class="line-bottom mb16"></div>
+                        <div class="mb10 txt_16"><strong>Chi tiết giá</strong></div>
+                        <ul>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Tổng tiền</div>
+                                <div class="total-price"></div>
+                            </li>
+                            <li id="voucher-adavigo" class="mb10 flex space-between d-none">
+                                <div class="gray">Voucher từ Adavigo</div>
+                                <div id="voucher-adavigo-price">984.000 Đ</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div>
+                                    <strong>Tiền cần thanh toán</strong>
+                                    <div class="gray">Đã bao gồm thuế, phí, VAT</div>
+                                </div>
+                                <div class="bold txt_16 color-green total-price-final"></div>
+                            </li>
+                        </ul>
+                        <button type="button" class="btn btn-default btn-not-paid">Thanh toán</button>
+                    </div>
+                    <div class="detail-order-flight__right">
+                        <div class="mb10 txt_16"><strong>Thông tin chuyến bay</strong></div>
+                        <div class="trip-info min" id="list-flight">
+                            <div class="trip-info__right">
+                                <div class="name">
+                                    <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                    <div class="hang">Bamboo Airways</div>
+                                    <p class="code">QH1629 / Airbus A320</p>
+                                </div>
+                                <div class="time-flight">
+                                    <div class="first-time">
+                                        <div class="time">HAN</div>
+                                        <div class="gray">Hà Nội</div>
+                                        <div class="gray">17:40, 24 tháng 6</div>
+                                    </div>
+                                    <div class="flight">
+                                        <img src="~/images/icons/fly-to-gray.png" alt="">
+                                    </div>
+                                    <div class="last-time">
+                                        <div class="time">PQC</div>
+                                        <div class="gray">Phú Quốc</div>
+                                        <div class="gray">17:40, 24 tháng 6</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/flightBooking/orderDetail.js" asp-append-version="true"></script>
+}
+
+
+

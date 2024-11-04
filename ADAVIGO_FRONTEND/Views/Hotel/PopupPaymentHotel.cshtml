@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+    string qr_code = (string)ViewBag.QRCode;
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model PaymentHotelModel
+
+<div class="">
+    <table class="table table-bordered" border="1">
+        <tbody>
+            <tr>
+                <td>
+                    <div>Số tài khoản</div>
+                </td>
+                <td>
+                    <div>@Model.bank_account</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Chủ tài khoản</div>
+                </td>
+                <td>
+                    <div>Công ty cổ phần Thương mại và Dịch vụ Quốc tế Đại Việt</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Ngân hàng</div>
+                </td>
+                <td>
+                    <div>@Model.short_name</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Số tiền chuyển khoản</div>
+                </td>
+                <td>
+                    <div>@Model.amount.ToString("N0")</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Nội dung chuyển khoản</div>
+                </td>
+                <td>
+                    <div>@Model.order_no THANH TOAN</div>
+                </td>
+            </tr>
+            @if(qr_code!=null && qr_code.Trim() != "")
+            {
+                <tr>
+                    <td style="position:relative;">
+                        <div style="position:absolute;top:40%;">Mã QR chuyển khoản</div>
+                    </td>
+                    <td>
+                        <div><img style="max-width:240px;" src="@qr_code" /></div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p class="txt_16 bold" style="margin: 0px;">Lưu ý:</p>
+    <div class="pd-10">
+        <p><strong>1.</strong> Bạn vui lòng điền chính xác thông tin chuyển khoản bao gồm “Số tiền chuyển khoản” & “Nội dung chuyển khoản” để việc đặt hàng diễn ra nhanh chóng.</p>
+        <p><strong>2.</strong> Đơn hàng của bạn sẽ được xác nhận thanh toán sau khi hệ thống của Adavigo ghi nhận thông báo thanh toán thành công từ ngân hàng.</p>
+        <p><strong>3.</strong> Bạn vui lòng giữ lại các chứng từ giao dịch để đối chiếu khi có phát sinh vấn đề</p>
+        <p><strong>4.</strong> Bạn có thể thực hiện thanh toán tại quầy giao dịch ngân hàng, Mobile Banking, ATM, hoặc thanh toán qua dịch vụ Internet Banking của ngân hàng tại đây.</p>
+    </div>
+
+    <a type="button" class="btn btn-default mt10 full size" style="width: 240px;" href="/hotel/OrderSuccess?order_no=@Model.order_no">Xác nhận đã chuyển khoản</a>
+</div>

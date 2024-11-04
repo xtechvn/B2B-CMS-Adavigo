@@ -1,0 +1,458 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels;
+@using ADAVIGO_FRONTEND.Models.Configs;
+@using System.Security.Claims
+@model HotelOrderDataModel
+
+@if (Model != null)
+{
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var address = claimsIdentity.FindFirst(nameof(SystemUserModel.Address));
+    var phone = claimsIdentity.FindFirst(nameof(SystemUserModel.Phone));
+    var email = claimsIdentity.FindFirst(nameof(SystemUserModel.Email));
+    var _UserManager = new SystemUserModel
+                {
+                    ClientID = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ClientID)).Value),
+                    ClientType = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ClientType)).Value),
+                    ClientName = claimsIdentity.FindFirst(nameof(SystemUserModel.ClientName)).Value,
+                    Phone = phone != null ? phone.Value : string.Empty,
+                    Address = address != null ? address.Value : string.Empty,
+                    Email = email != null ? email.Value : string.Empty
+                };
+
+    var FromDate = DateTime.Parse(Model.arrivalDate);
+    var ToDate = DateTime.Parse(Model.departureDate);
+    var TotalDays = (ToDate - FromDate).TotalDays + 1;
+    decimal TotalMoney = 0;
+    var ArrMemberOfRoom = new List<string>();
+
+    int room_total = 0, adult_total = 0, child_total = 0, infant_total = 0;
+
+    if (Model.rooms != null && Model.rooms.Any())
+    {
+        //var room_groups = Model.rooms.GroupBy(s => new { s.room_number, s.room_id, s.room_name, s.adult, s.child, s.infant });
+        room_total = Model.rooms.Count();
+        adult_total = Model.rooms.Sum(s => s.adult);
+        child_total = Model.rooms.Sum(s => s.child);
+        infant_total = Model.rooms.Sum(s => s.infant);
+
+        if (adult_total > 0) ArrMemberOfRoom.Add(adult_total + " Người lớn");
+        if (child_total > 0) ArrMemberOfRoom.Add(child_total + " Trẻ em");
+        if (infant_total > 0) ArrMemberOfRoom.Add(infant_total + " Em bé");
+    }
+
+    var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
+
+    <input type="hidden" id="input__hotel_id" value="@Model.hotelID" />
+    <input type="hidden" id="input__number_room_order" value="@room_total" />
+    <input type="hidden" id="input__hotel_arrival_date" value="@Model.arrivalDate" />
+    <input type="hidden" id="input__hotel_departure_date" value="@Model.departureDate" />
+
+    <input type="hidden" id="input__number_adult_order" value="@adult_total" />
+    <input type="hidden" id="input__number_child_order" value="@child_total" />
+    <input type="hidden" id="input__number_infant_order" value="@infant_total" />
+    <input type="hidden" id="input__token_order" value="@Model.orderToken" />
+
+    <section class="step-menu">
+        <div class="step step1 active success">
+            <span class="number">
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+                </svg>
+            </span> Thông tin đặt chỗ
+        </div>
+        <div class="step step1 active">
+            <span class="number">2</span> Thông tin khách hàng
+        </div>
+        <div class="step step2">
+            <span class="number">3</span> Thanh toán
+        </div>
+        <div class="step step3">
+            <span class="number">4</span> Hoàn thành
+        </div>
+    </section>
+
+    <section class="main-container clearfix">
+        <div class="flex mb16">
+            <div class="col-main">
+                <div class="bg-white pd-20 radius10 mb16">
+                    <form id="form_order_client_info">
+                        <div class="mb30">
+                            <h2 class="bold txt_20 mb16">Thông tin thành viên chính</h2>
+                            <div class="line-bottom mb16"></div>
+                            <div class="form-group hidden">
+                                <label class="" for="exampleInputEmail1">Danh xưng</label>
+                                <div class="sort-list flex">
+                                    <label class="confir_res circle mb0">
+                                        Ông
+                                        <input type="radio" name="rad_present_sex" checked="">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="confir_res circle mb0 ml-3">
+                                        Bà
+                                        <input type="radio" name="rad_present_sex">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="confir_res circle mb0 ml-3">
+                                        Khác
+                                        <input type="radio" name="rad_present_sex">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group mb0">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label class="">Họ và tên trưởng đoàn</label>
+                                        <div class="row row__grid_8">
+                                            <input type="text" class="form-control" name="firstName" placeholder="Tên" value="@_UserManager.ClientName">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb16">
+                                        <label class="">Số điện thoại</label>
+                                        <input type="text" class="form-control" name="phoneNumber" placeholder="Số điện thoại" value="@_UserManager.Phone">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb0">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label class="">Địa chỉ (Quốc gia, tỉnh, thành phố)</label>
+                                        <div class="row row__grid_8">
+                                            <div class="col-md-4 mb16">
+                                                <input type="text" class="form-control" name="country" placeholder="Nhập quốc gia" value="Việt Nam">
+                                            </div>
+                                            <div class="col-md-8 mb16">
+                                                <input type="text" class="form-control" name="address" placeholder="Nhập quốc tịch" value="Việt Nam">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb16">
+                                        <label class="">Email</label>
+                                        <input type="text" class="form-control" name="email" placeholder="Nhập email" value="@_UserManager.Email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="gray" for="exampleInputEmail1">Lưu ý</label>
+                                <textarea class="form-control" name="note" rows="4"></textarea>
+                            </div>
+                            <div class="form-group flex hidden">
+                                <input type="file" class="hidden" id="import_data_guest">
+                                <button type="button" class="btn btn-default upload size" onclick="$('#import_data_guest').trigger('click');">
+                                    <svg class="icon-svg mr-1" width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16.9414 15.0002C16.9414 15.5525 16.4937 16.0002 15.9414 16.0002H1.94141C1.38912 16.0002 0.941406 15.5525 0.941406 15.0002C0.941406 14.448 1.38912 14.0002 1.94141 14.0002H15.9414C16.4937 14.0002 16.9414 14.4479 16.9414 15.0002ZM5.39838 5.5433C5.65428 5.5433 5.91022 5.44567 6.10547 5.25039L7.94141 3.41445V11.1253C7.94141 11.6775 8.38912 12.1253 8.94141 12.1253C9.49369 12.1253 9.94141 11.6775 9.94141 11.1253V3.41445L11.7773 5.25039C12.1679 5.64092 12.801 5.64092 13.1916 5.25039C13.5821 4.85986 13.5821 4.22671 13.1916 3.83617L9.6485 0.293143C9.25797 -0.0973887 8.62481 -0.0973887 8.23428 0.293143L4.69125 3.83617C4.30072 4.22671 4.30072 4.85986 4.69125 5.25039C4.88653 5.44567 5.14244 5.5433 5.39838 5.5433Z" fill="#1254FF" />
+                                    </svg>
+                                    Upload danh sách khách nhanh
+                                </button>
+                                <a type="button" class="btn btn-default download size" href="/templates/excels/template_import_room_member.xlsx">
+                                    <svg class="icon-svg mr-1" width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.90141 8.64C7.58141 8.32 7.10141 8.32 6.78141 8.64L5.34141 10.08V0.8C5.34141 0.32 5.02141 0 4.54141 0C4.06141 0 3.74141 0.32 3.74141 0.8V10.08L2.30141 8.64C1.98141 8.32 1.50141 8.32 1.18141 8.64C0.861406 8.96 0.861406 9.44 1.18141 9.76L3.98141 12.56C4.14141 12.72 4.38141 12.8 4.54141 12.8C4.70141 12.8 4.94141 12.72 5.10141 12.56L7.90141 9.76C8.22141 9.44 8.22141 8.88 7.90141 8.64Z" fill="#1254FF" />
+                                    </svg>
+                                    Tải mẫu danh sách khách nhanh
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb30">
+                            <h2 class="bold txt_20 mb16">Thông tin thành viên trong đoàn</h2>
+                            <div class="line-bottom mb16"></div>
+                            @if (Model.rooms != null && Model.rooms.Any())
+                            {
+                                var room_group = Model.rooms.GroupBy(s => new { s.room_number, s.room_id, s.room_name, s.adult, s.child, s.infant });
+                                foreach (var item in room_group)
+                                {
+                                    <div class="info-room-block-item room" data-room="@item.Key.room_number">
+                                        <div class="bold txt_16 mb16">Phòng @item.Key.room_number</div>
+                                        @if (item.Key.adult > 0)
+                                        {
+                                            @for (int i = 0; i < item.Key.adult; i++)
+                                            {
+                                                <div class="row input-padding-right room_user_item" data-guesttype="0">
+                                                    <div class="col-md-6 form-group">
+                                                        <label class="" for="exampleInputEmail1">Người lớn @(i+1)</label>
+                                                        <input type="text" name="@Guid.NewGuid().ToString()" class="form-control member_name" placeholder="Họ và tên" />
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+                                        @if (item.Key.child > 0)
+                                        {
+                                            @for (int i = 0; i < item.Key.child; i++)
+                                            {
+                                                <div class="row input-padding-right room_user_item" data-guesttype="1">
+                                                    <div class="col-md-6 form-group">
+                                                        <label class="" for="exampleInputEmail1">Trẻ em (4-12 tuổi)</label>
+                                                        <input type="text" name="@Guid.NewGuid().ToString()" class="form-control member_name" placeholder="Họ và tên" />
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        <label class="" for="exampleInputEmail1">Ngày sinh</label>
+                                                        <div class="line-btn-date">
+                                                            <input class="form-control datepicker-input datepicker-input-child member_date" value="@DateTime.Now.AddYears(-8).ToString("dd/MM/yyyy")" type="text" placeholder="Ngày sinh" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+                                        @if (item.Key.infant > 0)
+                                        {
+                                            @for (int i = 0; i < item.Key.infant; i++)
+                                            {
+                                                <div class="row input-padding-right room_user_item" data-guesttype="2">
+                                                    <div class="col-md-6 form-group">
+                                                        <label class="" for="exampleInputEmail1">Em bé (0-4 tuổi)</label>
+                                                        <input type="text" name="@Guid.NewGuid().ToString()" class="form-control member_name" placeholder="Họ và tên" />
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        <label class="" for="exampleInputEmail1">Ngày sinh</label>
+                                                        <div class="line-btn-date">
+                                                            <input class="form-control datepicker-input datepicker-input-infant member_date" value="@DateTime.Now.AddYears(-2).ToString("dd/MM/yyyy")" type="text" placeholder="Ngày sinh" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            }
+
+                            <div class="hidden">
+                                <div class="head-title mb16">
+                                    <h2 class="title txt_20 bold mb0">Thông tin đưa đón</h2>
+                                    <a class="text-collapse" data-toggle="collapse" aria-expanded="true" href="#collapseDate">Thu gọn tất cả</a>
+                                </div>
+                                <div class="line-bottom mb16"></div>
+                                <div class="collapse gray show" id="collapseDate">
+                                    <p class="mb16">Phí dịch vụ đón/tiễn sân bay áp dụng theo quy định của từng khách sạn. Thông tin chi tiết vui lòng liên hệ Bộ phận đặt phòng.</p>
+                                    <div class="grid grid__2 grid-form">
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Yêu cầu đón khách</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select class="select2" name="arrive_able" style="width: 100%;">
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Yes</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Yêu cầu tiễn khách</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select class="select2" name="departure_able" style="width: 100%;">
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Yes</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Phương tiện</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select class="select2" name="arrive_vehicle" style="width: 100%;">
+                                                    <option value="">Chọn phương tiện</option>
+                                                    <option value="car">Car</option>
+                                                    <option value="bus">Bus</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Phương tiện</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select class="select2" name="departure_vehicle" style="width: 100%;">
+                                                    <option value="">Chọn phương tiện</option>
+                                                    <option value="car">Car</option>
+                                                    <option value="bus">Bus</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Mã chuyến bay</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="arrive_plane_code">
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Mã chuyến bay</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="departure_plane_code">
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Số người</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="sl_giohang">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="giam_sl minus-btn">-</button>
+                                                    </div>
+                                                    <input type="number" class="qty_input_arrive" name="arrive_number_user" value="0" min="0" disabled />
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="tang_sl plus-btn">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Số người</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="sl_giohang">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="giam_sl minus-btn">-</button>
+                                                    </div>
+                                                    <input type="number" class="qty_input_departure" name="departure_number_user" value="0" min="0" disabled />
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" class="tang_sl plus-btn">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Ngày đến</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="line-btn-date">
+                                                    <input class="form-control datepicker-input date-arrive-picker" type="text" name="arrive_date" placeholder="Ngày đến">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Ngày về</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="line-btn-date">
+                                                    <input class="form-control datepicker-input date-departure-picker" type="text" name="departure_date" placeholder="Ngày về">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row hidden">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Giờ đón khách</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control ip_arrive_time" name="arrive_time" value="00:00" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row hidden">
+                                            <div class="col-md-4">
+                                                <label class="gray mt10" for="exampleInputEmail1">Giờ trả khách</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control ip_departure_time" name="departure_time" value="00:00" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray" for="exampleInputEmail1">Ghi chú đón khách</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="arrive_note" rows="4"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb0 row">
+                                            <div class="col-md-4">
+                                                <label class="gray" for="exampleInputEmail1">Ghi chú tiễn khách</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="departure_note" rows="4"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-300">
+                <div class="bg-white sticky pd-20 radius10 mb16">
+                    <div class="head-title">
+                        <h2 class="title txt_20 bold mb0">Thông tin đặt phòng</h2>
+                    </div>
+                    <div class="mb12">
+                        <span class="gray">Khách sạn</span><br>
+                        <strong>@Model.hotelName</strong>
+                    </div>
+                    <div class="line-bottom mb12"></div>
+                    <ul>
+                        <li class="gray mb8">@strMemberOfRoom</li>
+                        <li class="flex mb8">
+                            <div class="gray">@FromDate.ToString("dd/MM/yyyy") - @ToDate.ToString("dd/MM/yyyy")</div>
+                            <div class="text-right" style="width: calc(100% - 165px);"><strong>@($"{TotalDays} ngày {TotalDays-1} đêm")</strong></div>
+                        </li>
+                        <li class="gray mb8">@room_total Phòng</li>
+                    </ul>
+                    <div class="line-bottom mb12"></div>
+                    <div class="head-title">
+                        <div class="title bold mb0">Chính sách đặt phòng</div>
+                        <a class="icon-collapse" data-toggle="collapse" href="#data-room-booking">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#next2"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="collapse" id="data-room-booking">
+                        @if (Model.rooms != null && Model.rooms.Any())
+                        {
+                            foreach (var item in Model.rooms)
+                            {
+                                <ul data-room="@item.room_number">
+                                    <li class="gray mb8">
+                                        <input type="hidden" class="room-id" value="@item.room_id" />
+                                        Phòng @item.room_number
+                                    </li>
+                                    <li class="gray mb8"><strong class="room-name">@item.room_name</strong></li>
+                                    @foreach (var pack in item.packages)
+                                    {
+                                        TotalMoney += pack.amount;
+
+                                        <li class="gray row mb8 package_item" data-pack="@pack.package_id">
+                                            <input type="hidden" class="arrival_date" value="@pack.arrival_date" />
+                                            <input type="hidden" class="departure_date" value="@pack.departure_date" />
+                                            <input type="hidden" class="allotment_id" value="@pack.allotment_id" />
+                                            <div class="gray col-7">Gói : <strong class="package-code">@pack.package_code</strong></div>
+                                            <div class="col-5 text-right selected_room_price" data-amount="@pack.amount" data-profit="@pack.profit">
+                                                <strong>@pack.amount.ToString("N0") đ</strong>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                    <div class="flex mb12">
+                        <div class="bold txt_16">Tổng cộng</div>
+                        <div class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@TotalMoney.ToString("N0") VNĐ</div>
+                    </div>
+                    <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
+                    <button type="button" id="btn_continue_to_payment" class="btn btn-default blue full size">Tiếp tục đơn hàng</button>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <p class="no-result">Booking đã hết thời gian</p>
+}
+
+@section scripts{
+<script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+<script type="text/javascript" src="~/js/modules/hotel-order.js"></script>
+}

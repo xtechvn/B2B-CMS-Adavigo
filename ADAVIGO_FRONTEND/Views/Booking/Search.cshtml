@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+
+@using ADAVIGO_FRONTEND.ViewModels
+@model GenericGridViewModel<BookingModel>
+
+<div class="table-responsive table-default bg-white mb24">
+    <table class="table table-nowrap" border="1">
+        <caption>
+            Lịch sử ký quỹ
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col">Mã booking</th>
+                <th scope="col">Ngày đặt</th>
+                <th scope="col">Tên đơn hàng</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Tên khách hàng</th>
+                <th scope="col">Check in</th>
+                <th scope="col">Check out</th>
+                <th scope="col">Số phòng</th>
+                <th scope="col">Số đêm</th>
+                <th scope="col">Giá đại lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListData != null && Model.ListData.Any())
+            {
+                foreach (var item in Model.ListData)
+                {
+                    <tr>
+                        <td><a class="cursor-pointer" onclick="_booking.Detail('@item.orderId')"><span class="color-blue">@item.orderNo</span></a></td>
+                        <td>
+                            @((item.createTime != null && item.createTime != DateTime.MinValue) ? item.createTime.Value.ToString("dd/MM/yyyy HH:mm") : "#")
+                        </td>
+
+                        <td>@item.hotelName</td>
+                        <td class="medium">
+                            @if (item.hotelBookingStatus == 2)
+                            {
+                                <span class="dote-text bg-green" data-id="@item.hotelBookingStatus"></span>
+                                <span class="color-green">@item.hotelBookingStatusName</span>
+                            }
+                            else if (item.hotelBookingStatus == 4)
+                            {
+                                <span class="dote-text bg-red" data-id="@item.hotelBookingStatus"></span>
+                                <span class="color-red">@item.hotelBookingStatusName</span>
+                            }
+                            else
+                            {
+                                <span class="dote-text" data-id="@item.hotelBookingStatus"></span>
+                                <span class="">@item.hotelBookingStatusName</span>
+                            }
+                        </td>
+                        <td>@item.contactClientName</td>
+                        <td>@item.arrivalDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.departureDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.numberOfRoom</td>
+                        <td>@item.roomNights</td>
+                        <td>
+                            <span>@item.amount.ToString("N0") đ</span>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@await Component.InvokeAsync("Paging", new
+{
+    pageModel = new PagingModel()
+    {
+        TotalRecord = Model.TotalRecord,
+        TotalPage = Model.TotalPage,
+        CurrentPage = Model.CurrentPage,
+        PageSize = Model.PageSize,
+        RecordName = "đơn hàng",
+        PageAction = "_booking.OnPaging({0})"
+    }
+})
+
+

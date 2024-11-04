@@ -1,0 +1,80 @@
+﻿.cursor-pointer {
+    cursor: pointer;
+}
+
+.building-grid .guest-w .item {
+    padding-right: 14px;
+}
+
+.building-grid .guest-w .item {
+    width: calc(100% - 76px);
+}
+
+p.no-result {
+    margin: 0;
+    color: orange;
+}
+
+.package_price {
+    min-width: 140px;
+}
+
+
+.btn__delete_package {
+    color: #FF5B00 !important;
+    background: #fff;
+}
+
+    .btn__delete_package:hover {
+        color: #fff !important;
+    }
+
+.info-room .confir_res {
+    border-bottom: unset;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.confir_res_detail {
+    padding-left: 30px;
+    border-bottom: 1px solid #E3EBF3;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+ul.block_cancle_policy {
+    padding: 5px 0 0 16px;
+}
+
+    ul.block_cancle_policy li {
+        list-style-type: initial;
+    }
+
+.building-grid .date-w .note {
+    top: 33px !important;
+}
+
+.modal {
+    overflow-y: auto !important;
+}
+
+.list-room .article-itemt .article-content .btn-default {
+    color: #fff;
+}
+
+    .list-room .article-itemt .article-content .btn-default[aria-expanded="true"] {
+        color: #FF5B00;
+    }
+
+
+#block__hotel_room_tab a, .tab-room .tab-room-link {
+    color: #698096;
+    background: #fff;
+    border: 1px solid;
+}
+
+    #block__hotel_room_tab a.active, .tab-room .tab-room-link.active {
+        color: #fff;
+        background: #FF5B00;
+    }
+

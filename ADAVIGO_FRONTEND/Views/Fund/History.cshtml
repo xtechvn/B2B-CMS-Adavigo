@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Lịch sử kí quỹ";
+}
+<style>
+    .daterangepicker td.start-date::before {
+        content: "Bắt đầu"
+    }
+
+    .daterangepicker td.end-date::before {
+        content: "Kết thúc"
+    }
+</style>
+
+<section class="padding-main bg-white">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="flex">
+                <div class="mr-2 line-btn-date mb10">
+                    <input class="form-control datepicker-input " type="text" id="search_from_date" placeholder="Thời gian bắt đầu" value="@DateTime.Now.AddYears(-1).ToString("dd/MM/yyyy")" />
+                </div>
+                <div class="mr-2 line-btn-date mb10">
+                    <input class="datepicker-input form-control" type="text" id="search_to_date" placeholder="Thời gian kết thúc" value="@DateTime.Now.ToString("dd/MM/yyyy")">
+                </div>
+                <a type="button" class="btn-search btn-default mb10" style="line-height: 34px; color:#fff;" onclick="fund_history.Filter()">Lọc</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="search-wrapper">
+                <form action="" class="mb16" style="max-width:380px;margin-left: auto;">
+                    <input type="search" class="input_search onclick-togle active" id="search_trans_code" placeholder="Tìm kiếm mã giao dịch">
+                    <span class="search-btn">
+                        <button type="button" onclick="fund_history.Filter()">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#search"></use>
+                            </svg>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="main-container clearfix" id="grid_data">
+</section>
+
+@section scripts{
+<script type="text/javascript" src="~/js/modules/fund_history.js"></script>
+}

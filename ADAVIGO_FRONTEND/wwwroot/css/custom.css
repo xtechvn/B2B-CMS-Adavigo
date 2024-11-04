@@ -1,0 +1,14 @@
+﻿.wrap-search .flexbox
+{
+    width:100% !important;
+
+}
+    .wrap-search .flexbox .btn-search {
+        height: initial !important;
+    }
+.banner-tour .tab-menu a {
+    margin:0 !important;
+}
+.nav-left a svg {
+    width:100% !important;
+}

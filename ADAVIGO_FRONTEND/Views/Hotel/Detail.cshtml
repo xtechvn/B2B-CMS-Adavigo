@@ -1,0 +1,336 @@
+﻿@{
+    ViewData["Title"] = "Chi tiết khách sạn";
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model RoomDetailViewModel
+
+@{
+    var FromDate = DateTime.Parse(Model.arrivalDate);
+    var ToDate = DateTime.Parse(Model.departureDate);
+    var TotalDays = (ToDate - FromDate).TotalDays + 1;
+    var ArrMemberOfRoom = new List<string>();
+
+    int room_total = 0, adult_total = 0, child_total = 0, infant_total = 0;
+
+    if (Model.rooms != null && Model.rooms.Any())
+    {
+        room_total = Model.rooms.Count();
+        adult_total = Model.rooms.Sum(s => s.number_adult);
+        child_total = Model.rooms.Sum(s => s.number_child);
+        infant_total = Model.rooms.Sum(s => s.number_infant);
+
+        if (adult_total > 0) ArrMemberOfRoom.Add(adult_total + " Người lớn");
+        if (child_total > 0) ArrMemberOfRoom.Add(child_total + " Trẻ em");
+        if (infant_total > 0) ArrMemberOfRoom.Add(infant_total + " Em bé");
+    }
+    var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
+    long nights = Convert.ToInt64((ToDate - FromDate).TotalDays <= 1 ? 1 : (ToDate - FromDate).TotalDays);
+}
+
+<input type="hidden" id="input__hotel_id" value="@Model.hotelID" />
+<input type="hidden" id="input__hotel_phone" value="@Model.telephone" />
+<input type="hidden" id="input__hotel_email" value="@Model.email" />
+<input type="hidden" id="input__hotel_arrival_date" value="@Model.arrivalDate" />
+<input type="hidden" id="input__hotel_departure_date" value="@Model.departureDate" />
+<input type="hidden" id="input__hotel_search_type" value="@Model.isVinHotel" />
+<input type="hidden" id="input__hotel_nights" value="@nights" />
+
+<input type="hidden" id="input__number_room_order" value="@room_total" />
+<input type="hidden" id="input__hotel_number_adult" value="@adult_total" />
+<input type="hidden" id="input__hotel_number_child" value="@child_total" />
+<input type="hidden" id="input__hotel_number_infant" value="@infant_total" />
+<style>
+    .select-tab {
+        display: inline-block;
+        border-radius: 10px;
+        background: #F1F5F9;
+        font-size: 16px;
+        padding: 8px 15px;
+        margin-right: 6px;
+        font-weight: 600;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .select-tab-active {
+        background: #070BA0 !important;
+        color: #fff !important;
+    }
+</style>
+<section class="tab-menu-folder">
+    <a href="#" class="active">Đặt phòng</a>
+    @*<a href="#">Giữ chỗ của tôi</a>*@
+</section>
+<section class="main-container clearfix">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Khách sạn</a></li>
+        @* <li class="breadcrumb-item active" aria-current="page">Kiên Giang</li>*@
+    </ol>
+    <div class="mb8" id="block__detail_hotel_title">
+        <h2 class="txt_24 bold">@Model.hotelName</h2>
+        @Model.address
+    </div>
+    <div class="row mb16">
+        <div class="col-12">
+            <label class="confir_res circle m-0 float-right">
+                <input type="radio" name="radio_price_type" value="1">
+                <span class="checkmark"></span>
+                <strong class="txt_14 bold">Tổng giá các ngày</strong>
+            </label>
+            <label class="confir_res circle m-0 float-right" style="padding-right:20px;">
+                <input type="radio" name="radio_price_type" checked value="0">
+                <span class="checkmark"></span>
+                <strong class="txt_14 bold">Giá trung bình một ngày</strong>
+            </label>
+        </div>
+    </div>
+    <div class="flex mb16">
+        <div class="col-main" id="block__detail_hotel_rooms">
+            <div class="bg-white pd-12 radius10 mb16">
+                <div class="flex tab-room" id="block__hotel_room_tab">
+                    @for (int i = 1; i <= room_total; i++)
+                    {
+                        var room_model = Model.rooms.FirstOrDefault(s => s.room == i);
+
+                        <a class="cursor-pointer @(i == 1 ? "active": string.Empty)"
+                           data-room="@i"
+                           data-adult="@room_model.number_adult"
+                           data-child="@room_model.number_child"
+                           data-infant="@room_model.number_infant">Phòng @i</a>
+                    }
+                </div>
+            </div>
+            <div class="bg-white pd-12 radius10 mb16">
+                <div class="flex tab-room" id="hotel-room-filter">
+                    <a class="cursor-pointer hotel-room-filter-item" href="javascripts:;">Tiện ích 1</a>
+                </div>
+            </div>
+            <div class="list-room">
+                @await Component.InvokeAsync("HotelRoom", new HotelSearchParamModel
+                {
+                    hotelID = Model.hotelID,
+                arrivalDate = Model.arrivalDate,
+                departureDate = Model.departureDate,
+                rooms = Model.rooms,
+                isVinHotel = Model.isVinHotel
+                })
+            </div>
+            <div class="detail_tin bg-white pd-20 radius10 mb20">
+                <div class="flex tab-room mb20">
+                    <a class="select-tab select-tab-active" href="#select-tab-1">
+                        Phụ thu
+                    </a>
+                </div>
+                <div id="select-tab-1" class="dotted select-tab-tab" style=" padding-left: 5px; ">
+
+
+                </div>
+
+            </div>
+            <div class="bg-white pd-20 radius10 mb16 block_package_addition hidden">
+            </div>
+        </div>
+        <div class="col-300">
+            <div class="bg-white sticky pd-20 radius10 mb16">
+                <div class="head-title">
+                    <h2 class="title txt_20 bold mb0">Thông tin đặt phòng</h2>
+                </div>
+                <div class="mb12">
+                    <span class="gray">Khách sạn</span>
+                    <br />
+                    <strong>@Model.hotelName</strong>
+                </div>
+                <label class="confir_res">
+                    Đặt nhiều gói trong một đơn hàng
+                    <input type="checkbox" name="inlineGoi2" id="cbk__order_multiple_pacekage">
+                    <span class="checkmark"></span>
+                </label>
+                <div class="line-bottom mb12"></div>
+                <ul>
+                    <li class="gray mb8">
+                        @strMemberOfRoom
+                    </li>
+                    <li class="flex mb8">
+                        <div class="gray">@FromDate.ToString("dd/MM/yyyy") - @ToDate.ToString("dd/MM/yyyy")</div>
+                        <div class="text-right" style="width:calc(100% - 165px);"><strong>@($"{TotalDays} ngày {TotalDays-1} đêm")</strong></div>
+                    </li>
+                    <li class="gray mb8">@room_total Phòng</li>
+                </ul>
+                <div class="line-bottom mb12"></div>
+                <div class="head-title">
+                    <div class="title bold mb0">Chính sách đặt phòng</div>
+                    <a class="icon-collapse" data-toggle="collapse" href="#collapse-room1">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#next2"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div id="hotel__detail_grid_selected_room">
+                </div>
+                <div class="line-bottom mb12"></div>
+                <div class="flex mb12">
+                    <div class="bold txt_16">Tổng cộng</div>
+                    <div class="bold txt_18 color-green text-right" id="hotel__booking_total_amount" style="width:calc(100% - 76px)">0 VNĐ</div>
+                </div>
+                <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
+                <button type="button" id="btn__continue_order" class="btn btn-default blue full size">
+                    Tiếp tục đơn hàng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white pd-16 radius10 mb16 hidden" id="block__hotel_advisory">
+        <div class="article-itemt full">
+            <div class="article-content">
+                <div class="bold txt_32">Regent Resort Phú Quốc</div>
+                <div class="on-star">
+                    <div class="star">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#star">
+                            </use>
+                        </svg>
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#star">
+                            </use>
+                        </svg>
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#star">
+                            </use>
+                        </svg>
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#star">
+                            </use>
+                        </svg>
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#star">
+                            </use>
+                        </svg>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="number-vote">
+                            <span class="point">9,7</span>
+                            <span>Tuyệt vời (177 đánh giá)</span>
+                            <a href="#" class="color-blue ml-1">Xem đánh giá</a>
+                        </div>
+                        <div>
+                            <svg class="icon-svg mr-1">
+                                <use xlink:href="/images/icons/icon.svg#address"></use>
+                            </svg>23 Trường Sa, Hoà Hải, Ngũ Hành Sơn, Đà Nẵng <a href="#" class="color-blue ml-1">Xem trên bản đồ</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-right flex justify-end">
+                        <div class="price">
+                            <div class="price-old">2.648.104 đ <span class="sale ml-1">-2%</span></div>
+                            <div class="price-new">2.571.000 đ</div>
+                        </div>
+                        <a class="btn-default ml-2 align-center flex" href="#">Chọn phòng</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- GALLERY -->
+        <div id="lightgallery" class="lightgallery mb24">
+            <div class="grid grid__2">
+                <div class="item" href="/images/graphics/gallery1.jpg" data-sub-html=".caption">
+                    <div class="thumb_img thumb_5x3">
+                        <img src="/images/graphics/gallery1.jpg" alt="">
+                        <div class="caption">
+                            <p>Rivew cảnh đẹp bên hồ</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid__2">
+                    <div class="item" href="/images/graphics/gallery1.jpg" data-sub-html=".caption">
+                        <div class="thumb_img thumb_5x3">
+                            <img src="/images/graphics/gallery1.jpg" alt="">
+                            <div class="caption">
+                                <p>Rivew cảnh đẹp bên hồ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" href="/images/graphics/gallery1.jpg" data-sub-html=".caption">
+                        <div class="thumb_img thumb_5x3">
+                            <img src="/images/graphics/gallery1.jpg" alt="">
+                            <div class="caption">
+                                <p>Rivew cảnh đẹp bên hồ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" href="/images/graphics/gallery1.jpg" data-sub-html=".caption">
+                        <div class="thumb_img thumb_5x3">
+                            <img src="/images/graphics/gallery1.jpg" alt="">
+                            <div class="caption">
+                                <p>Rivew cảnh đẹp bên hồ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item number" href="/images/graphics/gallery1.jpg" data-sub-html=".caption">
+                        <div class="thumb_img thumb_5x3">
+                            <img src="/images/graphics/gallery1.jpg" alt="">
+                            <span class="number-img">
+                                +19
+                            </span>
+                            <div class="caption">
+                                <p>Rivew cảnh đẹp bên hồ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="address-service">
+            <div class="service">
+                <h3 class="txt_16 bold mb12">Tiện nghi khách sạn</h3>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="grid grid__8 list-service">
+                            <div class="item">
+                                <img src="/images/tien-nghi/parking.svg" alt="">
+                                <div>Bãi đỗ xe</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/tien-nghi/train.svg" alt="">
+                                <div>Đưa/đón khách ga tàu</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/tien-nghi/taxi.svg" alt="">
+                                <div>Cho thuê xe hơi</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/tien-nghi/moto.svg" alt="">
+                                <div>Cho thuê xe máy</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/tien-nghi/taxi2.svg" alt="">
+                                <div>Đưa/đón khách sân bay</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/tien-nghi/exchange.svg" alt="">
+                                <div>Thu đổi ngoại tệ</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/tien-nghi/safe.svg" alt="">
+                                <div>Két an toàn</div>
+                            </div>
+                            <div class="view-more">
+                                <a href="#">+24</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+<script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+<script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
+}
+
+
+

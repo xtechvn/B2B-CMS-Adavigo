@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null;
+}
+
+@using ADAVIGO_FRONTEND.ViewModels
+@model MultiplePackageRoomSearchModel
+
+<div class="bg-white radius10 mb8">
+    <div class="wrap-search" style="padding:0px;">
+        <div class="tab-content">
+            <div class="building-grid flex mb8">
+                <div class="date-w flex" style="width:calc(100% - 76px);">
+                    <div class="item">
+                        <a class="wrap" data-toggle="collapse" href="#">
+                            <div class="flex icon">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#date"></use>
+                                </svg>
+                                <span>Nhận phòng</span>
+                            </div>
+                            <div class="text">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#date"></use>
+                                </svg>
+                                <input class="datepicker-input form-control date-range-fromdate" type="text" value="@Model.arrival_date.ToString("dd/MM/yyyy")">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="note">
+                        <a class="day_count">@Model.night_time</a>
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#night2"></use>
+                        </svg>
+                    </div>
+                    <div class="item">
+                        <a class="wrap" data-toggle="collapse" href="#">
+                            <div class="flex icon">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#date"></use>
+                                </svg>
+                                <span>Trả phòng</span>
+                            </div>
+                            <div class="text">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#date"></use>
+                                </svg>
+                                <input class="form-control datepicker-input date-range-todate" type="text" value="@Model.departure_date.ToString("dd/MM/yyyy")">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <button type="button" title="Tìm kiếm" class="btn-search btn-default" id="btn_search_other_package" data-hotel="@Model.hotel_id" data-room="@Model.room_id">
+                    <svg class="icon-svg">
+                        <use xlink:href="/images/icons/icon.svg#search"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-room scrollbar-height" style="max-height:450px;" id="block_other_package_holder">
+       
+    </div>
+
+    <button type="button" class="btn btn-default size mt16 btn_add_room_package">Thêm gói</button>
+</div>

@@ -1,0 +1,208 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Home\NewsFeeds.cshtml" />
+    <Content Remove="wwwroot\js\shared\newsServices.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
+    <Folder Include="Views\Shared\PartialView\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Flights\CustomerInfo\_ModalAddBaggagePartial.cshtml" />
+    <None Include="Views\Flights\CustomerInfo\_ModalAddBaggageV2Partial.cshtml" />
+    <None Include="Views\Flights\CustomerInfo\_ModalConfirmPartial.cshtml" />
+    <None Include="Views\Flights\Payment\_ModalBankTransferPartial.cshtml" />
+    <None Include="wwwroot\css\fontAwesome\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\css\fontAwesome\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\css\fonts\icomoon.svg" />
+    <None Include="wwwroot\css\fonts\iconfont\iconfont.woff2" />
+    <None Include="wwwroot\css\fonts\lg.svg" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Bold.svg" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Bold.woff2" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Medium.svg" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Medium.woff2" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Regular.svg" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Regular.woff2" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Semibold.svg" />
+    <None Include="wwwroot\css\fonts\SFProDisplay\SFProDisplay-Semibold.woff2" />
+    <None Include="wwwroot\css\images\graphics\logout.svg" />
+    <None Include="wwwroot\css\images\icons\address.svg" />
+    <None Include="wwwroot\css\maps\article.css.map" />
+    <None Include="wwwroot\css\maps\comment.css.map" />
+    <None Include="wwwroot\css\maps\datepicker-v2.css.map" />
+    <None Include="wwwroot\css\maps\demo.css.map" />
+    <None Include="wwwroot\css\maps\detail.css.map" />
+    <None Include="wwwroot\css\maps\style.css.map" />
+    <None Include="wwwroot\css\scss\article.scss" />
+    <None Include="wwwroot\css\scss\comment.scss" />
+    <None Include="wwwroot\css\scss\datepicker-v2.scss" />
+    <None Include="wwwroot\css\scss\detail.css.map" />
+    <None Include="wwwroot\css\scss\detail.scss" />
+    <None Include="wwwroot\css\scss\Save.svg" />
+    <None Include="wwwroot\css\scss\style.scss" />
+    <None Include="wwwroot\css\scss\_circle.scss" />
+    <None Include="wwwroot\css\scss\_common.scss" />
+    <None Include="wwwroot\css\scss\_datepicker.min.scss" />
+    <None Include="wwwroot\css\scss\_element.scss" />
+    <None Include="wwwroot\css\scss\_font.scss" />
+    <None Include="wwwroot\css\scss\_footer.scss" />
+    <None Include="wwwroot\css\scss\_form.scss" />
+    <None Include="wwwroot\css\scss\_header.scss" />
+    <None Include="wwwroot\css\scss\_lightgallery.scss" />
+    <None Include="wwwroot\css\scss\_modal.scss" />
+    <None Include="wwwroot\css\scss\_placeholder.scss" />
+    <None Include="wwwroot\css\scss\_reset.scss" />
+    <None Include="wwwroot\css\scss\_responsive.scss" />
+    <None Include="wwwroot\css\scss\_scrollbar.scss" />
+    <None Include="wwwroot\css\scss\_slider-range.scss" />
+    <None Include="wwwroot\css\scss\_swiper.scss" />
+    <None Include="wwwroot\css\scss\_t-datepicker-orange.scss" />
+    <None Include="wwwroot\css\scss\_t-datepicker.min.scss" />
+    <None Include="wwwroot\css\scss\_var.scss" />
+    <None Include="wwwroot\css\scss\_vendors.scss" />
+    <None Include="wwwroot\images\graphics\404.svg" />
+    <None Include="wwwroot\images\graphics\logo-a.svg" />
+    <None Include="wwwroot\images\graphics\logo-white.svg" />
+    <None Include="wwwroot\images\graphics\logo.svg" />
+    <None Include="wwwroot\images\icons\Add.svg" />
+    <None Include="wwwroot\images\icons\changer.svg" />
+    <None Include="wwwroot\images\icons\clock-hot.svg" />
+    <None Include="wwwroot\images\icons\icon.svg" />
+    <None Include="wwwroot\images\icons\insurance.svg" />
+    <None Include="wwwroot\images\icons\lightning.svg" />
+    <None Include="wwwroot\images\icons\lightning2.svg" />
+    <None Include="wwwroot\images\icons\location.svg" />
+    <None Include="wwwroot\images\icons\notification.svg" />
+    <None Include="wwwroot\images\icons\paper.svg" />
+    <None Include="wwwroot\images\icons\recharge.svg" />
+    <None Include="wwwroot\images\icons\seat.svg" />
+    <None Include="wwwroot\images\icons\security-guard.svg" />
+    <None Include="wwwroot\images\icons\soup.svg" />
+    <None Include="wwwroot\images\icons\Upload.svg" />
+    <None Include="wwwroot\images\icons\vali.svg" />
+    <None Include="wwwroot\images\icons\warring.svg" />
+    <None Include="wwwroot\images\nganhang\bank-techcombank.svg" />
+    <None Include="wwwroot\images\nganhang\VIB.svg" />
+    <None Include="wwwroot\images\symbols\elements\add.svg" />
+    <None Include="wwwroot\images\symbols\elements\address.svg" />
+    <None Include="wwwroot\images\symbols\elements\address2.svg" />
+    <None Include="wwwroot\images\symbols\elements\afternoon.svg" />
+    <None Include="wwwroot\images\symbols\elements\bed.svg" />
+    <None Include="wwwroot\images\symbols\elements\booking.svg" />
+    <None Include="wwwroot\images\symbols\elements\building.svg" />
+    <None Include="wwwroot\images\symbols\elements\cancel.svg" />
+    <None Include="wwwroot\images\symbols\elements\changer.svg" />
+    <None Include="wwwroot\images\symbols\elements\checkmark.svg" />
+    <None Include="wwwroot\images\symbols\elements\child.svg" />
+    <None Include="wwwroot\images\symbols\elements\close.svg" />
+    <None Include="wwwroot\images\symbols\elements\date.svg" />
+    <None Include="wwwroot\images\symbols\elements\Dawn.svg" />
+    <None Include="wwwroot\images\symbols\elements\dinner.svg" />
+    <None Include="wwwroot\images\symbols\elements\facebook.svg" />
+    <None Include="wwwroot\images\symbols\elements\flight.svg" />
+    <None Include="wwwroot\images\symbols\elements\gift.svg" />
+    <None Include="wwwroot\images\symbols\elements\group.svg" />
+    <None Include="wwwroot\images\symbols\elements\hanh-ly.svg" />
+    <None Include="wwwroot\images\symbols\elements\heart.svg" />
+    <None Include="wwwroot\images\symbols\elements\help.svg" />
+    <None Include="wwwroot\images\symbols\elements\home.svg" />
+    <None Include="wwwroot\images\symbols\elements\info.svg" />
+    <None Include="wwwroot\images\symbols\elements\instagram.svg" />
+    <None Include="wwwroot\images\symbols\elements\lang.svg" />
+    <None Include="wwwroot\images\symbols\elements\menu.svg" />
+    <None Include="wwwroot\images\symbols\elements\morning.svg" />
+    <None Include="wwwroot\images\symbols\elements\next.svg" />
+    <None Include="wwwroot\images\symbols\elements\next2.svg" />
+    <None Include="wwwroot\images\symbols\elements\night.svg" />
+    <None Include="wwwroot\images\symbols\elements\night2.svg" />
+    <None Include="wwwroot\images\symbols\elements\notifi.svg" />
+    <None Include="wwwroot\images\symbols\elements\operate.svg" />
+    <None Include="wwwroot\images\symbols\elements\Out.svg" />
+    <None Include="wwwroot\images\symbols\elements\phone.svg" />
+    <None Include="wwwroot\images\symbols\elements\plane.svg" />
+    <None Include="wwwroot\images\symbols\elements\plus.svg" />
+    <None Include="wwwroot\images\symbols\elements\prev.svg" />
+    <None Include="wwwroot\images\symbols\elements\prev2.svg" />
+    <None Include="wwwroot\images\symbols\elements\recharge.svg" />
+    <None Include="wwwroot\images\symbols\elements\refresh.svg" />
+    <None Include="wwwroot\images\symbols\elements\remove.svg" />
+    <None Include="wwwroot\images\symbols\elements\restaurant.svg" />
+    <None Include="wwwroot\images\symbols\elements\search.svg" />
+    <None Include="wwwroot\images\symbols\elements\star.svg" />
+    <None Include="wwwroot\images\symbols\elements\ticket.svg" />
+    <None Include="wwwroot\images\symbols\elements\ticket2.svg" />
+    <None Include="wwwroot\images\symbols\elements\twitter.svg" />
+    <None Include="wwwroot\images\symbols\elements\Upload.svg" />
+    <None Include="wwwroot\images\symbols\elements\user.svg" />
+    <None Include="wwwroot\images\symbols\elements\user2.svg" />
+    <None Include="wwwroot\images\symbols\elements\view.svg" />
+    <None Include="wwwroot\images\symbols\elements\villa.svg" />
+    <None Include="wwwroot\images\symbols\elements\warning.svg" />
+    <None Include="wwwroot\images\symbols\elements\warring.svg" />
+    <None Include="wwwroot\images\tien-nghi\alarm-clock.svg" />
+    <None Include="wwwroot\images\tien-nghi\body-massage.svg" />
+    <None Include="wwwroot\images\tien-nghi\customer-service.svg" />
+    <None Include="wwwroot\images\tien-nghi\exchange.svg" />
+    <None Include="wwwroot\images\tien-nghi\luggage.svg" />
+    <None Include="wwwroot\images\tien-nghi\massage.svg" />
+    <None Include="wwwroot\images\tien-nghi\moto.svg" />
+    <None Include="wwwroot\images\tien-nghi\parking.svg" />
+    <None Include="wwwroot\images\tien-nghi\phone-call.svg" />
+    <None Include="wwwroot\images\tien-nghi\safe.svg" />
+    <None Include="wwwroot\images\tien-nghi\salon.svg" />
+    <None Include="wwwroot\images\tien-nghi\sauna.svg" />
+    <None Include="wwwroot\images\tien-nghi\taxi.svg" />
+    <None Include="wwwroot\images\tien-nghi\taxi2.svg" />
+    <None Include="wwwroot\images\tien-nghi\ticket.svg" />
+    <None Include="wwwroot\images\tien-nghi\tour-guide.svg" />
+    <None Include="wwwroot\images\tien-nghi\train.svg" />
+    <None Include="wwwroot\images\tien-nghi\wifi.svg" />
+    <None Include="wwwroot\js\shared\ajaxServices.js" />
+    <None Include="wwwroot\js\shared\constants.js" />
+    <None Include="wwwroot\js\shared\newsServices.js" />
+    <None Include="wwwroot\js\shared\flightServices.js" />
+    <None Include="wwwroot\js\shared\timeUtils.js" />
+    <None Include="wwwroot\js\shared\utils.js" />
+    <None Include="wwwroot\libs\jquery\datepicker-vi.js" />
+    <None Include="wwwroot\libs\jquery\jquery-3.6.0.min.js" />
+    <None Include="wwwroot\libs\jquery\jquery-ui.js" />
+    <None Include="wwwroot\templates\excels\template_import_room_member.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.32" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RestSharp" Version="111.2.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\B2B.ENTITIES\LIB.ENTITIES.csproj" />
+    <ProjectReference Include="..\LIB.Caching\LIB.Caching.csproj" />
+    <ProjectReference Include="..\Utilities\LIB.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Hotel\Components\OnePayBank\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\custom.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

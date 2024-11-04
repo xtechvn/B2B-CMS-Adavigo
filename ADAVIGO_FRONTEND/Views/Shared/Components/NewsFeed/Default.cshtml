@@ -1,0 +1,67 @@
+﻿@using ADAVIGO_FRONTEND.Common
+@using ADAVIGO_FRONTEND.ViewModels
+@using LIB.Utilities.Common
+@model NewsViewModel
+@{
+    int count=0;
+}
+<div class="bg-white pd-20 radius10 mb16">
+    <div class="head-title">
+        <h2 class="title txt_20 bold mb0">Lịch bay & khuyến mại</h2>
+        <a class="detail hidden" href="#">Xem thêm</a>
+    </div>
+    @if (Model.IsShowSlider)
+    {
+        <!-- Slide banner -->
+        <div class="slide-banner">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="/images/graphics/thumb1.jpg" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/graphics/thumb1.jpg" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/graphics/thumb1.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    }
+
+    <div class="list-article">
+        @if (Model.NewsDatas != null && Model.NewsDatas.Any())
+        {
+            foreach (var item in Model.NewsDatas)
+            {
+                <div class="article-itemt @(count>=5? "hidden": "")">
+                    <div class="article-thumb">
+                        <a class="thumb_img thumb_5x3" href="#">
+                            <img src="@item.image_169" alt="image">
+                        </a>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="title_new">
+                            @{
+                                string url_slug = "https://adavigo.com/tin-tuc"+ CommonHelper.genLinkNews(item.title, item.id.ToString());
+                            }
+                            <a href="javascript:;" onclick="  window.open('@url_slug', '_blank').focus();">@item.title</a>
+                        </h3>
+                        <div class="date-post">@item.publish_date.ToString("dd/MM/yyyy")</div>
+                    </div>
+                </div>
+                count++;
+            }
+        }
+        
+    </div>
+    <div class="list-article" style="position: relative;padding-top: 50px;">
+        <div class="article-itemt view-more" style="position: absolute;bottom: 0;place-content: center;width: 100%;background: white;padding: 0 !important;margin: 0 !important;">
+            <button class="btn btn-default article-itemt-view-more">Xem thêm</button>
+        </div>
+
+    </div>
+   
+</div>

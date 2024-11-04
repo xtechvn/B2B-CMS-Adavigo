@@ -1,0 +1,80 @@
+﻿<!--POPUP Thông tin chuyển khoản  -->
+<div class="modal fade" id="myModalBankTransfer">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin chuyển khoản </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <table class="table table-bordered" border="1">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div>Số tài khoản</div>
+                            </td>
+                            <td>
+                                <div class="medium bank-stk"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>Chủ tài khoản</div>
+                            </td>
+                            <td>
+                                <div class="medium bank-owner"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>Ngân hàng</div>
+                            </td>
+                            <td>
+                                <div class="medium bank-name"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>Số tiền chuyển khoản</div>
+                            </td>
+                            <td>
+                                <div class="color_green2 medium bank-tranfer-money"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>Nội dung chuyển khoản</div>
+                            </td>
+                            <td>
+                                <div class="color_green2 medium" id="transfer-content">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="position:relative;">
+                                <div style="position:absolute;top:40%;">Mã QR chuyển khoản</div>
+                            </td>
+                            <td>
+                                <div><img id="qr-code-image" style="max-width:240px;" src="" alt="qr-code" /></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="note-popup scrollbar-inner mb16" style="max-height: 180px;">
+                    <p><strong>Lưu ý:</strong></p>
+                    <ul class="gray dotted">
+                        <li>Bạn vui lòng điền chính xác thông tin chuyển khoản bao gồm “Số tiền chuyển khoản” & “Nội dung chuyển khoản” để việc đặt hàng diễn ra nhanh chóng.</li>
+                        <li>Bạn có thể thực hiện chuyển khoản thanh toán tại quầy giao dịch ngân hàng, qua mobile banking, cây ATM, hoặc chuyển khoản qua internet <a class="color-blue">tại đây</a>.</li>
+                    </ul>
+                </div>
+                <div class="line-bottom mb16"></div>
+                <button data-dismiss="modal" type="submit" class="btn btn-default btn-confirm-transfer">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>

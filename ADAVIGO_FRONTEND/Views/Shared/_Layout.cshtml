@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="vi" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="" />
+    <meta name="description" content="content">
+    <meta name="keywords" content="Việt Nam">
+    <title>
+        Adavigo
+    </title>
+    <link rel="icon" type="image/png" href="/images/graphics/logo.svg">
+    <link rel="stylesheet" href="/css/fontAwesome/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" href="/css/bootstrap.css" media="all" />
+    <link rel="stylesheet" href="/css/toastr.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/css/select2.min.css" />
+    <link href="~/css/lightpick.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" media="all" />
+    <link rel="stylesheet" href="/css/extension.css" media="all" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
+
+    <!-- build:head2 -->
+    <!-- build:head -->
+    @await RenderSectionAsync("SocialMetaTags", required: false)
+</head>
+
+<body class="homepage">
+    <section class="section-main clearfix">
+        <section class="menu-left">
+            <a href="javascipt:;" class="btn_control_menu active">
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#menu"></use>
+                </svg>
+            </a>
+            <h1 class="logo" title="new-ca">
+                <a href="/"><img src="/images/graphics/logo-white.svg" alt=""></a>
+            </h1>
+            <div class="nav-left">
+               
+                <ul>
+                    <li>
+                        <a href="/" title="">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#home"></use>
+                            </svg> Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/hotel" title="">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#building"></use>
+                            </svg> Khách sạn
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/fund/history" title="">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#help"></use>
+                            </svg> Lịch sử ký quỹ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/booking" title="">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#booking"></use>
+                            </svg> Quản lý đơn phòng Khách sạn
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/flights" title="">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#flight"></use>
+                            </svg> Vé máy bay
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/flightBooking" title="">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#booking"></use>
+                            </svg> Quản lý vé máy bay
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <a href="#" title="" class="out" onclick="_global.Logout();">
+                <svg class="icon-svg" style="width:100% !important;">
+                    <use xlink:href="/images/icons/icon.svg#Out"></use>
+                </svg> Đăng xuất
+            </a>
+        </section>
+        <!--HEADER-->
+        @await Component.InvokeAsync("TopBar")
+        <!--END HEADER-->
+        @*<section id="navbar" class="topnav">
+            <a href="javascript:;" id="vibeji-ham" class="item"><span></span> <span></span> <span></span></a>
+            <h1 class="logo" title="new-ca">
+                <a href="#"><img src="/images/graphics/logo.svg" alt=""></a>
+            </h1>
+            <h2 class="title-page"></h2>
+            <a href="#" class="phone">
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#phone"></use>
+                </svg>
+                <span>0936 191 192</span>
+            </a>
+            <div class="my-adavigo">
+                <button type="submit" title="Tìm kiếm" class="btn-search">
+                    <svg class="icon-svg">
+                        <use xlink:href="/images/icons/icon.svg#search"></use>
+                    </svg>
+                </button>
+                <div class="notifi">
+                    <a href="">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#notifi"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="my-user dropdown show">
+                    <a class="login dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#user"></use>
+                        </svg>
+                        <span class="nav_username">@(User.Identity.Name == null ? "" : User.Identity.Name.ToString())</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/account" style="color:#00264D">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#user"></use>
+                            </svg> <span>Thông tin tài khoản</span>
+                        </a>
+                        @using System.Security.Claims
+                        @using ADAVIGO_FRONTEND.Models.Configs;
+                        @{
+                            var claimsIdentity = User.Identity as ClaimsIdentity;
+                            var ParentId = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ParentId)).Value);
+                        }
+                        @if (ParentId != null && ParentId <= 0)
+                        {
+                        <a class="dropdown-item" href="/account/listAccount" style="color:#00264D">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#user"></use>
+                            </svg> <span>Quản lý tài khoản</span>
+                        </a>
+                        }
+
+                        <a class="dropdown-item" href="/booking" style="color:#00264D">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#booking"></use>
+                            </svg> <span>Quản lý đơn hàng</span>
+                        </a>
+                        <a class="dropdown-item" href="/fund/history" style="color:#00264D">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#help"></use>
+                            </svg> <span>Quản lý quỹ</span>
+                        </a>
+                        <a class="dropdown-item" onclick="_global.Logout()" style="color:#00264D">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#Out"></use>
+                            </svg> <span>Đăng xuất</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>*@
+
+        @RenderBody()
+
+    </section>
+
+    <div class="overlay-bg"></div>
+
+    <!--Popup include dynamic context-->
+    <div class="modal fade" id="modal-context-global" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title"><!--html holder--></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <!--Append any chtml context here-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Popup include dynamic context-->
+    <div class="modal fade" id="modal-context-global-second" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background:#f5f5f5;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title"><!--html holder--></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <!--Append any chtml context here-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Popup for alert or warning style="max-width: 335px;"-->
+    <div class="modal fade" id="modal-warning-global">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content center">
+                <div class="modal-header">
+                    <div class="center" style="width:100%"><img src="/images/icons/warring.svg" alt=""></div>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <!--Append any html context here-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-warning-logout">
+        <div class="modal-dialog">
+            <div class="modal-content center">
+                <div class="modal-header">
+                    <div class="center" style="width:100%"><img src="/images/icons/warring.svg" alt=""></div>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="gray mb16">Bạn có chắc muốn đăng xuất khỏi hệ thống không?</div>
+                    <div class="center">
+                        <button type="button" class="btn btn-default mr-1" onclick="_global.ConfirmLogout()">Đồng ý</button>
+                        <button type="button" class="btn btn-default ml-1 gray" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Back to top-->
+    <a href="javascript:;" id="to_top">
+        <i class="fa fa-long-arrow-up"></i>
+    </a>
+
+    <partial name="_ModalSuccessPartial" />
+    <partial name="_ModalErrorPartial" />
+    <partial name="_LoaderPartial" />
+
+
+    <!--Jquery lib-->
+    <script type="text/javascript" src="~/libs/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/swiper.min.js"></script>
+    <script type="text/javascript" src="/js/select2.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.js"></script>
+    <script type="text/javascript" src="/js/toastr.min.js"></script>
+    <script type="text/javascript" src="/js/slider-range.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/global/global_script.js"></script>
+    <script src="~/js/lightpick.min.js"></script>
+
+    <script type="text/javascript" src="~/js/shared/constants.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/shared/utils.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/shared/timeUtils.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/shared/ajaxServices.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/shared/flightServices.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/shared/newsservices.js" asp-append-version="true"></script>
+    <script src="~/js/modules/flight/sidebar.js" asp-append-version="true"></script>
+
+    @*<script type="text/javascript">
+    window.onload = function () {
+    var userAuthorized = '@User.Identity.IsAuthenticated.ToString().ToLower()';
+    var user_name = '@(User.Identity.Name == null ? "" : User.Identity.Name.ToString())';
+    if (userAuthorized) {
+    $('.nav_username').html(user_name).change();
+    }
+    };
+    </script>*@
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,18 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels;
+@model IEnumerable<BankDataModel>
+
+<strong class="bold txt_16">Hướng dẫn chuyển khoản</strong>
+<div class="gray txt_12 mb16">Vui lòng chọn một ngân hàng bên dưới để chuyển khoản:</div>
+<ul class="list-bank grid grid__6">
+    @if (Model != null && Model.Any())
+    {
+        int count = 0;
+        foreach (var item in Model)
+        {
+            <li class="@(count++ == 0 ? "active" : string.Empty)" title="@item.fullnameVi" data-account="@item.account_number" data-alias="@item.bankName">
+                <img src="@item.logo" alt="@item.bankName">
+                <span>@item.bankName</span>
+            </li>
+        }
+    }
+</ul>

@@ -1,0 +1,66 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@model BankPaymentModel
+
+<section class="step-menu">
+    <div class="step step1 success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Chọn phương thức
+    </div>
+    <div class="step step2 active">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+            2
+        </span> Xác nhận thông tin chuyển khoản
+    </div>
+</section>
+
+<section class="main-container clearfix">
+    <div class="modal-content" style="max-width: 520px;margin: 0 auto;">
+        <div class="modal-body">
+            <div class="mb16"><img src="/images/icons/deadline.png" alt=""></div>
+            <div class="txt_24 bold mb10 color-orange">Chờ xác nhận thanh toán</div>
+            <div class="gray">
+                <p>Đơn hàng của bạn sẽ được xác nhận thanh toán sau khi Adavigo nhận được thông báo từ ngân hàng</p>
+                <p>Sau khi thanh toán đơn hàng bàng tài khoản ngân hàng quý khách chụp lại hoá đơn thanh toán rồi gửi về Adavigo. Adavigo sẽ xác nhận và liên hệ với quý khách </p>
+            </div>
+            <div class="mb5"><strong>Ảnh UNC nạp tiền</strong></div>
+            <div class="mb10 note-warring">
+                <svg class="icon-svg mr-1">
+                    <use xlink:href="/images/icons/icon.svg#warring"></use>
+                </svg> Lưu ý: Vui lòng gửi lại hình ảnh hoá đơn thanh toán
+            </div>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile">
+                <label id="label_payment_upload" class="custom-file-label" for="customFile">
+                    <div class="mb24">
+                        <img src="/images/icons/Upload.svg" alt="">
+                    </div>
+                    <div class="bold mb10">Drag & drop files or <a>Browse</a></div>
+                    <div class="gray">Supported formates: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT</div>
+                </label>
+                <div class="list image_preview_list" style="display:none;">
+                    <div class="item">
+                        <img id="image_payment_preview" src="" alt="">
+                        <a class="delete cursor-pointer" id="btn__delete_image_preview">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#close"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="payment_confirm_trans_code" value="@Model.tran_code" />
+            <button type="button" id="btn_payment_insert_deposit_log" class="btn btn-default gray size" style="width: 240px;">Xác nhận & hoàn tất</button>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+<script type="text/javascript" src="~/js/modules/payment.js"></script>
+}

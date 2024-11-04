@@ -1,0 +1,368 @@
+﻿<div class="col-300">
+    <div class="bg-white pd-10 radius10 mb5" id="bookflight-fail">
+        <div class="clock-hot">
+            <svg class="icon-svg color-red">
+                <use xlink:href="../images/icons/icon.svg#warring2"></use>
+            </svg>
+            <div class="content gray pl-10">
+                @*<h3 class="bold txt_18 color-red">Hãy nhanh tay!</h3>*@
+                Vé cần thanh toán ngay để giữ chỗ <strong id="bookfail_timer" class="color-red"></strong>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white pd-10 radius10 mb5" id="bookflight-success">
+        <div class="clock-hot">
+            <img src="~/images/icons/clock-hot.svg" alt="">
+            <div class="content gray">
+                Giá có thể thay đổi trong thời gian ngắn Thời gian hoàn tất thanh thanh toán <strong class="color-yellow" id="game_timer"></strong>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white pd-20 radius10 mb16">
+        <div class="head-title mb0">
+            <h2 class="title txt_20 bold mb0">Thông tin chuyến bay</h2>
+            <a class="icon-collapse" aria-expanded="true" data-toggle="collapse" href="#collapseInfoflight">
+                <svg class="icon-svg">
+                    <use xlink:href="../images/icons/icon.svg#next2"></use>
+                </svg>
+            </a>
+        </div>
+        <div class="collapse show mt16" id="collapseInfoflight">
+            <div class="trip-info trip-info-go min mb16">
+                <div class="trip-info__left">
+                    <div class="lbl" id="flight-go-lbl">Chiều đi</div>
+                    <div class="info">
+                        <div class="name full-name-go"></div>
+                        <div class="date">
+                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                        </div>
+                    </div>
+                </div>
+                <div class="trip-info__right">
+                    <div class="detail-trip">
+                        <div class="name">
+                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                            <div class="hang"></div>
+                            <p class="code"></p>
+                        </div>
+                        <div class="option">
+                            <div class="tag">EA</div>
+                            <span class="seat-class-go"></span>
+                            <span class="tooltip-new">
+                                <svg class="icon-svg color-blue min">
+                                    <use xlink:href="../images/icons/icon.svg#info">
+                                    </use>
+                                </svg>
+                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                            </span>
+                        </div>
+                        <div class="time-flight">
+                            <div class="first-time">
+                                <div class="time">20:20</div>
+                                <div class="add code-fly-start"></div>
+                            </div>
+                            <div class="flight">
+                                <img src="~/images/icons/fly-to.png" alt="">
+                                <p class="duration-fly-item-go-wrapper">
+                                    <span class="duration-fly-item-go"></span>&nbsp;
+                                    <span class="stopNum-go"></span>
+                                </p>
+                            </div>
+                            <div class="last-time">
+                                <div class="time">20:20</div>
+                                <div class="add code-fly-end"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="trip-info trip-info-back d-none min mb16">
+                <div class="trip-info__left">
+                    <div class="lbl red">Chiều về</div>
+                    <div class="info">
+                        <div class="name full-name-back"></div>
+                        <div class="date">
+                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                        </div>
+                    </div>
+                </div>
+                <div class="trip-info__right">
+                    <div class="detail-trip">
+                        <div class="name">
+                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                            <div class="hang"></div>
+                            <p class="code"></p>
+                        </div>
+                        <div class="option">
+                            <div class="tag">EA</div>
+                            <span class="seat-class-back"></span>
+                            <span class="tooltip-new">
+                                <svg class="icon-svg color-blue min">
+                                    <use xlink:href="../images/icons/icon.svg#info">
+                                    </use>
+                                </svg>
+                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                            </span>
+                        </div>
+                        <div class="time-flight">
+                            <div class="first-time">
+                                <div class="time">20:20</div>
+                                <div class="add code-fly-start"></div>
+                            </div>
+                            <div class="flight">
+                                <img src="~/images/icons/fly-to.png" alt="">
+                                <p class="duration-fly-item-back-wrapper">
+                                    <span class="duration-fly-item-back"></span>&nbsp;
+                                    <span class="stopNum-back"></span>
+                                </p>
+                            </div>
+                            <div class="last-time">
+                                <div class="time">20:20</div>
+                                <div class="add code-fly-end"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="blue-white btn-default full size" data-toggle="modal" data-target="#myModalDetailsFight">Xem chi tiết </button>
+        </div>
+    </div>
+    <div class="bg-white pd-20 radius10 mb16">
+        <div class="details-go">
+            <div id="customer-list-wrapper">
+                <div class="mb16 txt_16"><strong>Hành khách</strong></div>
+                <div class="pl-3">
+                    <ul id="customer-list">
+                        <li class="mb15 flex space-between">
+                            <div>Ông</div>
+                            <div class="gray">Nguyễn Văn A</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @*<div class="mb16 txt_16"><strong id="flight-go-detail-text">Chi tiết chiều đi</strong></div>*@
+            @*<div class="pl-3">
+                <ul>
+                    <li class="mb15 flex space-between gray">
+                        <div>Người lớn (x<span class="qty-adt"></span>)</div>
+                        <div class="fee-adt"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray d-none">
+                        <div>Trẻ em (x<span class="qty-child"></span>)</div>
+                        <div class="fee-child"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray d-none">
+                        <div>Em bé (x<span class="qty-baby"></span>)</div>
+                        <div class="fee-baby"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray">
+                        <div>
+                            Thuế &amp; phí sân bay
+                        </div>
+                        <div class="tax-airport"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray">
+                        <div>
+                            Phí dịch vụ
+                            <span class="tooltip-new">
+                                <svg class="icon-svg color-blue min">
+                                    <use xlink:href="../images/icons/icon.svg#info">
+                                    </use>
+                                </svg>
+                                <div class="tooltip-content tool-tip-service-fee">
+
+                                </div>
+                            </span>
+                        </div>
+                        <div class="adavigo-fee">35.000 đ</div>
+                    </li>
+                    <li class="mb15 flex space-between gray baggage-wrapper">
+                        <div>
+                            Hành lý mua thêm <span class="baggage-name"></span>
+                        </div>
+                        <div class="baggage-fee">35.000 đ</div>
+                    </li>
+                </ul>
+                <div class="line-bottom mb16"></div>
+                <ul>
+                    <li class="mb15 flex space-between">
+                        <div class="bold gray">Tổng giá</div>
+                        <div class="bold total-go">1.184.000 đ</div>
+                    </li>
+                </ul>
+            </div>*@
+        </div>
+        @*<div class="details-back d-none">
+            <div class="mb16 txt_16"><strong>Chi tiết chiều về</strong></div>
+            <div class="pl-3">
+                <ul>
+                    <li class="mb15 flex space-between gray">
+                        <div>Người lớn (x<span class="qty-adt"></span>)</div>
+                        <div class="fee-adt"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray d-none">
+                        <div>Trẻ em (x<span class="qty-child"></span>)</div>
+                        <div class="fee-child"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray d-none">
+                        <div>Em bé (x<span class="qty-baby"></span>)</div>
+                        <div class="fee-baby"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray">
+                        <div>
+                            Thuế &amp; phí sân bay
+                        </div>
+                        <div class="tax-airport"></div>
+                    </li>
+                    <li class="mb15 flex space-between gray">
+                        <div>
+                            Phí dịch vụ
+                            <span class="tooltip-new">
+                                <svg class="icon-svg color-blue min">
+                                    <use xlink:href="../images/icons/icon.svg#info">
+                                    </use>
+                                </svg>
+                                <div class="tooltip-content tool-tip-service-fee">
+                                    Phí này giúp Mytour duy trì và nâng cao chất lượng dịch vụ như cải thiện dịch vụ khách hàng 24/7, nâng cấp trải nghiệm  ứng dụng và hỗ trợ hoàn hủy, mua thêm các dịch vụ sau đặt vé được tốt hơn
+                                </div>
+                            </span>
+                        </div>
+                        <div class="adavigo-fee">35.000 đ</div>
+                    </li>
+                    <li class="mb15 flex space-between gray baggage-wrapper">
+                        <div>
+                            Hành lý mua thêm <span class="baggage-name"></span>
+                        </div>
+                        <div class="baggage-fee">35.000 đ</div>
+                    </li>
+                </ul>
+                <div class="line-bottom mb16"></div>
+                <ul>
+                    <li class="mb15 flex space-between">
+                        <div class="bold gray">Tổng giá</div>
+                        <div class="bold total-back"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>*@
+        <div class="mb5 txt_16"><strong>Chi tiết chuyến bay</strong></div>
+        @*<table class="table table-noborder gray mb10 details-go">
+            <thead id="flight-go-detail-row">
+                <tr>
+                    <th class="color-body" colspan="3">&#8226; <strong>Chiều đi</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Người lớn</td>
+                    <td><span class="qty-adt"></span> x <span class="fee-adt"></span></td>
+                    <td class="color-body text-right"><span class="total-adt"></span></td>
+                </tr>
+                <tr class="d-none">
+                    <td>Trẻ em</td>
+                    <td><span class="qty-child"></span> x <span class="fee-child"></span></td>
+                    <td class="color-body text-right"><span class="total-child"></span></td>
+                </tr>
+                <tr class="d-none">
+                    <td>Em bé</td>
+                    <td><span class="qty-baby"></span> x <span class="fee-baby"></span></td>
+                    <td class="color-body text-right"><span class="total-baby"></span></td>
+                </tr>
+
+                <tr class="baggage-wrapper">
+                    <td>Tổng hành lý</td>
+                    <td class="baggage-name">40kg</td>
+                    <td class="color-body text-right baggage-fee">220.500</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-noborder gray mb10 details-back">
+            <thead>
+                <tr>
+                    <th class="color-body" colspan="3">&#8226; <strong>Chiều về</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Người lớn</td>
+                    <td><span class="qty-adt"></span> x <span class="fee-adt"></span></td>
+                    <td class="color-body text-right"><span class="total-adt"></span></td>
+                </tr>
+                <tr class="d-none">
+                    <td>Trẻ em</td>
+                    <td><span class="qty-child"></span> x <span class="fee-child"></span></td>
+                    <td class="color-body text-right"><span class="total-child"></span></td>
+                </tr>
+                <tr class="d-none">
+                    <td>Em bé</td>
+                    <td><span class="qty-baby"></span> x <span class="fee-baby"></span></td>
+                    <td class="color-body text-right"><span class="total-baby"></span></td>
+                </tr>
+
+                <tr class="baggage-wrapper">
+                    <td>Tổng hành lý</td>
+                    <td class="baggage-name">40kg</td>
+                    <td class="color-body text-right baggage-fee">220.500</td>
+                </tr>
+            </tbody>
+        </table>*@
+
+        <table class="table table-noborder gray mb10 details-total">
+            <tbody>
+                <tr>
+                    <td>Người lớn</td>
+                    <td><span class="qty-adt"></span> x <span class="fee-adt"></span></td>
+                    <td class="color-body text-right"><span class="total-adt"></span></td>
+                </tr>
+                <tr class="d-none">
+                    <td>Trẻ em</td>
+                    <td><span class="qty-child"></span> x <span class="fee-child"></span></td>
+                    <td class="color-body text-right"><span class="total-child"></span></td>
+                </tr>
+                <tr class="d-none">
+                    <td>Em bé</td>
+                    <td><span class="qty-baby"></span> x <span class="fee-baby"></span></td>
+                    <td class="color-body text-right"><span class="total-baby"></span></td>
+                </tr>
+
+                <tr class="baggage-wrapper baggage-wrapper-go">
+                    <td>Tổng hành lý chiều đi</td>
+                    <td class="baggage-name">40kg</td>
+                    <td class="color-body text-right baggage-fee">220.500</td>
+                </tr>
+                <tr class="baggage-wrapper baggage-wrapper-back">
+                    <td>Tổng hành lý chiều về</td>
+                    <td class="baggage-name">40kg</td>
+                    <td class="color-body text-right baggage-fee">220.500</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class="input-button mb16" id="txt-discount-box">
+            <input type="text" class="form-control" id="txt-discount" placeholder="Nhập mã giảm giá">
+            <button id="btn-apply-voucher" type="button" class="">Áp dụng</button>
+        </div>
+        <div class="mb15 flex space-between">
+            <div>
+                <div>Tổng giá</div>
+                <div>Chiết khấu</div>
+                <div>
+                    <strong class="txt_16">Tổng giá vé</strong>
+                    <div class="txt_12 gray">Đã bao gồm thuế, phí, VAT</div>
+                </div>
+            </div>
+            <div class="bold text-right">
+                <div class="total-payment">2.392.720 đ</div>
+                <div class="total-payment-hidden" hidden></div>
+                <div id="discount-value">0 đ</div>
+                <div class="bold txt_18 total-payment-final color-green">2.392.720 đ</div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-default full size btn-next-step btn-sidebar-submit">Tiếp tục</button>
+        <button type="submit" class="btn btn-default full size btn-payment d-none">Thanh toán</button>
+    </div>
+</div>

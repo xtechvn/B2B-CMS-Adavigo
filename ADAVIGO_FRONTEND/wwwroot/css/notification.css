@@ -1,0 +1,8 @@
+.fullName-customer {
+    text-transform: uppercase;
+}
+
+.first-time .time, .last-time .time {
+    white-space: nowrap;
+    font-weight: bold !important;
+}

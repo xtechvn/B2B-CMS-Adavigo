@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Đăng nhập - Adavigo";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+@using ENTITIES.ViewModels.Client;
+@model ClientLogOnViewModel
+
+@section SocialMetaTags {
+<!--Facebook Open Graph-->
+<meta property="og:title" content="Đặt phòng khách sạn, tour du lịch, vé máy bay - Adavigo" />
+<meta property="og:description" content="Adavigo chuyên dịch vụ Đặt phòng khách sạn, tour du lịch, vé máy bay" />
+<meta property="og:url" content="https://www.adavigo.com" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="adavigo.com" />
+}
+<div class="form-login">
+    <div class="row" style="height:100%">
+        <div class="col-lg-8 col-md-7 form-login__left d-none d-md-block"></div>
+        <div class="col-lg-4 col-md-5 form-login__right" id="block_form_login">
+            @await Html.PartialAsync("FormLogin", Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(".toggle-password").click(function () {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+</script>
+}

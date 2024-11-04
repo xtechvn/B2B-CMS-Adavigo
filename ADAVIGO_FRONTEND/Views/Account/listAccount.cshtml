@@ -1,0 +1,73 @@
+﻿@using ADAVIGO_FRONTEND.Models.AllCode;
+@using System.Security.Claims
+@using ADAVIGO_FRONTEND.Models.Configs;
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    var AcStatus = (List<AllCodeModel>)ViewBag.allcode;
+    var PERMISSIONB2B = (List<AllCodeModel>)ViewBag.allcode_PERMISSION_B2B;
+    var claimsIdentity = User.Identity as ClaimsIdentity;
+    var ParentId = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ParentId)).Value);
+}
+
+<section class="padding-main bg-white">
+    <div class="mr-2 mb10"><strong>Quản lý người dùng</strong></div>
+    <div class="row">
+        <div class="mr-2">
+            <div class="search-wrapper">
+
+                <input type="text" class="form-control" id="inputSearch"style="min-width:300px;" placeholder="Tìm kiếm tên ,email">
+                <span class="search-btn" onclick="Ql_account.GetListAc(1,20)">
+                    <button type="button">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#search"></use>
+                        </svg>
+                    </button>
+                </span>
+
+            </div>
+        </div>
+        <div class="mr-2">
+            <div class="flex">
+                <div class="mr-2 mb10" style="min-width:200px;">
+                    <select class="form-control" type="text" id="Type" placeholder="Nhóm quyền" onchange=" Ql_account.GetListAc(1,20)">
+                        <option value="-1">Tất cả nhóm quyền</option>
+                        @if (PERMISSIONB2B != null)
+                        {
+                            foreach (var item in PERMISSIONB2B)
+                            {
+                                <option value="@item.CodeValue">@item.Description</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="mr-2 mb10" style="min-width:200px;">
+                    <select class="form-control" type="text" id="Status" placeholder="Trạng thái" onchange=" Ql_account.GetListAc(1,20)">
+                        <option value="-1">Tất cả trạng thái</option>
+                        @if (AcStatus != null)
+                        {
+                            foreach (var item in AcStatus)
+                            {
+                                <option value="@item.CodeValue">@item.Description</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        @if (ParentId != null && ParentId <= 0)
+        {
+            <div>
+                <a class="btn-search btn-default" style="color:white;" onclick="Ql_account.openAddAcPopup(0)">Thêm mới</a>
+            </div>
+        }
+
+    </div>
+</section>
+<section class="main-container clearfix">
+    <div id="grid_data"></div>
+</section>
+@section scripts{
+    <script type="text/javascript" src="~/js/modules/ql-account.js"></script>
+}
+

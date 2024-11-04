@@ -1,0 +1,27 @@
+﻿@section SocialMetaTags {
+    <!--Facebook Open Graph-->
+    <meta property="og:title" content="Đặt phòng khách sạn, tour du lịch, vé máy bay - Adavigo" />
+    <meta property="og:description" content="Adavigo chuyên dịch vụ Đặt phòng khách sạn, tour du lịch, vé máy bay" />
+    <meta property="og:url" content="https://www.adavigo.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="adavigo.com" />
+    <meta property="og:image" content="https://adavigo.com/images/default/share.png" />
+}
+
+<section class="main-container clearfix">
+    @await Html.PartialAsync("QuickOrder.cshtml")
+    <div class="flex">
+        <div class="col-main" id="fund_management_holder">
+            @await Component.InvokeAsync("FundManagement")
+        </div>
+        <div class="col-300">
+            @await Component.InvokeAsync("NewsFeed", new { isShowSlider = true })
+        </div>
+    </div>
+  
+</section>
+
+@section scripts{
+    <script type="text/javascript" src="~/js/modules/home.js"></script>
+   
+}

@@ -1,0 +1,121 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@model FundManageViewModel
+
+<div class="bg-white pd-20 radius10 mb16">
+    <div class="head-title">
+        <h2 class="title txt_20 bold mb0">Quỹ phòng của tôi</h2>
+        <a class="detail" href="#">Chi tiết</a>
+    </div>
+    <div class="gray mb5">Tổng số tiền đã ký quỹ</div>
+    <div class="flex align-center mb16">
+        <div class="bold color-green txt_24 mr-3">@Model.fund_balance_total.ToString("N0") VNĐ</div>
+        <div class="medium color-green" onclick="_fund_management.openTranferFundPopup();" style="cursor:pointer;">
+            <img src="/images/icons/changer.svg" alt="" style="margin: -2px 5px 0 0;"> Phân bổ quỹ
+        </div>
+    </div>
+    <div class="flex fund-list mb16">
+        @if (Model.fund_list != null && Model.fund_list.Any())
+        {
+            foreach (var item in Model.fund_list)
+            {
+                <div class="item @(item.service_type != 1 ? "hidden" : string.Empty)">
+                    <div class="mb24">
+                        @switch (item.service_type)
+                        {
+                            case 1:
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#building"></use>
+                                </svg>
+                                break;
+                            case 3:
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#flight"></use>
+                                </svg>
+                                break;
+                            case 4:
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#building"></use>
+                                </svg>
+                                break;
+                            case 5:
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#flight"></use>
+                                </svg>
+                                break;
+                        }
+                        <div class="txt_15 bold mt5">@item.service_name</div>
+                    </div>
+                    <div class="surplus mb16">
+                        Số dư
+                        <div class="bold txt_16 color-green">@item.account_blance.ToString("N0") VNĐ</div>
+                    </div>
+                    <a class="recharge" onclick="_fund_management.openAddFundPopup('@item.service_name','@item.service_type',@item.account_blance)">
+                        <img src="/images/icons/recharge.svg" alt="" style="margin: -2px 5px 0 0;"> Nạp quỹ
+                    </a>
+                </div>
+            }
+        }
+    </div>
+    @* <h2 class="title txt_16 bold mb16"><a class="color-blue" href="/fund/history">Lịch sử ký quỹ</a></h2>
+    <div class="table-responsive table-default">
+        <table class="table table-nowrap" border="1">
+            <thead>
+                <tr>
+                    <th scope="col">Mã giao dịch</th>
+                    <th scope="col">Tiêu đề</th>
+                    <th scope="col">Số tiền nạp</th>
+                    <th scope="col">Hình thức thanh toán</th>
+                    <th scope="col">Thời gian giao dịch</th>
+                    <th scope="col">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.fund_history != null && Model.fund_history.Any())
+                {
+                    @foreach (var item in Model.fund_history)
+                    {
+                        <tr>
+                            <td>@item.TransNo</td>
+                            <td>@item.Title</td>
+                            <td class="text-right">
+                                @if (item.Status == 3)
+                                {
+                                    <span class="color-red" title="Tổng số tiền chuyển khoản">@item.Amount.ToString("N0") đ</span>
+                                    <span>/</span>
+                                    <br />
+                                    <span title="Tổng số tiền yêu cầu">@(item.Price == null ? "" : (((double)item.Price).ToString("N0") + " đ"))</span>
+                                }
+                                else
+                                {
+                                    <span title="Tổng số tiền yêu cầu">@(item.Price == null ? "" : (((double)item.Price).ToString("N0") + " đ"))</span>
+                                }
+                            </td>
+                            <td>@item.PaymentTypeName</td>
+                            <td>@(item.CreateDate == null ? "" : ((DateTime)item.CreateDate).ToString("dd/MM/yyyy HH:mm"))</td>
+                            <td class="medium">
+                                @if (item.Status == 1)
+                                {
+                                    <span class="dote-text bg-yellow"></span>
+                                    <span class="color-yellow">@item.StatusName</span>
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <span class="dote-text bg-red"></span>
+                                    <span class="color-red">@item.StatusName</span>
+                                }
+                                else
+                                {
+                                    <span class="dote-text bg-green"></span>
+                                    <span class="color-green">@item.StatusName</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+               
+            </tbody>
+        </table>
+    </div> *@
+   
+</div>
+

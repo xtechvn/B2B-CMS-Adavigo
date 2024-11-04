@@ -1,0 +1,314 @@
+﻿@{
+    ViewData["Title"] = "Danh sách chuyến bay | Adavigo.com";
+}
+<partial name="_FlightTopNavbar" />
+
+<section class="main-container clearfix">
+    <div class="wrap-search">
+        <h2 class="title txt_20 bold mb16">Đặt vé nhanh</h2>
+        <div class="tab-menu flex">
+            <a href="#tab-flight" class="active">
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#flight"></use>
+                </svg>
+                <span>Chuyến bay</span>
+            </a>
+
+        </div>
+        <div class="tab-content">
+            <div id="tab-flight">
+                <div class="flex-row">
+                    <partial name="_SearchFlightBox" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="flights-infomation-wrapper">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Chuyến bay</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Chuyến bay từ <span class="address-go-name">Hồ Chí Minh</span> đến <span class="address-arrival-name">Hà Nội</span>
+            </li>
+        </ol>
+        <div class="trip-info mb16">
+            <div class="trip-info__left">
+                <div class="lbl" id="flight-go-lbl">Chiều đi</div>
+                <div class="info">
+                    <div class="name">
+                        <strong>
+                            <span class="name-go-1">Hồ Chí Minh (SGN)</span>
+                            &nbsp;-&nbsp;
+                            <span class="name-arrival-1">Hà Nội (HAN)</span>
+                        </strong>
+                        :&nbsp;<span class="qty-flight-go"></span> Chuyến bay
+                    </div>
+                    <div class="date">
+                        <span class="string-date-go-chosen">Thứ 3, 28 tháng 6</span>
+                        &nbsp;-&nbsp;
+                        <span class="qty-customer">1</span> Khách
+                    </div>
+                </div>
+            </div>
+            <div class="trip-info__right line-left trip-info-choose-go-inprogress">
+                <a href="#" class="btn-default" id="trip-info-choose-go-inprogress-label">Đang chọn chiều đi</a>
+            </div>
+            <div class="trip-info__right line-left trip-info-choose-go-done d-none">
+                <div class="detail-trip">
+                    <div class="name">
+                        <div class="hang airplane-hang">Bamboo Airways</div>
+                        <p class="code airplane-flynumber">QH1629 / Airbus A320</p>
+                    </div>
+                    <div class="time-flight">
+                        <div class="first-time">
+                            <div class="time time-go-chosen"></div>
+                            <div class="add address-go-code">SGN</div>
+                        </div>
+                        <div class="flight">
+                            <img src="~/images/icons/fly-to.png" alt="" />
+                            <p class="duration-fly"><strong>2h55’</strong> bay thẳng</p>
+                        </div>
+                        <div class="last-time">
+                            <div class="time time-arrival-chosen"></div>
+                            <div class="add address-arrival-code">HAN</div>
+                        </div>
+                    </div>
+                    <a class="edit edit-go-chosen" href="#">Sửa</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="line-bottom mb20"></div>
+    <div class="trip-info trip-info-return d-none mb16">
+        <div class="trip-info__left">
+            <div class="lbl red">Chiều về</div>
+            <div class="info">
+                <div class="name">
+                    <strong>
+                        <span class="name-go-2">Hà Nội (HAN)</span>
+                        &nbsp;-&nbsp;
+                        <span class="name-arrival-2">Hồ Chí Minh (SGN)</span>
+                    </strong>
+                    :&nbsp;<span class="qty-flight-arrival"></span> Chuyến bay
+                </div>
+                <div class="date">
+                    <span class="string-date-back-chosen">Thứ 3, 28 tháng 6</span>
+                    &nbsp;-&nbsp;
+                    <span class="qty-customer">1</span> Khách
+                </div>
+            </div>
+        </div>
+        <div class="trip-info__right line-left">
+            <a href="#" class="btn-default">Đang chọn chiều về</a>
+        </div>
+    </div>
+    <div class="line-bottom line-bottom-return d-none mb24"></div>
+
+    <div class="flex mb40">
+        <div class="col-left">
+            <div id="filter-wrapper" class="bg-white radius_10 pd-24 disabled-child">
+                <div class="header-fillter flex">
+                    <div class="txt_16"><strong>Bộ lọc</strong></div>
+                    <a class="clear clear-fliter" href="javascript:void(0)">
+                        Xóa lọc&nbsp;
+                        <svg class="icon-svg">
+                            <use xlink:href="../images/icons/icon.svg#refresh"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="price-filter mb24">
+                    <div class="mb16"><strong>Khoảng giá</strong></div>
+                    <div class="price-filter-container">
+                        <div id="slider-range"></div>
+                        <form>
+                            <input type="hidden" id="min-value" name="min-value" value="" />
+                            <input type="hidden" id="max-value" name="max-value" value="" />
+                        </form>
+                        <div class="row slider-labels">
+                            <div class="col-6">
+                                <div class="wrap">
+                                    <span id="slider-range-value1"></span> đ
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="wrap text-right">
+                                    <span id="slider-range-value2"></span> đ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb24">
+                    <div class="mb16"><strong>Hãng bay</strong></div>
+                    <div class="checkboxs-airline"></div>
+                </div>
+                <div class="mb24">
+                    <div class="mb16"><strong>Thời gian cất cánh</strong></div>
+                    <div class="session-list">
+                        <a class="item" href="javascript:void(0)" data-value="0">
+                            <div class="text">
+                                <svg class="icon-svg">
+                                    <use xlink:href="../images/icons/icon.svg#Dawn"></use>
+                                </svg>
+                                Sáng sớm
+                            </div>
+                            <div class="time">00:00 - 6:00</div>
+                        </a>
+                        <a class="item" href="javascript:void(0)" data-value="1">
+                            <div class="text">
+                                <svg class="icon-svg">
+                                    <use xlink:href="../images/icons/icon.svg#morning"></use>
+                                </svg>
+                                Buổi sáng
+                            </div>
+                            <div class="time">06:00 - 12:00</div>
+                        </a>
+                        <a class="item" href="javascript:void(0)" data-value="2">
+                            <div class="text">
+                                <svg class="icon-svg">
+                                    <use xlink:href="../images/icons/icon.svg#afternoon"></use>
+                                </svg>
+                                Buổi chiều
+                            </div>
+                            <div class="time">12:00 - 18:00</div>
+                        </a>
+                        <a class="item" href="javascript:void(0)" data-value="3">
+                            <div class="text">
+                                <svg class="icon-svg" style="width: 20px; height: 20px">
+                                    <use xlink:href="../images/icons/icon.svg#night"></use>
+                                </svg>
+                                Buổi tối
+                            </div>
+                            <div class="time">18:00 - 24:00</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="mb24">
+                    <div class="mb16"><strong>Hạng vé</strong></div>
+                    <label class="confir_res">
+                        Phổ thông
+                        <input type="checkbox" name="inlineGoi2" id="Goi1" value="0" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="confir_res">
+                        Thương gia
+                        <input type="checkbox" name="inlineGoi2" id="Goi1" value="1" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <!-- <label class="confir_res">
+                      Phổ thông Đặc biệt
+                      <input type="checkbox" name="inlineGoi2" id="Goi1" value="2"/>
+                      <span class="checkmark"></span>
+                    </label> -->
+                </div>
+                <div>
+                    <div class="mb16"><strong>Điểm dừng</strong></div>
+                    <label class="confir_res">
+                        Bay thẳng
+                        <input type="checkbox" name="inlineGoi3" id="Goi1" value="0" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="confir_res">
+                        1 điểm dừng
+                        <input type="checkbox" name="inlineGoi3" id="Goi1" value="1" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-right">
+            <div id="skeleton-slide-date">
+                <partial name="_Skeleton" />
+            </div>
+            <div class="slide-date opacity-zero" id="slide-date">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                        <div class="swiper-slide item">
+                            <div class="date"><strong>Ngày 24/6 - 26/6</strong></div>
+                            <span>609.000 đ</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev">
+                    <svg class="icon-svg">
+                        <use xlink:href="../images/icons/icon.svg#prev"></use>
+                    </svg>
+                </div>
+                <div class="swiper-button-next">
+                    <svg class="icon-svg">
+                        <use xlink:href="../images/icons/icon.svg#next"></use>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="skeleton-flight-list-wrapper">
+                <partial name="_Skeleton" />
+                <partial name="_Skeleton" />
+                <partial name="_Skeleton" />
+            </div>
+            <div id="flight-list-wrapper" class="d-none">
+                <div class="filter-time-date bg-white radius_10 pd-16">
+                    <a class="chon-hang btn-sort-airline" href="javascript:void(0)">Chọn hãng</a>
+                    <a class="sort-select departure-time" data-sort="start" href="javascript:void(0)">Giờ khởi hành</a>
+                    <a class="sort-select landing-time active" data-sort="end" href="javascript:void(0)">Giờ hạ cánh</a>
+                    <a class="sort-select flight-price" data-sort="price" href="javascript:void(0)">Giá</a>
+                    <div class="btn-view">
+                        <a onclick="showFilterPrice()" class="lbl" href="javascript:void(0)">
+                            <span class="title">Hiển thị theo</span>
+                            <span class="filterPriceByName">Giá gồm thuế, phí 1 người lớn</span>
+                        </a>
+                        <div class="list" id="filterPriceByList">
+                            <label class="confir_res circle mb10">
+                                Giá cơ bản cho 1 người lớn
+                                <input type="radio" name="filterPriceBy" value="Giá cơ bản cho 1 người lớn">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res circle mb0">
+                                Giá gồm thuế và phí cho 1 người lớn
+                                <input type="radio" name="filterPriceBy" checked value="Giá gồm thuế, phí 1 người lớn">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thông tin chuyến bay -->
+                <div class="list-flight-information list-flight-information-all mb16"></div>
+                @*<ul class="pagination"></ul>*@
+                <div id="load-more-position">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script src="~/js/slider-range-custom.js"></script>
+    <script type="text/javascript" src="~/js/modules/flight/flightList.js" asp-append-version="true"></script>
+}
+
+
+

@@ -1,0 +1,186 @@
+﻿@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model AccountModel
+@{
+    var provinces = (IEnumerable<ProvinceModel>)ViewBag.Provinces;
+    var banks = (IEnumerable<BankDataModel>)ViewBag.Banks;
+}
+
+<section class="tab-menu-folder">
+    <a class="cursor-pointer client_tab_info active" data-tab="1">Chỉnh sửa hồ sơ</a>
+    <a class="cursor-pointer client_tab_info" data-tab="2">Thay đổi mật khẩu</a>
+    <a class="hidden" href="#">Quản lý ký quỹ</a>
+</section>
+
+<section class="main-container clearfix">
+    <div class="bg-white pd-20 radius10 mb16" id="client_tab_info_1">
+        <div class="bold txt_18 mb16">Thông tin tài khoản</div>
+        <form id="form_client_info">
+            <div class="form-default form-info">
+                <div class="form-group">
+                    <label class="gray">Họ và tên / Công ty</label>
+                    <div class="wrap-input" style="width:30%">
+                        <input type="hidden" name="id" value="@Model.id" />
+                        <input type="text" class="form-control" name="name" value="@Model.name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Địa chỉ Email</label>
+                    <div class="wrap-input" style="width:30%">
+                        <input type="text" class="form-control" name="email" value="@Model.email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Loại khách</label>
+                    <div class="wrap-input" style="width:30%">
+                        <input type="text" class="form-control" value="@Model.client_type_name" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray mt10">CMT/MST</label>
+                    <div class="wrap-input" style="width:30%">
+                        <input type="text" class="form-control" name="indentifer_id" value="@Model.indentifer_id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Quốc gia/quốc tịch</label>
+                    <div class="wrap-input" style="width:28%">
+                        <select class="select2" name="country" style="width: 100%">
+                            <option value="0">Việt Nam</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Tỉnh/thành</label>
+                    <div class="wrap-input" style="width:28%">
+                        <select class="select2" name="provinced_id" id="sl_client_province" style="width: 100%">
+                            <option value="0">Chọn Tỉnh/Thành phố</option>
+                            @foreach (var item in provinces)
+                            {
+                                if (Model.provinced_id == item.provinceId)
+                                {
+                                    <option value="@item.provinceId" selected>@item.name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.provinceId">@item.name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Quận/huyện</label>
+                    <div class="wrap-input" style="width:32%">
+                        <input type="hidden" id="ip_hd_district_id" value="@Model.district_id" />
+                        <select class="select2" name="district_id" id="sl_client_district" style="width: 100%">
+                            <option value="0">Chọn Quận/Huyện</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Phường/Xã</label>
+                    <div class="wrap-input" style="width:32%">
+                        <input type="hidden" id="ip_hd_ward_id" value="@Model.ward_id" />
+                        <select class="select2" name="ward_id" id="sl_client_ward" style="width: 100%">
+                            <option value="0">Chọn Phường/Xã</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="gray">Địa chỉ chi tiết</label>
+                    <div class="wrap-input">
+                        <input type="text" class="form-control" name="address" id="ip_client_address" value="@Model.address" />
+                    </div>
+                </div>
+                <div class="form-group flex-list grid grid__3">
+                    <div class="item">
+                        <label class="gray">STK giao dịch</label>
+                        <div class="wrap-input">
+                            <input type="text" class="form-control" name="account_number" value="@Model.account_number" />
+                        </div>
+                    </div>
+                    <div class="item">
+                        <label class="gray">Tên ngân hàng</label>
+                        <div class="wrap-input">
+                            <select class="select2" name="bank_name" style="width: 100%">
+                                <option value="0">Chọn ngân hàng</option>
+                                @foreach (var item in banks)
+                                {
+                                    if (Model.bank_name == item.bankName)
+                                    {
+                                        <option value="@item.bankName" selected>@item.bankName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.bankName">@item.bankName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <label class="gray">Chủ tài khoản</label>
+                        <div class="wrap-input">
+                            <input type="text" class="form-control" name="account_name" value="@Model.account_name" />
+                        </div>
+                    </div>
+                </div>
+                <div class="line-bottom mb16"></div>
+                <button type="button" class="btn-default" style="height: 36px;width:150px" onclick="_account.OnUpdate();">Cập nhật</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="bg-white pd-20 radius10 mb16 hidden" id="client_tab_info_2">
+        <div class="bold txt_18 mb16">Thay đổi mật khẩu</div>
+        <form id="form_client_change_pass">
+            <div class="form-default" style="max-width: 700px;">
+                <div class="form-group row mb16">
+                    <div class="col-md-3"><label class="gray mt10">Mật khẩu cũ</label></div>
+                    <div class="col-md-9">
+                        <div class="relative password-wrap input-icon">
+                            <svg class="icon-svg">
+                                <use xlink:href="images/icons/icon.svg#Lock"></use>
+                            </svg>
+                            <input type="password" name="password_old" class="form-control" placeholder="Nhập mật khẩu cũ" />
+                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb16">
+                    <div class="col-md-3"><label class="gray mt10">Mật khẩu mới</label></div>
+                    <div class="col-md-9">
+                        <div class="relative password-wrap input-icon">
+                            <svg class="icon-svg">
+                                <use xlink:href="images/icons/icon.svg#Lock"></use>
+                            </svg>
+                            <input type="password" name="password_new" id="password_new" class="form-control" placeholder="Nhập mật khẩu mới">
+                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb16">
+                    <div class="col-md-3"><label class="gray mt10">Xác nhận mật khẩu mới</label></div>
+                    <div class="col-md-9">
+                        <div class="relative password-wrap input-icon">
+                            <svg class="icon-svg">
+                                <use xlink:href="images/icons/icon.svg#Lock"></use>
+                            </svg>
+                            <input type="password" name="confirm_password_new" class="form-control" placeholder="Nhập lại mật khẩu mới">
+                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="line-bottom mb16"></div>
+                <button type="button" class="btn-default" style="height: 36px" onclick="_account.OnChangePass()">Thay đổi mật khẩu</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section scripts{
+<script type="text/javascript" src="~/js/modules/account.js"></script>
+}

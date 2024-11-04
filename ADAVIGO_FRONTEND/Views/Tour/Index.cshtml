@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ Tour";
+}
+<section class="tab-menu-folder">
+    <a href="javascript:;" class="active">Đặt Tour</a>
+</section>
+<section class="main-container clearfix">
+    <div class="flex">
+        <div class="col-main">
+            <div class="banner-tour">
+                <div class="content">
+                    <h2 class="title">Tìm kiếm tour mà bạn muốn</h2>
+                    <div class="tab-menu flex">
+                        <a href="javascript:;" class="filter-tour-type active" data-id="1">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#flight"></use>
+                            </svg>
+                            <span>Du lịch trong nước</span>
+                        </a>
+                        <a href="javascript:;" class="filter-tour-type" data-id="3">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#world"></use>
+                            </svg>
+                            <span>Du lịch nước ngoài</span>
+                        </a>
+                    </div>
+                    <div class="wrap-search">
+                        <div class="flexbox">
+                            <div class="address-w flex">
+                                <div class="item form-search">
+                                    <a class="wrap" href="javascript:;">
+                                        <div class="flex icon">
+                                            <svg class="icon-svg">
+                                                <use xlink:href="/images/icons/icon.svg#address"></use>
+                                            </svg>
+                                            <span>Từ</span>
+                                        </div>
+                                        <div class="text">
+                                            <svg class="icon-svg">
+                                                <use xlink:href="/images/icons/icon.svg#address"></use>
+                                            </svg>
+                                            <select class=" filter-address-from" name="" id="select-address-from" style="width: 100%;"></select>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="item form-search">
+                                    <a class="wrap" href="javascript:;">
+                                        <div class="flex icon">
+                                            <svg class="icon-svg">
+                                                <use xlink:href="/images/icons/icon.svg#address"></use>
+                                            </svg>
+                                            <span>Đến</span>
+                                        </div>
+                                        <div class="text">
+                                            <svg class="icon-svg">
+                                                <use xlink:href="/images/icons/icon.svg#address"></use>
+                                            </svg>
+                                            <select class=" filter-address-to" name="" id="select-address-to" style="width: 100%; display:none;" disabled ></select>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <button type="submit" title="Tìm kiếm" class="btn-search btn-default">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#search"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                  @*   <div class="sort-list mt10 flex">
+                        <label class="confir_res circle mb0">
+                            Tour trọn gói
+                            <input type="radio" name="inlineGoi4" id="Goi" checked="">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res circle mb0 ml-3">
+                            Dịch vụ điểm đến
+                            <input type="radio" name="inlineGoi4" id="Goi">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div> *@
+                </div>
+            </div>
+            <div class="bg-white pd-20 radius10 mb16">
+                @await Component.InvokeAsync("FundTour")
+
+            </div>
+        </div>
+        <div class="col-300">
+            @await Component.InvokeAsync("NewsFeed", new { isShowSlider = true })
+
+        </div>
+    </div>
+
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/tour/constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/index.js"></script>
+
+}

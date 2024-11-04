@@ -1,0 +1,213 @@
+@import "var.scss";
+.warp_vote {
+    display: flex;
+    .point-vote {
+        width: 130px;
+    }
+    .box-vote {
+        width: calc(100% - 130px);
+        .count-vote {
+            position: relative;
+            padding-left: 40px;
+            &::before {
+                content: "";
+                background: #E3EBF3;
+                position: absolute;
+                height: 96px;
+                width: 1px;
+                left: 20px;
+                top: 10px;
+            }
+        }
+        .note-vote {
+            width: 100%;
+            padding-left: 0;
+        }
+    }
+    @media (max-width: 991px) {
+        display: block;
+        .point-vote {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 10px;
+            .number {
+                margin-right: 15px;
+            }
+            .mb10 {
+                margin-bottom: 0!important;
+                margin-right: 10px;
+            }
+        }
+        .box-vote {
+            width: 100%;
+            column-gap: 16px;
+            row-gap: 16px;
+            .count-vote {
+                padding-left: 0;
+                &::before {
+                    display: none;
+                }
+            }
+        }
+    }
+    @media (max-width: 575px) {
+        .box-vote {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+}
+
+.point-vote {
+    .number {
+        font-size: 48px;
+        font-weight: 700;
+        color: #000000;
+        line-height: 1.2;
+        span {
+            font-size: 32px;
+            font-weight: 400;
+            color: #8C9FB1
+        }
+    }
+    .ct_star {
+        svg {
+            color: #F6A500;
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+.img-user-vote {
+    align-items: center;
+    border-bottom: 1px solid #E3EBF3;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    &__left {
+        display: flex;
+        align-items: center;
+        .text {
+            width: 130px;
+            color: #000000;
+        }
+    }
+    &__right {
+        .tab-default {
+            margin-bottom: 0;
+            justify-content: end;
+            a {
+                background: #E3EBF3;
+                &.active,
+                &:hover {
+                    background: #00264D;
+                }
+            }
+        }
+    }
+    @media (max-width: 991px) {
+        display: block;
+        &__left {
+            margin-bottom: 15px;
+        }
+        &__right {
+            margin-right: -15px;
+        }
+        .tab-default {
+            justify-content: start
+        }
+    }
+}
+
+.list-comment {
+    .item-comment {
+        display: flex;
+        border-bottom: 1px solid #E3EBF3;
+        padding-bottom: 24px;
+        margin-bottom: 24px;
+        .info-comment {
+            min-width: 300px;
+            display: flex;
+            .avatar {
+                width: 48px;
+                height: 48px;
+                float: left;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 16px;
+            }
+            .info {
+                overflow: hidden;
+                color: #698096;
+                .name {
+                    color: #000;
+                    font-size: 16px;
+                    font-weight: bold
+                }
+                .point {
+                    font-weight: bold;
+                    background: #FFEFD7;
+                    border-radius: 4px;
+                    line-height: 22px;
+                    margin-right: 6px;
+                    color: #F6A500;
+                    font-size: 12px;
+                    padding: 0 4px;
+                    display: inline-block;
+                    margin-left: 4px;
+                }
+                li {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+        .content-comment {
+            width: 100%;
+            .title {
+                margin-bottom: 0;
+                font-size: 16px;
+                font-weight: bold;
+                color: #000;
+            }
+            .des {
+                margin-bottom: 16px;
+                line-height: 1.6
+            }
+            .like {
+                color: #698096;
+                padding: 2px 0 2px 20px;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M9.375 0.625C8.38837 0.625 7.43382 1.55444 7.77319 2.94531C8.00119 3.87981 7.45523 4.95091 7.17773 5.34766C6.57736 6.20566 6.43767 7.09478 6.10767 7.48853C5.87953 7.76063 5.64253 7.96733 5.42065 8.13159C5.16173 7.68152 4.68147 7.375 4.125 7.375H2.25C1.42162 7.375 0.75 8.04663 0.75 8.875V16.375C0.75 17.2034 1.42162 17.875 2.25 17.875H4.125C4.95337 17.875 5.625 17.2034 5.625 16.375V15.7964C6.27921 16.1445 6.50597 16.75 7.9812 16.75H12.75C14.3036 16.75 14.9539 16.5139 15.4036 15.9941C15.8536 15.4744 15.9993 14.885 16.0327 14.5059C16.332 14.2899 16.7122 13.8847 16.9395 13.2644C17.1956 12.5665 17.1286 12.0324 17.0127 11.6274C17.3213 11.2393 17.625 10.72 17.625 10C17.625 9.253 17.3433 8.65001 17.0039 8.34326C17.0159 7.96114 16.9743 7.33969 16.5974 6.83081C16.1452 6.22031 15.4897 5.875 14.625 5.875H11.8689C11.9701 5.33012 12 4.53239 12 3.81689C12 2.01502 10.9099 0.625 9.375 0.625ZM9.62988 2.03418C10.207 2.03418 10.6707 2.89291 10.6707 4.00366C10.6707 4.71916 10.3049 6.71978 10.207 7.22266H14.2273C14.9537 7.22266 15.2532 7.2298 15.5442 7.55005C15.8588 7.89617 15.7483 8.25609 15.6973 8.88159C16.0546 9.17784 16.2672 9.3337 16.2642 9.96558C16.2608 10.686 15.9086 10.9442 15.624 11.377C15.7991 11.9743 15.8626 12.2792 15.668 12.8323C15.449 13.4552 15.022 13.5325 14.7224 13.7485C14.6947 14.2259 14.8156 14.5981 14.5254 14.927C14.2276 15.2641 13.911 15.3534 12.375 15.3635L7.9812 15.3782C6.81352 15.3782 6.50303 14.6826 5.625 14.3528V9.6792C6.21411 9.44165 6.87171 9.0041 7.44434 8.16968C7.74471 7.73243 7.8516 6.96242 8.14673 6.47192C8.39648 6.05717 9.27832 4.60782 9.27832 3.51807C9.27832 2.87757 8.89001 2.03418 9.62988 2.03418ZM2.625 8.875H3.75C3.957 8.875 4.125 9.043 4.125 9.25V16C4.125 16.207 3.957 16.375 3.75 16.375H2.625C2.418 16.375 2.25 16.207 2.25 16V9.25C2.25 9.043 2.418 8.875 2.625 8.875Z' fill='%23698096'/%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                &.active {
+                    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M3.375 7.375C4.20338 7.375 4.875 8.04663 4.875 8.875V16.375C4.875 17.2034 4.20338 17.875 3.375 17.875H2.25C1.42162 17.875 0.75 17.2034 0.75 16.375V8.875C0.75 8.04663 1.42162 7.375 2.25 7.375H3.375ZM17.625 10C17.625 10.72 17.3213 11.2394 17.0126 11.6275C17.1285 12.0325 17.1956 12.5665 16.9395 13.2644C16.7123 13.8846 16.332 14.2896 16.0328 14.5056C15.9994 14.8847 15.8539 15.4746 15.4039 15.9944C14.9543 16.5141 14.3036 16.75 12.75 16.75H7.9815C6.50625 16.75 6.27938 16.1444 5.625 15.796V7.972C5.78512 7.837 5.94863 7.67875 6.108 7.489C6.438 7.09525 6.57788 6.20575 7.17825 5.34775C7.45575 4.951 8.00138 3.88 7.77338 2.9455C7.43363 1.55425 8.23575 0.625 9.22237 0.625C10.7257 0.625 11.625 2.01475 11.625 3.81662C11.625 4.53212 11.595 5.33012 11.4938 5.875H14.625C15.4897 5.875 16.1449 6.22038 16.5971 6.83087C16.974 7.33975 17.0156 7.96113 17.0036 8.34325C17.343 8.65 17.625 9.253 17.625 10Z' fill='%23698096'/%3e%3c/svg%3e");
+                }
+            }
+        }
+    }
+    @media (max-width: 991px) {
+        .item-comment {
+            flex-wrap: wrap;
+            .info-comment {
+                min-width: inherit;
+                width: 200px;
+            }
+            .content-comment {
+                width: calc(100% - 200px);
+                padding-left: 15px;
+            }
+        }
+    }
+    @media (max-width: 575px) {
+        .item-comment {
+            .info-comment {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .content-comment {
+                width: 100%;
+                padding-left: 0;
+            }
+        }
+    }
+}

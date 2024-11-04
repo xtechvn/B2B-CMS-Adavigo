@@ -1,0 +1,511 @@
+﻿@{
+    ViewData["Title"] = "Thông báo";
+}
+
+<section class="main-container clearfix">
+    <div class="container mt20">
+        <div class="mb-5" id="noti-success">
+            <div class="popup-success bg-white pd-20 radius10" style="max-width: 870px;margin: 0 auto;">
+                <div class="mb16"><img src="~/images/icons/success.png" alt=""></div>
+                <div class="flex mb16">
+                    <h2 class="txt_24 bold mb0">Giữ chỗ thành công</h2>
+                    <div class="note-text ml-2">Giữ chỗ đến <span id="saving-time"></span></div>
+                </div>
+                <div class="head-title mb12">
+                    <div class="gray mb10">Đơn hàng của bạn đã được giữ thành công. Bạn có thể xem lại nội dung chi tiết đơn hàng. </div>
+                    <a class="detail color-blue mb10" href="javascript:;" data-toggle="modal" data-target="#myModalDetailsFight">
+                        Xem chi tiết
+                        <svg class="icon-svg min">
+                            <use xlink:href="../images/icons/icon.svg#next2"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="detail-order-code">
+                    <div class="detail-order-code__head mb16">
+                        <div class="flex space-between gray">
+                            <div> Mã đơn hàng <strong class="ml-2 color-blue order-code" id="order-code"></strong></div>
+                            <span><span class="go-saving-text">Mã đặt chỗ chiều đi</span>  <strong class="ml-2 color-blue go-saving-code" id="go-saving-code"></strong></span>
+                            <div id="back-saving" class="back-saving">
+                                <span><img src="~/images/icons/fly-to-gray.png" alt=""></span>
+                                <span>Mã đặt chỗ chiều về <strong class="ml-2 color-blue back-saving-code" id="back-saving-code">F4039689</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line-bottom mb16"></div>
+                <div class="detail-order-code__centen mb16">
+                    <div class="row mb16">
+                        <div class="col-md-6">
+                            <div class="mb10 txt_16"><strong>Thông tin liên hệ</strong></div>
+                            <ul>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Họ tên</div>
+                                    <div class="contact-name"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Số điện thoại</div>
+                                    <div class="contact-phone"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Email</div>
+                                    <div class="contact-email"></div>
+                                </li>
+                            </ul>
+                            <div class="mb10 txt_16"><strong>Thông tin hành khách (<span class="total-customer"></span> khách)</strong></div>
+                            <ul class="list-customer">
+                            </ul>
+                        </div>
+                        <div class="col-md-6 line-left off-line-mb">
+                            <div class="trip-info trip-info-go min mb16">
+                                <div class="trip-info__left">
+                                    <div class="lbl">Chiều đi</div>
+                                    <div class="info">
+                                        <div class="name full-name-go"></div>
+                                        <div class="date">
+                                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="trip-info__right">
+                                    <div class="detail-trip">
+                                        <div class="name">
+                                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                            <div class="hang"></div>
+                                            <p class="code"></p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="tag">EA</div>
+                                            <span class="seat-class-go"></span>
+                                            <span class="tooltip-new">
+                                                <svg class="icon-svg color-blue min">
+                                                    <use xlink:href="../images/icons/icon.svg#info">
+                                                    </use>
+                                                </svg>
+                                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                            </span>
+                                        </div>
+                                        <div class="time-flight">
+                                            <div class="first-time">
+                                                <div class="time">20:20</div>
+                                                <div class="add code-fly-start"></div>
+                                            </div>
+                                            <div class="flight">
+                                                <img src="~/images/icons/fly-to-gray.png" alt="">
+                                                <p class="duration-fly-item-go-wrapper">
+                                                    <strong><span class="duration-fly-item-go"></span></strong>&nbsp;
+                                                    <span class="stopNum-go"></span>
+                                                </p>
+                                            </div>
+
+                                            <div class="last-time">
+                                                <div class="time">20:20</div>
+                                                <div class="add code-fly-end"></div>
+                                            </div>
+                                        </div>
+                                        @*<div class="time-flight">
+                                        <div class="first-time">
+                                        <div class="time">20:20</div>
+                                        <div class="add code-fly-start"></div>
+                                        </div>
+
+                                        <div class="flight">
+                                        <img src="~/images/icons/fly-to-gray.png" alt="">
+                                        <p class="">
+                                        <strong><span class="duration-fly-item-go"></span></strong>&nbsp;
+                                        <span class="stopNum-go"></span>
+                                        </p>
+                                        </div>
+                                        <div class="last-time">
+                                        <div class="time">20:20</div>
+                                        <div class="add code-fly-end"></div>
+                                        </div>
+                                        </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="trip-info trip-info-back d-none min mb16">
+                                <div class="trip-info__left">
+                                    <div class="lbl red">Chiều về</div>
+                                    <div class="info">
+                                        <div class="name full-name-back"></div>
+                                        <div class="date">
+                                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="trip-info__right">
+                                    <div class="detail-trip">
+                                        <div class="name">
+                                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                            <div class="hang"></div>
+                                            <p class="code"></p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="tag">EA</div>
+                                            <span class="seat-class-back"></span>
+                                            <span class="tooltip-new">
+                                                <svg class="icon-svg color-blue min">
+                                                    <use xlink:href="../images/icons/icon.svg#info">
+                                                    </use>
+                                                </svg>
+                                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                            </span>
+                                        </div>
+                                        <div class="time-flight">
+                                            <div class="first-time">
+                                                <div class="time"></div>
+                                                <div class="add code-fly-start"></div>
+                                            </div>
+                                            <div class="flight">
+                                                <img src="~/images/icons/fly-to-gray.png" alt="">
+                                                <p class="duration-fly-item-back-wrapper">
+                                                    <span class="duration-fly-item-back"></span>&nbsp;
+                                                    <span class="stopNum-back"></span>
+                                                </p>
+                                            </div>
+                                            <div class="last-time">
+                                                <div class="time"></div>
+                                                <div class="add code-fly-end"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-bottom mb16"></div>
+                    <button type="submit" class="btn btn-default size btn-back-home" style="padding: 0 60px">Quay về trang chủ</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-failed mb-5" id="noti-fail">
+            <div class="popup-success bg-white pd-20 radius10" style="max-width: 870px;margin: 0 auto;">
+                <div class="mb16"><img src="~/images/icons/fail.png" alt=""></div>
+                <div class="flex mb16">
+                    <h2 class="txt_24 bold mb0">Chú ý</h2>
+                </div>
+                <div class="head-title mb12">
+                    <div class="gray mb10">Loại vé không được phép giữ chỗ. Cần thanh toán luôn để đăt vé với giá này</div>
+                    <div class="gray mb10">Quy khách vui lòng liên hệ hotline: <strong class="color-body">093 6191 192</strong> để được hỗ trợ nhanh nhất. Xin cảm ơn</div>
+                </div>
+
+                <div class="line-bottom mb16"></div>
+                <div class="detail-order-code__centen mb16">
+                    <div class="row mb16">
+                        <div class="col-md-6">
+                            <div class="mb10 txt_16"><strong>Thông tin liên hệ</strong></div>
+                            <ul>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Họ tên</div>
+                                    <div class="contact-name"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Số điện thoại</div>
+                                    <div class="contact-phone"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Email</div>
+                                    <div class="contact-email"></div>
+                                </li>
+                            </ul>
+                            <div class="mb10 txt_16"><strong>Thông tin hành khách (<span class="total-customer"></span> khách)</strong></div>
+                            <ul class="list-customer">
+                            </ul>
+                        </div>
+                        <div class="col-md-6 line-left off-line-mb">
+                            <div class="trip-info trip-info-go min mb16">
+                                <div class="trip-info__left">
+                                    <div class="lbl">Chiều đi</div>
+                                    <div class="info">
+                                        <div class="name full-name-go"></div>
+                                        <div class="date">
+                                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="trip-info__right">
+                                    <div class="detail-trip">
+                                        <div class="name">
+                                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                            <div class="hang"></div>
+                                            <p class="code"></p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="tag">EA</div>
+                                            <span class="seat-class-go"></span>
+                                            <span class="tooltip-new">
+                                                <svg class="icon-svg color-blue min">
+                                                    <use xlink:href="../images/icons/icon.svg#info">
+                                                    </use>
+                                                </svg>
+                                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                            </span>
+                                        </div>
+                                        <div class="time-flight">
+                                            <div class="first-time">
+                                                <div class="time">20:20</div>
+                                                <div class="add code-fly-start"></div>
+                                            </div>
+                                            <div class="flight">
+                                                <img src="~/images/icons/fly-to-gray.png" alt="">
+                                                <p class="duration-fly-item-go-wrapper">
+                                                    <strong><span class="duration-fly-item-go"></span></strong>&nbsp;
+                                                    <span class="stopNum-go"></span>
+                                                </p>
+                                            </div>
+                                            <div class="last-time">
+                                                <div class="time">20:20</div>
+                                                <div class="add code-fly-end"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="trip-info trip-info-back d-none min mb16">
+                                <div class="trip-info__left">
+                                    <div class="lbl red">Chiều về</div>
+                                    <div class="info">
+                                        <div class="name full-name-back"></div>
+                                        <div class="date">
+                                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="trip-info__right">
+                                    <div class="detail-trip">
+                                        <div class="name">
+                                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                            <div class="hang"></div>
+                                            <p class="code"></p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="tag">EA</div>
+                                            <span class="seat-class-back"></span>
+                                            <span class="tooltip-new">
+                                                <svg class="icon-svg color-blue min">
+                                                    <use xlink:href="../images/icons/icon.svg#info">
+                                                    </use>
+                                                </svg>
+                                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                            </span>
+                                        </div>
+                                        <div class="time-flight">
+                                            <div class="first-time">
+                                                <div class="time"></div>
+                                                <div class="add code-fly-start"></div>
+                                            </div>
+                                            <div class="flight">
+                                                <img src="~/images/icons/fly-to-gray.png" alt="">
+                                                <p class="duration-fly-item-back-wrapper">
+                                                    <span class="duration-fly-item-back"></span>&nbsp;
+                                                    <span class="stopNum-back"></span>
+                                                </p>
+                                            </div>
+                                            <div class="last-time">
+                                                <div class="time"></div>
+                                                <div class="add code-fly-end"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-bottom mb16"></div>
+                    <button type="submit" class="btn-default size btn-back-home" style="padding: 0 60px">Quay về trang chủ</button>
+                    <button type="submit" class="btn-default btn-paid size gray ml-2" style="padding: 0 60px">Tôi đã thanh toán xong</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--POPUP Chi tiết đơn hàng  -->
+<div class="modal fade" id="myModalDetailsFight">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 870px;">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chi tiết đơn hàng</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="detail-order-code">
+                    <div class="detail-order-code__head mb16">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="gray">Mã đơn hàng</div>
+                                <strong class="color-blue order-code" id="order-code"></strong>
+                            </div>
+                            <div class="col-sm-5 grid grid__2 line-left off-line-mb">
+                                <div id="go-saving">
+                                    <div class="gray go-saving-text">Mã đặt chỗ chiều đi</div>
+                                    <strong class="color-blue go-saving-code"></strong>
+                                </div>
+                                <div id="back-saving" class="back-saving">
+                                    <div class="gray ">Mã đặt chỗ chiều về</div>
+                                    <strong class="color-blue back-saving-code">AD4GK</strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 line-left off-line-mb">
+                                <div class="gray">Trạng thái</div>
+                                <strong>Đang giữ chỗ</strong>
+                            </div>
+                            <div class="col-sm-3 line-left off-line-mb">
+                                <div class="gray">Ngày đặt</div>
+                                <strong id="booking-date">18/6/2022, 16:34:22</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line-bottom mb16"></div>
+                <div class="detail-order-code__centen mb16">
+                    <div class="row mb16">
+                        <div class="col-md-6">
+                            <div class="mb10 txt_16"><strong>Thông tin liên hệ</strong></div>
+                            <ul>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Họ tên</div>
+                                    <div class="contact-name"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Số điện thoại</div>
+                                    <div class="contact-phone"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Email</div>
+                                    <div class="contact-email"></div>
+                                </li>
+                            </ul>
+                            <div class="mb10 txt_16"><strong>Thông tin hành khách (<span class="total-customer"></span> khách)</strong></div>
+                            <ul class="list-customer">
+                            </ul>
+                            <div class="line-bottom mb16"></div>
+                            <div class="mb10 txt_16"><strong>Thanh toán</strong></div>
+                            <ul>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Tổng tiền thanh toán</div>
+                                    <div class="bold total-payment-final"></div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Phương thức thanh toán</div>
+                                    <div id="payment-type" class="bold">Giữ chỗ</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 line-left off-line-mb">
+                            <div class="trip-info trip-info-go min mb16">
+                                <div class="trip-info__left">
+                                    <div class="lbl">Chiều đi</div>
+                                    <div class="info">
+                                        <div class="name full-name-go"></div>
+                                        <div class="date">
+                                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="trip-info__right">
+                                    <div class="detail-trip">
+                                        <div class="name">
+                                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                            <div class="hang"></div>
+                                            <p class="code"></p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="tag">EA</div>
+                                            <span class="seat-class-go"></span>
+                                            <span class="tooltip-new">
+                                                <svg class="icon-svg color-blue min">
+                                                    <use xlink:href="../images/icons/icon.svg#info">
+                                                    </use>
+                                                </svg>
+                                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                            </span>
+                                        </div>
+                                        <div class="time-flight">
+                                            <div class="first-time">
+                                                <div class="time">20:20</div>
+                                                <div class="add code-fly-start"></div>
+                                            </div>
+                                            <div class="flight">
+                                                <img src="~/images/icons/fly-to-gray.png" alt="">
+                                                <p class="duration-fly-item-go-wrapper">
+                                                    <strong><span class="duration-fly-item-go"></span></strong>&nbsp;
+                                                    <span class="stopNum-go"></span>
+                                                </p>
+                                            </div>
+                                            <div class="last-time">
+                                                <div class="time">20:20</div>
+                                                <div class="add code-fly-end"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="trip-info trip-info-back d-none min mb16">
+                                <div class="trip-info__left">
+                                    <div class="lbl red">Chiều về</div>
+                                    <div class="info">
+                                        <div class="name full-name-back"></div>
+                                        <div class="date">
+                                            <span class="date-prev-step"></span> - <span class="qty-customer-prev-step"></span> Khách
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="trip-info__right">
+                                    <div class="detail-trip">
+                                        <div class="name">
+                                            <div class="logo"><img src="~/images/hang-bay/bamboo.png" alt=""></div>
+                                            <div class="hang"></div>
+                                            <p class="code"></p>
+                                        </div>
+                                        <div class="option">
+                                            <div class="tag">EA</div>
+                                            <span class="seat-class-back"></span>
+                                            <span class="tooltip-new">
+                                                <svg class="icon-svg color-blue min">
+                                                    <use xlink:href="../images/icons/icon.svg#info">
+                                                    </use>
+                                                </svg>
+                                                <div class="tooltip-content tooltip-groupclass">Gói phổ thông tiết kiệm</div>
+                                            </span>
+                                        </div>
+                                        <div class="time-flight">
+                                            <div class="first-time">
+                                                <div class="time"></div>
+                                                <div class="add code-fly-start"></div>
+                                            </div>
+                                            <div class="flight">
+                                                <img src="~/images/icons/fly-to-gray.png" alt="">
+                                                <p class="duration-fly-item-back-wrapper">
+                                                    <span class="duration-fly-item-back"></span>&nbsp;
+                                                    <span class="stopNum-back"></span>
+                                                </p>
+                                            </div>
+                                            <div class="last-time">
+                                                <div class="time"></div>
+                                                <div class="add code-fly-end"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/modules/flight/notification.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <link href="~/css/notification.css" rel="stylesheet" asp-append-version="true" />
+}
+

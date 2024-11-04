@@ -1,0 +1,27 @@
+.error-field {
+    color: #dc3545;
+    font-size: 12px;
+    font-style: italic;
+    display: none;
+}
+
+    .error-field.has-error {
+        display: block;
+    }
+
+.first-time .time, .last-time .time {
+    white-space: nowrap;
+    font-weight: bold !important;
+}
+
+.daterangepicker .calendar {
+    max-width: unset !important;
+}
+
+.daterangepicker_input, input[name="daterangepicker_end"], input[name="daterangepicker_start"] {
+    display: none !important;
+}
+
+.fullName-customer {
+    text-transform: uppercase;
+}

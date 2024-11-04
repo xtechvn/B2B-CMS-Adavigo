@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model RoomPackagePopupModel
+@if (Model != null)
+{
+    <div class="">
+        <div class="bold black">Tên gói</div>
+        <div class="txt_16 mb24">@Model.name</div>
+        <div class="bold black">Chính sách mua gói</div>
+        <div class="txt_16">
+            <ul class="block_cancle_policy">
+                <li>@Model.guarantee_policy</li>
+                @if (Model.package_includes != null && Model.package_includes.Any())
+                {
+                    foreach (var item in Model.package_includes)
+                    {
+                        <li>@item</li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="bold black">Hoàn hủy theo chính sách</div>
+        <div class="txt_16 hidden">
+            @if (Model.cancel_policy != null && Model.cancel_policy.Any())
+            {
+                <ul class="block_cancle_policy">
+                    @foreach (var item in Model.cancel_policy)
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p class="no-result radius10 bg-white" style="padding:15px;">Hệ thống không tìm thấy dữ liệu</p>
+}

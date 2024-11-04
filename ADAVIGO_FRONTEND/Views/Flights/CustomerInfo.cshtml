@@ -1,0 +1,167 @@
+﻿@{
+    ViewData["Title"] = "Thông tin khách hàng";
+
+    var claims = User.Claims;
+    var phone = claims?.FirstOrDefault(x => x.Type.Equals("Phone", StringComparison.OrdinalIgnoreCase))?.Value;
+    var name = claims?.FirstOrDefault(x => x.Type.Equals("ClientName", StringComparison.OrdinalIgnoreCase))?.Value;
+    var email = claims?.FirstOrDefault(x => x.Type.Equals("Email", StringComparison.OrdinalIgnoreCase))?.Value;
+}
+
+<partial name="_FlightTopNavbar" />
+<section class="step-menu">
+    <div class="step step1 active">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#checkmark"></use>
+            </svg>
+            1
+        </span> Thông tin khách hàng
+    </div>
+    <div class="step step2">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#checkmark"></use>
+            </svg>
+            2
+        </span> Mã đặt chỗ
+    </div>
+    <div class="step step3">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#checkmark"></use>
+            </svg>
+            3
+        </span> Thông tin vé xuất
+    </div>
+    <div class="step step4">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#checkmark"></use>
+            </svg>
+            4
+        </span> Thanh toán
+    </div>
+    <div class="step step5">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="../images/icons/icon.svg#checkmark"></use>
+            </svg>
+            5
+        </span> Hoàn thành
+    </div>
+</section>
+<section class="main-container clearfix">
+    <div class="flex align-center mb16">
+        <a href="/flights/flightlist" class="btn-default white" style="padding:0  12px">
+            <svg class="icon-svg min">
+                <use xlink:href="../images/icons/icon.svg#prev2"></use>
+            </svg>
+            <span>Quay lại</span>
+        </a>
+        <h2 class="txt_24 bold ml-3 mb0">Thông tin liên hệ</h2>
+    </div>
+
+    <div class="flex">
+        <div class="col-main" id="customer-info-form">
+            <div class="bg-white pd-20 radius10 mb40">
+                <div class="head-title mb16">
+                    <h2 class="title txt_16 bold mb0">Thông tin liên hệ (nhận vé/phiếu thanh toán)</h2>
+                    <a href="javascript:void(0)" id="save-contact" class="color-blue medium">Lưu</a>
+                    <a href="javascript:void(0)" id="edit-save-contact" class="color-blue medium d-none ">Sửa</a>
+                </div>
+              @*  <div class="flex align-center mb24" id="login-customer">
+                    <a href="javascript:void(0)" id="accountBtn" class="btn-login">
+                        <svg class="icon-svg">
+                            <use xlink:href="../images/icons/icon.svg#user2"></use>
+                        </svg> Đăng nhập
+                    </a>
+                    <span class="gray ml-1">để đặt vé nhanh hơn, không cần nhập thông tin</span>
+                </div>*@
+                <div id="contact-info-form" class="grid grid__2 grid-form">
+                    <input type="text" value="@name" class="d-none" id="fullName">
+
+                    <div class="form-group mb0">
+                        <label class="" for="firstName">Họ (vd: Nguyen)</label>
+                        <input type="text" class="form-control form-control-CMND field-required" id="firstName">
+                        <div class="gray mt8">Như trên CMND (không dấu)</div>
+                        <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
+                    </div>
+                    <div class="form-group mb0">
+                        <label class="" for="lastName">Tên Đệm &amp; Tên (vd: Thi Ngoc Anh)</label>
+                        <input type="text" class="form-control form-control-CMND field-required" id="lastName">
+                        <div class="gray mt8">Như trên CMND (không dấu)</div>
+                        <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
+                    </div>
+                    <div class="form-group mb0">
+                        <label class="" for="phoneNumber">Điện thoại di động</label>
+                        <div class="select-input" id="select2-phone">
+                            <select class="select2" name="" id="select-sort" style="width: 100%;"></select>
+                            <input maxlength="10" value="@phone" type="text" class="form-control field-required field-number" id="phoneNumber">
+                        </div>
+                        <div class="gray mt8">VD: +84 901234567 trong đó (+84) là mã quốc gia và 9012345678 là số đi động</div>
+                        <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
+                    </div>
+                    <div class="form-group mb0">
+                        <label class="" for="emailContact">Email</label>
+                        <input type="text" class="form-control field-email" value="@email" id="emailContact">
+                        <div class="gray mt8">VD: email@examle.com</div>
+                        <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="txt_24 bold mb16">Thông tin hành khách</h2>
+            <div class="bg-white pd-20 radius10 mb40">
+                <div class="mb24 note-warring">
+                    <svg class="icon-svg mr-1">
+                        <use xlink:href="../images/icons/icon.svg#warring"></use>
+                    </svg> Tên không dấu ( Họ Tên đệm Tên, VD: Nguyen Thi Ngoc Anh)
+                </div>
+                <div class="block-info-adt"></div>
+                <div class="block-info-child"></div>
+                <div class="block-info-baby"></div>
+            </div>
+
+            <h2 class="txt_24 bold mb16">Tiện nghi chuyến bay</h2>
+            <div class="bg-white pd-20 radius10 mb40">
+                <div class="flying-utility">
+                    <!-- Button trigger modal Baggage -->
+                    <div class="item" id="myModalBaggage-div">
+                        <img src="~/images/icons/vali.svg" alt="">
+                        <div class="content">
+                            <h3 class="bold txt_16">Thêm hành lý ký gửi </h3>
+                            <p class="gray">Thêm hành lý để thuận tiện hơn cho chuyên đi. Mua bây giờ rẻ hơn tại quầy</p>
+                        </div>
+                        <a class="add" href="javascript:void(0)">
+                            <svg class="icon-svg">
+                                <use xlink:href="../images/icons/icon.svg#add"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <partial name="_SidebarPartial" />
+    </div>
+</section>
+
+<!--Modals-->
+<partial name="/Views/Flights/CustomerInfo/_ModalAddBaggageV2Partial.cshtml" />
+<partial name="/Views/Flights/CustomerInfo/_ModalConfirmPartial.cshtml" />
+<partial name="_FlightDetailPartial" />
+<partial name="_ModalExpiredlPartial" />
+<partial name="_ModalSupportPartial" />
+<partial name="_ModalEndPricePartial" />
+<partial name="_ModalChangePricePartial" />
+
+@section scripts {
+    <script src="~/js/modules/flight/customerinfo.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <link href="~/css/customerinfo.css" rel="stylesheet" asp-append-version="true" />
+}
+
+
+

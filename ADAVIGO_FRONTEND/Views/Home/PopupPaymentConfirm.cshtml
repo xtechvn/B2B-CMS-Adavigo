@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@using System.Web
+@model BankPaymentModel
+
+<div class="bg-agray pd-16 radius10 mb16">
+    <input type="hidden" id="fund_bank_type_id" value="@Model.bank_id" />
+    <input type="hidden" id="fund_bank_alias" value="@Model.bank_account" />
+    <input type="hidden" id="fund_amount" value="@Model.amount" />
+    <input type="hidden" id="fund_tran_code" value="@Model.tran_code" />
+
+    <div><img src="@Model.image" alt=""></div>
+    <div>@Model.title</div>
+    <div class="gray">Tên tài khoản</div>
+    <div class="bold txt_16">Công ty Cổ phần Thương mại và Dịch vụ Quốc tế Đại Việt</div>
+    <div class="line-bottom mt5 mb5"></div>
+    <div class="gray">Số tài khoản</div>
+    <div class="bold txt_16">@Model.bank_account</div>
+    <div class="line-bottom mt5 mb5"></div>
+    <div class="gray">Nội dung chuyển khoản</div>
+    <div class="bold txt_16">@Model.tran_code Nạp Quỹ</div>
+</div>
+<button type="button" class="btn btn-default size full" id="btn__fund_checkout_payment">Xác nhận</button>

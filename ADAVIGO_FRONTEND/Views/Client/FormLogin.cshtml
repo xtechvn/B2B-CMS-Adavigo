@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+@model ENTITIES.ViewModels.Client.ClientLogOnViewModel
+<form id="formClientLogin" asp-controller="Client" asp-action="Login" asp-route-returnurl="@Model.return_url">
+    @Html.AntiForgeryToken()
+    <div class="mb40"><img src="/images/graphics/logo.svg" alt=""></div>
+    <h2 class="bold txt_20 mb20">Welcome back</h2>
+    <div class="form-default">
+        <div class="form-group">
+            <label class="txt_12">Tên đăng nhập</label>
+            <input type="text" class="form-control" name="Email" asp-for="Email" placeholder="Enter tên đăng nhập">
+            @*<span asp-validation-for="Email" class="error mt5"></span>*@
+        </div>
+        <div class="form-group">
+            <label class="txt_12">Password</label>
+            <div class="relative password-wrap">
+                <input id="password-field" type="password" name="Password" asp-for="Password" class="form-control" placeholder="Enter Password" value="@Model.Password">
+                <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+            </div>
+            <span asp-validation-for="Password" class="error mt5"></span>
+        </div>
+        <div class="form-group capcha-flex">
+        </div>
+        <div class="form-group text-right">
+            <a class="medium" id="forgot-password-btn" href="/ForgotPassword">Quên mật khẩu?</a>
+        </div>
+        <div class="form-group">
+            @Html.ValidationSummary(true, "", new { @class = "error mt5" })
+            <button type="submit" class="btn-default full size btn_login_client">Login</button>
+        </div>
+    </div>
+    <div class="gray txt_12">© 2022 - Công ty cổ phần thương mại &amp; dịch vụ quốc tế Đại Việt</div>
+    <input type="hidden" asp-for="return_url" name="return_url">
+    <input type="hidden" asp-for="remember_me" name="remember_me">
+</form>

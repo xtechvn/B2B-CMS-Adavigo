@@ -1,0 +1,86 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@using Newtonsoft.Json
+@model HotelPackageDataModel
+
+@if (Model.package_includes != null && Model.package_includes.Any())
+{
+    foreach (var item in Model.package_includes)
+    {
+        <input type="hidden" class="package_include" value="@item" />
+    }
+}
+
+@if (Model.rates != null && Model.rates.Any())
+{
+    var rates_list = new List<RoomPackageRateModel>();
+    rates_list.AddRange(Model.rates.Where(s => s.total_price > 0).OrderBy(s => s.total_price));
+    rates_list.AddRange(Model.rates.Where(s => s.total_price == 0));
+
+    foreach (var item in rates_list)
+    {
+      <div class="room-package-detail">
+            <label class="confir_res circle" data-id="@item.id" data-code="@item.code" data-amount="@item.total_price" data-profit="@item.total_profit">
+                <input type="hidden" class="allotment_id" value="@item.allotment_id">
+                <input type="radio" name="@($"ckb__package_{@Model.id}_{@Model.guid_popup}")" class="ckb__package" @(item.total_price == 0 ? "disabled" : string.Empty)>
+                <span class="checkmark"></span>
+                <div class="flex-res txt_16 bold">
+                    <div class="package_name">@($"{item.code} | {item.name}")</div>
+                    @if (item.total_price > 0)
+                    {
+                        <div class="text-right package_price">
+                            <div class="dynamic_price" data-amount="@item.total_price" data-night="@Model.night_time">
+                                @(Model.view_type == 1 ? item.total_price.ToString("N0") : (item.total_price / Model.night_time).ToString("N0")) đ
+                            </div>
+                            <div class="gray txt_14 regular">/ <strong class="night">@(Model.view_type == 1 ? Model.night_time : 1)</strong> Đêm</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-right package_price">
+                            Giá liên hệ
+                        </div>
+                    }
+                </div>
+            </label>
+            <ul class="confir_res_detail room-package-include">
+                <li class="color-orange">
+                    <svg class="icon-svg min">
+                        <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+                    </svg>
+                    @item.description
+                </li>
+                <li class="flex space-between">
+                    <a href="#" class="color-blue">
+                        <svg class="icon-svg min">
+                            <use xlink:href="/images/icons/icon.svg#info"></use>
+                        </svg>
+                        Hoàn hủy theo chính sách khách sạn
+                    </a>
+                    <a class="cursor-pointer color-blue btn__show_popup_room_package">Xem chi tiết</a>
+                    <input type="hidden" class="package_name" value="@($"{item.code} [{item.name}]")">
+                    <input type="hidden" class="guarantee_policy" value="@item.guarantee_policy">
+                    @if (item.cancel_policy != null && item.cancel_policy.Any())
+                    {
+                        foreach (var data in item.cancel_policy)
+                        {
+                            <input type="hidden" class="cancel_policy" value="@data">
+                        }
+                    }
+
+                    @if (item.package_includes != null && item.package_includes.Any())
+                    {
+                        foreach (var data in item.package_includes)
+                        {
+                            <input type="hidden" class="package_include" data-id="@data.id" data-code="@data.code" value="@data.name">
+                        }
+                    }
+                </li>
+            </ul>
+      </div>
+    }
+}
+else
+{
+    <p class="no-result">Hệ thống không tìm thấy kết quả</p>
+}
+

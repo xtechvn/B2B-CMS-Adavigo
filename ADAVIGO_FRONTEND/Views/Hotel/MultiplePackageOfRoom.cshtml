@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+}
+@using ADAVIGO_FRONTEND.ViewModels
+@model MultiplePackageRoomModel
+
+<h2 class="bold txt_20 mb16">Thông tin phòng</h2>
+<input type="hidden" id="hotel_grid_cache_search" value="@Model.cacheId" />
+
+@if (Model.rooms != null && Model.rooms.Any())
+{
+    var arrivalDate = DateTime.Parse(Model.arrivalDate);
+    var departureDate = DateTime.Parse(Model.departureDate);
+
+    <div class="flex tab-room">
+        @foreach (var item in Model.rooms)
+        {
+            <a class="cursor-pointer tab-room-link @(item.room_number == 1 ? "active": string.Empty)" data-tab="@item.room_number">Phòng @item.room_number</a>
+        }
+    </div>
+    <div class="line-bottom mb16 mt10"></div>
+    @foreach (var item in Model.rooms)
+    {
+        <div class="room-tab-grid" data-tab="@item.room_number" style="display:@(item.room_number == 1 ? "block;" : "none;")">
+            <div class="bold txt_16 mb10">@item.room_name</div>
+            <div class="bg-agray pd-16 radius10 mb16 txt_16">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div><strong>@item.package_name</strong></div>
+                        <div class="gray">Mã gói: @item.package_code</div>
+                    </div>
+                    <div class="col-md-5 text-right">
+                        <div class="color-green txt_18"><strong>@item.amount.ToString("N0") VNĐ</strong></div>
+                        <div class="gray txt_14">@arrivalDate.ToString("dd/MM/yyyy") - @departureDate.ToString("dd/MM/yyyy")</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-default size add_other_package" data-room="@item.room_number" data-id="@item.room_id">Thêm gói</button>
+                <button type="button" class="btn btn-default gray size float-right btn_back_to_room_list"><i class="fa fa-reply"></i> Quay lại</button>
+            </div>
+        </div>
+    }
+}

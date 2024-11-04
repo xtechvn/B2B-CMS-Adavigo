@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+@using ADAVIGO_FRONTEND.ViewModels;
+@model FundDataModel
+<div class="form-group mb10">
+    <label class="gray" for="exampleInputEmail1">Số tiền chuyển</label>
+    <div class="relative currency-gr">
+        <span class="currency">VND</span>
+        <input type="text" class="form-control is-success text-left txt_18 bold ip-currency" id="input__add_fund" value="0">
+    </div>
+</div>
+<div class="select-group-note mb16">
+    <div>@Model.service_name</div>
+    <div class="flex">
+        <span>Số dư</span>
+        <div class="price">
+            <strong>@Model.account_blance.ToString("N0")</strong> VNĐ
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-default gray full" id="btn__submit_add_fund" onclick="_fund_management.redirectToPayment('@Model.service_type');">Nạp quỹ</button>
