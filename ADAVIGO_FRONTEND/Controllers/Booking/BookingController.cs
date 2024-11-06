@@ -29,9 +29,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
             long type = 0;
             var TaskModel = _AccountService.GetDetail();
             var Account = TaskModel.Result;
-            if(Account.GroupPermission == (int)GroupPermissionType.ADMIN)
+            if (Account.GroupPermission == (int)GroupPermissionType.ADMIN)
             {
-                if(Account.ParentId > 0)
+                if (Account.ParentId > 0)
                 {
                     id = Account.ParentId;
                     type = 1;
@@ -51,7 +51,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
 
         public async Task<IActionResult> Detail(long id)
         {
-          
+
             long account_client_id = 0;
             long type = 0;
             var TaskModel = _AccountService.GetDetail();
@@ -73,6 +73,20 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                 account_client_id = Account.id;
             }
             var data = await _BookingService.GetBookingDetail(id, account_client_id, type);
+            return View(data);
+        }
+        public async Task<IActionResult> RequestHotelBooking()
+        {
+            return View();
+        }
+        public async Task<IActionResult> GetListRequestHotelBooking(RequestSearchModel model)
+        {
+
+            var TaskModel = _AccountService.GetDetail();
+            var Account = TaskModel.Result;
+
+            model.ClientId = Account.id;
+            var data = await _BookingService.GetListRequestHotelBooking(model);
             return View(data);
         }
     }

@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Kiểm tra quỹ phòng";
+}
+<style>
+    .daterangepicker td.start-date::before {
+        content: "Bắt đầu"
+    }
+
+    .daterangepicker td.end-date::before {
+        content: "Kết thúc"
+    }
+</style>
+
+<section class="padding-main bg-white">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="search-wrapper">
+                <form action="" id="search" class="mb16" style="max-width:380px;margin-left: auto;">
+                    <input type="search" class="input_search onclick-togle active" id="search_code" placeholder="Tìm kiếm mã đơn hàng">
+                    <span class="search-btn" onclick="_booking.Filter()">
+                        <button type="button">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#search"></use>
+                            </svg>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="main-container clearfix">
+    <div id="grid_data_listing">
+    </div>
+
+    <div class="hidden" id="grid_data_detail">
+    </div>
+</section>
+
+@section scripts{
+    <script type="text/javascript" src="~/js/modules/request_hotel_booking.js"></script>
+}
+
+
+
+

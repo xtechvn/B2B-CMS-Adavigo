@@ -1,0 +1,96 @@
+﻿@{
+    Layout = null;
+}
+
+@using ADAVIGO_FRONTEND.ViewModels;
+@using LIB.Utilities.Contants;
+@model GenericGridViewModel<RequestViewModel>
+
+<div class="table-responsive table-default bg-white mb24">
+    <table class="table table-nowrap" border="1">
+        <caption>
+            Kiểm tra quỹ phòng
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col">Mã booking</th>
+                <th scope="col">Ngày đặt</th>
+                <th scope="col">Tên đơn hàng</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Check in</th>
+                <th scope="col">Check out</th>
+                <th scope="col">Số phòng</th>
+                <th scope="col">Số đêm</th>
+                <th scope="col">Giá đại lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListData != null && Model.ListData.Any())
+            {
+                foreach (var item in Model.ListData)
+                {
+                    <tr>
+                        <td><a class="cursor-pointer" onclick="_booking.Detail('@item.OrderId')"><span class="color-blue">@item.RequestNo</span></a></td>
+                        <td>
+                            @((item.CreatedDate != null && item.CreatedDate != DateTime.MinValue) ? item.CreatedDate.ToString("dd/MM/yyyy HH:mm") : "#")
+                        </td>
+
+                        <td>@item.HotelName</td>
+                        <td class="medium">
+                            @switch (item.Status)
+                            {
+                                case (int)(RequestStatus.TAO_MOI):
+                                    {
+                                        <span class="color-oranger">@item.RequestStatus</span>
+                                    }
+                                    break;
+                                case (int)(RequestStatus.NHAN_XU_LY):
+                                    {
+                                        <span class="color-green">@item.RequestStatus</span>
+                                    }
+                                    break;
+                                case (int)(RequestStatus.DA_XU_LY):
+                                    {
+                                        <span class="color-green">@item.RequestStatus</span>
+                                    }
+                                    break;
+                                case (int)(RequestStatus.HOAN_THANH):
+                                    {
+                                        <span class="color-green">@item.RequestStatus</span>
+                                    }
+                                    break;
+                                case (int)(RequestStatus.HUY):
+                                    {
+                                        <span class="color-red">@item.RequestStatus</span>
+                                    }
+                                    break;
+                            }
+                        </td>
+                        <td>@item.FromDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.ToDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.numberOfRoom</td>
+                        <td>@((item.ToDate - item.FromDate).TotalDays)</td>
+                        <td>
+                            <span>@item.Amount.ToString("N0") đ</span>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@await Component.InvokeAsync("Paging", new
+{
+    pageModel = new PagingModel()
+    {
+        TotalRecord = Model.TotalRecord,
+        TotalPage = Model.TotalPage,
+        CurrentPage = Model.CurrentPage,
+        PageSize = Model.PageSize,
+        RecordName = "đơn hàng",
+        PageAction = "_request_hotel_booking.OnPaging({0})"
+    }
+})
+
+

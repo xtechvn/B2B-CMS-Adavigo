@@ -91,5 +91,41 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw;
             }
         }
+        public async Task<GenericGridViewModel<RequestViewModel>> GetListRequestHotelBooking(RequestSearchModel model)
+        {
+            try
+            {
+                var gridModel = new GenericGridViewModel<RequestViewModel>()
+                {
+                    CurrentPage = model.PageIndex,
+                    PageSize = model.PageSize,
+                };
+
+                string token = CommonHelper.Encode(JsonConvert.SerializeObject(model), _ApiConnector._ApiSecretKey);
+
+                var keyParams = new[] {
+                    new KeyValuePair<string, string>("token", token),
+                 
+                };
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.REQUEST_HOTEL_BOOKING_LISTING, keyParams);
+
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                {
+                    gridModel.ListData = JsonConvert.DeserializeObject<IEnumerable<RequestViewModel>>(jsonData["data"].ToString());
+                    gridModel.TotalRecord = int.Parse(jsonData["total_row"].ToString());
+                    gridModel.TotalPage = (int)Math.Ceiling((double)gridModel.TotalRecord / gridModel.PageSize);
+                }
+
+                return gridModel;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

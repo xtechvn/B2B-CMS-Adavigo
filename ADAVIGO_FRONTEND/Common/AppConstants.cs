@@ -103,6 +103,10 @@
         /// Lịch sử booking
         /// </summary>
         public const string BOOKING_LISTING = "/api/order/get-order-by-client-id.json";
+        /// <summary>
+        /// Lịch sử request booking
+        /// </summary>
+        public const string REQUEST_HOTEL_BOOKING_LISTING = "/api/b2b/hotel/get-list-request-hotel-booking-clientid.json";
 
         /// <summary>
         /// Lịch sử booking
