@@ -497,6 +497,9 @@ input {
         background: none;
         border: 0;
     }
+    &.rounded{
+        border-radius: 99px !important;
+    }
 }
 
 .flex {

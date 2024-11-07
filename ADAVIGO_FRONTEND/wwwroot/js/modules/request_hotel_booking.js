@@ -1,5 +1,6 @@
 ﻿var _request_hotel_booking = {
     grid_element: "#grid_data_listing",
+    grid_detail_element: "#grid_data_detail",
     Init: function () {
         let objSearch = {
             PageIndex: 1,
@@ -19,6 +20,14 @@
         objSearch.PageIndex = value;
         this.Search(objSearch);
     },
+    GetDetailRequestBooking: function (id, RequestNo) {
+   
+        _ajax_caller.post('/Booking/DetailRequestHotelBooking', { id: id, RequestNo: RequestNo }, function (result) {
+            $(_request_hotel_booking.grid_detail_element).html(result);
+            $(_request_hotel_booking.grid_element).addClass('hidden');
+            $(_request_hotel_booking.grid_detail_element).removeClass('hidden');
+        });
+    }
 }
 
 $(document).ready(function () {

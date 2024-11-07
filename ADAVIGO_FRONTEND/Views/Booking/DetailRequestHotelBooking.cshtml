@@ -1,0 +1,143 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels;
+@{
+    Layout = null;
+  
+}
+@model DetailRequestModel
+<section class="main-container clearfix">
+
+    <div class="mb16">
+        <div class="flex align-center justify-content-between">
+            <div class="flex align-center  gap_10">
+                <a href="" class="btn-default white min rounded">
+                    <svg class="icon-svg min">
+                        <use xlink:href="images/icons/icon.svg#prev2"></use>
+                    </svg>
+                    <span>Quay lại</span>
+                </a>
+                <div class="item">
+                    <h4 class="mb0">Yêu cầu số: @ViewBag.RequestNo</h4>
+                </div>
+                <div class="btn-default white min rounded">
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#clock"></use>
+                    </svg> 15: 00
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">Đặt phòng</button>
+
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        <div class="row detail-order-flight">
+            <div class="col-md-8 mb16">
+                <div class="bg-white pd-20 radius10">
+                    <div class="detail-order-flight__left">
+                        <div class="mb10 txt_20"><strong>Thông tin đơn hàng</strong> <a href="" class="color-blue txt_14"><i>(Xem yêu cầu ban đầu)</i></a></div>
+                        @if (Model.Rooms != null && Model.Rooms.Count > 0)
+                        {
+                            foreach (var item in Model.Rooms)
+                            {
+                                <ul>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Hạng phòng</div>
+                                        <div class="color-green"><strong>@item.RoomTypeName</strong></div>
+                                    </li>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Số phòng</div>
+                                        <div>@item.NumberOfRooms</div>
+                                    </li>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Tình trạng</div>
+                                        <div class="color-blue">Còn phòng</div>
+                                    </li>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Số người lớn</div>
+                                        <div>@item.NumberOfAdult</div>
+                                    </li>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Số trẻ em</div>
+                                        <div>@item.NumberOfChild</div>
+                                    </li>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Giá</div>
+                                        <div><span class="color-orange"> @item.TotalAmount.ToString("N0") đ</span> </div>
+                                    </li>
+                                </ul>
+
+                                <div class="line-bottom mb16"></div>
+                            }
+                        }
+
+                        @if (Model.ExtraPackages != null && Model.ExtraPackages.Count > 0)
+                        {
+
+                            <ul>
+                                <li class="mb10">
+                                    <div class="gray"><strong>Phụ thu</strong></div>
+                                </li>
+                                @foreach (var item in Model.ExtraPackages)
+                                {
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Dịch vụ phòng</div>
+                                        <div class="color-green"><strong>@item.PackageCode</strong></div>
+                                    </li>
+                                    <li class="mb10 flex space-between">
+                                        <div class="gray">Tổng</div>
+                                        <div>@(((double)item.Amount).ToString("N0"))</div>
+                                    </li>
+                                }
+
+
+                            </ul>
+                            <div class="line-bottom mb16"></div>
+                        }
+
+
+                        <ul>
+                            <li class="mb10 flex space-between">
+                                <div class="gray"><strong>Tổng </strong>@(Model!=null ? Model.Rooms.Sum(s=>s.NumberOfRooms) + " phòng":"")</div>
+                                <div class="color-orange txt_16"><strong>@ViewBag.Amount.ToString("N0") Đ</strong></div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb16">
+                <div class="pd-20 bg-white radius10">
+                    <div class="info-basic flex flex-nowrap w-100">
+                        <div class="ava">
+                            <span class="thumb_img thumb_5x5">
+                                <img src="images/graphics/ava.jpg">
+                            </span>
+                        </div>
+                        <div class="content  w-100">
+                            <div class="flex justify-content-between">
+                                <p><b>Admin</b></p>
+                                <span style="color:#698096">17:53 23 th7, 2024<b class="ml-2">Phản hồi</b></span>
+                            </div>
+
+                            <div>
+                                Dear ABC,<br>
+                                <br>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                Sincere,<br>
+                                Mr. Dinh Thanh Binh
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="line-bottom mt16 mb16"></div>
+                    <div class="form-group mb0">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+</section>

@@ -17,7 +17,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
         }
 
 
-        public async Task<GenericGridViewModel<BookingModel>> GetBookingList(BookingSearchModel model,long id,long type)
+        public async Task<GenericGridViewModel<BookingModel>> GetBookingList(BookingSearchModel model, long id, long type)
         {
             try
             {
@@ -34,8 +34,8 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     account_client_id = id,
                     page = model.page_index,
                     size = model.page_size,
-                    type= type,
-                    keyword=model.code
+                    type = type,
+                    keyword = model.code
                 }), _ApiConnector._ApiSecretKey);
 
                 var keyParams = new[] {
@@ -63,7 +63,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
         }
 
-        public async Task<BookingDetailModel> GetBookingDetail(long id, long account_client_id,long type)
+        public async Task<BookingDetailModel> GetBookingDetail(long id, long account_client_id, long type)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 {
                     order_id = id,
                     account_client_id = account_client_id,
-                    type= type
+                    type = type
                 });
 
                 var jsonData = JObject.Parse(result);
@@ -105,7 +105,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 var keyParams = new[] {
                     new KeyValuePair<string, string>("token", token),
-                 
+
                 };
 
                 var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.REQUEST_HOTEL_BOOKING_LISTING, keyParams);
@@ -121,6 +121,40 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 }
 
                 return gridModel;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async Task<DetailRequestModel> GetDetailRequestHotelBooking(int id)
+        {
+            try
+            {
+                var model = new
+                {
+                    id = id
+                };
+
+                string token = CommonHelper.Encode(JsonConvert.SerializeObject(model), _ApiConnector._ApiSecretKey);
+
+                var keyParams = new[] {
+                    new KeyValuePair<string, string>("token", token),
+
+                };
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.REQUEST_DETAIL_HOTEL_BOOKING, keyParams);
+
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                {
+                    var Data = JsonConvert.DeserializeObject<DetailRequestModel>(jsonData["data"].ToString());
+                    return Data;
+                }
+
+                return null;
             }
             catch
             {

@@ -2,6 +2,7 @@
 using ADAVIGO_FRONTEND.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Contants;
 
@@ -87,6 +88,19 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
 
             model.ClientId = Account.id;
             var data = await _BookingService.GetListRequestHotelBooking(model);
+            return View(data);
+        }
+        public async Task<IActionResult> DetailRequestHotelBooking(int id,string RequestNo)
+        {
+            ViewBag.RequestNo = RequestNo;
+            var data = await _BookingService.GetDetailRequestHotelBooking(id);
+            if(data != null)
+            {
+                var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
+                var amunt_ExtraPackages = data.ExtraPackages != null ? data.ExtraPackages.Sum(s => s.Amount) : 0;
+                ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
+            }
+            
             return View(data);
         }
     }
