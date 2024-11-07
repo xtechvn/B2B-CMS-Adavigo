@@ -37,8 +37,10 @@
                         <div class="mb10 txt_20"><strong>Thông tin đơn hàng</strong> <a href="" class="color-blue txt_14"><i>(Xem yêu cầu ban đầu)</i></a></div>
                         @if (Model.Rooms != null && Model.Rooms.Count > 0)
                         {
+
                             foreach (var item in Model.Rooms)
                             {
+                                var RoomRates = Model.Rates.Where(s => s.HotelBookingRoomId == item.Id);
                                 <ul>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Hạng phòng</div>
@@ -51,6 +53,10 @@
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Tình trạng</div>
                                         <div class="color-blue">Còn phòng</div>
+                                    </li>
+                                     <li class="mb10 flex space-between">
+                                        <div class="gray">Thời gian sử dụng</div>
+                                        <div>@(((DateTime)RoomRates.Min(s => s.StartDate)).ToString("dd/MM/yyyy")) - @(((DateTime)RoomRates.Max(s => s.EndDate)).ToString("dd/MM/yyyy")) </div>
                                     </li>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Số người lớn</div>
