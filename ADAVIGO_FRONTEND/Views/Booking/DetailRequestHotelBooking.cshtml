@@ -24,7 +24,9 @@
                     </svg> 15: 00
                 </div>
             </div>
-            <button type="button"  class="btn btn-default" onclick="_request_detail_hotel_booking.summit()">Đặt phòng</button>
+            @if (ViewBag.bt==true){
+                <button type="button" class="btn btn-default" onclick="_request_detail_hotel_booking.summit()">Đặt phòng</button>
+            }
 
         </div>
     </div>

@@ -1,6 +1,7 @@
 ﻿using ADAVIGO_FRONTEND.Models.Flights;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
+using LIB.Utilities.Contants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -96,11 +97,14 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
         {
             if(BookingId!= 0)
             {
-
-                var data = _BookingService.GetDetailRequestHotelBooking(BookingId).Result;
+                ViewBag.bt = false;
+               var data = _BookingService.GetDetailRequestHotelBooking(BookingId).Result;
                 if (data != null)
                 {
                     ViewBag.RequestNo = data.RequestNo;
+                    if(data.Status != (int)RequestStatus.HOAN_THANH && data.Status != (int)RequestStatus.HUY){
+                        ViewBag.bt = true;
+                    }
                     var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
                     var amunt_ExtraPackages = data.ExtraPackages != null ? data.ExtraPackages.Sum(s => s.Amount) : 0;
                     ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
