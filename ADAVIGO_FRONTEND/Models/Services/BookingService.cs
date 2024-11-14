@@ -160,6 +160,40 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
                 throw;
             }
+        } 
+        public async Task<int> UpdateRequestHotelBooking(long id)
+        {
+            try
+            {
+                var model = new
+                {
+                    id = id
+                };
+
+                string token = CommonHelper.Encode(JsonConvert.SerializeObject(model), _ApiConnector._ApiSecretKey);
+
+                var keyParams = new[] {
+                    new KeyValuePair<string, string>("token", token),
+
+                };
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.UPDATE_REQUEST_HOTEL_BOOKING, keyParams);
+
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                {
+                  
+                    return (int)ENUM_API_RESULT.SUCCESS;
+                }
+
+                return 1;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

@@ -331,7 +331,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     });
                 }
 
-
+                _BookingService.UpdateRequestHotelBooking(Convert.ToInt32(cache_data.bookingID));
                 jsonData.Add("search", JObject.FromObject(new
                 {
                     arrivalDate = cache_data.arrivalDate,

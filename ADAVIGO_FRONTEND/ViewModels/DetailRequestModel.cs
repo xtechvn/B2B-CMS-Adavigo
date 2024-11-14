@@ -5,6 +5,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
 {
     public class DetailRequestModel
     {
+        public int RequestId { get; set; }
         public string RequestNo { get; set; }
         public string HotelName { get; set; }
         public string HotelId { get; set; }
