@@ -215,11 +215,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
 
                 var data = new HotelOrderDataModel();
                 data.hotelName = DetailRequestHotelBooking.HotelName;
-                data.hotelID = DetailRequestHotelBooking.HotelName;
-                data.telephone = DetailRequestHotelBooking.HotelName;
-                data.email = DetailRequestHotelBooking.HotelName;
-                data.arrivalDate = DetailRequestHotelBooking.HotelName;
-                data.departureDate = DetailRequestHotelBooking.HotelName;
+                data.hotelID = DetailRequestHotelBooking.HotelId;
+                data.telephone = DetailRequestHotelBooking.telephone;
+                data.email = DetailRequestHotelBooking.email;
+                data.arrivalDate = DetailRequestHotelBooking.arrivalDate;
+                data.departureDate = DetailRequestHotelBooking.departureDate;
             
                 data.bookingID = BookingId.ToString();
                if(DetailRequestHotelBooking.Rooms != null)
@@ -262,7 +262,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         rooms.Add(rooms_detail);
                     }
                 }
-                
+                data.rooms = rooms;
 
                 var cache_name = Guid.NewGuid().ToString();
                 _MemoryCache.Set(cache_name, data, TimeSpan.FromMinutes(30));
