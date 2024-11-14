@@ -715,5 +715,24 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw;
             }
         }
+        public async Task<string> SaveRequestHotel(BookingHotelB2BViewModel model)
+        {
+            try
+            {
+                model.account_client_id = _UserManager.ClientID;
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.SAVE_REQUYEST_HOTEL_BOOKING, model);
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return jsonData["data"].ToString();
+                else
+                    throw new Exception(jsonData["msg"].ToString());
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

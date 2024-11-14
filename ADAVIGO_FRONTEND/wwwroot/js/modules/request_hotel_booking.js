@@ -27,9 +27,25 @@
             $(_request_hotel_booking.grid_element).addClass('hidden');
             $(_request_hotel_booking.grid_detail_element).removeClass('hidden');
         });
+    },
+    Filter: function () {
+        let objSearch = {
+            RequestId: $('#search_request_code').val(),
+            PageIndex: 1,
+            PageSize: 15
+        };
+
+        this.SearchParam = objSearch;
+        this.Search(objSearch);
     }
 }
 
 $(document).ready(function () {
     _request_hotel_booking.Init();
+    $('#search_request_code').keyup(function (event) {
+        if (event.keyCode === 13) {
+            _request_hotel_booking.Filter();
+        }
+    })
+    
 });

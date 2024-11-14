@@ -152,6 +152,7 @@ namespace ADAVIGO_FRONTEND
                  pattern: "tour/{slug_location}/{slug}--{id}",
                  defaults: new { controller = "Tour", action = "Detail" }
                 );
+     
             });
 
           

@@ -93,6 +93,10 @@
         /// SAVE BOOKING HOTEL
         /// </summary>
         public const string SAVE_HOTEL_BOOKING = "api/b2b/hotel/save-booking.json";
+        /// <summary>
+        /// SAVE REQUYEST BOOKING HOTEL
+        /// </summary>
+        public const string SAVE_REQUYEST_HOTEL_BOOKING = "api/b2b/hotel/request-hotel-booking.json";
 
         /// <summary>
         /// SAVE_HOTEL_PAYMENT

@@ -16,10 +16,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="search-wrapper">
-                <form action="" id="search" class="mb16" style="max-width:380px;margin-left: auto;">
-                    <input type="search" class="input_search onclick-togle active" id="search_code" placeholder="Tìm kiếm mã đơn hàng">
-                    <span class="search-btn" onclick="_booking.Filter()">
-                        <button type="button">
+                <form onsubmit="return false" id="search" class="mb16" style="max-width:380px;margin-left: auto;">
+                    <input type="search" id="search_request_code" placeholder="Tìm kiếm mã">
+                    <span class="search-btn" onclick="_request_hotel_booking.Filter()">
+                        <button type="button" onclick="_request_hotel_booking.Filter()">
                             <svg class="icon-svg">
                                 <use xlink:href="/images/icons/icon.svg#search"></use>
                             </svg>

@@ -1,6 +1,6 @@
 ﻿@using ADAVIGO_FRONTEND.ViewModels;
 @{
-    Layout = null;
+
   
 }
 @model DetailRequestModel
@@ -9,7 +9,7 @@
     <div class="mb16">
         <div class="flex align-center justify-content-between">
             <div class="flex align-center  gap_10">
-                <a href="" class="btn-default white min rounded">
+                <a href="/booking/RequestHotelBooking" class="btn-default white min rounded">
                     <svg class="icon-svg min">
                         <use xlink:href="images/icons/icon.svg#prev2"></use>
                     </svg>
@@ -24,19 +24,20 @@
                     </svg> 15: 00
                 </div>
             </div>
-            <button type="submit" class="btn btn-default">Đặt phòng</button>
+            <button type="button"  class="btn btn-default" onclick="_request_detail_hotel_booking.summit()">Đặt phòng</button>
 
         </div>
     </div>
     @if (Model != null)
     {
+       
         <div class="row detail-order-flight">
             <div class="col-md-8 mb16">
                 <div class="bg-white pd-20 radius10">
                     <div class="detail-order-flight__left">
                         <div class="mb10 txt_20"><strong>Thông tin đơn hàng</strong> <a href="" class="color-blue txt_14"><i>(Xem yêu cầu ban đầu)</i></a></div>
                         @if (Model.Rooms != null && Model.Rooms.Count > 0)
-                        {
+                        {<input id="BookingId" value="@Model.Rooms[0].HotelBookingId" style="display:none" />
 
                             foreach (var item in Model.Rooms)
                             {
@@ -54,7 +55,7 @@
                                         <div class="gray">Tình trạng</div>
                                         <div class="color-blue">Còn phòng</div>
                                     </li>
-                                     <li class="mb10 flex space-between">
+                                    <li class="mb10 flex space-between">
                                         <div class="gray">Thời gian sử dụng</div>
                                         <div>@(((DateTime)RoomRates.Min(s => s.StartDate)).ToString("dd/MM/yyyy")) - @(((DateTime)RoomRates.Max(s => s.EndDate)).ToString("dd/MM/yyyy")) </div>
                                     </li>
@@ -147,3 +148,4 @@
 
 
 </section>
+<script src="~/js/modules/request_detail_hotel_booking.js"></script>

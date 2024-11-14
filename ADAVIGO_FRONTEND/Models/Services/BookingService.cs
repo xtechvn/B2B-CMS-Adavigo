@@ -127,7 +127,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw;
             }
         }
-        public async Task<DetailRequestModel> GetDetailRequestHotelBooking(int id)
+        public async Task<DetailRequestModel> GetDetailRequestHotelBooking(long id)
         {
             try
             {

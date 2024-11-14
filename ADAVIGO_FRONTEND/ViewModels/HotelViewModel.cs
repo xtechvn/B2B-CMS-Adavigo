@@ -237,6 +237,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public IEnumerable<RoomOrderData> rooms { get; set; }
         public string orderToken { get; set; }
         public string bookingID { get; set; }
+        public string note { get; set; }
     }
 
     public class RoomOrderData

@@ -1,10 +1,12 @@
-﻿using ADAVIGO_FRONTEND.Models.Services;
+﻿using ADAVIGO_FRONTEND.Models.Flights;
+using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Contants;
+using static ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants.TourConstants;
 
 namespace ADAVIGO_FRONTEND.Controllers.Booking
 {
@@ -90,18 +92,26 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
             var data = await _BookingService.GetListRequestHotelBooking(model);
             return View(data);
         }
-        public async Task<IActionResult> DetailRequestHotelBooking(int id,string RequestNo)
+        public async Task<IActionResult> DetailRequestHotelBooking(long BookingId)
         {
-            ViewBag.RequestNo = RequestNo;
-            var data = await _BookingService.GetDetailRequestHotelBooking(id);
-            if(data != null)
+            if(BookingId!= 0)
             {
-                var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
-                var amunt_ExtraPackages = data.ExtraPackages != null ? data.ExtraPackages.Sum(s => s.Amount) : 0;
-                ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
+
+                var data = _BookingService.GetDetailRequestHotelBooking(BookingId).Result;
+                if (data != null)
+                {
+                    ViewBag.RequestNo = data.RequestNo;
+                    var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
+                    var amunt_ExtraPackages = data.ExtraPackages != null ? data.ExtraPackages.Sum(s => s.Amount) : 0;
+                    ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
+                }
+
+                return View(data);
             }
-            
-            return View(data);
+            else
+            {
+                return View();
+            }
         }
     }
 }

@@ -1,19 +1,18 @@
 ﻿using ADAVIGO_FRONTEND.Common;
-using ADAVIGO_FRONTEND.Models.Log;
 using B2B.Utilities.Common;
 using B2B.Utilities.Contants;
 using ENTITIES.ViewModels.Client;
+using LIB.Utilities.Common;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using LIB.Utilities.Common;
+using System.Threading.Tasks;
 
 namespace ADAVIGO_FRONTEND.Models.Client
 {
@@ -62,7 +61,7 @@ namespace ADAVIGO_FRONTEND.Models.Client
             }
             catch (Exception ex)
             {
-                LogService.addLogTelegram("ClientService - checkLogIn error: " + ex.ToString());
+                //LogService.addLogTelegram("ClientService - checkLogIn error: " + ex.ToString());
                 throw;
             }
         

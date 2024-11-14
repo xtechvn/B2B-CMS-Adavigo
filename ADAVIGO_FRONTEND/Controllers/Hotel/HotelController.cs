@@ -5,11 +5,13 @@ using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,12 +29,14 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         private readonly string _KeyEncodeParam;
         private IMemoryCache _MemoryCache;
         private readonly HomeService _HomeService;
-        public HotelController(HotelService hotelService, IConfiguration configuration, IMemoryCache memoryCache, HomeService homeService)
+        private readonly BookingService _BookingService;
+        public HotelController(HotelService hotelService, IConfiguration configuration, IMemoryCache memoryCache, HomeService homeService, BookingService BookingService)
         {
             _HotelService = hotelService;
             _KeyEncodeParam = configuration["KeyEncodeParam"];
             _MemoryCache = memoryCache;
             _HomeService = homeService;
+            _BookingService = BookingService;
         }
 
         public IActionResult Index(string filter)
@@ -79,7 +83,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 // var datas1 = await _HotelService.GetSuggestHotel(textSearch, limit);
                 var datas = await _HotelService.GetHotelList(textSearch, search_type);
                 var results = new List<HotelESSuggestModel>();
-               
+
                 if (datas != null && datas.Any())
                 {
                     results.AddRange(datas);
@@ -203,10 +207,63 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         }
 
         [HttpPost]
-        public IActionResult SaveCustomerData(HotelOrderDataModel data)
+        public IActionResult SaveCustomerData(long BookingId)
         {
             try
             {
+                var DetailRequestHotelBooking = _BookingService.GetDetailRequestHotelBooking(BookingId).Result;
+
+                var data = new HotelOrderDataModel();
+                data.hotelName = DetailRequestHotelBooking.HotelName;
+                data.hotelID = DetailRequestHotelBooking.HotelName;
+                data.telephone = DetailRequestHotelBooking.HotelName;
+                data.email = DetailRequestHotelBooking.HotelName;
+                data.arrivalDate = DetailRequestHotelBooking.HotelName;
+                data.departureDate = DetailRequestHotelBooking.HotelName;
+            
+                data.bookingID = BookingId.ToString();
+               if(DetailRequestHotelBooking.Rooms != null)
+                {
+                    data.numberOfAdult = (int)DetailRequestHotelBooking.Rooms.Sum(s=>s.NumberOfAdult);
+                    data.numberOfChild = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfChild);
+                    data.numberOfInfant = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfInfant);
+                }
+                var rooms = new List<RoomOrderData>();
+                if (DetailRequestHotelBooking.Rates != null)
+                {
+                    foreach(var item in DetailRequestHotelBooking.Rooms)
+                    {
+                      
+                        var rooms_detail = new RoomOrderData();
+                        rooms_detail.room_number = item.NumberOfRooms.ToString();
+                        rooms_detail.room_id = item.RoomTypeId;
+                        rooms_detail.room_code = item.RoomTypeCode;
+                        rooms_detail.room_name = item.RoomTypeName;
+                        rooms_detail.adult = (int)item.NumberOfAdult;
+                        rooms_detail.child = (int)item.NumberOfChild;
+                        rooms_detail.infant = (int)item.NumberOfInfant;
+                        rooms_detail.package_includes = item.PackageIncludes.Split(',');
+
+                        var Package = new List<PackageOrderData>();
+                        foreach (var item2 in DetailRequestHotelBooking.Rates.Where(s => s.HotelBookingRoomId == item.Id))
+                        {
+                            var Package_detail = new PackageOrderData();
+                            Package_detail.package_id = item2.RatePlanId;
+                            Package_detail.package_code = item2.RatePlanCode;
+                            Package_detail.amount = (decimal)item2.TotalAmount;
+                            Package_detail.profit = (decimal)item2.Profit;
+                            Package_detail.arrival_date = ((DateTime)item2.StartDate).ToString("yyyy-MM-dd");
+                            Package_detail.departure_date = ((DateTime)item2.EndDate).ToString("yyyy-MM-dd");
+                            Package_detail.allotment_id = item2.AllotmentId;
+                            Package_detail.package_includes = item2.PackagesInclude.Split(',');
+                            Package.Add(Package_detail);
+                        }
+                        rooms_detail.packages = Package;
+                        rooms.Add(rooms_detail);
+                    }
+                }
+                
+
                 var cache_name = Guid.NewGuid().ToString();
                 _MemoryCache.Set(cache_name, data, TimeSpan.FromMinutes(30));
                 try
@@ -217,14 +274,14 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         foreach (var rate in room.packages)
                         {
                             DateTime departure_date_package = DateTime.ParseExact(rate.departure_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                            if(departure_date==DateTime.MinValue || departure_date < departure_date_package)
+                            if (departure_date == DateTime.MinValue || departure_date < departure_date_package)
                             {
                                 departure_date = departure_date_package;
                             }
 
                         }
                     }
-                    data.departureDate=departure_date.ToString("yyyy-MM-dd");
+                    data.departureDate = departure_date.ToString("yyyy-MM-dd");
                 }
                 catch { }
                 return new JsonResult(new
@@ -386,9 +443,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             booking = booking.Replace(' ', '+');
             var strJsonData = CommonHelper.Decode(booking, _KeyEncodeParam);
             var model = JsonConvert.DeserializeObject<HotelPaymentModel>(strJsonData);
-            var fund_datas =  _HomeService.GetAmountDeposit().Result;
+            var fund_datas = _HomeService.GetAmountDeposit().Result;
             ViewBag.Fund = new FundDataModel();
-            if (fund_datas!=null && fund_datas.Count() > 0)
+            if (fund_datas != null && fund_datas.Count() > 0)
             {
                 ViewBag.Fund = fund_datas.Where(x => x.service_type == 1).FirstOrDefault();
             }
@@ -397,7 +454,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
 
         public async Task<IActionResult> PopupPaymentHotel(PaymentHotelModel model)
         {
-            ViewBag.QRCode = await  _HotelService.GetVietQRCode(model);
+            ViewBag.QRCode = await _HotelService.GetVietQRCode(model);
             return View(model);
         }
 
@@ -406,7 +463,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         {
             try
             {
-                
+
                 if (model.order_id <= 0)
                 {
                     model.event_status = 0;
@@ -416,14 +473,14 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     model.event_status = 1;
                 }
-                if (model.payment_type==(int)PaymentType.KY_QUY)
+                if (model.payment_type == (int)PaymentType.KY_QUY)
                 {
                     var data = await _HotelService.CheckFundPaymentAvailable(new CheckFundAvailableRequest()
                     {
-                        booking_id=model.booking_id,
-                        service_type=1
+                        booking_id = model.booking_id,
+                        service_type = 1
                     });
-                    if(data!=null && !data.data)
+                    if (data != null && !data.data)
                     {
 
                         return new JsonResult(new
@@ -435,7 +492,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     var data_payment = await _HotelService.SaveHotelPayment(model);
                     if (data_payment != null)
                     {
-                        var fund_payment =  _HotelService.ConfirmPaymentWithFund(new ConfirmPaymentWithFundRequest()
+                        var fund_payment = _HotelService.ConfirmPaymentWithFund(new ConfirmPaymentWithFundRequest()
                         {
                             booking_id = model.booking_id,
                             order_id = data_payment.order_id
@@ -464,13 +521,13 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         isSuccess = true,
                         message = "Thanh toán thành công",
                         data = data.order_no,
-                        order_id= data.order_id
+                        order_id = data.order_id
                     });
                 }
 
 
             }
-            catch 
+            catch
             {
                 return new JsonResult(new
                 {
@@ -479,15 +536,15 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 });
             }
         }
-       
-        public IActionResult OrderSuccess(string order_no,int? payment_type)
+
+        public IActionResult OrderSuccess(string order_no, int? payment_type)
         {
             ViewBag.PaymentType = payment_type;
             ViewBag.OrderNo = order_no;
             ViewBag.ExpirationDate = DateTime.Now.AddHours(3);
             return View();
         }
-         
+
 
         [HttpPost]
         public async Task<IActionResult> GetDataFromFile(IFormFile file)
@@ -563,7 +620,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             try
             {
                 var result_data = await _HotelService.ListHotelExclusiveDetail(request_model);
-                if(result_data != null)
+                if (result_data != null)
                 {
                     return new JsonResult(new
                     {
@@ -642,7 +699,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             }
         }
         [HttpPost]
-        public async Task<IActionResult> GetHotelCommitLocation(string id="")
+        public async Task<IActionResult> GetHotelCommitLocation(string id = "")
         {
             try
             {
@@ -679,6 +736,95 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 return new JsonResult(new
                 {
                     isSuccess = false
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    isSuccess = false,
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveRequestData(HotelOrderDataModel data)
+        {
+            try
+            {
+                var data_Request = new BookingHotelB2BViewModel();
+                decimal total_money = 0;
+                if (data.rooms != null)
+                {
+                    var rooms = new List<BookingHotelB2BViewModelRooms>();
+                   
+                    var detai = new BookingHotelB2BViewModelDetail();
+                    detai.email=data.email;
+                    detai.telephone = data.telephone;
+                    detai.image_thumb = "";
+                    detai.address = "";
+                    detai.note = data.note;
+                    detai.check_out_time = DateTime.Parse(data.arrivalDate);
+                    detai.check_in_time = DateTime.Parse(data.departureDate);
+
+                    var search = new BookingHotelB2BViewModelSearch();
+                    search.arrivalDate = data.arrivalDate;
+                    search.departureDate = data.departureDate;
+                    search.hotelID = data.hotelID;
+                    search.numberOfRoom = data.rooms.Sum(s=>Convert.ToInt32(s.room_number));
+                    search.numberOfAdult = data.numberOfAdult;
+                    search.numberOfChild = data.numberOfChild;
+                    search.numberOfInfant = data.numberOfInfant;
+
+                    foreach (var room in data.rooms)
+                    {
+                        var room_detail = new BookingHotelB2BViewModelRooms();
+                        var rates = new List<BookingHotelB2BViewModelRates>();
+                        decimal total_price = 0, total_profit = 0, total_amount = 0;
+                        foreach (var pack in room.packages)
+                        {
+                            total_price += (pack.amount - pack.profit);
+                            total_profit += pack.profit;
+                            total_amount += pack.amount;
+                            var rates_detail = new BookingHotelB2BViewModelRates();
+                            rates_detail.arrivalDate = pack.arrival_date;
+                            rates_detail.departureDate = pack.departure_date;
+                            rates_detail.rate_plan_code = pack.package_code;
+                            rates_detail.rate_plan_id = pack.package_id;
+                            rates_detail.allotment_id = pack.allotment_id;
+                            rates_detail.price = (double)(pack.amount - pack.profit);
+                            rates_detail.profit = (double)pack.profit;
+                            rates_detail.total_amount = (double)pack.amount;
+                            rates_detail.package_includes = (List<string>)pack.package_includes;
+                            rates.Add(rates_detail);
+                        }
+
+                        room_detail.numberOfRooms = (short?)Convert.ToInt32(room.room_number);
+                        room_detail.room_type_id = room.room_id;
+                        room_detail.room_type_code = room.room_code;
+                        room_detail.room_type_name = room.room_name;
+                        room_detail.numberOfAdult = room.adult;
+                        room_detail.numberOfChild = room.child;
+                        room_detail.numberOfInfant = room.infant;
+                        room_detail.package_includes = (List<string>)room.package_includes;
+                        room_detail.price = (double)total_price;
+                        room_detail.profit = (double)total_profit;
+                        room_detail.total_amount = (double)total_amount;
+                        room_detail.special_request = string.Empty;
+                        room_detail.rates = rates;
+                        rooms.Add(room_detail);
+
+                        total_money += total_amount;
+                    }
+                    data_Request.rooms = rooms;
+                    data_Request.detail = detai;
+                    data_Request.search = search;
+                }
+                var SaveRequestHotel = await _HotelService.SaveRequestHotel(data_Request);
+                return new JsonResult(new
+                {
+                    isSuccess = true,
+                    id = SaveRequestHotel
                 });
             }
             catch (Exception ex)

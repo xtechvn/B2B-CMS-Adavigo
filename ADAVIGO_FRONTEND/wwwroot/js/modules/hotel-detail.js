@@ -11,10 +11,10 @@
         let cache = $('#hotel_grid_cache_search').val();
         let night = $('#hotel_grid_cache_night_time').val();
         let room_info = $(seft.data('target'));
-      
+
 
         let isToggle = seft.attr('aria-expanded')
-        if (isToggle == undefined||  !JSON.parse(isToggle)) {
+        if (isToggle == undefined || !JSON.parse(isToggle)) {
             seft.attr('aria-expanded', true);
             if (room_info.children().length <= 0) {
                 let viewType = $('input[name="radio_price_type"]:checked').val();
@@ -63,7 +63,7 @@ var _hotel_detail = {
                 });
             } else {
                 for (var i = 0; i < list_image.length; i++) {
-                    item.find(`img.img_rechange_url:eq(${i})`).attr('src', list_image[i].includes('https://') ? list_image[i]: `${_hotel_detail.static_image}${list_image[i]}`);
+                    item.find(`img.img_rechange_url:eq(${i})`).attr('src', list_image[i].includes('https://') ? list_image[i] : `${_hotel_detail.static_image}${list_image[i]}`);
                 }
             }
         });
@@ -215,7 +215,7 @@ var _hotel_detail = {
     LoadingSurcharge: function () {
         var loading_surcharge = false
 
-       
+
         setTimeout(function () {
             while (!loading_surcharge) {
                 if ($('#hotel_detail_surcharge').length > 0) {
@@ -228,11 +228,11 @@ var _hotel_detail = {
 
     },
     LoadingPackageFilters: function () {
-        var template =` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="@item.id" data-code="@item.code" data-filter="@item.code">@item.name</a>`
-        var breakfirst =` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="filter-manual" data-code="BF-IN" data-filter="BF-A-IN,BF-C-IN">Ăn sáng</a>`
-        var vinwonder =` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="filter-manual" data-code="VAP-IN" data-filter="VAP-A-IN,VAP-C-IN">Vé vui chơi VinWonder</a>`
-        var fullmeal =` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="filter-manual" data-code="VAP-IN" data-filter="BF-A-IN,BF-C-IN,LN-A-IN,LN-C-IN,DN-A-IN,DN-C-IN">Ăn 3 bữa</a>`
-        var filter_manual = ['BF-A-IN', 'BF-C-IN', 'VAP-A-IN','VAP-C-IN']
+        var template = ` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="@item.id" data-code="@item.code" data-filter="@item.code">@item.name</a>`
+        var breakfirst = ` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="filter-manual" data-code="BF-IN" data-filter="BF-A-IN,BF-C-IN">Ăn sáng</a>`
+        var vinwonder = ` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="filter-manual" data-code="VAP-IN" data-filter="VAP-A-IN,VAP-C-IN">Vé vui chơi VinWonder</a>`
+        var fullmeal = ` <a class="cursor-pointer hotel-room-filter-item" href="javascript:;" data-id="filter-manual" data-code="VAP-IN" data-filter="BF-A-IN,BF-C-IN,LN-A-IN,LN-C-IN,DN-A-IN,DN-C-IN">Ăn 3 bữa</a>`
+        var filter_manual = ['BF-A-IN', 'BF-C-IN', 'VAP-A-IN', 'VAP-C-IN']
         setTimeout(function () {
             var loaded = true
             $('.btn__toggle_room_package').each(function () {
@@ -242,14 +242,14 @@ var _hotel_detail = {
                     loaded = false
                     return false;
                 }
-               
+
             })
             if (loaded) {
                 var html = ''
                 html += breakfirst
                 html += vinwonder
                 html += fullmeal
-             
+
                 $('#hotel-room-filter').html(html)
                 $('#hotel-room-filter').closest('.pd-12').show()
 
@@ -271,6 +271,10 @@ var _hotel_detail = {
             x1 = x1.replace(rgx, '$1' + ',' + '$2');
         return x1 + x2;
     },
+    ConvertToDateDotnet: function (text) {
+        var split_date = text.split('-')
+        return split_date[2] + '/' + split_date[1] + '/' + split_date[0]
+    },
 };
 
 $(document).on('click', '.btn__toggle_room_package', function () {
@@ -281,8 +285,7 @@ $(document).on('click', '.btn__toggle_room_package', function () {
     let room_info = $(seft.data('target'));
 
     let isToggle = seft.attr('aria-expanded')
-    if (JSON.parse(isToggle))
-    {
+    if (JSON.parse(isToggle)) {
         seft.attr('aria-expanded', true);
         seft.html('Bỏ chọn');
         //if (room_info.children().length <= 0) {
@@ -344,7 +347,7 @@ $(document).on('click', '.hotel-room-filter-item', function () {
             var package_filter = JSON.parse(JSON.stringify(filters))
             detail.find('.package_include').each(function (index, item) {
                 var package = $(this)
-                package_filter = package_filter.filter(item => !package.attr('data-code').includes(item) )
+                package_filter = package_filter.filter(item => !package.attr('data-code').includes(item))
 
             })
             if (package_filter.length > 0) {
@@ -357,7 +360,7 @@ $(document).on('click', '.hotel-room-filter-item', function () {
         })
         $('.list-room').find('.room_detail').each(function (index, item) {
             var self = $(this)
-            
+
             var min_price = 0;
             var night = 1;
             self.find('.room-package-detail').each(function (index, item) {
@@ -382,7 +385,7 @@ $(document).on('click', '.hotel-room-filter-item', function () {
                 self.find('.article-content').find('.dynamic_price').html('Giá liên hệ')
 
             }
-           
+
         })
 
     }, 1000)
@@ -807,7 +810,179 @@ $('#btn__continue_order').click(function () {
         }
     }
 });
+$('#btn__check_order').click(function () {
 
+    let number_of_room = $('#input__number_room_order').val();
+    let arrRoom = _hotel_detail.getRoomOrdered();
+    let checkbox_package = $('#cbk__order_multiple_pacekage');
+
+    if (arrRoom.length !== parseInt(number_of_room)) {
+
+        //let htmlBody = `<div class="bold txt_16 mb10">Chưa hoàn thành!</div>
+        //            <div class="gray mb16">Vui lòng nhập đủ thông tin phòng để tiếp tục</div>
+        //            <button type="button" data-dismiss="modal" class="btn btn-default">Đồng ý</button>`;
+        //_global_popup.showAlertPopup("width:335px", htmlBody);
+
+    
+    } else {
+        sessionStorage.removeItem(hotel_constants.CONSTATNTS.STORAGE.OrderID)
+
+        let isCheckBoxVisible = !checkbox_package.closest('label.confir_res').hasClass('hidden');
+
+        if (isCheckBoxVisible && checkbox_package.is(":checked")) {
+
+            $('#navbar .title-page').html('Khách sạn');
+            $('#block__hotel_advisory').hide();
+
+            let obj = {
+                rooms: arrRoom,
+                cacheId: $('#hotel_grid_cache_search').val(),
+                arrivalDate: _hotel_detail.hotel.arrival_date,
+                departureDate: _hotel_detail.hotel.departure_date
+            };
+
+            _ajax_caller.post('/hotel/MultiplePackageOfRoom', { model: obj }, function (result) {
+                var package_addition = $('#block__detail_hotel_rooms .block_package_addition');
+                package_addition.html(result);
+                package_addition.siblings().addClass('hidden');
+                package_addition.removeClass('hidden');
+                checkbox_package.closest('label.confir_res').addClass('hidden');
+            });
+
+        } else {
+            let obj = {
+                hotelID: _hotel_detail.hotel.id,
+                hotelName: _hotel_detail.hotel.name,
+                telephone: _hotel_detail.hotel.phone,
+                email: _hotel_detail.hotel.email,
+                arrivalDate: _hotel_detail.hotel.arrival_date,
+                departureDate: _hotel_detail.hotel.departure_date,
+                rooms: _hotel_detail.rooms
+            };
+
+
+            var html_btn = ''
+            var html_body = ''
+            var table_html = ''
+            var Amonut_packages = 0;
+            _hotel_detail.rooms.forEach((item) => {
+                var html_code = ''
+                var html_date = ''
+                var html_amount = ''
+                var td1 = ` `
+                html_btn =`<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
+                item.packages.forEach((item2) => {
+                    html_code += `  <input type="text" class="form-control mb-2" id="" value="${item2.package_code}">`
+                    html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}">`
+                    html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}">`
+                    Amonut_packages += item2.amount;
+                });
+                var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}"></td>`
+                var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}"></td>`
+                table_html += `  <tr>
+                                    <td>1</td>
+                                   <td style="width: 30%;"><input type="email" class="form-control" id="" value="${item.room_name}"></td>
+                                    <td>
+                                        <div class="flexbox align-center">
+                                            <div>
+                                               `+ html_code + `
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                       `+ html_date + `
+                                    </td>
+                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="1"></td>
+                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}"></td>
+                                    <td class="text-right">
+                                    `+ html_amount + `
+                                    </td>
+
+                                </tr>
+                               `
+
+            });
+            var html_table2 = ` <tr class="bg-white">
+                                    <td></td>
+                                    <td class="text-left"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"><b>Tổng</b></td>
+                                    <td class="text-right"><b>${_hotel_detail.Comma(Amonut_packages)}</b></td>
+                                </tr>`
+
+            $('#table_body').html(table_html + html_table2)
+            $('#btn_summit').html(html_btn)
+     
+            //_ajax_caller.post('/hotel/SaveRequestData', { data: obj }, function (result) {
+            //    if (result.isSuccess) {
+            //        sessionStorage.removeItem(hotel_constants.CONSTATNTS.STORAGE.OrderID)
+            //        sessionStorage.setItem(hotel_constants.CONSTATNTS.STORAGE.HotelDetailURL, window.location.href)
+
+            //        window.location.href ="/booking/RequestHotelBooking/"+ result.id;
+            //    } else {
+            //        _msgalert.error(result.message);
+            //    }
+            //});
+        }
+    }
+});
+$(document).on('click', '#btn__summit_request_order',function () {
+
+    let obj = {
+        hotelID: _hotel_detail.hotel.id,
+        hotelName: _hotel_detail.hotel.name,
+        telephone: _hotel_detail.hotel.phone,
+        email: _hotel_detail.hotel.email,
+        arrivalDate: _hotel_detail.hotel.arrival_date,
+        departureDate: _hotel_detail.hotel.departure_date,
+        rooms: _hotel_detail.rooms,
+        note: $('#note').val()
+    };
+
+    _ajax_caller.post('/hotel/SaveRequestData', { data: obj }, function (result) {
+        if (result.isSuccess) {
+
+            $('#myModal14').hide();
+            $('#myModal14').removeClass('show');
+            $('#myModal14').removeAttr('role');
+            var html_myModal15 = `<div class="modal-dialog" style="max-width: 550px;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close close_modal" data-dismiss="modal">×</button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <img class="mb16" src="images/icons/success.png" alt="">
+                                    <h4 class="modal-title">Gửi yêu cầu thành công</h4>
+                                    <div class="txt_16 mb16">
+                                        Chúng tôi sẽ liên hệ lại trong vài phút.<br>
+                                        Nếu bạn cần được hỗ trợ ngay, hãy gọi tổng đài hỗ trợ 0936 191 192. Chúng tôi luôn sẵn sàng trả lời bạn từ 8h30 - 17h30, thứ 2 đến thứ 6 hàng tuần.
+                                    </div>
+                                    <div class="line-bottom mb16"></div>
+                                    <div class="d-flex flex-nowrap gap_10">
+                                        <a href="/"class="btn btn-default gray full">Quay về trang chủ</a>
+                                        <a href="/booking/DetailRequestHotelBooking/?BookingId= ${result.id}" class="btn btn-default full">Theo dõi yêu cầu</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+            $('#myModal15').html(html_myModal15)
+            $('#myModal15').show();
+            $('#myModal15').addClass('show');
+            /* window.location.href = "/booking/DetailRequestHotelBooking/?BookingId=" + result.id;*/
+        } else {
+            _msgalert.error(result.message);
+        }
+    });
+})
+$(document).on('click', '.close_modal', function () {
+    $('.homepage').removeClass('modal-open')
+    $('.modal-backdrop').removeClass('modal-backdrop fade show')
+    $('#myModal15').removeClass('show')
+    $('#myModal15').attr('style','display: none;')
+});
 $('input[name="radio_price_type"]').click(function () {
     let value = $(this).val();
     $('#block__detail_hotel_rooms .list-room .dynamic_price').each(function () {

@@ -5,6 +5,8 @@ namespace ADAVIGO_FRONTEND.ViewModels
 {
     public class DetailRequestModel
     {
+        public string RequestNo { get; set; }
+        public string HotelName { get; set; }
         public List<HotelBookingRooms> Rooms { get; set; }
         public List<HotelBookingRoomRates> Rates { get; set; }
         public List<HotelBookingRoomExtraPackages> ExtraPackages { get; set; }
