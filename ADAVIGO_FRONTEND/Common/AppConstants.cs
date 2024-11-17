@@ -148,6 +148,13 @@
         public const string CHECK_FUND_AVAILABLE = "/api/b2b/payment/check-fund-available";
         public const string CONFIRM_PAYMENT_WITH_FUND = "/api/b2b/payment/confirm-fund-payment";
 
+        // Comment
+
+        public const string GET_COMMENT_LISTING = "/api/comment/get-list.json";
+        public const string ADD_COMMENT = "/api/comment/add.json";
+
+
+
     }
 
     public enum ENUM_API_RESULT

@@ -4,6 +4,7 @@ using ADAVIGO_FRONTEND.Infrastructure.Extensions;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.Services.CacheService;
 using B2B.Utilities.Contants;
+using Caching.RedisWorker;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -94,6 +95,8 @@ namespace ADAVIGO_FRONTEND
             services.AddTransient<LocationService>();
             services.AddHttpClient<DataComService>();
             services.AddHttpClient<AdavigoTourService>();
+            services.AddTransient<CommentService>();
+            services.AddSingleton<RedisConn>();
 
             services.AddScoped<ICacheService, CacheService>();
 

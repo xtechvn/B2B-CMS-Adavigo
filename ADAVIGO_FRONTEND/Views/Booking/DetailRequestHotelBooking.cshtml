@@ -114,7 +114,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb16">
+
+
+
+            @await Component.InvokeAsync("Comment", new { requestId = Model.RequestId })
+
+             @* Comment *@
+            @* <div class="col-md-4 mb16">
                 <div class="pd-20 bg-white radius10">
                     <div class="info-basic flex flex-nowrap w-100">
                         <div class="ava">
@@ -143,12 +149,14 @@
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
                     </div>
                 </div>
-            </div>
+            </div> *@
         </div>
     }
 
 
 
 </section>
+ <script type="text/javascript" src="~/js/modules/comment.js"></script>
+
 <script src="~/js/modules/request_detail_hotel_booking.js"></script>
 <script src="~/js/modules/hotel-constants.js"></script>
