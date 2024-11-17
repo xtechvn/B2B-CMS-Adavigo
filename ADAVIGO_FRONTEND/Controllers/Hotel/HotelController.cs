@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
+using OfficeOpenXml.FormulaParsing.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -798,7 +799,12 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                             rates_detail.package_includes = (List<string>)pack.package_includes;
                             rates.Add(rates_detail);
                         }
-
+                        if(data.numberOfAdult==0&& data.numberOfChild==0 && data.numberOfInfant == 0)
+                        {
+                            search.numberOfAdult = room.adult;
+                            search.numberOfChild = room.child;
+                            search.numberOfInfant = room.infant;
+                        }
                         room_detail.numberOfRooms = (short?)Convert.ToInt32(room.room_number);
                         room_detail.room_type_id = room.room_id;
                         room_detail.room_type_code = room.room_code;
