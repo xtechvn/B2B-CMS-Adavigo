@@ -87,7 +87,8 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     type = (int)AttachmentType.Addservice_Comment,
                     content,
                     attach_files = attachFileUrls.Zip(attachFileNames, (url, name) => new { url, name }),
-                    created_by = createdBy
+                    created_by = createdBy,
+                    user_type = 0,
                 };
                 
                 var data_product = JsonConvert.SerializeObject(commentData);
