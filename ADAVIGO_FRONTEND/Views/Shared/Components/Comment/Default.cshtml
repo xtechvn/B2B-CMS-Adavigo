@@ -19,7 +19,7 @@
                         <div class="content w-100">
                             <div class="flex justify-content-between">
                                 <p><b>@comment.UserName</b></p>
-                                <span style="color:#698096">@comment.CreatedDate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")<b class="ml-2">Phản hồi</b></span>
+                                <span style="color:#698096">@comment.CreatedDate.ToString("HH:mm dd/MM/yyyy")<b class="ml-2">Phản hồi</b></span>
                             </div>
                             <div>@comment.Content</div>
                             @if (comment.AttachFiles != null && comment.AttachFiles.Any())

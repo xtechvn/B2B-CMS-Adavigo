@@ -12,21 +12,20 @@ using System.Linq;
 using LIB.Utilities.Contants;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using ADAVIGO_FRONTEND.Common;
 
 namespace ADAVIGO_FRONTEND.Models.Services
 {
-    public class CommentService : BaseService
+    public class CommentService
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _context;
-       
 
 
-        public CommentService(ApiConnector apiConnector,IConfiguration configuration , IHttpContextAccessor httpContextAccessor):base(apiConnector, httpContextAccessor)
+
+        public CommentService(IConfiguration configuration, IHttpContextAccessor context)
         {
             _configuration = configuration;
-            _context = httpContextAccessor;
+            _context = context;
         }
 
 
@@ -48,13 +47,13 @@ namespace ADAVIGO_FRONTEND.Models.Services
             new KeyValuePair<string, string>("token", token)
         });
 
-                //var url = "https://localhost:44396" + "/api/comment/get-list.json";
-                var response = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GET_COMMENT_LISTING, token);
+                var url = "https://localhost:44396" + "/api/comment/get-list.json";
+                var response = await httpClient.PostAsync(url, request);
 
-                if (!string.IsNullOrEmpty(response))
+                if (response.IsSuccessStatusCode)
                 {
-                    //var stringResult = await response.Content.ReadAsStringAsync();
-                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<CommentViewModel>>>(response);
+                    var stringResult = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<CommentViewModel>>>(stringResult);
 
                     if (apiResponse != null && apiResponse.Status == 0 && apiResponse.Data != null)
                     {
@@ -78,7 +77,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
         {
             try
             {
-                
+
                 // Chuẩn bị dữ liệu gọi API lưu comment
                 var commentData = new
                 {
@@ -89,7 +88,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     attach_files = attachFileUrls.Zip(attachFileNames, (url, name) => new { url, name }),
                     created_by = createdBy
                 };
-                
+
                 var data_product = JsonConvert.SerializeObject(commentData);
                 var token = CommonHelper.Encode(data_product, _configuration["DataBaseConfig:key_api:b2b"]);
 
@@ -99,13 +98,13 @@ namespace ADAVIGO_FRONTEND.Models.Services
         });
                 using var httpClient = new HttpClient();
 
-                //var url = "https://localhost:44396" + "/api/comment/add.json";
-                var response = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.ADD_COMMENT, token); 
+                var url = "https://localhost:44396" + "/api/comment/add.json";
+                var response = await httpClient.PostAsync(url, request);
 
-                if (!string.IsNullOrEmpty(response))
+                if (response.IsSuccessStatusCode)
                 {
-                    var result = JsonConvert.DeserializeObject<ApiResponse<CommentViewModel>>(response);
-
+                    var stringResult = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<ApiResponse<CommentViewModel>>(stringResult);
 
                     if (result != null && result.Status == 0 && result.Data != null)
                     {

@@ -2,6 +2,7 @@
     const requestId = $("#comment-section").data("request-id");
     if (requestId) {
         loadComments(requestId);
+        startSSE(requestId)
     }
 });
 
@@ -22,10 +23,37 @@ function loadComments(requestId) {
         }
     });
 }
+// SSE - Nhận comment mới từ server
+function startSSE(requestId) {
+    debugger
+    const eventSource = new EventSource(`/Comment/GetCommentsStream?requestId=${requestId}`);
+
+    eventSource.onmessage = function (event) {
+        const newComment = JSON.parse(event.data);
+        renderComment(newComment); // Render comment mới ngay khi nhận
+    };
+
+    eventSource.onerror = function () {
+        console.error("Error with SSE connection.");
+        eventSource.close();
+    };
+}
 
 function renderComment(comment) {
-    var username = comment.UserName || "Unknown User"; // Hiển thị tên mặc định nếu UserName null
-    var avatarInitial = username.charAt(0).toUpperCase(); // Lấy ký tự đầu tiên của tên
+    var username = comment.UserName || "Unknown User";
+    var avatarInitial = username.charAt(0).toUpperCase();
+
+    // Chuyển đổi thời gian theo múi giờ Việt Nam
+    var createdDate = new Date(comment.CreatedDate);
+    var formattedDate = createdDate.toLocaleString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour12: false,
+        timeZone: 'Asia/Ho_Chi_Minh' // Chỉnh theo múi giờ
+    });
 
     var html = `
         <div class="info-basic flex flex-nowrap w-100">
@@ -37,7 +65,7 @@ function renderComment(comment) {
             <div class="content w-100">
                 <div class="flex justify-content-between">
                     <p><b>${username}</b></p>
-                    <span style="color:#698096">${new Date(comment.CreatedDate).toLocaleString()}<b class="ml-2">Phản hồi</b></span>
+                    <span style="color:#698096">${formattedDate}<b class="ml-2">Phản hồi</b></span>
                 </div>
                 <div>${comment.Content}</div>
                 ${renderAttachments(comment.AttachFiles)}
@@ -46,9 +74,9 @@ function renderComment(comment) {
         <div class="line-bottom mt16 mb16"></div>
     `;
 
-    // Thêm comment xuống dưới danh sách
     $(".comment-list-wrapper").append(html);
 }
+
 
 function renderAttachments(files) {
     if (!files || files.length === 0) return "";
@@ -67,7 +95,7 @@ function renderFileLink(file) {
                     <div class="file-type">PDF</div>
                     <div>
                         <span class="file-name">${file.Name}</span>
-                        <span class="file-size">15.54 MB</span>
+                       
                     </div>
                 </div>
                 <div class="file-icon-download">

@@ -44,14 +44,15 @@ namespace ADAVIGO_FRONTEND.Controllers.Comment
 
 
 
-        // Phương thức lắng nghe comment mới qua SSE
+        // Phương thức lắng nghe comment mới qua SSE    
+        // SSE lắng nghe comment mới
         [HttpGet]
-        public async Task GetCommentsStream(long requestId)
+        public async Task GetCommentsStream(int requestId)
         {
             Response.Headers.Add("Content-Type", "text/event-stream");
             var dataQueue = new ConcurrentQueue<string>();
 
-            _subscriber.Subscribe("COMMENT_" + requestId, (channel, message) =>
+            _subscriber.Subscribe($"COMMENT_{requestId}", (channel, message) =>
             {
                 dataQueue.Enqueue(message);
             });
@@ -68,6 +69,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Comment
                 await Task.Delay(100);
             }
         }
+
 
         //// Load danh sách comment ban đầu
         [HttpPost]
@@ -151,6 +153,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Comment
 
                 if (newComment != null)
                 {
+                    _subscriber.Publish($"COMMENT_{requestId}", JsonConvert.SerializeObject(newComment)); // Publish comment lên Redis
                     return Ok(new { status = 0, msg = "Comment added successfully.", data = newComment });
                 }
 
