@@ -20,10 +20,10 @@ namespace ADAVIGO_FRONTEND.Models.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _context;
-       
 
 
-        public CommentService(ApiConnector apiConnector,IConfiguration configuration , IHttpContextAccessor httpContextAccessor):base(apiConnector, httpContextAccessor)
+
+        public CommentService(ApiConnector apiConnector,IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(apiConnector, httpContextAccessor)
         {
             _configuration = configuration;
             _context = httpContextAccessor;
@@ -62,6 +62,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     }
                 }
 
+
                 return new List<CommentViewModel>(); // Nếu không thành công, trả về danh sách rỗng
             }
             catch (Exception ex)
@@ -78,7 +79,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
         {
             try
             {
-                
+
                 // Chuẩn bị dữ liệu gọi API lưu comment
                 var commentData = new
                 {
@@ -87,9 +88,10 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     type = (int)AttachmentType.Addservice_Comment,
                     content,
                     attach_files = attachFileUrls.Zip(attachFileNames, (url, name) => new { url, name }),
-                    created_by = createdBy
+                    created_by = createdBy,
+                    user_type = 0,
                 };
-                
+
                 var data_product = JsonConvert.SerializeObject(commentData);
                 var token = CommonHelper.Encode(data_product, _configuration["DataBaseConfig:key_api:b2b"]);
 
@@ -100,7 +102,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 using var httpClient = new HttpClient();
 
                 //var url = "https://localhost:44396" + "/api/comment/add.json";
-                var response = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.ADD_COMMENT, token); 
+                var response = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.ADD_COMMENT, token);
 
                 if (!string.IsNullOrEmpty(response))
                 {
@@ -112,6 +114,8 @@ namespace ADAVIGO_FRONTEND.Models.Services
                         return result.Data; // Trả về thông tin comment vừa thêm
                     }
                 }
+
+
 
                 return null; // Thất bại
             }
