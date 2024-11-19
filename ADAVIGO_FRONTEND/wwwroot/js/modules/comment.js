@@ -42,17 +42,17 @@ function startSSE(requestId) {
 
 function renderComment(comment) {
     debugger
-    var commentId = comment.Id; // Lấy Id của comment
+    var commentId = comment.Id || comment.id; // Lấy Id của comment
     // Kiểm tra xem comment này đã tồn tại trong DOM chưa
     if ($(`#comment-${commentId}`).length > 0) {
         return; // Nếu đã tồn tại thì không render lại
     }
 
-    var username = comment.Username || comment.UserName || "Unknown User";
+    var username = comment.Username || comment.UserName || comment.userName || "Unknown User";
     var avatarInitial = username.charAt(0).toUpperCase();
 
     // Chuyển đổi thời gian theo múi giờ Việt Nam
-    var createdDate = new Date(comment.CreatedDate);
+    var createdDate = new Date(comment.createdDate);
     var formattedDate = createdDate.toLocaleString('vi-VN', {
         hour: '2-digit',
         minute: '2-digit',
@@ -75,8 +75,8 @@ function renderComment(comment) {
                     <p><b>${username}</b></p>
                     <span style="color:#698096">${formattedDate}<b class="ml-2">Phản hồi</b></span>
                 </div>
-                <div>${comment.Content}</div>
-                ${renderAttachments(comment.AttachFiles)}
+                <div>${comment.Content || comment.content}</div>
+                ${renderAttachments(comment.AttachFiles || comment.attachFiles)}
             </div>
         </div>
         <div class="line-bottom mt16 mb16"></div>
@@ -96,13 +96,14 @@ function renderAttachments(files) {
 }
 
 function renderFileLink(file) {
+    const fileExtension = file.Name || file.name.split('.').pop().toUpperCase();
     return `
         <div class="file-preview">
-            <a href="${file.Url}" class="attachment-file" target="_blank">
+            <a href="${file.Url || file.url}" class="attachment-file" target="_blank">
                 <div class="file-info">
-                    <div class="file-type">PDF</div>
+                    <div class="file-type">${fileExtension}</div>
                     <div>
-                        <span class="file-name">${file.Name}</span>
+                        <span class="file-name">${file.Name || file.name}</span>
                        
                     </div>
                 </div>
@@ -113,7 +114,7 @@ function renderFileLink(file) {
         </div>
     `;
 }
-$('#attachFiles').change(function (event) {
+('$attachFiles').change(function (event) {
 
     var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png", "pdf", "doc", "docx", "txt", "xls", "xlsx"];
 
