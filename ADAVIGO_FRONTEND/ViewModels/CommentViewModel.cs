@@ -25,11 +25,16 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public string Name { get; set; }
     }
 
-    public class ApiResponse<T>
+    public class ObjectResponseAPI<T>
     {
-        public int Status { get; set; }
-        public string Msg { get; set; }
-        public T Data { get; set; }
+        public int status { get; set; }
+        public string msg { get; set; }
+        public T data { get; set; }
+    }
+    public class CommentComponentViewModel
+    {
+        public int RequestId { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
     }
 }
 

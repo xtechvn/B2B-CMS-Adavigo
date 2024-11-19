@@ -44,31 +44,47 @@ namespace ADAVIGO_FRONTEND.Controllers.Comment
 
 
 
-        // Phương thức lắng nghe comment mới qua SSE    
-        // SSE lắng nghe comment mới
+   
         [HttpGet]
         public async Task GetCommentsStream(int requestId)
         {
-            Response.Headers.Add("Content-Type", "text/event-stream");
-            var dataQueue = new ConcurrentQueue<string>();
-
-            _subscriber.Subscribe($"COMMENT_{requestId}", (channel, message) =>
+            try
             {
-                dataQueue.Enqueue(message);
-            });
+                Response.Headers.Add("Content-Type", "text/event-stream");
+                var dataQueue = new ConcurrentQueue<string>();
 
-            while (!HttpContext.RequestAborted.IsCancellationRequested)
-            {
-                while (dataQueue.TryDequeue(out var message))
+                // Subscribe to Redis channel for this specific request
+                _subscriber.Subscribe("COMMENT_" + requestId, (channel, message) =>
                 {
-                    var data = $"data: {message}\n\n";
-                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(data);
-                    await Response.Body.WriteAsync(buffer, 0, buffer.Length);
-                    await Response.Body.FlushAsync();
+                    dataQueue.Enqueue(message);
+                });
+
+                while (true)
+                {
+                    if (HttpContext.RequestAborted.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    while (dataQueue.TryDequeue(out var message))
+                    {
+                        var data = $"data: {message}\n\n";
+                        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(data);
+                        await Response.Body.WriteAsync(buffer, 0, buffer.Length);
+                        await Response.Body.FlushAsync();
+                    }
+
+                    await Task.Delay(20);
                 }
-                await Task.Delay(100);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.InsertLogTelegram($"CommentController - GetCommentsStream Error: {ex}");
             }
         }
+
+
+
 
 
         //// Load danh sách comment ban đầu
@@ -153,8 +169,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Comment
 
                 if (newComment != null)
                 {
-                    _subscriber.Publish($"COMMENT_{requestId}", JsonConvert.SerializeObject(newComment)); // Publish comment lên Redis
-                    return Ok(new { status = 0, msg = "Comment added successfully.", data = newComment });
+                   // Publish comment mới lên Redis channel
+                var commentData = JsonConvert.SerializeObject(newComment);
+                await _subscriber.PublishAsync("COMMENT_" + requestId, commentData);
+                
+                return Ok(new { status = 0, msg = "Comment added successfully.", data = newComment });
                 }
 
                 return BadRequest(new { status = 1, msg = "Failed to add comment." });

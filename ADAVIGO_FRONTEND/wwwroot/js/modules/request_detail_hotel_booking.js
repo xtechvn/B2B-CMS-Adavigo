@@ -1,5 +1,11 @@
-﻿
+﻿$(document).ready(function () {
+   
+    var Request_Id = $('#Request_Id').val()
+    _request_detail_hotel_booking.getcomment(Request_Id)
+})
+
 var _request_detail_hotel_booking = {
+
 
     getRoomOrdered: function () {
         let arrRoom = [];
@@ -60,4 +66,17 @@ var _request_detail_hotel_booking = {
         }, 1000)
     },
     
+    getcomment: function (id) {
+        $.ajax({
+            
+            url: "/Booking/CommentRequest",
+            type: "post",
+            data: { id: parseFloat(id) },
+            success: function (result) {
+             
+                $('#Comment_request').html(result)
+
+            }
+        });
+    },
 };

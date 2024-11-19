@@ -13,6 +13,7 @@ using LIB.Utilities.Contants;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using ADAVIGO_FRONTEND.Common;
+using Telegram.Bot.Types;
 
 namespace ADAVIGO_FRONTEND.Models.Services
 {
@@ -23,7 +24,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
 
 
-        public CommentService(ApiConnector apiConnector,IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(apiConnector, httpContextAccessor)
+        public CommentService(ApiConnector apiConnector, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(apiConnector, httpContextAccessor)
         {
             _configuration = configuration;
             _context = httpContextAccessor;
@@ -36,17 +37,17 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
                 using HttpClient httpClient = new HttpClient();
                 var j_param = new Dictionary<string, object>
-        {
-            { "request_id", requestId }
-        };
+                {
+                    { "request_id", requestId }
+                };
 
                 var data_product = JsonConvert.SerializeObject(j_param);
                 var token = CommonHelper.Encode(data_product, _configuration["DataBaseConfig:key_api:b2b"]);
 
                 var request = new FormUrlEncodedContent(new[]
                 {
-            new KeyValuePair<string, string>("token", token)
-        });
+                    new KeyValuePair<string, string>("token", token)
+                });
 
                 //var url = "https://localhost:44396" + "/api/comment/get-list.json";
                 var response = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GET_COMMENT_LISTING, token);
@@ -54,11 +55,11 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 if (!string.IsNullOrEmpty(response))
                 {
                     //var stringResult = await response.Content.ReadAsStringAsync();
-                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<List<CommentViewModel>>>(response);
+                    var apiResponse = JsonConvert.DeserializeObject<ObjectResponseAPI<List<CommentViewModel>>>(response);
 
-                    if (apiResponse != null && apiResponse.Status == 0 && apiResponse.Data != null)
+                    if (apiResponse != null && apiResponse.status == 0 && apiResponse.data != null)
                     {
-                        return apiResponse.Data; // Trả về danh sách comment
+                        return apiResponse.data; // Trả về danh sách comment
                     }
                 }
 
@@ -84,7 +85,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 var commentData = new
                 {
                     request_id = requestId,
-                    userid = userid,
+                    userid,
                     type = (int)AttachmentType.Addservice_Comment,
                     content,
                     attach_files = attachFileUrls.Zip(attachFileNames, (url, name) => new { url, name }),
@@ -106,15 +107,14 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 if (!string.IsNullOrEmpty(response))
                 {
-                    var result = JsonConvert.DeserializeObject<ApiResponse<CommentViewModel>>(response);
+                    var result = JsonConvert.DeserializeObject<ObjectResponseAPI<CommentViewModel>>(response);
 
 
-                    if (result != null && result.Status == 0 && result.Data != null)
+                    if (result != null && result.status == 0 && result.data != null)
                     {
-                        return result.Data; // Trả về thông tin comment vừa thêm
+                        return result.data; // Trả về thông tin comment vừa thêm
                     }
                 }
-
 
 
                 return null; // Thất bại
@@ -125,5 +125,6 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 return null;
             }
         }
+
     }
 }
