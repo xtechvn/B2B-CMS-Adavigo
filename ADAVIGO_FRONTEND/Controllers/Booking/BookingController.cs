@@ -112,8 +112,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                     ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
                     ViewBag.StatusName = data.StatusName;
                     ViewBag.Status = data.Status;
-                    var thoigianConLai = ((DateTime)data.Rooms[0].CreatedDate - DateTime.Now.AddMinutes(15) ).TotalMilliseconds;
-                  if (thoigianConLai < 0)
+                    var thoigianConLai = (((DateTime)data.Rooms[0].CreatedDate).AddMinutes(15) - DateTime.Now ).TotalMilliseconds;
+                  if (thoigianConLai > 0)
                     {
                         ViewBag.Status = (int)RequestStatus.HUY;
                         ViewBag.StatusName = "Hủy";
