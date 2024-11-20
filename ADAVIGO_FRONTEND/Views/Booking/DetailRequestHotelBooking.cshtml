@@ -5,6 +5,7 @@
 
 }
 @model DetailRequestModel
+
 <section class="main-container clearfix">
     <input id="thoigianConLai" value="@ViewBag.thoigianConLai" style="display:none;" />
     <div class="mb16">
@@ -70,6 +71,7 @@
     </div>
     @if (Model != null)
     {
+        <input id="Request_Id" value="@Model.RequestId" style="display:none;" />
 
         <div class="row detail-order-flight">
             <div class="col-md-8 mb16">
@@ -77,7 +79,8 @@
                     <div class="detail-order-flight__left">
                         <div class="mb10 txt_20"><strong>Thông tin đơn hàng</strong> <a href="" class="color-blue txt_14"><i>(Xem yêu cầu ban đầu)</i></a></div>
                         @if (Model.Rooms != null && Model.Rooms.Count > 0)
-                        {<input id="BookingId" value="@Model.Rooms[0].HotelBookingId" style="display:none" />
+                        {
+                            <input id="BookingId" value="@Model.Rooms[0].HotelBookingId" style="display:none" />
 
                             foreach (var item in Model.Rooms)
                             {
@@ -149,7 +152,7 @@
 
                         <ul>
                             <li class="mb10 flex space-between">
-                                <div class="gray"><strong>Tổng </strong>@(Model!=null ? Model.Rooms.Sum(s=>s.NumberOfRooms) + " phòng":"")</div>
+                                <div class="gray"><strong>Tổng </strong>@(Model != null ? Model.Rooms.Sum(s => s.NumberOfRooms) + " phòng" : "")</div>
                                 <div class="color-orange txt_16"><strong>@ViewBag.Amount.ToString("N0") Đ</strong></div>
                             </li>
 
@@ -158,48 +161,21 @@
                 </div>
             </div>
 
+            <div id="Comment_request" class="col-md-4 mb16">
+            </div>
 
+            
 
-            @await Component.InvokeAsync("Comment", new { requestId = Model.RequestId })
-
-            @* Comment *@
-            @* <div class="col-md-4 mb16">
-                    <div class="pd-20 bg-white radius10">
-                        <div class="info-basic flex flex-nowrap w-100">
-                            <div class="ava">
-                                <span class="thumb_img thumb_5x5">
-                                    <img src="images/graphics/ava.jpg">
-                                </span>
-                            </div>
-                            <div class="content  w-100">
-                                <div class="flex justify-content-between">
-                                    <p><b>Admin</b></p>
-                                    <span style="color:#698096">17:53 23 th7, 2024<b class="ml-2">Phản hồi</b></span>
-                                </div>
-
-                                <div>
-                                    Dear ABC,<br>
-                                    <br>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                    Sincere,<br>
-                                    Mr. Dinh Thanh Binh
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="line-bottom mt16 mb16"></div>
-                        <div class="form-group mb0">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
-                        </div>
-                    </div>
-                </div> *@
+           
         </div>
     }
 
 
 
 </section>
-<script type="text/javascript" src="~/js/modules/comment.js"></script>
 
-<script src="~/js/modules/request_detail_hotel_booking.js"></script>
+@section scripts {
+    <script src="~/js/modules/request_detail_hotel_booking.js"></script>
+}
+
 <script src="~/js/modules/hotel-constants.js"></script>

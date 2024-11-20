@@ -1,14 +1,13 @@
 ﻿@model ADAVIGO_FRONTEND.ViewModels.CommentComponentViewModel
 
-<div class="comment-section col-md-4 mb16" id="comment-section" data-request-id="@Model.RequestId">
+<div class="comment-section" id="comment-section"  data-request-id="@Model.RequestId">
     <div class="pd-20 bg-white radius10">
         <div class="comment-list-wrapper">
             @if (Model != null && Model.Comments.Any())
             {
                 @foreach (var comment in Model.Comments)
                 {
-
-                    <div class="info-basic flex flex-nowrap w-100">
+                    <div id="comment-@comment.Id" class="info-basic flex flex-nowrap w-100">
                         <div class="ava">
                             <span class="thumb_img thumb_5x5">
                                 <div class="initial-avatar">
@@ -27,14 +26,13 @@
                                 <div class="attachments mt10">
                                     @foreach (var file in comment.AttachFiles)
                                     {
-                                        var fileExtension = System.IO.Path.GetExtension(file.Name)?.TrimStart('.').ToUpper(); // Lấy phần mở rộng file và viết hoa
+                                        var fileExtension = System.IO.Path.GetExtension(file.Name)?.TrimStart('.').ToUpper();
                                         <div class="file-preview">
                                             <a href="@file.Url" class="attachment-file" target="_blank">
                                                 <div class="file-info">
                                                     <div class="file-type">@fileExtension</div>
                                                     <div>
                                                         <span class="file-name">@file.Name</span>
-                                                        
                                                     </div>
                                                 </div>
                                                 <div class="file-icon-download">
@@ -67,6 +65,7 @@
         </form>
     </div>
 </div>
+
 
 <style>
     .comment-list-wrapper {
@@ -140,3 +139,5 @@
         color: #777;
     }
 </style>
+
+<script type="text/javascript" src="/js/modules/comment.js"></script>

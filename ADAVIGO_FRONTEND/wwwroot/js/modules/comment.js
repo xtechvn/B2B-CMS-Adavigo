@@ -9,13 +9,13 @@
 // Hàm tải danh sách comment
 function loadComments(requestId) {
     $.ajax({
-        url: "/Comment/LoadComments",
+        url: "/Booking/LoadComments",
         type: "POST",
         data: { requestId },
         success: function (result) {
             if (result.status === 1 && result.data.length > 0) {
-                $("#CommentList").empty();
-                result.data.forEach(renderComment);
+                $(".comment-list-wrapper").empty(); // Xóa comment cũ
+                result.data.forEach(renderComment); // Render từng comment
             }
         },
         error: function () {
@@ -24,23 +24,31 @@ function loadComments(requestId) {
     });
 }
 // SSE - Nhận comment mới từ server
+let lastAddedCommentId = null; // Biến lưu ID của comment vừa thêm
 function startSSE(requestId) {
     debugger
-    const eventSource = new EventSource(`/Comment/GetCommentsStream?requestId=${requestId}`);
+    const eventSource = new EventSource(`/Booking/GetCommentsStream?requestId=${requestId}`);
 
     eventSource.onmessage = function (event) {
         const newComment = JSON.parse(event.data);
-        renderComment(newComment); // Render comment mới ngay khi nhận
+        renderComment(newComment); // Hiển thị comment mới ngay lập tức
     };
 
     eventSource.onerror = function () {
-        console.error("Error with SSE connection.");
+        console.error("SSE connection error.");
         eventSource.close();
     };
 }
 
 function renderComment(comment) {
-    var username = comment.UserName || "Unknown User";
+    debugger
+    var commentId = comment.Id; // Lấy Id của comment
+    // Kiểm tra xem comment này đã tồn tại trong DOM chưa
+    if ($(`#comment-${commentId}`).length > 0) {
+        return; // Nếu đã tồn tại thì không render lại
+    }
+
+    var username = comment.Username || comment.UserName || "Unknown User";
     var avatarInitial = username.charAt(0).toUpperCase();
 
     // Chuyển đổi thời gian theo múi giờ Việt Nam
@@ -56,7 +64,7 @@ function renderComment(comment) {
     });
 
     var html = `
-        <div class="info-basic flex flex-nowrap w-100">
+        <div id="comment-${commentId}" class="info-basic flex flex-nowrap w-100">
             <div class="ava">
                 <span class="thumb_img thumb_5x5">
                     <div class="initial-avatar">${avatarInitial}</div>
@@ -106,7 +114,7 @@ function renderFileLink(file) {
     `;
 }
 ('$attachFiles').change(function (event) {
-    debugger
+
     var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png", "pdf", "doc", "docx", "txt", "xls", "xlsx"];
 
     if (event.target.files && event.target.files[0]) {
@@ -150,22 +158,24 @@ function addComment(requestId) {
     }
 
     $.ajax({
-        url: "/Comment/AddComment",
+        url: "/Booking/AddComment",
         type: "POST",
         data: formData,
         processData: false,
         contentType: false,
         success: function (result) {
+            debugger
             if (result.status === 0) {
                 _msgalert.success(result.msg);
-                renderComment(result.data); // Thêm comment xuống dưới
+                //renderComment(result.data); // Thêm comment xuống dưới
+                //lastAddedCommentId = result.data.Id; // Ghi nhớ ID comment vừa thêm
                 resetForm();
             } else {
                 _msgalert.error(result.msg);
             }
         },
         error: function () {
-             _msgalert.error(result.msg);
+            _msgalert.error(result.msg);
         }
     });
 }
@@ -207,7 +217,7 @@ function previewAttachments() {
                 document.getElementById('attachFiles').value = '';
                 document.getElementById('attachmentPreviews').style.display = 'none';
 
-               
+
 
             }
 
