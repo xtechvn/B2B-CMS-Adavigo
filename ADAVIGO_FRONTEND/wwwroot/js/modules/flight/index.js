@@ -78,10 +78,26 @@ var pickerSingle = new Lightpick({
 // default when load page
 $(document).ready(function () {
     // set default value for select place
-    // hcm
-    $("#select-go").val("2").trigger("change");
     // hà nội
-    $("#select-arrival").val("1").trigger("change");
+    UTILS.rerenderSelectGo(CONSTANTS.FLIGHTS.PLACES)
+    $("#select-go").val("1").trigger("change");
+    // hcm
+    var arrivalist = CONSTANTS.FLIGHTS.PLACES.filter(function (item) {
+        return item.id != 1;
+    });
+    UTILS.rerenderSelectArrival(arrivalist)
+    $("#select-arrival").val("2").trigger("change");
+
+    // Remove arrival selection that same as go place:
+    $("body").on("select2:select", '#select-go', function () {
+        var selected_value = $("#select-go").find(':selected').val()
+        var arrivalist_select = CONSTANTS.FLIGHTS.PLACES.filter(function (item) {
+            return item.id != selected_value;
+        });
+        UTILS.rerenderSelectArrival(arrivalist_select)
+
+    });
+    
     renderSearchHistory();
     renderListAddress();
     $("body").removeClass("h-100vh");

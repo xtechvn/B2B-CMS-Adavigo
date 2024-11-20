@@ -120,7 +120,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     numberOfInfant = model.rooms.Sum(s => s.number_infant),
                     product_type = model.productType,
                     clientType = _UserManager.ClientType,
-
+                    isVinHotel=model.isVinHotel,
                     client_id = _UserManager.ClientID
                 });
 
