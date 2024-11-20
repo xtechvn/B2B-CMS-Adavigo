@@ -32,7 +32,7 @@ namespace LIB.ENTITIES.ViewModels.Hotels
         public int hotel_group_type { get; set; }
         public double? price { get; set; }
         public double? total_profit { get; set; }
-        public int position { get; set; }
+        public int? position { get; set; }
 
     }
     public class FilterGroup
