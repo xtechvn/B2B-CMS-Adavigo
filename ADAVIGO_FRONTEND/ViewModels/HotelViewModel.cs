@@ -291,6 +291,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public int numberOfChild { get; set; }
         public int numberOfInfant { get; set; }
         public decimal totalMoney { get; set; }
+        public decimal extrapackagesMoney { get; set; }
         public string bookingID { get; set; }
         public string orderID { get; set; }
     }

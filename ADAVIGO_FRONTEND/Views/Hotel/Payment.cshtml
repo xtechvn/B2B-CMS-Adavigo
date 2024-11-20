@@ -142,8 +142,20 @@
 
                 <div class="row mb12">
                     <div class="col-5 gray">Tổng tiền</div>
-                    <div class="col-7 bold text-right">@Model.totalMoney.ToString("N0") VND</div>
+                    <div class="col-7 bold text-right">@((Model.totalMoney - Model.extrapackagesMoney).ToString("N0")) VND</div>
                 </div>
+                @if (Model.extrapackagesMoney > 0)
+                {
+                    <div class="line-bottom mb12"></div>
+                    <div class="">
+                        <strong>Dịch vụ phụ</strong>
+                    </div>
+
+                    <div class="row mb12">
+                        <div class="col-5 gray">Tổng tiền</div>
+                        <div class="col-7 bold text-right">@Model.extrapackagesMoney.ToString("N0") VND</div>
+                    </div>
+                }
                 <div class="line-bottom mb12"></div>
                 <div class="row mb12">
                     <div class="col-5 bold txt_16">Thành tiền</div>

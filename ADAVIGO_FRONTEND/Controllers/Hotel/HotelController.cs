@@ -353,6 +353,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
 
                 var rooms = new List<dynamic>();
                 decimal total_money = 0;
+                decimal extrapackages_money = 0;
                 if (cache_data.rooms != null && cache_data.rooms.Any())
                 {
                     var arrayGuest = JArray.Parse(jsonData["guests"].ToString());
@@ -401,7 +402,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         total_money += total_amount;
                     }
                 }
-
+                if(cache_data.extrapackages != null && cache_data.extrapackages.Count > 0){
+                    total_money += cache_data.extrapackages.Sum(s => (decimal)s.Amount);
+                    extrapackages_money += cache_data.extrapackages.Sum(s => (decimal)s.Amount);
+                }
                 jsonData.Add("rooms", JArray.FromObject(rooms));
                 jsonData.Add("extrapackages", JArray.FromObject(cache_data.extrapackages != null && cache_data.extrapackages.Count > 0 ? cache_data.extrapackages : null));
                 jsonData.Property("order_token").Remove();
@@ -420,6 +424,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     numberOfChild = cache_data.rooms.Sum(s => s.child),
                     numberOfInfant = cache_data.rooms.Sum(s => s.infant),
                     totalMoney = total_money,// model.rooms.Sum(x => x.amount),
+                    extrapackagesMoney = extrapackages_money,
                     bookingID = booking_id
                 }), _KeyEncodeParam);
 
