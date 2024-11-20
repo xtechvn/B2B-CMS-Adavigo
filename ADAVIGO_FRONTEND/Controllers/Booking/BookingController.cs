@@ -113,7 +113,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                     ViewBag.StatusName = data.StatusName;
                     ViewBag.Status = data.Status;
                     var thoigianConLai = (((DateTime)data.Rooms[0].CreatedDate).AddMinutes(15) - DateTime.Now ).TotalMilliseconds;
-                  if (thoigianConLai > 0)
+                  if (thoigianConLai < 0)
                     {
                         ViewBag.Status = (int)RequestStatus.HUY;
                         ViewBag.StatusName = "Hủy";
