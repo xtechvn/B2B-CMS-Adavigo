@@ -1,4 +1,5 @@
-﻿var _request_detail_hotel_booking = {
+﻿
+var _request_detail_hotel_booking = {
 
     getRoomOrdered: function () {
         let arrRoom = [];
@@ -29,4 +30,34 @@
             }
         });
     },
+    newYear: function () {
+        /*Lấy thời gian ngày hiện tại (mily giây) */
+        var thoigianConLai = $('#thoigianConLai').val();
+        if (parseFloat(thoigianConLai) < 0) { thoigianConLai = 0; }
+        /*Tính thời gian còn lại (mily giây) */
+        console.log("thoigianConLai:" +thoigianConLai)
+        /*Chuyển đơn vị thời gian tương ứng sang mili giây*/
+        var giay = 1000;
+        var phut = giay * 60;
+        var gio = phut * 60;
+        var ngay = gio * 24;
+
+        /*Tìm ra thời gian theo ngày, giờ, phút giây còn lại thông qua cách chia lấy dư(%) và làm tròn số(Math.floor) trong Javascript*/
+        var h = Math.floor((thoigianConLai % (ngay)) / (gio));
+        var m = Math.floor((thoigianConLai % (gio)) / (phut));
+        var s = Math.floor((thoigianConLai % (phut)) / (giay));
+
+        /*Hiển thị kết quả ra các thẻ Div với ID tương ứng*/
+        document.getElementById("hour").innerText = h;
+        document.getElementById("minute").innerText = m;
+        document.getElementById("second").innerText = s;
+    },
+
+    /*Thiết Lập hàm sẽ tự động chạy lại sau 1s*/
+    setTime: function () {
+        setInterval(function () {
+            _request_detail_hotel_booking.newYear()
+        }, 1000)
+    },
+    
 };

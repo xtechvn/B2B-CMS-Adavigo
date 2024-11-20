@@ -10,19 +10,20 @@
     var phone = claimsIdentity.FindFirst(nameof(SystemUserModel.Phone));
     var email = claimsIdentity.FindFirst(nameof(SystemUserModel.Email));
     var _UserManager = new SystemUserModel
-                {
-                    ClientID = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ClientID)).Value),
-                    ClientType = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ClientType)).Value),
-                    ClientName = claimsIdentity.FindFirst(nameof(SystemUserModel.ClientName)).Value,
-                    Phone = phone != null ? phone.Value : string.Empty,
-                    Address = address != null ? address.Value : string.Empty,
-                    Email = email != null ? email.Value : string.Empty
-                };
+    {
+        ClientID = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ClientID)).Value),
+        ClientType = int.Parse(claimsIdentity.FindFirst(nameof(SystemUserModel.ClientType)).Value),
+        ClientName = claimsIdentity.FindFirst(nameof(SystemUserModel.ClientName)).Value,
+        Phone = phone != null ? phone.Value : string.Empty,
+        Address = address != null ? address.Value : string.Empty,
+        Email = email != null ? email.Value : string.Empty
+    };
 
     var FromDate = DateTime.Parse(Model.arrivalDate);
     var ToDate = DateTime.Parse(Model.departureDate);
     var TotalDays = (ToDate - FromDate).TotalDays + 1;
     decimal TotalMoney = 0;
+    double TotalEX = Model.extrapackages != null && Model.extrapackages.Count > 0 ? Model.extrapackages.Sum(s => (double)s.Amount) : 0;
     var ArrMemberOfRoom = new List<string>();
 
     int room_total = 0, adult_total = 0, child_total = 0, infant_total = 0;
@@ -435,10 +436,29 @@
                                 </ul>
                             }
                         }
+                        @if (Model.extrapackages != null && Model.extrapackages.Any())
+                        {
+                            <ul data-room="">
+                                <li class="gray mb8">
+                                    <strong> Dịch vụ phụ</strong>
+                                </li>
+                                @foreach (var item in Model.extrapackages)
+                                {
+                                    <li class="gray row mb8 package_item">
+                                        <div class="gray col-7"><strong>@item.PackageCode</strong></div>
+                           
+                                        <div class="text-right col-5">
+                                            <strong>@(((double)item.Amount).ToString("N0"))  đ</strong>
+                                        </div>
+                                    </li>
+                                  
+                                }
+                            </ul>
+                        }
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_16">Tổng cộng</div>
-                        <div class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@TotalMoney.ToString("N0") VNĐ</div>
+                        <div class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@(((double)TotalMoney + TotalEX).ToString("N0")) VNĐ</div>
                     </div>
                     <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
                     <button type="button" id="btn_continue_to_payment" class="btn btn-default blue full size">Tiếp tục đơn hàng</button>
@@ -453,6 +473,6 @@ else
 }
 
 @section scripts{
-<script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
-<script type="text/javascript" src="~/js/modules/hotel-order.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-order.js"></script>
 }

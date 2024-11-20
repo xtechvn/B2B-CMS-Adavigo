@@ -235,6 +235,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public int numberOfChild { get; set; }
         public int numberOfInfant { get; set; }
         public IEnumerable<RoomOrderData> rooms { get; set; }
+        public List<HotelBookingRoomExtraPackages> extrapackages { get; set; }
         public string orderToken { get; set; }
         public string bookingID { get; set; }
         public string note { get; set; }

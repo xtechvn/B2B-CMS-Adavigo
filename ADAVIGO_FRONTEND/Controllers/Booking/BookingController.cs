@@ -4,6 +4,7 @@ using ADAVIGO_FRONTEND.ViewModels;
 using LIB.Utilities.Contants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Contants;
@@ -98,6 +99,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
             if(BookingId!= 0)
             {
                 ViewBag.bt = false;
+                ViewBag.Status = 0;
                var data = _BookingService.GetDetailRequestHotelBooking(BookingId).Result;
                 if (data != null)
                 {
@@ -108,6 +110,16 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                     var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
                     var amunt_ExtraPackages = data.ExtraPackages != null ? data.ExtraPackages.Sum(s => s.Amount) : 0;
                     ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
+                    ViewBag.StatusName = data.StatusName;
+                    ViewBag.Status = data.Status;
+                    var thoigianConLai = ((DateTime)data.Rooms[0].CreatedDate - DateTime.Now.AddMinutes(15) ).TotalMilliseconds;
+                  if (thoigianConLai < 0)
+                    {
+                        ViewBag.Status = (int)RequestStatus.HUY;
+                        ViewBag.StatusName = "Hủy";
+                        ViewBag.bt = false;
+                    }
+                    ViewBag.thoigianConLai = thoigianConLai;
                 }
 
                 return View(data);

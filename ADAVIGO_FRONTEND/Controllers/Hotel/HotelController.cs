@@ -264,6 +264,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     }
                 }
                 data.rooms = rooms;
+                data.extrapackages = DetailRequestHotelBooking.ExtraPackages;
 
                 var cache_name = Guid.NewGuid().ToString();
                 _MemoryCache.Set(cache_name, data, TimeSpan.FromMinutes(30));
@@ -402,6 +403,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 }
 
                 jsonData.Add("rooms", JArray.FromObject(rooms));
+                jsonData.Add("extrapackages", JArray.FromObject(JArray.Parse(jsonData["extrapackages"].ToString())));
                 jsonData.Property("order_token").Remove();
                 jsonData.Property("guests").Remove();
 

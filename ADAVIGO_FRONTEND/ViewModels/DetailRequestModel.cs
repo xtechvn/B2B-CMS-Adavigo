@@ -14,6 +14,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public string email { get; set; }
         public string telephone { get; set; }
         public  int Status { get; set; }
+        public string StatusName { get; set; }
         public List<HotelBookingRooms> Rooms { get; set; }
         public List<HotelBookingRoomRates> Rates { get; set; }
         public List<HotelBookingRoomExtraPackages> ExtraPackages { get; set; }
