@@ -712,6 +712,10 @@ $('.hotel.tab-menu .hotel_tab_type').click(function () {
         $('#input__search-hotel-id').val("");
         $('#input__search-hotel-type').val(0);
     }
+    setTimeout(function () {
+        $('.tab-content .flex-row').show()
+
+    }, 1000);
 });
 
 $(document).ready(function () {
