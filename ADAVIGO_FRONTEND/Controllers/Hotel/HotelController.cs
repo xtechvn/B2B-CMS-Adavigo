@@ -221,20 +221,20 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 data.email = DetailRequestHotelBooking.email;
                 data.arrivalDate = DetailRequestHotelBooking.arrivalDate;
                 data.departureDate = DetailRequestHotelBooking.departureDate;
-            
+
                 data.bookingID = BookingId.ToString();
-               if(DetailRequestHotelBooking.Rooms != null)
+                if (DetailRequestHotelBooking.Rooms != null)
                 {
-                    data.numberOfAdult = (int)DetailRequestHotelBooking.Rooms.Sum(s=>s.NumberOfAdult);
+                    data.numberOfAdult = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfAdult);
                     data.numberOfChild = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfChild);
                     data.numberOfInfant = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfInfant);
                 }
                 var rooms = new List<RoomOrderData>();
                 if (DetailRequestHotelBooking.Rates != null)
                 {
-                    foreach(var item in DetailRequestHotelBooking.Rooms)
+                    foreach (var item in DetailRequestHotelBooking.Rooms)
                     {
-                      
+
                         var rooms_detail = new RoomOrderData();
                         rooms_detail.room_number = item.NumberOfRooms.ToString();
                         rooms_detail.room_id = item.RoomTypeId;
@@ -403,7 +403,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 }
 
                 jsonData.Add("rooms", JArray.FromObject(rooms));
-                jsonData.Add("extrapackages", JArray.FromObject(JArray.Parse(jsonData["extrapackages"].ToString())));
+                jsonData.Add("extrapackages", JArray.FromObject(cache_data.extrapackages != null && cache_data.extrapackages.Count > 0 ? cache_data.extrapackages : null));
                 jsonData.Property("order_token").Remove();
                 jsonData.Property("guests").Remove();
 
@@ -760,9 +760,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 if (data.rooms != null)
                 {
                     var rooms = new List<BookingHotelB2BViewModelRooms>();
-                   
+
                     var detai = new BookingHotelB2BViewModelDetail();
-                    detai.email=data.email;
+                    detai.email = data.email;
                     detai.telephone = data.telephone;
                     detai.image_thumb = "";
                     detai.address = "";
@@ -774,7 +774,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     search.arrivalDate = data.arrivalDate;
                     search.departureDate = data.departureDate;
                     search.hotelID = data.hotelID;
-                    search.numberOfRoom = data.rooms.Sum(s=>Convert.ToInt32(s.room_number));
+                    search.numberOfRoom = data.rooms.Sum(s => Convert.ToInt32(s.room_number));
                     search.numberOfAdult = data.numberOfAdult;
                     search.numberOfChild = data.numberOfChild;
                     search.numberOfInfant = data.numberOfInfant;
@@ -801,7 +801,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                             rates_detail.package_includes = (List<string>)pack.package_includes;
                             rates.Add(rates_detail);
                         }
-                        if(data.numberOfAdult==0&& data.numberOfChild==0 && data.numberOfInfant == 0)
+                        if (data.numberOfAdult == 0 && data.numberOfChild == 0 && data.numberOfInfant == 0)
                         {
                             search.numberOfAdult = room.adult;
                             search.numberOfChild = room.child;
