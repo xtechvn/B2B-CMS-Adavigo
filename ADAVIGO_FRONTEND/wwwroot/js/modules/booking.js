@@ -107,7 +107,7 @@
 
     Detail: function (order_id) {
         _ajax_caller.post('/Booking/Detail', { id: order_id }, function (result) {
-            console.log('vao');
+            //console.log('vao');
             $(_booking.grid_detail_element).html(result);
             $(_booking.grid_element).addClass('hidden');
             $(_booking.grid_detail_element).removeClass('hidden');

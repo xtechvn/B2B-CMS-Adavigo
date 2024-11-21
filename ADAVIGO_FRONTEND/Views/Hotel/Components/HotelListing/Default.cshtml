@@ -1,7 +1,7 @@
 ﻿@using ADAVIGO_FRONTEND.ViewModels
 @using System.Web
 @model HotelDataModel
-@{ 
+@{
     int nights = (int)ViewBag.Nights;
 }
 
@@ -21,7 +21,7 @@
                 {
                     var img = @item.img_thumb.FirstOrDefault(s => !string.IsNullOrEmpty(s));
                     <a class="thumb_img thumb_5x4">
-                        <img class="img_rechange_url" src="" data-url="@(img??"/images/graphics/thumb1x1.jpg")">
+                        <img class="img_rechange_url" src="" data-url="@(img ?? "/images/graphics/thumb1x1.jpg")">
                     </a>
                 }
                 else
@@ -83,20 +83,21 @@
                             @if (item.min_price > 0)
                             {
 
-                            @*<div class="sale">-2%</div>*@
-                            @*<div class="price-old">2.648.104 đ</div>*@
-                            <div class="price-new @(item.min_price != 0 ? string.Empty : "placeholder")">
-                                @(Math.Round(item.min_price / nights, 0).ToString("N0")) đ
-                            </div>
-                            <div class="gray per-nights" >/ <strong>1</strong> Đêm</div>
+                                @*<div class="sale">-2%</div>*@
+                                @*<div class="price-old">2.648.104 đ</div>*@
+                                <div class="price-new placeholder">
+                                    @(Math.Round(item.min_price / nights, 0).ToString("N0")) đ
+                                </div>
+                                <div class="gray per-nights">/ <strong>1</strong> Đêm</div>
 
                             }
                             else
-                            { <div class="price-new">
-                                Giá liên hệ
+                            {
+                                <div class="price-new placeholder">
+                                    Giá liên hệ
 
-                            </div>
-                            <div class="gray per-nights" style="display:none;">/ <strong>1</strong> Đêm</div>
+                                </div>
+                                <div class="gray per-nights" style="display:none;">/ <strong>1</strong> Đêm</div>
 
                             }
                         </div>
