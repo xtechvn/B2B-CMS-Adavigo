@@ -650,7 +650,7 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
     if (current_value >= 0) {
         if (is_room || is_adult) {
             if (current_value >= 0) {
-                inputElement.val(current_value);
+                inputElement.val(current_value-1);
                 if (is_room) $('#block_room_search_content .line-bottom:last').remove();
             }
         } else {
@@ -679,8 +679,8 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     });
     if (is_room) {
         if (current_value < 9) {
-            inputElement.val(current_value);
-            _hotel.appendRoomSearch(current_value);
+            inputElement.val(current_value + 1);
+            _hotel.appendRoomSearch(current_value + 1);
         }
     } else {
         if (room == 1) {

@@ -780,9 +780,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     search.departureDate = data.departureDate;
                     search.hotelID = data.hotelID;
                     search.numberOfRoom = data.rooms.Sum(s => Convert.ToInt32(s.room_number));
-                    search.numberOfAdult = data.numberOfAdult;
-                    search.numberOfChild = data.numberOfChild;
-                    search.numberOfInfant = data.numberOfInfant;
+                    search.numberOfAdult = data.rooms.Sum(s=>s.adult);
+                    search.numberOfChild = data.rooms.Sum(s => s.child);
+                    search.numberOfInfant = data.rooms.Sum(s => s.infant);
 
                     foreach (var room in data.rooms)
                     {
@@ -806,7 +806,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                             rates_detail.package_includes = (List<string>)pack.package_includes;
                             rates.Add(rates_detail);
                         }
-                        if (data.numberOfAdult == 0 && data.numberOfChild == 0 && data.numberOfInfant == 0)
+                        if (search.numberOfAdult == 0 && search.numberOfChild == 0 && search.numberOfInfant == 0)
                         {
                             search.numberOfAdult = room.adult;
                             search.numberOfChild = room.child;

@@ -865,10 +865,12 @@ $('#btn__check_order').click(function () {
             var html_body = ''
             var table_html = ''
             var Amonut_packages = 0;
+       
             _hotel_detail.rooms.forEach((item) => {
                 var html_code = ''
                 var html_date = ''
                 var html_amount = ''
+                var night_number = 0;
                 var td1 = ` `
                 html_btn =`<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
                 item.packages.forEach((item2) => {
@@ -876,6 +878,7 @@ $('#btn__check_order').click(function () {
                     html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}" disabled>`
                     html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}" disabled>`
                     Amonut_packages += item2.amount;
+                    night_number += (new Date(_hotel_detail.ConvertToDateDotnet(item2.departure_date)) - new Date(_hotel_detail.ConvertToDateDotnet(item2.arrival_date)) ).daysOfWeek
                 });
                 var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
                 var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
@@ -892,7 +895,7 @@ $('#btn__check_order').click(function () {
                                     <td>
                                        `+ html_date + `
                                     </td>
-                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="1" disabled></td>
+                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="${night_number}" disabled></td>
                                     <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>
                                     <td class="text-right">
                                     `+ html_amount + `
