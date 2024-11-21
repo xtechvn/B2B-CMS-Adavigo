@@ -158,11 +158,13 @@
                             <div class="line-bottom mb16"></div>
                             @if (Model.rooms != null && Model.rooms.Any())
                             {
+                                var count = 0;
                                 var room_group = Model.rooms.GroupBy(s => new { s.room_number, s.room_id, s.room_name, s.adult, s.child, s.infant });
                                 foreach (var item in room_group)
                                 {
-                                    <div class="info-room-block-item room" data-room="@item.Key.room_number">
-                                        <div class="bold txt_16 mb16">Phòng @item.Key.room_number</div>
+                                    count++;
+                                    <div class="info-room-block-item room" data-room="@count">
+                                        <div class="bold txt_16 mb16">Phòng @count</div>
                                         @if (item.Key.adult > 0)
                                         {
                                             @for (int i = 0; i < item.Key.adult; i++)

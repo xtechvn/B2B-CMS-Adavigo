@@ -407,7 +407,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     extrapackages_money += cache_data.extrapackages.Sum(s => (decimal)s.Amount);
                 }
                 jsonData.Add("rooms", JArray.FromObject(rooms));
-                jsonData.Add("extrapackages", JArray.FromObject(cache_data.extrapackages != null && cache_data.extrapackages.Count > 0 ? cache_data.extrapackages : null));
+                jsonData.Add("extrapackages", cache_data.extrapackages != null && cache_data.extrapackages.Count > 0 ? JArray.FromObject( cache_data.extrapackages):null);
                 jsonData.Property("order_token").Remove();
                 jsonData.Property("guests").Remove();
 

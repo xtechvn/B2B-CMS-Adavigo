@@ -275,6 +275,15 @@ var _hotel_detail = {
         var split_date = text.split('-')
         return split_date[2] + '/' + split_date[1] + '/' + split_date[0]
     },
+    checkinput: function () {
+        if ($('#cbk__order_multiple_pacekage').is(":checked")) {
+            $('#btn__check_order').removeAttr('data-target')
+            $('#btn__check_order').removeAttr('data-toggle')
+        } else {
+            $('#btn__check_order').attr('data-target', '#myModal14')
+            $('#btn__check_order').attr('data-toggle', 'modal')
+        }
+    },
 };
 
 $(document).on('click', '.btn__toggle_room_package', function () {
@@ -750,6 +759,7 @@ $('#block__detail_hotel_rooms').on('click', '.btn_back_to_room_list', function (
     _hotel_detail.loadTotalMoney();
 });
 
+
 $('#btn__continue_order').click(function () {
 
     let number_of_room = $('#input__number_room_order').val();
@@ -848,8 +858,11 @@ $('#btn__check_order').click(function () {
                 package_addition.removeClass('hidden');
                 checkbox_package.closest('label.confir_res').addClass('hidden');
             });
-
+           
+      
         } else {
+            $('#btn__check_order').attr('data-target', '#myModal14')
+            $('#btn__check_order').attr('data-toggle', 'modal')
             let obj = {
                 hotelID: _hotel_detail.hotel.id,
                 hotelName: _hotel_detail.hotel.name,
@@ -865,7 +878,7 @@ $('#btn__check_order').click(function () {
             var html_body = ''
             var table_html = ''
             var Amonut_packages = 0;
-       
+            var millisecondsPerDay = 24 * 60 * 60 * 1000;
             _hotel_detail.rooms.forEach((item) => {
                 var html_code = ''
                 var html_date = ''
@@ -878,7 +891,7 @@ $('#btn__check_order').click(function () {
                     html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}" disabled>`
                     html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}" disabled>`
                     Amonut_packages += item2.amount;
-                    night_number += (new Date(_hotel_detail.ConvertToDateDotnet(item2.departure_date)) - new Date(_hotel_detail.ConvertToDateDotnet(item2.arrival_date)) ).daysOfWeek
+                    night_number += (ConvertToDate(_hotel_detail.ConvertToDateDotnet(item2.departure_date)) - ConvertToDate(_hotel_detail.ConvertToDateDotnet(item2.arrival_date))) / millisecondsPerDay
                 });
                 var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
                 var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
@@ -896,7 +909,7 @@ $('#btn__check_order').click(function () {
                                        `+ html_date + `
                                     </td>
                                     <td class="text-right"><input type="text" class="form-control text-right" id="" value="${night_number}" disabled></td>
-                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>
+                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="1" disabled></td>
                                     <td class="text-right">
                                     `+ html_amount + `
                                     </td>

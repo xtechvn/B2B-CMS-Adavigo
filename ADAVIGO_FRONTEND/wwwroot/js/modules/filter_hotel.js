@@ -347,7 +347,6 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
     let current_value = parseInt(inputElement.val());
     let is_room = seft.closest('.sl_giohang_room').length > 0;
     let is_adult = seft.closest('.adult').length > 0;
-    current_value = current_value - 1;
     let room = 1;
     $('#block_room_search_content .line-bottom').each(function () {
         let seft2 = $(this);
@@ -358,7 +357,7 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
     if (current_value >= 0) {
         if (is_room || is_adult) {
             if (current_value >= 0) {
-                inputElement.val(current_value);
+                inputElement.val(current_value - 1);
                 if (is_room) $('#block_room_search_content .line-bottom:last').remove();
             }
         } else {
@@ -377,7 +376,6 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     let seft = $(this);
     let inputElement = seft.parent().siblings('input');
     let current_value = parseInt(inputElement.val());
-    current_value = current_value + 1;
     let is_room = seft.closest('.sl_giohang_room').length > 0;
     var room = 1;
     $('#block_room_search_content .line-bottom').each(function () {
@@ -388,8 +386,8 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     });
     if (is_room) {
         if (current_value < 9) {
-            inputElement.val(current_value);
-            _hotel.appendRoomSearch(current_value);
+            inputElement.val(current_value + 1);
+            _hotel.appendRoomSearch(current_value + 1);
         }
     } else {
         if (room == 1) {
