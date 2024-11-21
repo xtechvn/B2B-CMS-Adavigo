@@ -124,7 +124,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                 if (data != null)
                 {
                     ViewBag.RequestNo = data.RequestNo;
-                    if(data.Status != (int)RequestStatus.HOAN_THANH && data.Status != (int)RequestStatus.HUY){
+                    if(data.Status == (int)RequestStatus.DA_XU_LY ){
                         ViewBag.bt = true;
                     }
                     var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
@@ -132,7 +132,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                     ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
                     ViewBag.StatusName = data.StatusName;
                     ViewBag.Status = data.Status;
-                    var thoigianConLai = (((DateTime)data.Rooms[0].CreatedDate).AddMinutes(15) - DateTime.Now ).TotalMilliseconds;
+                    var thoigianConLai = (((DateTime)data.Rooms[0].CreatedDate).AddMinutes(60) - DateTime.Now ).TotalMilliseconds;
                   if (thoigianConLai < 0)
                     {
                         ViewBag.Status = (int)RequestStatus.HUY;
@@ -140,6 +140,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                         ViewBag.bt = false;
                     }
                     ViewBag.thoigianConLai = thoigianConLai;
+                    ViewBag.endtime = ((DateTime)data.Rooms[0].CreatedDate).AddMinutes(60); ;
                 }
 
                 return View(data);

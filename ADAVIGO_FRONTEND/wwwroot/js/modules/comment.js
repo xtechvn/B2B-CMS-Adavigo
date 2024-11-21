@@ -113,7 +113,7 @@ function renderFileLink(file) {
         </div>
     `;
 }
-('$attachFiles').change(function (event) {
+$('#attachFiles').change(function (event) {
 
     var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png", "pdf", "doc", "docx", "txt", "xls", "xlsx"];
 

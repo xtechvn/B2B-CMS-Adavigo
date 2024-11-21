@@ -2,6 +2,7 @@
    
     var Request_Id = $('#Request_Id').val()
     _request_detail_hotel_booking.getcomment(Request_Id)
+    _request_detail_hotel_booking.setTime()
 })
 
 var _request_detail_hotel_booking = {
@@ -38,24 +39,28 @@ var _request_detail_hotel_booking = {
     },
     newYear: function () {
         /*Lấy thời gian ngày hiện tại (mily giây) */
-        var thoigianConLai = $('#thoigianConLai').val();
+        var thoigianConLai = new Date($('#endtime').val()).getTime();
         if (parseFloat(thoigianConLai) < 0) { thoigianConLai = 0; }
         /*Tính thời gian còn lại (mily giây) */
+        const now = new Date().getTime();
+        thoigianConLai = thoigianConLai - now;
         console.log("thoigianConLai:" +thoigianConLai)
         /*Chuyển đơn vị thời gian tương ứng sang mili giây*/
         var giay = 1000;
         var phut = giay * 60;
         var gio = phut * 60;
         var ngay = gio * 24;
-
+        if (thoigianConLai <= 0) {
+            $('#end_time').hide();
+        }
         /*Tìm ra thời gian theo ngày, giờ, phút giây còn lại thông qua cách chia lấy dư(%) và làm tròn số(Math.floor) trong Javascript*/
         var h = Math.floor((thoigianConLai % (ngay)) / (gio));
         var m = Math.floor((thoigianConLai % (gio)) / (phut));
         var s = Math.floor((thoigianConLai % (phut)) / (giay));
 
         /*Hiển thị kết quả ra các thẻ Div với ID tương ứng*/
-        document.getElementById("hour").innerText = h;
-        document.getElementById("minute").innerText = m;
+  
+        document.getElementById("minute").innerText = m+":";
         document.getElementById("second").innerText = s;
     },
 

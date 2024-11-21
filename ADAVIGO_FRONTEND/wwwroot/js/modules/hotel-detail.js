@@ -872,16 +872,16 @@ $('#btn__check_order').click(function () {
                 var td1 = ` `
                 html_btn =`<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
                 item.packages.forEach((item2) => {
-                    html_code += `  <input type="text" class="form-control mb-2" id="" value="${item2.package_code}">`
-                    html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}">`
-                    html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}">`
+                    html_code += `  <input type="text" class="form-control mb-2" id="" value="${item2.package_code}" disabled>`
+                    html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}" disabled>`
+                    html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}" disabled>`
                     Amonut_packages += item2.amount;
                 });
-                var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}"></td>`
-                var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}"></td>`
+                var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
+                var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
                 table_html += `  <tr>
                                     <td>1</td>
-                                   <td style="width: 30%;"><input type="email" class="form-control" id="" value="${item.room_name}"></td>
+                                   <td style="width: 30%;"><input type="email" class="form-control" id="" value="${item.room_name}" disabled></td>
                                     <td>
                                         <div class="flexbox align-center">
                                             <div>
@@ -892,8 +892,8 @@ $('#btn__check_order').click(function () {
                                     <td>
                                        `+ html_date + `
                                     </td>
-                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="1"></td>
-                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}"></td>
+                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="1" disabled></td>
+                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>
                                     <td class="text-right">
                                     `+ html_amount + `
                                     </td>

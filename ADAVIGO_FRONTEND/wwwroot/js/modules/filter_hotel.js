@@ -347,6 +347,7 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
     let current_value = parseInt(inputElement.val());
     let is_room = seft.closest('.sl_giohang_room').length > 0;
     let is_adult = seft.closest('.adult').length > 0;
+    current_value = current_value - 1;
     let room = 1;
     $('#block_room_search_content .line-bottom').each(function () {
         let seft2 = $(this);
@@ -376,6 +377,7 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     let seft = $(this);
     let inputElement = seft.parent().siblings('input');
     let current_value = parseInt(inputElement.val());
+    current_value = current_value + 1;
     let is_room = seft.closest('.sl_giohang_room').length > 0;
     var room = 1;
     $('#block_room_search_content .line-bottom').each(function () {
