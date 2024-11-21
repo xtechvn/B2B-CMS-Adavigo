@@ -469,8 +469,8 @@
     },
 
     applyDaterange: function (fromDateElement, toDateElement, startDate, endDate) {
-        console.log(startDate);
-        console.log(endDate);
+      //  console.log(startDate);
+       // console.log(endDate);
 
         $(fromDateElement).val(startDate.format('DD/MM/YYYY')).change();
         $(toDateElement).val(endDate.format('DD/MM/YYYY')).change();

@@ -66,7 +66,9 @@ namespace ADAVIGO_FRONTEND.ViewModels
     public class HotelPriceDataModel
     {
         public string hotel_id { get; set; }
-        public decimal min_price { get; set; }
+        public double min_price { get; set; }
+        public double vin_price { get; set; }
+        public double profit { get; set; }
     }
 
     public class HotelGridInfoModel

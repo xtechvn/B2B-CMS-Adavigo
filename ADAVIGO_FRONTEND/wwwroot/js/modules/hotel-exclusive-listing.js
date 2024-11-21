@@ -118,39 +118,7 @@ var hotel_exclusive_listing = {
                         </div>
                     </div>
                 </div>`
-        //ko theo vị trí
-        //_ajax_caller.post('/hotel/GetExclusiveHotel', { request_model: input_2 }, function (result) {
-        //    var html = ''
-        //    if (result.isSuccess) {
-        //        var count = 0
-        //        $(result.data).each(function (index, item) {
-        //            html += hotel_constants.HTML.ExclusiveArticle
-        //                //.replaceAll('{city}', item.city == null || item.city == undefined ? (item.state == null || item.state == undefined ? item.street : item.state) : item.city)
-        //                .replaceAll('{city}', item.street)
-        //                .replaceAll('{name}', item.name == null || item.name == undefined ? '' : item.name)
-        //                .replaceAll('{name}', item.name == null || item.name == undefined ? '' : item.name)
-        //                .replaceAll('{thumb}', item.img_thumb == null || item.img_thumb == undefined || item.img_thumb.length <= 0 ? '/images/graphics/thumb1.jpg' : item.img_thumb[0])
-        //                .replaceAll('{amount}', item.min_price == null || item.min_price == undefined || item.min_price <= 0 ? 'Giá liên hệ' : hotel_exclusive_listing.Comma(Math.round(item.min_price / diffDays, 0)) + ' đ')
-        //                .replaceAll('{display}', item.min_price == null || item.min_price == undefined || item.min_price <= 0 ? 'display:none;' : '')
-        //                .replaceAll('{hotel_id}', item.hotel_id)
-        //                .replaceAll('{star}', hotel_constants.RenderStar(item.star))
-        //                .replaceAll('{hotel_hotel_type}', item.is_vin_hotel )
-        //                .replaceAll('{hotel_type}', item.hotel_type == null || item.hotel_type == undefined || item.hotel_type.trim() == '' ? 'Khách sạn' : item.hotel_type)
-        //            count++
-        //            hotel_exclusive_listing.Data.push(item)
-        //            if (count >= hotel_constants.CONSTATNTS.ExclusiveLimit) return false
-        //        });
-
-        //        $('#list-article-exclusive').html(html);
-        //        hotel_exclusive_listing.CalucateDetail(input_2, diffDays)
-        //        $('#list-article-exclusive').removeClass('box-placeholder')
-        //        $('#list-article-exclusive').removeClass('placeholder')
-        //    }
-        //    else {
-        //        $('#list-article-exclusive').html(html);
-
-        //    }
-        //});
+       
 
         //theo vị trí
         _ajax_caller.post('/hotel/GetExclusiveHotelPosition', { request_model: input_2 }, function (result) {
@@ -315,8 +283,42 @@ var hotel_exclusive_listing = {
                     hotel_exclusive_listing.Data.push(item)
                     if (count >= hotel_constants.CONSTATNTS.ExclusiveLimit) return false
                 });
-                html = (htmlp1 == "" ? htmlerr : htmlp1) + (htmlp2 == "" ? htmlerr : htmlp2) + (htmlp3 == "" ? htmlerr : htmlp3) + (htmlp4 == "" ? htmlerr : htmlp4) + (htmlp5 == "" ? htmlerr : htmlp5) + (htmlp6 == "" ? htmlerr : htmlp6) + (htmlp7 == "" ? htmlerr : htmlp7) + (htmlp8 == "" ? htmlerr : htmlp8)
+                html = (htmlp1 == "" ? "" : htmlp1) + (htmlp2 == "" ? "" : htmlp2) + (htmlp3 == "" ? "" : htmlp3) + (htmlp4 == "" ? "" : htmlp4) + (htmlp5 == "" ? "" : htmlp5) + (htmlp6 == "" ? "" : htmlp6) + (htmlp7 == "" ? "" : htmlp7) + (htmlp8 == "" ? "" : htmlp8)
+                //ko theo vị trí
+                if (html == undefined || html.trim() == "") {
+                    _ajax_caller.post('/hotel/GetExclusiveHotel', { request_model: input_2 }, function (result) {
+                        var html = ''
+                        if (result.isSuccess) {
+                            var count = 0
+                            $(result.data).each(function (index, item) {
+                                html += hotel_constants.HTML.ExclusiveArticle
+                                    //.replaceAll('{city}', item.city == null || item.city == undefined ? (item.state == null || item.state == undefined ? item.street : item.state) : item.city)
+                                    .replaceAll('{city}', item.street)
+                                    .replaceAll('{name}', item.name == null || item.name == undefined ? '' : item.name)
+                                    .replaceAll('{name}', item.name == null || item.name == undefined ? '' : item.name)
+                                    .replaceAll('{thumb}', item.img_thumb == null || item.img_thumb == undefined || item.img_thumb.length <= 0 ? '/images/graphics/thumb1.jpg' : item.img_thumb[0])
+                                    .replaceAll('{amount}', item.min_price == null || item.min_price == undefined || item.min_price <= 0 ? 'Giá liên hệ' : hotel_exclusive_listing.Comma(Math.round(item.min_price / diffDays, 0)) + ' đ')
+                                    .replaceAll('{display}', item.min_price == null || item.min_price == undefined || item.min_price <= 0 ? 'display:none;' : '')
+                                    .replaceAll('{hotel_id}', item.hotel_id)
+                                    .replaceAll('{star}', hotel_constants.RenderStar(item.star))
+                                    .replaceAll('{hotel_hotel_type}', item.is_vin_hotel )
+                                    .replaceAll('{hotel_type}', item.hotel_type == null || item.hotel_type == undefined || item.hotel_type.trim() == '' ? 'Khách sạn' : item.hotel_type)
+                                count++
+                                hotel_exclusive_listing.Data.push(item)
+                                if (count >= hotel_constants.CONSTATNTS.ExclusiveLimit) return false
+                            });
 
+                            $('#list-article-exclusive').html(html);
+                            hotel_exclusive_listing.CalucateDetail(input_2, diffDays)
+                            $('#list-article-exclusive').removeClass('box-placeholder')
+                            $('#list-article-exclusive').removeClass('placeholder')
+                        }
+                        else {
+                            $('#list-article-exclusive').html(html);
+
+                        }
+                    });
+                }
                 $('#list-article-exclusive').html(html);
                 hotel_exclusive_listing.CalucateDetail(input_2, diffDays)
                 $('#list-article-exclusive').removeClass('box-placeholder')

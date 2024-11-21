@@ -142,7 +142,7 @@ function payment(type, getVietQRCodeRequest) {
             }
         }
     }).catch(function (err) {
-        console.log(err);
+       // console.log(err);
     })
 }
 

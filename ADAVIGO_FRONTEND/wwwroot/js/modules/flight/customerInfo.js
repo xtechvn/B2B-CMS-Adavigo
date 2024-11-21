@@ -450,7 +450,7 @@ $(".btn-confirm-done").click(function () {
                 UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);
             }
         }).catch(function (err) {
-            console.log(err);
+           // console.log(err);
         })
 
     }).catch(function (err) {
@@ -784,7 +784,7 @@ $(document).ready(function () {
             }
 
         }).catch(function (err) {
-            console.log(err);
+           // console.log(err);
         })
     }
 
