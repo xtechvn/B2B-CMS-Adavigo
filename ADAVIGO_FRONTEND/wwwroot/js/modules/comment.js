@@ -52,7 +52,7 @@ function renderComment(comment) {
     var avatarInitial = username.charAt(0).toUpperCase();
 
     // Chuyển đổi thời gian theo múi giờ Việt Nam
-    var createdDate = new Date(comment.createdDate);
+    var createdDate = new Date(comment.createdDate ||comment.CreatedDate);
     var formattedDate = createdDate.toLocaleString('vi-VN', {
         hour: '2-digit',
         minute: '2-digit',
