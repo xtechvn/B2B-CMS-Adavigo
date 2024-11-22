@@ -96,7 +96,7 @@ function renderAttachments(files) {
 }
 
 function renderFileLink(file) {
-    const fileExtension = file.Name || file.name.split('.').pop().toUpperCase();
+    const fileExtension = file.Name.split('.').pop().toUpperCase();
     return `
         <div class="file-preview">
             <a href="${file.Url || file.url}" class="attachment-file" target="_blank">
@@ -114,7 +114,7 @@ function renderFileLink(file) {
         </div>
     `;
 }
-('$attachFiles').change(function (event) {
+$('#attachFiles').change(function (event) {
 
     var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png", "pdf", "doc", "docx", "txt", "xls", "xlsx"];
 

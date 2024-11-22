@@ -7,7 +7,7 @@
 @model DetailRequestModel
 
 <section class="main-container clearfix">
-    <input id="endtime" value="@ViewBag.endtime" style="display:none;" />
+    <input id="thoigianConLai" value="@ViewBag.thoigianConLai" style="display:none;" />
     <div class="mb16">
         <div class="flex align-center justify-content-between">
             <div class="flex align-center  gap_10">
@@ -23,7 +23,7 @@
                     {
                         case (int)(RequestStatus.TAO_MOI):
                             {
-                                <h6 class="color-orange" style="margin-left: 15px;">@ViewBag.StatusName</h6>
+                                <h6 class="color-oranger" style="margin-left: 15px;">@ViewBag.StatusName</h6>
                             }
                             break;
                         case (int)(RequestStatus.NHAN_XU_LY):
@@ -52,11 +52,11 @@
             </div>
             @if (ViewBag.thoigianConLai > 0)
             {
-                <div class="btn-default white min rounded" id="end_time" style="margin-left:50%;">
+                <div class="btn-default white min rounded" style="margin-left:50%;">
                     <svg class="icon-svg">
                         <use xlink:href="/images/icons/icon.svg#clock"></use>
                     </svg>
-                   
+                    <div id="hour"></div>
                     <div id="minute"></div>
                     <div id="second"></div>
                 </div>
@@ -97,25 +97,7 @@
                                     </li>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Tình trạng</div>
-                                        @switch ((int)item.IsRoomAvailable)
-                                        {
-                                            case 0:
-                                                {
-                                                    <div class="color-blue">Đang kiểm tra</div>
-                                                }
-                                                break;
-                                            case 1:
-                                                {
-                                                    <div class="color-blue">Còn phòng</div>
-                                                }
-                                                break;
-                                            case 2:
-                                                {
-                                                    <div class="color-red">Hết phòng</div>
-                                                }
-                                                break;
-
-                                        }
+                                        <div class="color-blue">Còn phòng</div>
                                     </li>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Thời gian sử dụng</div>
