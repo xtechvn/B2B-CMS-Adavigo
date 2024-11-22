@@ -97,7 +97,25 @@
                                     </li>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Tình trạng</div>
-                                        <div class="color-blue">Còn phòng</div>
+                                        @switch ((int)item.IsRoomAvailable)
+                                        {
+                                            case 0:
+                                                {
+                                                    <div class="color-blue">Đang kiểm tra</div>
+                                                }
+                                                break;
+                                            case 1:
+                                                {
+                                                    <div class="color-blue">Còn phòng</div>
+                                                }
+                                                break;
+                                            case 2:
+                                                {
+                                                    <div class="color-red">Hết phòng</div>
+                                                }
+                                                break;
+
+                                        }
                                     </li>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Thời gian sử dụng</div>

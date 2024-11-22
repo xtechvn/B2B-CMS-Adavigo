@@ -43,6 +43,8 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public DateTime? UpdatedDate { get; set; }
         public long? SupplierId { get; set; }
         public bool? IsRoomFund { get; set; }
+        public string IsRoomAvailableName { get; set; }
+        public int? IsRoomAvailable { get; set; }
     }
     public class HotelBookingRoomRates
     {
