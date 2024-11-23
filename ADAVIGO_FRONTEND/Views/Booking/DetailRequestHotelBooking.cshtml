@@ -97,7 +97,7 @@
                                     </li>
                                     <li class="mb10 flex space-between">
                                         <div class="gray">Tình trạng</div>
-                                        @switch ((int)item.IsRoomAvailable)
+                                        @switch (item.IsRoomAvailable != null ? (int)item.IsRoomAvailable : 0)
                                         {
                                             case 0:
                                                 {
