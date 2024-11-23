@@ -124,7 +124,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                 if (data != null)
                 {
                     ViewBag.RequestNo = data.RequestNo;
-                    if(data.Status == (int)RequestStatus.DA_XU_LY ){
+                    if(data.Status == (int)RequestStatus.DA_XU_LY && data.Rooms != null && data.Rooms.Where(s=> (int)s.IsRoomAvailable == RoomAvailableStatus.CON_PHONG).ToList().Count > 0)
+                    {
                         ViewBag.bt = true;
                     }
                     var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
