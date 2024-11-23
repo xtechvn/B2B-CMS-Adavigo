@@ -3,6 +3,7 @@ using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
 using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
+using LIB.Utilities.Contants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -232,7 +233,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 var rooms = new List<RoomOrderData>();
                 if (DetailRequestHotelBooking.Rates != null)
                 {
-                    foreach (var item in DetailRequestHotelBooking.Rooms)
+                    foreach (var item in DetailRequestHotelBooking.Rooms.Where(s=>s.IsRoomAvailable==(int)RoomAvailableStatus.CON_PHONG))
                     {
 
                         var rooms_detail = new RoomOrderData();
