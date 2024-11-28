@@ -336,6 +336,7 @@
             _hotel.loadFilterData();
             $('.item_vin_filter').prop('disabled', false);
             $('.item_vin_filter').removeClass('gray');
+            
         });
     },
 
@@ -640,21 +641,21 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
     let current_value = parseInt(inputElement.val());
     let is_room = seft.closest('.sl_giohang_room').length > 0;
     let is_adult = seft.closest('.adult').length > 0;
-    let room = 1;
-    $('#block_room_search_content .line-bottom').each(function () {
-        let seft2 = $(this);
-        if (seft2.data('room') > 1) {
-            room = seft2.data('room');
-        }
-    });
+    //let room = 1;
+    //$('#block_room_search_content .line-bottom').each(function () {
+    //    let seft2 = $(this);
+    //    if (seft2.data('room') > 1) {
+    //        room = seft2.data('room');
+    //    } 
+    //});
     if (current_value >= 0) {
         if (is_room || is_adult) {
-            if (current_value >= 0) {
-                inputElement.val(current_value-1);
+            if (current_value > 1) {
+                inputElement.val(current_value - 1);
                 if (is_room) $('#block_room_search_content .line-bottom:last').remove();
             }
         } else {
-            if (room == 1) {
+            if (current_value <= 1) {
                 inputElement.val(current_value);
             } else {
                 inputElement.val(current_value - 1);
@@ -670,24 +671,21 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     let inputElement = seft.parent().siblings('input');
     let current_value = parseInt(inputElement.val());
     let is_room = seft.closest('.sl_giohang_room').length > 0;
-    var room = 1;
-    $('#block_room_search_content .line-bottom').each(function () {
-        let seft2 = $(this);
-        if (seft2.data('room') > 1) {
-            room = seft2.data('room');
-        }
-    });
+    //var room = 1;
+    //$('#block_room_search_content .line-bottom').each(function () {
+    //    let seft2 = $(this); 
+    //    if (seft2.data('room') > 1) {
+    //        room = seft2.data('room');
+    //    }
+    //});
     if (is_room) {
         if (current_value < 9) {
             inputElement.val(current_value + 1);
             _hotel.appendRoomSearch(current_value + 1);
         }
     } else {
-        if (room == 1) {
-            inputElement.val(current_value);
-        } else {
-            inputElement.val(current_value + 1);
-        }
+        inputElement.val(current_value + 1);
+
 
     }
 

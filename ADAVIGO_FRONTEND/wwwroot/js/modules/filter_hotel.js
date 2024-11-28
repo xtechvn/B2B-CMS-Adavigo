@@ -297,7 +297,28 @@
         var filter = JSON.stringify(obj);
         localStorage.removeItem(_hotel.CACHE_OBJECT_SEARCH);
         window.location.href = `/hotel?filter=${encodeURIComponent(filter)}`;
-    }
+    },
+    changeSearchRoom: function () {
+        let arr = [];
+        let room = $('#collapseGuest').find('.sl_giohang_room .qty_input').val();
+        let adult = 0;
+        let baby = 0;
+        let infant = 0;
+
+        $('#block_room_search_content .line-bottom').each(function () {
+            let seft = $(this);
+            adult += parseInt(seft.find('.adult .qty_input').val());
+            baby += parseInt(seft.find('.baby .qty_input').val());
+            infant += parseInt(seft.find('.infant .qty_input').val());
+        });
+
+        if (room > 0) arr.push(`${room} Phòng`);
+        if (adult > 0) arr.push(`${adult} Người lớn`);
+        if (baby > 0) arr.push(`${baby} Trẻ em`);
+        if (infant > 0) arr.push(`${infant} Em bé`);
+
+        $('#text__search_room').text(arr.join(', '));
+    },
 };
 
 var _IntervalSuggestHotel = null;
@@ -347,21 +368,21 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
     let current_value = parseInt(inputElement.val());
     let is_room = seft.closest('.sl_giohang_room').length > 0;
     let is_adult = seft.closest('.adult').length > 0;
-    let room = 1;
-    $('#block_room_search_content .line-bottom').each(function () {
-        let seft2 = $(this);
-        if (seft2.data('room') > 1) {
-            room = seft2.data('room');
-        } 
-    });
+    //let room = 1;
+    //$('#block_room_search_content .line-bottom').each(function () {
+    //    let seft2 = $(this);
+    //    if (seft2.data('room') > 1) {
+    //        room = seft2.data('room');
+    //    } 
+    //});
     if (current_value >= 0) {
         if (is_room || is_adult) {
-            if (current_value >= 0) {
+            if (current_value >1) {
                 inputElement.val(current_value - 1);
                 if (is_room) $('#block_room_search_content .line-bottom:last').remove();
             }
         } else {
-            if (room == 1) {
+            if (current_value <= 1) {
                 inputElement.val(current_value);
             } else {
                 inputElement.val(current_value - 1);
@@ -377,24 +398,21 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     let inputElement = seft.parent().siblings('input');
     let current_value = parseInt(inputElement.val());
     let is_room = seft.closest('.sl_giohang_room').length > 0;
-    var room = 1;
-    $('#block_room_search_content .line-bottom').each(function () {
-        let seft2 = $(this); 
-        if (seft2.data('room') > 1) {
-            room = seft2.data('room');
-        }
-    });
+    //var room = 1;
+    //$('#block_room_search_content .line-bottom').each(function () {
+    //    let seft2 = $(this); 
+    //    if (seft2.data('room') > 1) {
+    //        room = seft2.data('room');
+    //    }
+    //});
     if (is_room) {
         if (current_value < 9) {
             inputElement.val(current_value + 1);
             _hotel.appendRoomSearch(current_value + 1);
         }
     } else {
-        if (room == 1) {
-            inputElement.val(current_value);
-        } else {
-            inputElement.val(current_value + 1);
-        } 
+        inputElement.val(current_value + 1);
+
         
     }
 
@@ -404,6 +422,7 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
 
 
 $(document).ready(function () {
+   
     let strSearchObj = localStorage.getItem(_hotel.CACHE_SUGGEST_SEARCH);
     let arrSearchObj = (strSearchObj && strSearchObj != null) ? JSON.parse(strSearchObj) : [];
     let model_search = arrSearchObj.find(x => x.searchType == 0);
@@ -412,7 +431,6 @@ $(document).ready(function () {
         $('#input__search-hotel-id').val(model_search.hotelID);
         $('#input__search-hotel-type').val(model_search.productType);
     }
-
     _hotel.initDateRange('.date-range-fromdate', '.date-range-todate');
     _ui_common.toggleFocusOut('#collapseGuest');
     _ui_common.toggleFocusOut('#block__suggest-hotel');
