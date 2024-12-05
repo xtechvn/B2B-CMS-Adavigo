@@ -14,16 +14,22 @@
     <div class="row">
         <div class="mr-2">
             <div class="search-wrapper">
-
-                <input type="text" class="form-control" id="inputSearch"style="min-width:300px;" placeholder="Tìm kiếm tên ,email">
-                <span class="search-btn" onclick="Ql_account.GetListAc(1,20)">
-                    <button type="button">
-                        <svg class="icon-svg">
-                            <use xlink:href="/images/icons/icon.svg#search"></use>
-                        </svg>
-                    </button>
-                </span>
-
+                <div class="search-wrapper mb16">
+                    <div id="search" class="mb16" style="max-width:470px">
+                        <form autocomplate="off" onsubmit="return false;">
+                            <input id="inputSearch" type="text" class="form-control input_search bg-white" name="" value="" placeholder="Nhập Tên,Email ...">
+                            <span class="search-btn" onclick="Ql_account.GetListAc(1,20)">
+                                <button type="button" onclick="Ql_account.GetListAc(1,20)">
+                                    <svg class="icon-svg">
+                                        <use xlink:href="../images/icons/icon.svg#search"></use>
+                                    </svg>
+                                </button>
+                            </span>
+                        </form>
+                       
+                    </div>
+              
+                </div>
             </div>
         </div>
         <div class="mr-2">
