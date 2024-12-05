@@ -1,5 +1,4 @@
-﻿using ADAVIGO_FRONTEND.Models.Flights;
-using ADAVIGO_FRONTEND.Models.Services;
+﻿using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
 using B2B.Utilities.Common;
 using LIB.Utilities.Contants;
@@ -11,11 +10,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Contants;
-using static ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants.TourConstants;
-using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Caching.RedisWorker;
 

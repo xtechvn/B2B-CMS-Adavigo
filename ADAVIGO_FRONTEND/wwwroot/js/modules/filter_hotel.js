@@ -382,7 +382,7 @@ $('#collapseGuest').on('click', '.giam_sl', function () {
                 if (is_room) $('#block_room_search_content .line-bottom:last').remove();
             }
         } else {
-            if (current_value <= 1) {
+            if (current_value <= 0) {
                 inputElement.val(current_value);
             } else {
                 inputElement.val(current_value - 1);
