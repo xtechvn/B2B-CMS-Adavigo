@@ -149,6 +149,10 @@ $('#attachFiles').change(function (event) {
 
 // Xử lý gửi comment
 function addComment(requestId) {
+    if ($("#commentContent").val() == null || $("#commentContent").val() == '') {
+        _msgalert.error("Nội dung comment không thể bổ trống");
+        return false;
+    }
     var formData = new FormData();
     formData.append("requestId", requestId);
     formData.append("content", $("#commentContent").val());
