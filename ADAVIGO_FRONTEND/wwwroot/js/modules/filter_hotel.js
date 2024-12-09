@@ -270,19 +270,24 @@
             _msgalert.error("Mỗi phòng phải có ít nhất một người lớn.");
             return;
         }
+        var hotel_search_type =0
+        $('.hotel_tab_type').each(function () {
+            var tab_type = $(this)
+            if (tab_type.hasClass('active')) {
+                hotel_search_type = tab_type.attr('data-id')
+                return false
+            }
 
+        });
         var obj = {
             arrivalDate: ConvertJsDateToString(fromDate, "YYYY-MM-DD"),
             departureDate: ConvertJsDateToString(toDate, "YYYY-MM-DD"),
             hotelID: $('#input__search-hotel-id').val(),
             hotelName: $('#input__suggest-hotel').attr('keyword'),
             productType: $('#input__search-hotel-type').val(),
-            rooms: room_datas
+            rooms: room_datas,
+            isVinHotel: hotel_search_type == 1 ? true : false,
         };
-        //if (obj.hotelID === "") {
-        //    _msgalert.error("Bạn phải chọn khách sạn, điểm đến");
-        //    return;
-        //}
 
         if (obj.arrivalDate === "" || obj.departureDate === "") {
             _msgalert.error("Bạn phải chọn ngày nhận phòng và trả phòng");
@@ -296,7 +301,10 @@
 
         var filter = JSON.stringify(obj);
         localStorage.removeItem(_hotel.CACHE_OBJECT_SEARCH);
+        localStorage.setItem(_hotel.CACHE_SUGGEST_SEARCH, JSON.stringify(arrSearchObj));
+        localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(obj));
         window.location.href = `/hotel?filter=${encodeURIComponent(filter)}`;
+
     },
     changeSearchRoom: function () {
         let arr = [];
@@ -430,7 +438,12 @@ $(document).ready(function () {
         $('#input__suggest-hotel').val(model_search.keyword);
         $('#input__search-hotel-id').val(model_search.hotelID);
         $('#input__search-hotel-type').val(model_search.productType);
+        $('.date-range-fromdate').val(model_search.arrivalDate)
+        $('.date-range-todate').val(model_search.departureDate)
     }
+
+
+   
     _hotel.initDateRange('.date-range-fromdate', '.date-range-todate');
     _ui_common.toggleFocusOut('#collapseGuest');
     _ui_common.toggleFocusOut('#block__suggest-hotel');
@@ -441,5 +454,12 @@ $(document).ready(function () {
     $('.btn__filter_hotel').click(function (e) {
         e.preventDefault()
         _hotel.searchHotel();
+    });
+    $('.hotel_tab_type').click(function (e) {
+        setTimeout(function () {
+            $('.tab-content .flex-row').show()
+
+        }, 1000);
+
     });
 });

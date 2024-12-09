@@ -25,6 +25,8 @@
     }
     var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
     long nights = Convert.ToInt64((ToDate - FromDate).TotalDays <= 1 ? 1 : (ToDate - FromDate).TotalDays);
+    bool isVinHotel = Convert.ToBoolean(Model.isVinHotel);
+
 }
 
 <input type="hidden" id="input__hotel_id" value="@Model.hotelID" />
@@ -56,6 +58,24 @@
         color: #fff !important;
     }
 </style>
+<div class="wrap-search">
+    <h2 class="title txt_20 bold mb16">Đặt phòng</h2>
+    <div class="hotel tab-menu flex">
+        <a class="cursor-pointer hotel_tab_type @(!isVinHotel ? "active":"")" data-id="0">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#building"></use>
+            </svg>
+            <span>Khách sạn toàn quốc</span>
+        </a>
+        <a class="cursor-pointer hotel_tab_type @(isVinHotel ? "active":"")" data-id="1">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#building"></use>
+            </svg>
+            <span>Khách sạn Vinpearl</span>
+        </a>
+    </div>
+    @await Html.PartialAsync("BoxFilter")
+</div>
 <section class="tab-menu-folder">
     <a href="#" class="active">Đặt phòng</a>
     @*<a href="#">Giữ chỗ của tôi</a>*@
@@ -380,6 +400,7 @@
     </div>
 </section>
 @section scripts{
+<script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
 <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
 <script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
 }

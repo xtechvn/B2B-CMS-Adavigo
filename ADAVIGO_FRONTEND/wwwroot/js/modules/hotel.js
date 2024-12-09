@@ -325,7 +325,8 @@
                 hotelID: obj.hotelID,
                 productType: obj.productType,
                 searchType: hotel_search_type,
-
+                arrivalDate: ConvertJsDateToString(fromDate, "DD/MM/YYYY"),
+                departureDate: ConvertJsDateToString(toDate, "DD/MM/YYYY"),
             });
 
             localStorage.setItem(_hotel.CACHE_SUGGEST_SEARCH, JSON.stringify(arrSearchObj));
