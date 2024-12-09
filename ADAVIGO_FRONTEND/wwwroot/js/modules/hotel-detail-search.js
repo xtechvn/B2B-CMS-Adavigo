@@ -283,7 +283,7 @@
             arrivalDate: ConvertJsDateToString(fromDate, "YYYY-MM-DD"),
             departureDate: ConvertJsDateToString(toDate, "YYYY-MM-DD"),
             hotelID: $('#input__search-hotel-id').val(),
-            hotelName: $('#input__suggest-hotel').attr('keyword') == undefined ? $('#input__suggest-hotel').val() : $('#input__suggest-hotel').attr('keyword'),
+            hotelName: $('#input__suggest-hotel').attr('keyword'),
             productType: $('#input__search-hotel-type').val(),
             rooms: room_datas,
             isVinHotel: hotel_search_type == 1 ? true : false,
@@ -301,8 +301,17 @@
 
         var filter = JSON.stringify(obj);
         localStorage.removeItem(_hotel.CACHE_OBJECT_SEARCH);
-        localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(obj));
-        window.location.href = `/hotel?filter=${encodeURIComponent(filter)}`;
+        var hotel_id = $('#input__search-hotel-id').val()
+        if (hotel_id != null && hotel_id != undefined && hotel_id.trim() != '' && !hotel_id.includes(',')) {
+            let objSearch = JSON.parse(JSON.stringify(obj));
+            objSearch.hotelID = hotel_id;
+            objSearch.hotelName = $('#input__suggest-hotel').val();
+            localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(objSearch));
+            window.location.href = `/hotel/detail?filter=${encodeURIComponent(JSON.stringify(objSearch))}`;
+        } else {
+            localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(objSearch));
+            window.location.href = `/hotel?filter=${encodeURIComponent(filter)}`;
+        }
 
     },
     changeSearchRoom: function () {
@@ -426,28 +435,34 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     _hotel.changeSearchRoom();
 });
 
-
+function ConvertDatetimeInputToHTMLDate(text) {
+    var split = text.split('-')
+    return split[2] + '/' + split[1] + '/' + split[0]
+}
 
 $(document).ready(function () {
-   
-    let strSearchObj = localStorage.getItem(_hotel.CACHE_SUGGEST_SEARCH);
-    let arrSearchObj = (strSearchObj && strSearchObj != null) ? JSON.parse(strSearchObj) : [];
-    let model_search = arrSearchObj.find(x => x.searchType == 0);
-    if (model_search && model_search != null) {
-        $('#input__suggest-hotel').val(model_search.keyword);
+    $('.item_vin_filter').prop('disabled', true);
+    $('.item_vin_filter').addClass('gray');
+    let strSearchObj = localStorage.getItem(_hotel.CACHE_OBJECT_SEARCH);
+    if (strSearchObj) {
+        var model_search = JSON.parse(strSearchObj)
+        $('#input__suggest-hotel').val(model_search.hotelName);
+        $('#input__suggest-hotel').attr('placeholder', model_search.hotelName);
         $('#input__search-hotel-id').val(model_search.hotelID);
         $('#input__search-hotel-type').val(model_search.productType);
-        $('.date-range-fromdate').val(model_search.arrivalDate)
-        $('.date-range-todate').val(model_search.departureDate)
+        $('.date-range-fromdate').val(ConvertDatetimeInputToHTMLDate(model_search.arrivalDate))
+        $('.date-range-todate').val(ConvertDatetimeInputToHTMLDate(model_search.departureDate))
+        $('.item_vin_filter').prop('disabled', false)
+        $('.item_vin_filter').removeClass('gray')
     }
+    var search_object = localStorage.getItem(_hotel.CACHE_OBJECT_SEARCH);
 
 
    
     _hotel.initDateRange('.date-range-fromdate', '.date-range-todate');
     _ui_common.toggleFocusOut('#collapseGuest');
     _ui_common.toggleFocusOut('#block__suggest-hotel');
-    $('.item_vin_filter').prop('disabled', true);
-    $('.item_vin_filter').addClass('gray');
+    
 
     $('.btn__filter_hotel').off('click');
     $('.btn__filter_hotel').click(function (e) {
