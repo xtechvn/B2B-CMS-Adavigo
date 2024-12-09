@@ -283,15 +283,15 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
 
                 if (newComment != null)
                 {
-                    return Ok(new { status = 0, msg = "Comment added successfully.", data = newComment });
+                    return Ok(new { status = 0, msg = "Thêm comment thành công.", data = newComment });
                 }
 
-                return BadRequest(new { status = 1, msg = "Failed to add comment." });
+                return BadRequest(new { status = 1, msg = "Thêm comment không thành công." });
             }
             catch (Exception ex)
             {
                 LogHelper.InsertLogTelegram($"AddComment Error: {ex}");
-                return StatusCode(500, new { status = 1, msg = "Internal server error." });
+                return StatusCode(500, new { status = 1, msg = "Thêm comment không thành công." });
             }
         }
     }

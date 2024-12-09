@@ -52,6 +52,7 @@ var _request_detail_hotel_booking = {
         var ngay = gio * 24;
         if (thoigianConLai <= 0) {
             $('#end_time').hide();
+            return false;
         }
         /*Tìm ra thời gian theo ngày, giờ, phút giây còn lại thông qua cách chia lấy dư(%) và làm tròn số(Math.floor) trong Javascript*/
         var h = Math.floor((thoigianConLai % (ngay)) / (gio));
