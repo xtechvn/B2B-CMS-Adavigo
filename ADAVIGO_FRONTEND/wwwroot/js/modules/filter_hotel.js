@@ -301,7 +301,6 @@
 
         var filter = JSON.stringify(obj);
         localStorage.removeItem(_hotel.CACHE_OBJECT_SEARCH);
-        localStorage.setItem(_hotel.CACHE_SUGGEST_SEARCH, JSON.stringify(arrSearchObj));
         localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(obj));
         window.location.href = `/hotel?filter=${encodeURIComponent(filter)}`;
 
