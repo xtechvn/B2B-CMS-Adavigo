@@ -24,7 +24,7 @@
                 <input type="radio" name="@($"ckb__package_{@Model.id}_{@Model.guid_popup}")" class="ckb__package" @(item.total_price == 0 ? "disabled" : string.Empty)>
                 <span class="checkmark"></span>
                 <div class="flex-res txt_16 bold">
-                    <div class="package_name">@($"{item.code} | {item.name}")</div>
+                    <div class="package_name">@($"{item.code} | {item.program_name} | {item.name}")</div>
                     @if (item.total_price > 0)
                     {
                         <div class="text-right package_price">

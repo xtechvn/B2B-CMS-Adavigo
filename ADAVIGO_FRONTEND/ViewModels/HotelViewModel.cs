@@ -145,6 +145,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public decimal total_profit { get; set; }
         public decimal total_price { get; set; }
         public string guarantee_policy { get; set; }
+        public string program_name { get; set; }
         public IEnumerable<string> cancel_policy { get; set; }
         public IEnumerable<RateDetailPackage> package_includes { get; set; }
     }
