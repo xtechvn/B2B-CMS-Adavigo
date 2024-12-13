@@ -1,4 +1,5 @@
 ﻿using ADAVIGO_FRONTEND.Common;
+using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.ViewModels;
 using LIB.ENTITIES.ViewModels.Hotels;
 using Microsoft.AspNetCore.Http;
@@ -726,6 +727,25 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 if (status == (int)ENUM_API_RESULT.SUCCESS)
                     return jsonData["data"].ToString();
+                else
+                    throw new Exception(jsonData["msg"].ToString());
+            }
+            catch
+            {
+                throw;
+            }
+        } 
+        public async Task<B2BTrackingVoucherResponse> TrackingVoucher(B2BTrackingVoucherRequest model)
+        {
+            try
+            {
+                model.user_id = _UserManager.ClientID;
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.TrackingVoucher, model);
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<B2BTrackingVoucherResponse>(result);
                 else
                     throw new Exception(jsonData["msg"].ToString());
             }

@@ -457,10 +457,23 @@
                                 }
                             </ul>
                         }
+                      
+                    </div>
+                    <div class="input-button mb16">
+                        <input type="text" class="form-control" id="hotel-order-voucher-code"  placeholder="Nhập mã giảm giá">
+                        <button id="hotel-order-voucher-apply"  class="">Áp dụng</button>
+                    </div>
+                    <div class="flex mb12">
+                        <div class="bold txt_14">Giá cũ</div>
+                        <div id="hotel-order-total-amount-old" class="bold txt_14  text-right" style="width:calc(100% - 50px);">@(((double)TotalMoney + TotalEX).ToString("N0")) VNĐ</div>
+                    </div>
+                    <div class="flex mb12">
+                        <div class="bold txt_14">Triết khấu</div>
+                        <div id="hotel-order-total-discount" class="bold txt_14 color-red  text-right" style="width:calc(100% - 76px);">0 VNĐ</div>
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_16">Tổng cộng</div>
-                        <div class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@(((double)TotalMoney + TotalEX).ToString("N0")) VNĐ</div>
+                        <div id="hotel-order-total-amount" class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@(((double)TotalMoney + TotalEX).ToString("N0")) VNĐ</div>
                     </div>
                     <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
                     <button type="button" id="btn_continue_to_payment" class="btn btn-default blue full size">Tiếp tục đơn hàng</button>

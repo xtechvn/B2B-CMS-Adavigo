@@ -153,6 +153,7 @@
         public const string GET_COMMENT_LISTING = "/api/comment/get-list.json";
         public const string ADD_COMMENT = "/api/comment/add.json";
 
+        public const string TrackingVoucher = "api/Voucher/b2b/apply.json";
 
 
     }

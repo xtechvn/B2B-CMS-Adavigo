@@ -1,4 +1,5 @@
 ﻿using ADAVIGO_FRONTEND.Common;
+using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
 using LIB.ENTITIES.ViewModels.Hotels;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using OfficeOpenXml.FormulaParsing.Utilities;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Telegram.Bot.Requests.Abstractions;
 using Utilities.Contants;
 
 namespace ADAVIGO_FRONTEND.Controllers.Hotel
@@ -413,6 +416,13 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 jsonData.Property("guests").Remove();
 
                 var booking_id = await _HotelService.SaveHotel(JsonConvert.SerializeObject(jsonData));
+                var response = await _HotelService.TrackingVoucher(new B2BTrackingVoucherRequest()
+                {
+                    total_order_amount_before=(double)total_money,
+                    project_type=1,
+                    service_id=1,
+                    voucher_name= jsonData["voucher_code"].ToString()
+                });
 
                 var payment_token = CommonHelper.Encode(JsonConvert.SerializeObject(new HotelPaymentModel
                 {
@@ -424,7 +434,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     numberOfAdult = cache_data.rooms.Sum(s => s.adult),
                     numberOfChild = cache_data.rooms.Sum(s => s.child),
                     numberOfInfant = cache_data.rooms.Sum(s => s.infant),
-                    totalMoney = total_money,// model.rooms.Sum(x => x.amount),
+                    totalMoney = response!=null? Convert.ToDecimal(response.total_order_amount_after) : total_money,// model.rooms.Sum(x => x.amount),
                     extrapackagesMoney = extrapackages_money,
                     bookingID = booking_id
                 }), _KeyEncodeParam);
@@ -839,6 +849,55 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     isSuccess = true,
                     id = SaveRequestHotel
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    isSuccess = false,
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> TrackingVoucher(B2BTrackingVoucherRequest request)
+        {
+            try
+            {
+                if(request.voucher_name == null || request.voucher_name.Trim() == ""
+                    || request.token == null || request.token.Trim() == "")
+                {
+                    return new JsonResult(new
+                    {
+                        isSuccess = false,
+                        msg = "Vui lòng điền đúng mã giảm giá"
+                    });
+                }
+                HotelOrderDataModel model = null;
+                var cache_data = _MemoryCache.Get<HotelOrderDataModel>(request.token);
+
+                if (cache_data == null)
+                {
+                    return new JsonResult(new
+                    {
+                        isSuccess = false,
+                        msg = "Áp mã voucher thất bại, vui lòng tải lại trang hoặc liên hệ bộ phận CSKH"
+                    });
+                }
+                model = cache_data;
+                request.project_type = 1;
+                request.service_id = 1;
+                request.service_id = 1;
+                decimal TotalMoney = (model.rooms != null && model.rooms.Count() > 0) ?model.rooms.Sum(x=>x.packages.Sum(x=>x.amount)):0;
+                double TotalEX = model.extrapackages != null && model.extrapackages.Count > 0 ? model.extrapackages.Sum(s => (double)s.Amount) : 0;
+                request.total_order_amount_before = (double)TotalMoney + TotalEX;
+                var response = await _HotelService.TrackingVoucher(request);
+
+                return new JsonResult(new
+                {
+                    isSuccess = true,
+                    data = response
                 });
             }
             catch (Exception ex)
