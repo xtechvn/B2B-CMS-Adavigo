@@ -1,8 +1,17 @@
 ﻿@using ADAVIGO_FRONTEND.Models.Configs
+@using ADAVIGO_FRONTEND.ViewModels
 @{
     ViewData["Title"] = "Thông tin khách hàng";
-    SystemUserModel _UserManager = (SystemUserModel)ViewBag.UserManager;
+    AccountModel _UserManager = (AccountModel)ViewBag.UserManager;
 }
+<style>
+    .on-star .star svg {
+        fill: #F6A500;
+    }
+    .select2-container{
+        width:100% !important;
+    }
+</style>
 <section class="step-menu">
     <div class="step step1 active success">
         <span class="number">1</span>
@@ -20,13 +29,13 @@
         <span class="number">3</span> Hoàn thành
     </div>
 </section>
-
+<input id="tour-schedule-flex" style="display:none" />
 <section class="main-container clearfix">
     <div class="flex mb16">
         <div class="col-main">
             <div class="bg-white pd-20 radius10 mb16">
-                <nw id="form_order_client_info">
-                    <div class="mb30">
+                <form id="form_order_client_info" onsubmit="return false">
+                    <div id="contact-info-form" class="mb30">
                         <h2 class="bold txt_20 mb16">Thông tin thành viên chính</h2>
                         <div class="line-bottom mb16"></div>
                         <div class="form-group hidden">
@@ -54,12 +63,12 @@
                                 <div class="col-md-8">
                                     <label class="">Họ và tên trưởng đoàn</label>
                                     <div class="row row__grid_8">
-                                        <input type="text" class="form-control" name="firstName" placeholder="Tên" value="@_UserManager.ClientName">
+                                        <input type="text" class="form-control" name="firstName" placeholder="Tên" value="@_UserManager.name">
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb16">
                                     <label class="">Số điện thoại</label>
-                                    <input type="text" class="form-control" name="phoneNumber" placeholder="Số điện thoại" value="@_UserManager.Phone">
+                                    <input type="text" class="form-control" name="phoneNumber" placeholder="Số điện thoại" value="@_UserManager.phone">
                                 </div>
                             </div>
                         </div>
@@ -78,7 +87,7 @@
                                 </div>
                                 <div class="col-md-4 mb16">
                                     <label class="">Email</label>
-                                    <input type="text" class="form-control" name="email" placeholder="Nhập email" value="@_UserManager.Email">
+                                    <input type="text" class="form-control" name="email" placeholder="Nhập email" value="@_UserManager.email">
                                 </div>
                             </div>
                         </div>
@@ -136,7 +145,7 @@
                             </div>
                         </div>
                     </div>
-                </nw>
+                </form>
             </div>
         </div>
         <div class="col-300">
@@ -191,28 +200,11 @@
 
                             <td id="select-date-departure" class="" colspan="2" style=" vertical-align: middle; font-weight: bold; color: black; ">
 
-                                <ul class="li-icon mt15 mb0" style=" margin-bottom: 30px !important; ">
-                                    <li id="tour-schedule-fixed">
-                                        <label class="confir_res">
-                                            Cố định
-                                            <input type="checkbox" class="tour-schedule-checkbox" name="tour-schedule" value="0">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <select class="" id="tour-detail-schedule-fixed" style="width: 100%;">
-                                        </select>
-
-                                    </li>
-                                    <li id="tour-schedule-flex" data-adt="1"
-                                        data-chd="1">
-                                        <label class="confir_res">
-                                            Theo yêu cầu
-                                            <input type="checkbox" class="tour-schedule-checkbox" name="tour-schedule" value="1" checked>
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <input id="tour-detail-schedule-flex" class="form-control datepicker-input tour-detail-schedule-flex" type="text" name="birthday" placeholder="dd/mm/yyyy">
-
-                                    </li>
-                                </ul>
+                                <input id="tour-detail-schedule-flex" class="form-control datepicker-input tour-detail-schedule-flex" type="text" name="birthday" placeholder="dd/mm/yyyy">
+                            </td>
+                            <td id="tour-schedule-fixed" class="" colspan="2" style=" vertical-align: middle; font-weight: bold; color: black; ">
+                                <select id="tour-detail-schedule-fixed" class="form-control" ></select>
+                               
                             </td>
                         </tr>
                         <tr>

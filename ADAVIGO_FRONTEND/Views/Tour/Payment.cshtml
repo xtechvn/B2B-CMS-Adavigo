@@ -1,0 +1,164 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels;
+@using ADAVIGO_FRONTEND.Models.Tour.TourListing
+@model TourPaymentModel
+@{
+    var TotalDays = 1;
+    var ArrMemberOfRoom = new List<string>();
+
+    if (Model.numberOfAdult > 0)
+    {
+        ArrMemberOfRoom.Add(Model.numberOfAdult + " Người lớn");
+    }
+
+    if (Model.numberOfChild > 0)
+    {
+        ArrMemberOfRoom.Add(Model.numberOfChild + " Trẻ em");
+    }
+
+    var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
+    var fund = (FundDataModel?)ViewBag.Fund;
+
+}
+
+<section class="step-menu">
+    <div class="step step1 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Thông tin đặt chỗ
+    </div>
+    <div class="step step1 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Thông tin khách hàng
+    </div>
+    <div class="step step2 active">
+        <span class="number">3</span> Thanh toán
+    </div>
+    <div class="step step3">
+        <span class="number">4</span> Hoàn thành
+    </div>
+</section>
+
+<section class="main-container clearfix">
+    <h2 class="bold txt_24 mb16 mt10">Phương thức thanh toán</h2>
+    <div class="flex mb16">
+        <div class="col-main">
+            <div class="bg-white pd-20 radius10 mb16">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="menu-bank" id="block__payment_option">
+                            <li class="active" data-type="1">
+                                <img src="/images/nganhang/credit-card.png" alt="">
+                                <span class="content">Chuyển khoản ngân hàng</span>
+                            </li>
+                            <li data-type="2">
+                                <img src="/images/nganhang/atm.png" alt="">
+                                <span class="content">Thẻ ATM/ Tài khoản ngân hàng</span>
+                            </li>
+                            <li data-type="3">
+                                <img src="/images/nganhang/visa.png" alt="">
+                                <span class="content">Thẻ Visa, Master Card</span>
+                            </li>
+                            <li data-type="4">
+                                <img src="/images/nganhang/qr-code.png" alt="">
+                                <span class="content">Thanh toán QR - PAY</span>
+                            </li>
+                            <li data-type="5">
+                                <img src="/images/nganhang/ky-quy.png" alt="">
+                                <span class="content">Thanh toán bằng ký quỹ</span>
+                            </li>
+                            @*  <li data-type="6">
+                                    <img src="/images/nganhang/hold.png" alt="">
+                                    <div class="content">
+                                        <span>Giữ chỗ</span>
+                                        <div class="txt_12 gray">
+                                            Chưa cần thanh toán ngay, đặt chỗ để giữ giá tốt trên trên Adavigo
+                                        </div>
+                                        <span class="note">Giữ chỗ trong 2h45m</span>
+                                    </div>
+                                </li>*@
+                        </ul>
+                        <a href="javascript:;" class="btn btn-default size gray mb8" onclick="history.back()">
+                            <svg class="icon-svg min">
+                                <use xlink:href="/images/icons/icon.svg#prev2"></use>
+                            </svg>
+                            <span>Quay lại</span>
+                        </a>
+                    </div>
+                    <div class="col-md-6 line-left off-line-mb">
+                        <div class="mb24 payment-type-grid" data-type="1">
+                            @await Component.InvokeAsync("BankTransfer")
+                        </div>
+                        <div class="mb24 hidden payment-type-grid" data-type="5">
+                            <div class="bold txt_16 mb16">
+                                Thanh toán bằng số dư tài khoản
+                            </div>
+                            <div class="gray mb5">Số dư</div>
+                            <div class="txt_24 bold color-orange mb5">@(fund==null? "0":fund.account_blance.ToString("N0")) VNĐ</div>
+                            <div class="gray txt_12">Không thu phí, nhận được Mã đặt phòng ngay</div>
+                        </div>
+                        <div class="mb24 hidden payment-type-grid" data-type="3">
+                            <strong class="bold txt_16">Thanh toán Thẻ Visa, Master Card</strong>
+                            <div class="gray txt_12 mb16">Vui lòng bấm thanh toán để hoàn tất</div>
+                            <br />
+                            <br />
+                            <div class="text-center">
+                                <div class="mb20"><img src="/images/nganhang/VisamasterCard.png" alt=""></div>
+                                <div class="gray txt_12 mb15">
+                                    Bạn đang sử dụng hình thức thanh toán Thẻ tín dụng/Thẻ ghi nợ
+                                </div>
+                                <div class="color-orange">
+                                    <strong>Lưu ý:</strong> Có thể phát sinh khoảng phí là <strong>100.000 VND</strong> khi thanh toán bằng thẻ Visa
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-300">
+            <div class="bg-white pd-20 radius10 mb16">
+                <div class="head-title">
+                    <h2 class="title txt_20 bold mb0">Thông tin thanh toán</h2>
+                </div>
+                <div class="mb12">
+                    <div class="gray">Đặt phòng với hồ sơ:</div>
+                    <strong>Dai Viet Tourist</strong>
+                </div>
+                <div class="line-bottom mb12"></div>
+
+                <div class="">
+                    <strong>@Model.tourName</strong>
+                    <div class="gray mb12">(@strMemberOfRoom)</div>
+                </div>
+
+                <div class="row mb12">
+                    <div class="col-5 gray">Tổng tiền</div>
+                    <div class="col-7 bold text-right">@(Model.totalAmount.ToString("N0")) VND</div>
+                </div>
+
+                <div class="line-bottom mb12"></div>
+                <div class="row mb12">
+                    <div class="col-5 bold txt_16">Thành tiền</div>
+                    <div class="col-7 bold color-green txt_18 text-right">@Model.totalAmount.ToString("N0") VND</div>
+                    <div class="col-12 gray text-right txt_12">Đã bao gồm thuế, phí, VAT</div>
+                </div>
+                @*<input type="hidden" value="@Model.bookingID" id="input__hotel_payment_bookingid" />*@
+                <input type="hidden" value="@Model.orderId" id="input__tour_payment_orderid" />
+                <input type="hidden" value="@Model.totalAmount" id="input__tour_payment_amount" />
+                <input type="hidden" value="@Model.bookingId" id="input__tour_payment_bookingid" />
+                <button type="button" id="btn__submit_tour_payment" class="btn btn-default full size">Thanh toán</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section scripts{
+    <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/tour-payment.js"></script>
+}

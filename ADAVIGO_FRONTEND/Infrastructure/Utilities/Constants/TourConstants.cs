@@ -25,6 +25,7 @@ namespace ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants
             public const string SearchTour = "/api/b2b/tour/search-tour";
             public const string SaveBooking = "/api/b2b/tour/save-booking";
             public const string ConfirmBooking = "/api/b2b/payment/tour-booking";
+            public const string TOUR_PAYMENT = "api/b2b/tour/payment/checkout.json";
 
         }
         public class Data

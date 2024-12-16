@@ -12,7 +12,50 @@ var tour_detail = {
             tour_detail.SwitchTab(element)
         });
         $('body').on('click', '.tour-detail-confirm', function (e) {
+            var element = $(this)
+            var packageid = element.closest('tr').attr('data-id')
+            var price = element.closest('tr').find('.price').text().replaceAll(',', '')
+            var fromdate = element.closest('tr').find('.departure-date').attr('data-date').replaceAll('/', '-')
+            var object = {
+                id: $('#tour-detail-id').val(),
+                tourname: $('#tour-detail-id').val(),
+                price: price,
+                days: $('#tour-detail-days').val(),
+                oldprice: $('#tour-detail-oldPrice').val(),
+                avatar: $('#tour-detail-avatar').val(),
+                star: $('#tour-detail-star').val(),
+                tourtypename: $('#tour-detail-tourTypeName').val(),
+                organizingname: $('#tour-detail-organizingName').val(),
+                selected_packageid: packageid,
+                fromdate: fromdate,
+            }
+
+            sessionStorage.setItem(tour_constants.STORAGE.TourCart, JSON.stringify(object))
             tour_detail.ConfirmTour()
+        });
+        $('body').on('click', '.tour-detail-confirm-quick', function (e) {
+            var object = {
+                id: $('#tour-detail-id').val(),
+                tourname: $('#tour-detail-id').val(),
+                price: 0,
+                days: $('#tour-detail-days').val(),
+                oldprice: $('#tour-detail-oldPrice').val(),
+                avatar: $('#tour-detail-avatar').val(),
+                star: $('#tour-detail-star').val(),
+                tourtypename: $('#tour-detail-tourTypeName').val(),
+                organizingname: $('#tour-detail-organizingName').val(),
+                selected_packageid: 0,
+
+            }
+
+            sessionStorage.setItem(tour_constants.STORAGE.TourCart, JSON.stringify(object))
+            tour_detail.ConfirmTour()
+        });
+        $('body').on('click', '.TT-Lien-He', function (e) {
+            let htmlBody = `<div class="bold txt_16 mb10">Thông tin liên hệ</div>
+                    <div class="gray mb16">Hỗ trợ khách hàng 24/7 0936.191.192</div>
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Đồng ý</button>`;
+            _global_popup.showAlertPopup("width:335px", htmlBody);
         });
         $('body').on('select2:select', '#tour-detail-schedule-fixed', function (e) {
             var selected_value = $(this).find(':selected')
@@ -43,14 +86,14 @@ var tour_detail = {
     },
     TourDetail: function () {
         var model = {
-            tour_id: parseInt($('#tour-detail').val())
+            tour_id: parseInt($('#tour-detail-id').val())
         }
         _ajax_caller.post('/tour/TourDetail', { "request": model }, function (result) {
             if (result != undefined && result.status != undefined && result.status == 0) {
                 tour_detail.RenderDetail(result)
-               
+
             } else {
-                window.location.href='/Error'
+                window.location.href = '/Error'
             }
 
         });
@@ -86,20 +129,20 @@ var tour_detail = {
         $('#min_childprice').html(tour_service.Comma(result.data.min_childprice != null && result.data.min_childprice != undefined && result.data.min_childprice > 0 ? result.data.min_childprice : result.data.price) + ' đ')
         $('#min_adultprice').removeClass('placeholder')
         $('#min_childprice').removeClass('placeholder')
-        var html=''
+        var html = ''
         if (result.data.packages != null && result.data.packages != undefined && result.data.packages.length > 0) {
             var html_option = ''
             $(result.data.packages).each(function (index, item) {
-                html_option += TOUR_CONSTANTS.HTML.DetailSelectTourScheduleOption.replaceAll('{id}', item.Id).replaceAll('{adt}', item.AdultPrice)
+                html_option += tour_constants.HTML.DetailSelectTourScheduleOption.replaceAll('{id}', item.Id).replaceAll('{adt}', item.AdultPrice)
                     .replaceAll('{chd}', item.ChildPrice).replaceAll('{time}', tour_detail.RenderDetailSelectTourScheduleOptionTime(item.FromDate))
             });
-            html += TOUR_CONSTANTS.HTML.DetailSelectTourScheduleFixed.replaceAll('{option}', html_option)
-            html += TOUR_CONSTANTS.HTML.DetailSelectTourScheduleFlex.replaceAll('{checked}', '')
+            html += tour_constants.HTML.DetailSelectTourScheduleFixed.replaceAll('{option}', html_option)
+            html += tour_constants.HTML.DetailSelectTourScheduleFlex.replaceAll('{checked}', '')
                 .replaceAll('{adt}', result.data.daily_adultprice != null && result.data.daily_adultprice != undefined && result.data.daily_adultprice > 0 ? result.data.daily_adultprice : result.data.price)
                 .replaceAll('{chd}', result.data.daily_childprice != null && result.data.daily_childprice != undefined && result.data.daily_childprice > 0 ? result.data.daily_childprice : result.data.price)
                 .replaceAll('{package_id}', result.data.daily_package_id)
         } else {
-            html += TOUR_CONSTANTS.HTML.DetailSelectTourScheduleFlex.replaceAll('{checked}', 'checked')
+            html += tour_constants.HTML.DetailSelectTourScheduleFlex.replaceAll('{checked}', 'checked')
                 .replaceAll('{adt}', result.data.daily_adultprice != null && result.data.daily_adultprice != undefined && result.data.daily_adultprice > 0 ? result.data.daily_adultprice : result.data.price)
                 .replaceAll('{chd}', result.data.daily_childprice != null && result.data.daily_childprice != undefined && result.data.daily_childprice > 0 ? result.data.daily_childprice : result.data.price)
                 .replaceAll('{package_id}', result.data.daily_package_id)
@@ -114,7 +157,7 @@ var tour_detail = {
         html = ''
         if (result.data.tourSchedule != null && result.data.tourSchedule != undefined && result.data.tourSchedule.length > 0) {
             $(result.data.tourSchedule).each(function (index, item) {
-                html += TOUR_CONSTANTS.HTML.DetailSelectTourScheduleDay.replaceAll('{day_num}', item.day_num).replaceAll('{day_title}', item.day_title)
+                html += tour_constants.HTML.DetailSelectTourScheduleDay.replaceAll('{day_num}', item.day_num).replaceAll('{day_title}', item.day_title)
                     .replaceAll('{day_description}', item.day_description)
             });
         }
@@ -123,7 +166,7 @@ var tour_detail = {
             $('.select-tag-1').hide()
         }
         else {
-            $('#select-tab-1').html( result.data.include)
+            $('#select-tab-1').html(result.data.include)
 
         }
         if (result.data.exclude == null || result.data.exclude == undefined || result.data.exclude.trim() == "") {
@@ -165,7 +208,7 @@ var tour_detail = {
                 return false
             }
         });
-        $('#total_nights').html((result.data.days + 1) + ' ngày '+result.data.days+' đêm')
+        $('#total_nights').html((result.data.days + 1) + ' ngày ' + result.data.days + ' đêm')
     },
     SwitchTab: function (element) {
         if (element.hasClass('active')) {
@@ -182,7 +225,7 @@ var tour_detail = {
 
     },
     RenderStar: function (value) {
-        var html_template = TOUR_CONSTANTS.HTML.Star
+        var html_template = tour_constants.HTML.Star
         var html = ''
         if (value == null || value == undefined || value <= 0) return html
         if (value > 5) value = 5
@@ -197,7 +240,7 @@ var tour_detail = {
         var first = false
         $(images).each(function (index, item) {
             if (item == null || item == undefined || item.trim() == '') return true
-            var url = item.includes(TOUR_CONSTANTS.Domain.StaticImage) ? item : TOUR_CONSTANTS.Domain.StaticImage + item
+            var url = item.includes(tour_constants.Domain.StaticImage) ? item : tour_constants.Domain.StaticImage + item
             if (!first) {
                 $('#lightgallery .thumb-main img').attr('src', url)
                 first = true
@@ -206,20 +249,20 @@ var tour_detail = {
             }
             if (count <= 0) return true
             if (count < 5) {
-                html += TOUR_CONSTANTS.HTML.LightGalleryItem.replaceAll('{d-none}', '').replaceAll('{src}', url)
+                html += tour_constants.HTML.LightGalleryItem.replaceAll('{d-none}', '').replaceAll('{src}', url)
                 count++
             } else {
-                html += TOUR_CONSTANTS.HTML.LightGalleryItem.replaceAll('{d-none}', 'display:none;').replaceAll('{src}', url)
+                html += tour_constants.HTML.LightGalleryItem.replaceAll('{d-none}', 'display:none;').replaceAll('{src}', url)
                 count++
             }
             if (count >= 20) return false
         });
-       
+
         $('#lightgallery .sub-gallery').html(html)
         if ($('#lightgallery .sub-gallery .item').length <= 0) {
             for (var i = 1; i < 5; i++) {
-                var url = images[0].includes(TOUR_CONSTANTS.Domain.StaticImage) ? images[0] : TOUR_CONSTANTS.Domain.StaticImage + images[0]
-                html += TOUR_CONSTANTS.HTML.LightGalleryItem.replaceAll('{d-none}', '').replaceAll('{src}', url)
+                var url = images[0].includes(tour_constants.Domain.StaticImage) ? images[0] : tour_constants.Domain.StaticImage + images[0]
+                html += tour_constants.HTML.LightGalleryItem.replaceAll('{d-none}', '').replaceAll('{src}', url)
             }
             $('#lightgallery .sub-gallery').html(html)
 
@@ -233,30 +276,20 @@ var tour_detail = {
     },
     RenderBreadcumb: function (tourName) {
         var html_direction = ''
-        html_direction += TOUR_CONSTANTS.HTML.BreadcumbItem.replaceAll('{active}', '').replaceAll('{url}', '/').replaceAll('{name}', 'Trang chủ')
-        html_direction += TOUR_CONSTANTS.HTML.BreadcumbItem.replaceAll('{active}', '').replaceAll('{url}', '/tour').replaceAll('{name}', 'Tour')
-        html_direction += TOUR_CONSTANTS.HTML.BreadcumbItem.replaceAll('{active}', 'active').replaceAll('{url}', 'javascript:;').replaceAll('{name}', tourName)
-        $('#navbar').prepend(TOUR_CONSTANTS.HTML.Breadcumb.replaceAll(' {items}', html_direction))
+        html_direction += tour_constants.HTML.BreadcumbItem.replaceAll('{active}', '').replaceAll('{url}', '/').replaceAll('{name}', 'Trang chủ')
+        html_direction += tour_constants.HTML.BreadcumbItem.replaceAll('{active}', '').replaceAll('{url}', '/tour').replaceAll('{name}', 'Tour')
+        html_direction += tour_constants.HTML.BreadcumbItem.replaceAll('{active}', 'active').replaceAll('{url}', 'javascript:;').replaceAll('{name}', tourName)
+        $('#navbar').prepend(tour_constants.HTML.Breadcumb.replaceAll('{items}', html_direction))
     },
     ConfirmTour: function () {
-           var model_input = {
-                tour_id: $('#tour-detail').val()
-            }
-            var is_daily = $("input[name='tour-schedule']:checked").val()
-            if (is_daily == 0) {
-                model_input.is_daily = false
-                var selected = $('#tour-detail-schedule-fixed').find(':selected')
-                model_input.selected_packageid = selected.val()
-                model_input.fromdate = selected.text()
-            }
-            if (is_daily == 1) {
-                model_input.is_daily = true
-                model_input.fromdate = $('#tour-detail-schedule-flex').val()
-                model_input.selected_packageid = $('#tour-schedule-flex').attr('data-id')
-            }
-            sessionStorage.setItem(TOUR_CONSTANTS.STORAGE.TourCart, JSON.stringify(model_input))
-            
-            window.location.href = '/tour/CustomerInfo'
+        var model_input = {
+            tour_id: $('#tour-detail').val()
+        }
+
+        model_input.is_daily = true
+
+
+        window.location.href = '/tour/CustomerInfo'
     },
     SingleDatePickerFromNow: function (element, dropdown_position = 'down') {
 

@@ -150,15 +150,16 @@ namespace ADAVIGO_FRONTEND
                 endpoints.MapControllerRoute(
                    name: "default",
                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(
-                 name: "tourDetail",
-                 pattern: "tour/{slug_location}/{slug}--{id}",
-                 defaults: new { controller = "Tour", action = "Detail" }
+
+               endpoints.MapControllerRoute(
+                  name: "tour",
+                  pattern: "tour/{slug_location}/{slug}-{id}",
+                  defaults: new { controller = "Tour", action = "Detail" }
                 );
-     
+
             });
 
-          
+
         }
     }
 }

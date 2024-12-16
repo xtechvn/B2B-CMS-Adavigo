@@ -4,7 +4,7 @@
 @{
 }
 <section class="main-container clearfix">
-    <div class="lightgallery grid grid__2 mb30">
+    <div id="lightgallery" class="lightgallery grid grid__2 mb30 placeholder box-placeholder">
         <div class="item">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
@@ -58,35 +58,14 @@
                 <div class="bold mb15">Loại tour</div>
                 <label class="confir_res circle">
                     Trong nước
-                    <input type="radio" name="inlineUser" id="Goi" checked="">
+                    <input type="radio" name="filter-tour-type" value="1" checked="">
                     <span class="checkmark"></span>
                 </label>
                 <label class="confir_res circle">
                     Quốc tế
-                    <input type="radio" name="inlineUser" id="Goi">
+                    <input type="radio" name="filter-tour-type" value="3">
                     <span class="checkmark"></span>
                 </label>
-                <label class="confir_res circle">
-                    Free & Easy
-                    <input type="radio" name="inlineUser" id="Goi">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="confir_res circle">
-                    Team Building
-                    <input type="radio" name="inlineUser" id="Goi">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="confir_res circle">
-                    Tour lễ Tết
-                    <input type="radio" name="inlineUser" id="Goi">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="confir_res circle">
-                    Visa Nhanh
-                    <input type="radio" name="inlineUser" id="Goi">
-                    <span class="checkmark"></span>
-                </label>
-
                 <div class="bold mb15">Điểm đi</div>
                 <div class="input-icon mb20">
                     <span class="icon"></span>
@@ -106,11 +85,24 @@
                 <a class="btn-default full" href="#">Tìm kiếm</a>
             </div>
         </div>
-        <div class="col-main order-2">
+        <div id="search-items" class="col-main order-2">
             <!-- Search Result-->
+            <div id="section-search-result">
+                <partial name="_Skeleton" />
+                <partial name="_Skeleton" />
+                <partial name="_Skeleton" />
+                <partial name="_Skeleton" />
+                <partial name="_Skeleton" />
 
-           
+            </div>
 
         </div>
     </div>
 </section>
+@section scripts {
+    <script type="text/javascript" src="~/js/lightgallery-all.min.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/search.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/global.js"></script>
+
+}

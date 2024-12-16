@@ -16,6 +16,7 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourBooking
         public long account_client_id { get; set; }
         public string note { get; set; }
         public bool is_daily { get; set; }
+        public string client_type { get; set; }
 
     }
 

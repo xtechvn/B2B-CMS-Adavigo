@@ -12,5 +12,7 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourListing
         public int tourtype { get; set; }
         public int startpoint { get; set; }
         public int endpoint { get; set; }
+        public int tour_id { get; set; }
+        public int clienttype { get; set; }
     }
 }

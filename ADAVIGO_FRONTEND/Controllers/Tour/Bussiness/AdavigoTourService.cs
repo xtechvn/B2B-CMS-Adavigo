@@ -13,10 +13,13 @@ using ADAVIGO_FRONTEND.Models.Tour.TourListing;
 using ADAVIGO_FRONTEND.Models.Tour.TourLocation;
 using ADAVIGO_FRONTEND.Models.Tour.TourOrders;
 using ADAVIGO_FRONTEND.Models.Tour.V2;
+using ADAVIGO_FRONTEND.ViewModels;
 using ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants;
+using LIB.ENTITIES.ViewModels.Hotels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -375,7 +378,37 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour.Bussiness
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<SaveHotelPaymentResponse> SaveTourPayment(PaymentHotelModel model)
+        {
+            try
+            {
+                var result = await _ApiConnector.ExecutePostAsync(TourConstants.AdavigoApiRoutes.TOUR_PAYMENT, new
+                {
+                    payment_type = model.payment_type,
+                    return_url = "/home",
+                    client_id = _UserManager.ClientID,
+                    bank_code = model.bank_code,
+                    booking_id = model.booking_id,
+                    amount = model.amount,
+                    order_id = model.order_id, // -1:tạo mới
+                    event_status = model.event_status ,//0: Tạo mới
+                    system_type = 0
+                });
 
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    //return jsonData["order_no"].ToString();
+                    return JsonConvert.DeserializeObject<SaveHotelPaymentResponse>(JsonConvert.SerializeObject(jsonData));
+                else
+                    throw new Exception(jsonData["msg"].ToString());
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public async Task<BaseObjectResponse<List<TourLocationResponseModel>>> GetLocationStart(TourLocationRequestModel requestObj)
         {
             try

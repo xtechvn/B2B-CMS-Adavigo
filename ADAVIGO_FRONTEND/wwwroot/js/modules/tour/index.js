@@ -17,9 +17,9 @@ var tour_index = {
 
 
         });
-        $('body').on('select2:select', '#select-address-to', function (e) {
-            $('#select-address-to').prop('disabled', true)
-            $('#select-address-to').addClass('placeholder')
+        $('body').on('select2:select', '#select-address-from', function (e) {
+            //$('#select-address-to').prop('disabled', true)
+            //$('#select-address-to').addClass('placeholder')
             tour_index.LocationEnd()
 
 

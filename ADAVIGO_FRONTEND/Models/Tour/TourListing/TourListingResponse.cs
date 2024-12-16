@@ -33,6 +33,7 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourListing
         public string location_key { get; set; }
         public string listimage { get; set; }
         public long TotalRow { get; set; }
+        public int packages { get; set; }
 
     }
     public class TourListingResponseExtension : BaseObjectResponse<List<TourListingResponse>>
@@ -40,5 +41,27 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourListing
         public List<string> listimages { get; set; }
 
     }
+    public class TourPaymentModel
+    {
+        public long orderId { get; set; }
+        public long tourId { get; set; }
+        public string tourName { get; set; }
+        public double totalAmount { get; set; }
 
+        public int totalNights { get; set; }
+        public int numberOfAdult { get; set; }
+        public int numberOfChild { get; set; }
+        public string firstName { get; set; }
+        public string email { get; set; }
+        public string phoneNumber { get; set; }
+        public string country { get; set; }
+        public string address { get; set; }
+        public string note { get; set; }
+        public string startDate { get; set; }
+        public string voucherName { get; set; }
+        public long packageId { get; set; }
+        public string bookingId { get; set; }
+
+
+    }
 }
