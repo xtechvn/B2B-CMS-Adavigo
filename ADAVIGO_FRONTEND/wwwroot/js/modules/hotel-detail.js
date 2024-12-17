@@ -132,7 +132,9 @@ var _hotel_detail = {
             amount_total += parseInt(seft.data('amount'));
         });
 
+        $('#hotel-order-total-amount-old').html(`${amount_total.toLocaleString()} VNĐ`)
         $('#hotel__booking_total_amount').html(`${amount_total.toLocaleString()} VNĐ`)
+
     },
 
     getRoomOrdered: function () {
@@ -1032,7 +1034,34 @@ $('.slide-image-package').each(function () {
         }
     });
 });
+$('#hotel-order-voucher-apply').click(function () {
+    var voucher_code = $('#hotel-order-voucher-code').val()
+    if (voucher_code == undefined || voucher_code == null || voucher_code.trim() == '') {
+        _msgalert.error('Vui lòng điền vào mã giảm giá');
+        return
+    }
+    var request = {
+        "voucher_name": voucher_code,
+        "service_id": $('#hotel_grid_cache_hotel_id').val(),
+        "token": $('#input__token_order').val()
+    }
+    _ajax_caller.post('/hotel/TrackingVoucher', { "request": request }, function (result) {
+        if (result.isSuccess) {
+            _msgalert.success('Áp dụng mã Voucher [' + voucher_code + '] thành công');
+            $('#hotel-order-voucher-code').prop('disabled', true)
+            $('#hotel-order-voucher-code').prop('readonly', true)
+            $('#hotel-order-voucher-apply').prop('disabled', true)
+            $('#hotel-order-voucher-apply').addClass('gray')
+            $('#hotel-order-total-amount').html(_hotel_order.Comma(result.data.total_order_amount_after) + ' VNĐ')
+            $('#hotel-order-total-amount-old').html(_hotel_order.Comma(result.data.total_order_amount_before) + ' VNĐ')
+            $('#hotel-order-total-discount').html('- ' + _hotel_order.Comma(result.data.total_order_amount_before - result.data.total_order_amount_after) + ' VNĐ')
 
+
+        } else {
+            _msgalert.error('Áp mã voucher thất bại, vui lòng liên hệ bộ phận chăm sóc');
+        }
+    });
+});
 $(document).ready(function () {
     _hotel_detail.initial();
 });
