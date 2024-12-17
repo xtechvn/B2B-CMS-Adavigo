@@ -2,12 +2,21 @@
     tour_search.Initialization()
     tour_search.EventBind()
 })
+var tourLoading = {
+    SearchListing: false,
+    LoadAllLocationLocal: false,
+    LoadAllLocationInternational: false,
+    FromLocation: false,
+    ToLocationDefault: false,
+    LightGallery: false
+}
 var tourData = {
     localFrom: [],
     localTo: [],
     outboundFrom: [],
     outboundTo: [],
-    data: []
+    data: [],
+    startPointList: [],
 }
 var tour_search = {
     EventBind: function () {
@@ -15,14 +24,14 @@ var tour_search = {
             var element = $(this)
 
 
-            tourSearch.RenderLocationEnd()
+            tour_search.RenderLocationEnd()
         });
 
         $('body').on('click', '.search-tour-viewmore', function () {
             var element = $(this)
             var start_point_id = element.attr('data-startpointid')
             if (tourData.startPointList.includes(parseInt(start_point_id)) && $('.search-tour-' + start_point_id) && $('.search-tour-' + start_point_id + ' .article-itemt') && $('.search-tour-' + start_point_id + ' .article-itemt')[0]) {
-                var count = tourRenderService.CountElement($('.search-tour-' + start_point_id + ' .article-itemt'))
+                var count = tour_search.CountElement($('.search-tour-' + start_point_id + ' .article-itemt'))
                 let tour_by_start_point = tourData.data.filter(function (e) {
                     return e.startpoint == start_point_id;
                 })
@@ -31,7 +40,16 @@ var tour_search = {
                     var tour_next_page = tour_by_start_point.slice(count, count + 3)
                     if (tour_next_page && tour_next_page[0]) {
                         $(tour_next_page).each(function (index_detail, tour_detail) {
-                            html += tourSearch.RenderSearchItem(tour_detail)
+                            var start_point_name = tour_detail.startpoint1
+                            switch (tour_detail.tourtype) {
+                                case 2: {
+                                    start_point_name = tour_detail.startpoint2
+                                } break;
+                                case 3: {
+                                    start_point_name = tour_detail.startpoint3
+                                } break;
+                            }
+                            html += tour_search.RenderSearchItem(start_point_name, tour_detail)
                         });
                     }
 
@@ -39,7 +57,7 @@ var tour_search = {
 
 
                 $('.search-tour-' + start_point_id).append(html)
-                if ($('#section-search-result .article-itemt').length >= tour_by_start_point.length) {
+                if ($('.search-tour-' + start_point_id +' .article-itemt').length >= tour_by_start_point.length) {
                     element.hide()
                 }
             }
@@ -50,26 +68,26 @@ var tour_search = {
                                 <button type="button" data-dismiss="modal" class="btn btn-default">Đồng ý</button>`;
             _global_popup.showAlertPopup("width:335px", htmlBody);
         });
-        $('input[type=radio][name=filter-tour-type]').on('click', function (e) {
+        $('input[type=radio][name=filter-tour-type-tour-type]').on('click', function (e) {
             var element = $(this)
             element.closest('.col-300').addClass('placeholder')
             element.closest('.col-300').addClass('box-placeholder')
             $('#clear-filter').show();
-            tourSearch.RenderLocationStart()
-            tourSearch.RenderLocationEnd()
+            tour_search.RenderLocationStart()
+            tour_search.RenderLocationEnd()
 
         });
         $('#search-tour').on('click', function (e) {
             var element = $(this);
             request.startpoint = $("#select-address-from").find(':selected').val()
             request.endpoint = $("#select-address-to").find(':selected').val()
-            request.tourtype = parseInt($('input[type=radio][name=filter-tour-type]:checked').val())
+            request.tourtype = parseInt($('input[type=radio][name=filter-tour-type-tour-type]:checked').val())
             var tour_name = $("#select-address-to").find(':selected').text()
             var slug = tourRenderService.RemoveUnicode(tour_name.toLowerCase())
             slug = tourRenderService.RemoveSpecialCharacter(slug)
             slug = slug.replaceAll(' ', '-')
             window.history.pushState('', 'Adavigo - Tìm kiếm Tour', '/tour/tim-kiem/' + slug + '_' + request.startpoint + '_' + request.endpoint + '_' + request.tourtype);
-            tourSearch.SearchListing()
+            tour_search.SearchListing()
         });
         $('body').on('click', '.confirm-booking-tour', function () {
             var element = $(this)
@@ -100,7 +118,7 @@ var tour_search = {
                 toId: '-1',
                 tourType: '1'
             }
-            tourSearch.RenderSearch()
+            tour_search.RenderSearch()
             $('#clear-filter').hide();
         });
 
@@ -162,7 +180,7 @@ var tour_search = {
             var model = {
                 pageindex: 1,
                 pagesize: 50,
-                tourtype: parseInt($('input[type=radio][name=filter]:checked').val()),
+                tourtype: parseInt($('input[type=radio][name=filter-tour-type]:checked').val()),
                 startpoint: parseInt($('#filter-from select').find(':selected').val()),
                 endpoint: parseInt($('#filter-to select').find(':selected').val())
             }
@@ -174,7 +192,7 @@ var tour_search = {
 
         });
 
-        $('input[type=radio][name=filter]').on('click', function (e) {
+        $('input[type=radio][name=filter-tour-type]').on('click', function (e) {
             $('#filter-from').addClass('placeholder')
             $('#filter-from').addClass('box-placeholder')
             $('#filter-to').addClass('placeholder')
@@ -245,8 +263,10 @@ var tour_search = {
         var start_point = result.data.map(a => a.startpoint);
         var unique_start_points = tour_search.GetUniqueStartPoint(start_point)
         var html = ''
+        var is_more_item = true
         $(unique_start_points).each(function (index, item) {
             let tour_by_start_point = result.data.filter(function (e) {
+                tourData.startPointList.push(e.startpoint)
                 return e.startpoint == item;
             });
             if (tour_by_start_point && tour_by_start_point[0]) {
@@ -269,13 +289,28 @@ var tour_search = {
                 }
                 html += tour_constants.HTML.SearchItemHeader.replaceAll('{start_point}', start_point_name).replaceAll('{count}', tour_by_start_point.length)
                 var html_item = ''
+                var html_item2 = ''
                 var count = 0
+                if (tour_by_start_point.length <= 6) {
+                    is_more_item = false
+                }
                 $(tour_by_start_point).each(function (index_detail, tour_detail) {
                     html_item += tour_search.RenderSearchItem(start_point_name, tour_detail).replaceAll('{display}', (count < 6 ? '' : 'display:none;'))
                     count++
+                    
+                    if (count >= 6) {
+                        return false;
+                    }
                 });
-                html += tour_constants.HTML.SearchItemContent.replaceAll('{items}', html_item).replaceAll('{view-more}', tour_by_start_point.length > 6 ? '' : 'display:none;')
+                if (is_more_item) {
+                    html_item2 += tour_constants.HTML.SearchTourDetailViewMore.replaceAll('(start_point)', item).replaceAll('(viewmore_style)', '')
 
+                } else {
+                    html_item2 += tour_constants.HTML.SearchTourDetailViewMore.replaceAll('(start_point)', item).replaceAll('(viewmore_style)', 'display:none;')
+
+                }
+                html += tour_constants.HTML.SearchItemContent.replaceAll('{id}', item).replaceAll('{items}', html_item).replaceAll('{items2}', html_item2).replaceAll('{view-more}', tour_by_start_point.length < 6 ? '' : 'display:none;')
+              
             }
         })
 
@@ -450,10 +485,10 @@ var tour_search = {
     },
     RenderLocationStart: function (default_option = undefined) {
         var model = {
-            "tour_type": $('input[type=radio][name=filter]:checked').val()
+            "tour_type": $('input[type=radio][name=filter-tour-type]:checked').val()
         }
 
-        _ajax_caller.post('/tour/GetLocationStart', { request: model }, function (result) {
+        _ajax_caller.post('/tour/LocationStart', { "request": model }, function (result) {
             var html = ''
             html += tour_constants.HTML.Option.replaceAll('{value}', '-1').replaceAll('{text}', 'Tất cả địa điểm')
 
@@ -476,10 +511,10 @@ var tour_search = {
     },
     RenderLocationEnd: function (start_point = -1, default_option = undefined) {
         var model = {
-            "tour_type": $('input[type=radio][name=filter]:checked').val(),
+            "tour_type": $('input[type=radio][name=filter-tour-type]:checked').val(),
             "start_point": start_point
         }
-        _ajax_caller.post('/tour/GetLocationEnd', { request: model }, function (result) {
+        _ajax_caller.post('/tour/LocationEnd', { request: model }, function (result) {
             var html = ''
             html += tour_constants.HTML.Option.replaceAll('{value}', '-1').replaceAll('{text}', 'Tất cả địa điểm')
 
@@ -498,5 +533,12 @@ var tour_search = {
             }
         });
 
-    }
+    },
+    CountElement: function (element) {
+        var total = 0;
+        element.each(function (index, item) {
+            total++;
+        });
+        return total
+    },
 }

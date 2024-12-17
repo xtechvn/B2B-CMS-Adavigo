@@ -96,9 +96,17 @@
                     Chúng tôi tìm thấy {count} tour cho Quý khách.
                 </p>
             </div>`,
-        SearchItemContent:`<div class="list-article grid grid__3 mb20">
+        SearchItemContent:`<div class="list-article grid grid__3 mb20 search-tour-{id}">
                {items}
-            </div>`,
+            </div>{items2}`,
         Star: '<svg class="icon-svg"> <use xlink:href="/images/icons/icon.svg#star"> </use> </svg>',
+        SearchTourDetailViewMore: ` <div class="center mb40">
+                        <a class="btn-default white search-tour-viewmore" style="(viewmore_style)" href="javascript:;" data-startpointid="(start_point)">
+                            Xem thêm
+                            <svg class="icon-svg min ml-1 rotate90">
+                                <use xlink:href="images/icons/icon.svg#next2"></use>
+                            </svg>
+                        </a>
+                    </div>`,
     },
 }
