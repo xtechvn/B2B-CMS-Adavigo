@@ -920,7 +920,18 @@ $('#btn__check_order').click(function () {
                                `
 
             });
-            var html_table2 = ` <tr class="bg-white">
+            var discount = ($('#hotel-order-voucher-code').attr('data-discount')) == undefined || isNaN(parseFloat($('#hotel-order-voucher-code').attr('data-discount'))) ? 0 : parseFloat($('#hotel-order-voucher-code').attr('data-discount'))
+            Amonut_packages -= discount
+            var html_table2 = `  <tr class="bg-white">
+                                    <td></td>
+                                    <td class="text-left"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"><b>Triết khấu</b></td>
+                                    <td class="text-right"><b>${_hotel_detail.Comma(discount)}</b></td>
+                                </tr>
+                                    <tr class="bg-white">
                                     <td></td>
                                     <td class="text-left"></td>
                                     <td></td>
@@ -956,9 +967,16 @@ $(document).on('click', '#btn__summit_request_order',function () {
         arrivalDate: _hotel_detail.hotel.arrival_date,
         departureDate: _hotel_detail.hotel.departure_date,
         rooms: _hotel_detail.rooms,
-        note: $('#note').val()
+        note: $('#note').val(),
+        voucher: undefined
     };
-
+    if ($('#hotel-order-voucher-code').attr('data-id') != undefined && $('#hotel-order-voucher-code').attr('data-id').trim() != '') {
+        obj.voucher = {
+            id: $('#hotel-order-voucher-code').attr('data-id'),
+            code: $('#hotel-order-voucher-code').val(),
+            discount: $('#hotel-order-voucher-code').attr('data-discount'),
+        }
+    }
     _ajax_caller.post('/hotel/SaveRequestData', { data: obj }, function (result) {
         if (result.isSuccess) {
 
@@ -1042,8 +1060,13 @@ $('#hotel-order-voucher-apply').click(function () {
     }
     var request = {
         "voucher_name": voucher_code,
-        "service_id": $('#hotel_grid_cache_hotel_id').val(),
-        "token": $('#input__token_order').val()
+        "service_id": $('#input__hotel_id').val(),
+        "token": $('#input__token_order').val(),
+        "detail": {
+            hotelID: _hotel_detail.hotel.id,
+            rooms: _hotel_detail.rooms,
+        }
+
     }
     _ajax_caller.post('/hotel/TrackingVoucher', { "request": request }, function (result) {
         if (result.isSuccess) {
@@ -1052,13 +1075,15 @@ $('#hotel-order-voucher-apply').click(function () {
             $('#hotel-order-voucher-code').prop('readonly', true)
             $('#hotel-order-voucher-apply').prop('disabled', true)
             $('#hotel-order-voucher-apply').addClass('gray')
-            $('#hotel-order-total-amount').html(_hotel_order.Comma(result.data.total_order_amount_after) + ' VNĐ')
-            $('#hotel-order-total-amount-old').html(_hotel_order.Comma(result.data.total_order_amount_before) + ' VNĐ')
-            $('#hotel-order-total-discount').html('- ' + _hotel_order.Comma(result.data.total_order_amount_before - result.data.total_order_amount_after) + ' VNĐ')
+            $('#hotel__booking_total_amount').html(_hotel_detail.Comma(result.data.total_order_amount_after) + ' VNĐ')
+            $('#hotel-order-total-amount-old').html(_hotel_detail.Comma(result.data.total_order_amount_before) + ' VNĐ')
+            $('#hotel-order-total-discount').html('- ' + _hotel_detail.Comma(result.data.total_order_amount_before - result.data.total_order_amount_after) + ' VNĐ')
+            $('#hotel-order-voucher-code').attr('data-id', result.data.voucher_id)
+            $('#hotel-order-voucher-code').attr('data-discount', (result.data.total_order_amount_before - result.data.total_order_amount_after))
 
 
         } else {
-            _msgalert.error('Áp mã voucher thất bại, vui lòng liên hệ bộ phận chăm sóc');
+            _msgalert.error(result.message);
         }
     });
 });

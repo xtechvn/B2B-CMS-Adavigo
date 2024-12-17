@@ -24,6 +24,11 @@
     var TotalDays = (ToDate - FromDate).TotalDays + 1;
     decimal TotalMoney = 0;
     double TotalEX = Model.extrapackages != null && Model.extrapackages.Count > 0 ? Model.extrapackages.Sum(s => (double)s.Amount) : 0;
+    double discount=0;
+    if(Model.voucher!=null && Model.voucher.id > 0)
+    {
+        discount = Model.voucher.discount;
+    }
     var ArrMemberOfRoom = new List<string>();
 
     int room_total = 0, adult_total = 0, child_total = 0, infant_total = 0;
@@ -460,8 +465,14 @@
                       
                     </div>
                     <div class="input-button mb16">
-                        <input type="text" class="form-control" id="hotel-order-voucher-code"  placeholder="Nhập mã giảm giá">
-                        <button id="hotel-order-voucher-apply"  class="">Áp dụng</button>
+                        <input type="text" class="form-control" id="hotel-order-voucher-code" placeholder="Nhập mã giảm giá"
+                               data-id="@(Model.voucher != null && Model.voucher.id > 0 ? Model.voucher.id.ToString() : "")"
+                               data-discount="@(Model.voucher != null && Model.voucher.discount > 0 ? Model.voucher.discount.ToString() : "0")"
+                               value="@(Model.voucher != null && Model.voucher.code != null ? Model.voucher.code : "")"
+                        @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "") >
+                        <button id="hotel-order-voucher-apply" class="@(Model.voucher != null && Model.voucher.id > 0 ? "gray" : "")" @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")>
+                                Áp dụng
+                          </button>
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_14">Giá cũ</div>
@@ -469,11 +480,11 @@
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_14">Triết khấu</div>
-                        <div id="hotel-order-total-discount" class="bold txt_14 color-red  text-right" style="width:calc(100% - 76px);">0 VNĐ</div>
+                        <div id="hotel-order-total-discount" class="bold txt_14 color-red  text-right" style="width:calc(100% - 76px);">@(((double)discount).ToString("N0")) VNĐ</div>
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_16">Tổng cộng</div>
-                        <div id="hotel-order-total-amount" class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@(((double)TotalMoney + TotalEX).ToString("N0")) VNĐ</div>
+                        <div id="hotel-order-total-amount" class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@(((double)TotalMoney + TotalEX - discount).ToString("N0")) VNĐ</div>
                     </div>
                     <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
                     <button type="button" id="btn_continue_to_payment" class="btn btn-default blue full size">Tiếp tục đơn hàng</button>

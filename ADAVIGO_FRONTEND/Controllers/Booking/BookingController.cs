@@ -126,7 +126,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Booking
                     }
                     var amunt_Rooms = data.Rooms != null ? data.Rooms.Sum(s => s.TotalAmount) : 0;
                     var amunt_ExtraPackages = data.ExtraPackages != null ? data.ExtraPackages.Sum(s => s.Amount) : 0;
-                    ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages;
+                    var discount = data.voucher!=null && data.voucher.id>0? data.voucher.discount:0;
+                    ViewBag.Price = amunt_Rooms + amunt_ExtraPackages;
+                    ViewBag.Discount = discount;
+                    ViewBag.Amount = amunt_Rooms + amunt_ExtraPackages - discount;
                     ViewBag.StatusName = data.StatusName;
                     ViewBag.Status = data.Status;
                     var thoigianConLai = (((DateTime)data.Rooms[0].CreatedDate).AddMinutes(60) - DateTime.Now ).TotalMilliseconds;

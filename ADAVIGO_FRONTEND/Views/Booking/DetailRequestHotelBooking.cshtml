@@ -171,8 +171,15 @@
                             <div class="line-bottom mb16"></div>
                         }
 
-
                         <ul>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Đơn giá</div>
+                                <div><span class="color-orange"> @(((double)ViewBag.Price).ToString("N0")) đ</span> </div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Triết khấu</div>
+                                <div><span class="color-orange"> @(((double)ViewBag.Discount).ToString("N0")) đ</span> </div>
+                            </li>
                             <li class="mb10 flex space-between">
                                 <div class="gray"><strong>Tổng </strong>@(Model != null ? Model.Rooms.Sum(s => s.NumberOfRooms) + " phòng" : "")</div>
                                 <div class="color-orange txt_16"><strong>@ViewBag.Amount.ToString("N0") Đ</strong></div>

@@ -233,6 +233,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     data.numberOfChild = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfChild);
                     data.numberOfInfant = (int)DetailRequestHotelBooking.Rooms.Sum(s => s.NumberOfInfant);
                 }
+                if(DetailRequestHotelBooking.voucher!=null && DetailRequestHotelBooking.voucher.id > 0)
+                {
+                    data.voucher = DetailRequestHotelBooking.voucher;
+                }
                 var rooms = new List<RoomOrderData>();
                 if (DetailRequestHotelBooking.Rates != null)
                 {
@@ -433,13 +437,13 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     extrapackagesMoney = extrapackages_money,
                     bookingID = booking_id
                 }), _KeyEncodeParam);
-                if (jsonData["voucher_code"].ToString() != null && jsonData["voucher_code"].ToString().Trim() != "")
+                if (jsonData["voucher_code"]!=null && jsonData["voucher_code"].ToString() != null && jsonData["voucher_code"].ToString().Trim() != "")
                 {
                     var response = await _HotelService.TrackingVoucher(new B2BTrackingVoucherRequest()
                     {
                         total_order_amount_before = (double)total_money,
                         project_type = 1,
-                        service_id = 1,
+                        service_id = cache_data.hotelID,
                         voucher_name = jsonData["voucher_code"].ToString()
                     });
                     payment_token = CommonHelper.Encode(JsonConvert.SerializeObject(new HotelPaymentModel
@@ -862,6 +866,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     data_Request.detail = detai;
                     data_Request.search = search;
                 }
+                if(data.voucher!=null && data.voucher.id > 0)
+                {
+                    data_Request.voucher = data.voucher;
+                }
                 var SaveRequestHotel = await _HotelService.SaveRequestHotel(data_Request);
                 return new JsonResult(new
                 {
@@ -879,36 +887,39 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             }
         }
         [HttpPost]
-        public async Task<IActionResult> TrackingVoucher(B2BTrackingVoucherRequest request)
+        public async Task<IActionResult> TrackingVoucher(B2BTrackingVoucherRequestFE request)
         {
             try
             {
-                if(request.voucher_name == null || request.voucher_name.Trim() == ""
-                    || request.token == null || request.token.Trim() == "")
+                if(request.voucher_name == null || request.voucher_name.Trim() == "")
                 {
                     return new JsonResult(new
                     {
                         isSuccess = false,
-                        msg = "Vui lòng điền đúng mã giảm giá"
+                        message = "Vui lòng điền đúng mã giảm giá"
                     });
                 }
-                HotelOrderDataModel model = null;
-                var cache_data = _MemoryCache.Get<HotelOrderDataModel>(request.token);
-
-                if (cache_data == null)
+                if (request.total_order_amount_before <=0 && (request.detail==null|| request.detail.rooms ==null|| request.detail.rooms.Count() <= 0))
                 {
                     return new JsonResult(new
                     {
                         isSuccess = false,
-                        msg = "Áp mã voucher thất bại, vui lòng tải lại trang hoặc liên hệ bộ phận CSKH"
+                        message = "Vui lòng chọn phòng trước khi áp dụng mã Voucher này"
                     });
                 }
-                model = cache_data;
-                request.project_type = 1;
-                decimal TotalMoney = (model.rooms != null && model.rooms.Count() > 0) ?model.rooms.Sum(x=>x.packages.Sum(x=>x.amount)):0;
-                double TotalEX = model.extrapackages != null && model.extrapackages.Count > 0 ? model.extrapackages.Sum(s => (double)s.Amount) : 0;
-                request.total_order_amount_before = (double)TotalMoney + TotalEX;
-                var response = await _HotelService.TrackingVoucher(request);
+             
+                decimal TotalMoney = (request.detail.rooms != null && request.detail.rooms.Count() > 0) ? request.detail.rooms.Sum(x=>x.packages.Sum(x=>x.amount)):0;
+                double TotalEX = request.detail.extrapackages != null && request.detail.extrapackages.Count > 0 ? request.detail.extrapackages.Sum(s => (double)s.Amount) : 0;
+                
+                B2BTrackingVoucherRequest model_request = new B2BTrackingVoucherRequest()
+                {
+                    project_type = 1,
+                    service_id=request.detail.hotelID,
+                    total_order_amount_before = (double)TotalMoney + TotalEX,
+                    user_id=0,
+                    voucher_name=request.voucher_name
+                };
+                var response = await _HotelService.TrackingVoucher(model_request);
 
                 return new JsonResult(new
                 {

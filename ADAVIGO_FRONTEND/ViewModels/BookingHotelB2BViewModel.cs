@@ -10,7 +10,14 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public BookingHotelB2BViewModelDetail detail { get; set; }
         public BookingHotelB2BViewModelSearch search { get; set; }
         public List<BookingHotelB2BViewModelRooms> rooms { get; set; }
+        public HotelOrderDataVoucher voucher { get; set; }
 
+    }
+    public class HotelOrderDataVoucher
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public double discount { get; set; }
     }
     public class BookingHotelB2BViewModelDetail
     {

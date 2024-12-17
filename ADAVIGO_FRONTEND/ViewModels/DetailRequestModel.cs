@@ -18,6 +18,8 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public List<HotelBookingRooms> Rooms { get; set; }
         public List<HotelBookingRoomRates> Rates { get; set; }
         public List<HotelBookingRoomExtraPackages> ExtraPackages { get; set; }
+        public HotelOrderDataVoucher voucher { get; set; }
+
     }
     public class HotelBookingRooms
     {

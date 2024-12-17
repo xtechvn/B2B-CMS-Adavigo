@@ -242,8 +242,8 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public string orderToken { get; set; }
         public string bookingID { get; set; }
         public string note { get; set; }
+        public HotelOrderDataVoucher voucher { get; set; }
     }
-
     public class RoomOrderData
     {
         public string room_number { get; set; }
