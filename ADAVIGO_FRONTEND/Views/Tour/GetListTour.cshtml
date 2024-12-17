@@ -1,0 +1,35 @@
+﻿<section class="padding-main bg-white">
+    <div><h3>Danh sách đơn Tour</h3> </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="search-wrapper">
+                <form onsubmit="return false" id="search" class="mb16" style="max-width:380px;margin-left: auto;">
+                    <input type="search" id="search_request_code" placeholder="Tìm kiếm mã">
+                    <span class="search-btn" onclick="Listing_tour_search.Filter()">
+                        <button type="button" onclick="Listing_tour_search.Filter()">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#search"></use>
+                            </svg>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="main-container clearfix">
+    <div id="grid_data_listing">
+
+    </div>
+    <div class="hidden" id="grid_detail_element">
+
+    </div>
+
+</section>
+
+
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/tour/get_list_tour.js" asp-append-version="true"></script>
+
+}

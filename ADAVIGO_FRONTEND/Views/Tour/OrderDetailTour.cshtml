@@ -1,0 +1,103 @@
+﻿
+@{
+    Layout = null;
+}
+@using  ADAVIGO_FRONTEND.Models.Tour.TourOrders
+@model TourOrderDetailResponse
+
+<section class="main-container clearfix">
+    <div class="mb16">
+        <a class="gray btn btn-default" onclick="Listing_tour_search.BackToListing()">
+            <svg class="icon-svg min">
+                <use xlink:href="images/icons/icon.svg#prev2"></use>
+            </svg>
+            <span>Quay lại</span>
+        </a>
+        <strong class="txt_20" style="margin-left:10px">@(Model!=null? "Đơn hàng: "+ Model.orderNo:"")</strong>
+    </div>
+    <div class="row detail-order-flight">
+        @if (@Model != null)
+        {
+            <div class="col-md-7 mb16">
+                <div class="bg-white pd-20 radius10">
+                    <div class="detail-order-flight__left">
+                        <div class="mb10 txt_20"><strong>Thông tin đơn hàng</strong></div>
+                        <ul>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Tên tour</div>
+                                <div class="bold color-green">@Model.tourProductName</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Ngày đi</div>
+                                <div>@Model.startDate.ToString("dd/MM/yyyy")</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Thời gian</div>
+                                <div>@(Model.Days +1) Ngày @Model.Days Đêm  </div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Số người lớn</div>
+                                <div>@Model.totalAdult</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Số trẻ em</div>
+                                <div>@Model.totalChildren</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Số em bé</div>
+                                <div>@Model.totalBaby</div>
+                            </li>
+                        </ul>
+                        <div class="line-bottom mb16"></div>
+                        <ul>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Họ và tên trưởng đoàn</div>
+                                <div class="bold color-green">@Model.clientName</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Số điện thoại</div>
+                                <div>@Model.phone</div>
+                            </li>
+                            <li class="mb10 flex space-between">
+                                <div class="gray">Email</div>
+                                <div>@Model.email</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mb16">
+                <div class="bg-white pd-20 radius10 mb16">
+                    <div class="head-title">
+                        <h2 class="title txt_20 bold mb0">Thông tin thanh toán</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 bold mb10">Đơn hàng</div>
+                        <div class="col-12">
+                            <ul>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Tổng giá trị đơn hàng</div>
+                                    <div class="bold color-green">@Model.orderAmount.ToString("N0")</div>
+                                </li>
+                                <li class="mb10 flex space-between">
+                                    <div class="gray">Nội dung thanh toán</div>
+                                    <div>Thanh toán booking số @Model.orderNo</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+        else
+        {
+
+            <div class="col-12">
+                <div class="bg-white pd-20 radius10">
+                    <p class="no-result txt_20">Không tồn tại thông tin booking</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

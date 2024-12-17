@@ -13,7 +13,7 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourOrders
         public string orderNo { get; set; }
         public string tourId { get; set; }
         public string tourName { get; set; }
-        public string amount { get; set; }
+        public double amount { get; set; }
         public string orderStatus { get; set; }
         public string orderStatusName { get; set; }
 

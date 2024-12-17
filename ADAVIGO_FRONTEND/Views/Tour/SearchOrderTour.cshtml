@@ -1,0 +1,69 @@
+﻿@using  ADAVIGO_FRONTEND.ViewModels
+@using  ADAVIGO_FRONTEND.Models.Tour.TourOrders
+@{
+    Layout = null;
+    var countmodel = (TourOrdersListingRequest)ViewBag.request;
+    var total_page = Model.data != null && Model.data.Count > 0 ? (Model.total / countmodel.pagesize) : 1;
+    var counter = (countmodel.pageindex - 1) * countmodel.pagesize;
+}
+@model TourOrderListingResponse
+<div>
+    @if (Model != null && Model.data.Count > 0)
+    {
+        <div class="table-responsive table-default bg-white mb24">
+
+            <table class="table table-nowrap" border="1">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Mã booking</th>
+                        <th scope="col">Tên đơn hàng</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Giá đại lý</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.data)
+                    {
+                        counter++;
+                        <tr>
+                            <td>@counter</td>
+                            <td><span class="color-blue"><a onclick="Listing_tour_search.Detail('@item.tourId')">@item.orderNo</a> </span></td>
+                            <td><span >@item.tourName</span></td>
+                            <td><span>@item.orderStatusName</span></td>
+                            <td>
+                                <span>@item.amount.ToString("N0") đ</span>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        @await Component.InvokeAsync("Paging", new
+        {
+            pageModel = new PagingModel()
+            {
+                TotalRecord = Model.total,
+                TotalPage = total_page,
+                CurrentPage = countmodel.pageindex,
+                PageSize = countmodel.pagesize,
+                RecordName = "đơn hàng",
+                PageAction = "Listing_tour_search.OnPaging({0})"
+            }
+        })
+    }
+    else
+    {
+        <div class="search-null center mb40">
+            <div class="mb24">
+                <img src="/images/graphics/icon-search.png" alt="">
+            </div>
+            <h2 class="title txt_24">Không tìm thấy kết quả</h2>
+            <div class="gray">Chúng tôi không tìm thấy thông tin mà bạn cần, vui lòng thử lại</div>
+        </div>
+    }
+</div>

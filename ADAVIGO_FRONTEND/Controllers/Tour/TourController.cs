@@ -7,6 +7,7 @@ using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.Models.Tour.TourBooking;
 using ADAVIGO_FRONTEND.Models.Tour.TourDetail;
 using ADAVIGO_FRONTEND.Models.Tour.TourListing;
+using ADAVIGO_FRONTEND.Models.Tour.TourOrders;
 using ADAVIGO_FRONTEND.Models.Tour.V2;
 using ADAVIGO_FRONTEND.ViewModels;
 using ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants;
@@ -49,6 +50,14 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
         {
             return View();
         }
+        public IActionResult Listing()
+        {
+            return View();
+        }
+        public IActionResult Search()
+        {
+            return View();
+        }
         public IActionResult Detail(string slug_location = "", string slug = "", int id = 0)
         {
             var TaskModel = _AccountService.GetDetail().Result;
@@ -88,14 +97,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             }
             return View();
         }
-        public IActionResult Listing()
-        {
-            return View();
-        }
-        public IActionResult Search()
-        {
-            return View();
-        }
+     
         public IActionResult CustomerInfo()
         {
             var TaskModel = _AccountService.GetDetail().Result;
@@ -260,6 +262,33 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             var detail = await _adavigoTourService.GetTourDetail(request);
 
             return detail;
+        }
+        public async Task<IActionResult> GetListTour()
+        {
+            return View();
+        }
+        public async Task<IActionResult> SearchOrderTour(TourOrdersListingRequest request)
+        {
+
+            var TaskModel = _AccountService.GetDetail().Result;
+            request.account_id = TaskModel.id;
+            request.pageindex = 1;
+            request.pagesize = 20;
+            ViewBag.request = request;
+            ViewBag.request = request;
+            var detail = await _adavigoTourService.GetTourOrdersListing(request);
+            return View(detail);
+        }
+        public async Task<IActionResult> OrderDetailTour(long id)
+        {
+            var model = new TourOrdersDetailRequest();
+            model.tour_id = id;
+            var detail = await _adavigoTourService.GetTourOrderDetail(model);
+            if (detail.status == 0)
+            {
+                return View(detail.data);
+            }
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> LocationStart(TourLocationRequestModel request)

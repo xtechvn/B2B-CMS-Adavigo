@@ -27,5 +27,6 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourOrders
         public int totalChildren { get; set; }
         public int totalAdult { get; set; }
         public int totalBaby { get; set; }
+        public int Days { get; set; }
     }
 }
