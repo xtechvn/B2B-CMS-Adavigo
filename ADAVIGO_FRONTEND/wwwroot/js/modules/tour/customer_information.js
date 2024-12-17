@@ -319,7 +319,7 @@ var customer_information = {
 
         let valid = true;
         let form_data = customer_information.getFormData(FromCreate);
-
+        var option_val = $('#tour-detail-schedule-fixed').val()
         let contact = {
             firstName: form_data.firstName,
             email: form_data.email,
@@ -331,7 +331,7 @@ var customer_information = {
             numberOfAdult: $('#qty_input-adt').val(),
             numberOfChild: $('#qty_input-chd').val(),
             totalAmount: $('.total-amount').attr('data-amount'),
-            startDate: $('#tour-detail-schedule-flex').val(),
+            startDate: $('#tour-detail-schedule-fixed').val(option_val).text().trim(),
             totalNights: $('#total_nights').attr('data-nights'),
             tourId: $('.tour-name').attr('data-id'),
             packageId: $('#tour-detail-schedule-fixed').val(),
