@@ -899,7 +899,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         message = "Vui lòng điền đúng mã giảm giá"
                     });
                 }
-                if (request.total_order_amount_before <=0 && (request.detail==null|| request.detail.rooms ==null|| request.detail.rooms.Count() <= 0))
+                if (request.total_order_amount_before <=0 && (request.token == null || request.token.Trim() == "")
+                    && (request.detail==null|| request.detail.rooms ==null|| request.detail.rooms.Count() <= 0))
                 {
                     return new JsonResult(new
                     {
@@ -907,7 +908,17 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         message = "Vui lòng chọn phòng trước khi áp dụng mã Voucher này"
                     });
                 }
-             
+                if (request.total_order_amount_before <= 0 && (request.detail == null || request.detail.rooms == null || request.detail.rooms.Count() <= 0))
+                {
+                    var cache_data = _MemoryCache.Get<HotelOrderDataModel>(request.token);
+                    if (cache_data != null)
+                    {
+                        if (request.detail == null) request.detail = new HotelOrderDataModel();
+                        request.detail.hotelID = cache_data.hotelID;
+                        request.detail.rooms = cache_data.rooms;
+                        request.detail.extrapackages = cache_data.extrapackages;
+                    }
+                }
                 decimal TotalMoney = (request.detail.rooms != null && request.detail.rooms.Count() > 0) ? request.detail.rooms.Sum(x=>x.packages.Sum(x=>x.amount)):0;
                 double TotalEX = request.detail.extrapackages != null && request.detail.extrapackages.Count > 0 ? request.detail.extrapackages.Sum(s => (double)s.Amount) : 0;
                 
