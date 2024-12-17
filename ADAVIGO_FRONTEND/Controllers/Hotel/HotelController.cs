@@ -416,13 +416,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 jsonData.Property("guests").Remove();
 
                 var booking_id = await _HotelService.SaveHotel(JsonConvert.SerializeObject(jsonData));
-                var response = await _HotelService.TrackingVoucher(new B2BTrackingVoucherRequest()
-                {
-                    total_order_amount_before=(double)total_money,
-                    project_type=1,
-                    service_id=1,
-                    voucher_name= jsonData["voucher_code"].ToString()
-                });
+               
+               
 
                 var payment_token = CommonHelper.Encode(JsonConvert.SerializeObject(new HotelPaymentModel
                 {
@@ -434,11 +429,34 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     numberOfAdult = cache_data.rooms.Sum(s => s.adult),
                     numberOfChild = cache_data.rooms.Sum(s => s.child),
                     numberOfInfant = cache_data.rooms.Sum(s => s.infant),
-                    totalMoney = response!=null? Convert.ToDecimal(response.total_order_amount_after) : total_money,// model.rooms.Sum(x => x.amount),
+                    totalMoney =total_money,// model.rooms.Sum(x => x.amount),
                     extrapackagesMoney = extrapackages_money,
                     bookingID = booking_id
                 }), _KeyEncodeParam);
-
+                if (jsonData["voucher_code"].ToString() != null && jsonData["voucher_code"].ToString().Trim() != "")
+                {
+                    var response = await _HotelService.TrackingVoucher(new B2BTrackingVoucherRequest()
+                    {
+                        total_order_amount_before = (double)total_money,
+                        project_type = 1,
+                        service_id = 1,
+                        voucher_name = jsonData["voucher_code"].ToString()
+                    });
+                    payment_token = CommonHelper.Encode(JsonConvert.SerializeObject(new HotelPaymentModel
+                    {
+                        hotelID = cache_data.hotelID,
+                        hotelName = cache_data.hotelName,
+                        arrivalDate = DateTime.Parse(cache_data.arrivalDate),
+                        departureDate = DateTime.Parse(cache_data.departureDate),
+                        numberOfRoom = cache_data.rooms.Count(),
+                        numberOfAdult = cache_data.rooms.Sum(s => s.adult),
+                        numberOfChild = cache_data.rooms.Sum(s => s.child),
+                        numberOfInfant = cache_data.rooms.Sum(s => s.infant),
+                        totalMoney = Convert.ToDecimal(response.total_order_amount_after),// model.rooms.Sum(x => x.amount),
+                        extrapackagesMoney = extrapackages_money,
+                        bookingID = booking_id
+                    }), _KeyEncodeParam);
+                }
                 return new JsonResult(new
                 {
                     isSuccess = true,
@@ -887,8 +905,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 }
                 model = cache_data;
                 request.project_type = 1;
-                request.service_id = 1;
-                request.service_id = 1;
                 decimal TotalMoney = (model.rooms != null && model.rooms.Count() > 0) ?model.rooms.Sum(x=>x.packages.Sum(x=>x.amount)):0;
                 double TotalEX = model.extrapackages != null && model.extrapackages.Count > 0 ? model.extrapackages.Sum(s => (double)s.Amount) : 0;
                 request.total_order_amount_before = (double)TotalMoney + TotalEX;
