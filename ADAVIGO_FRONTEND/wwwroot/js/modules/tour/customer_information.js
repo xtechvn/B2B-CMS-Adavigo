@@ -108,6 +108,25 @@ var customer_information = {
             $('.base-price-chd-nw').html(tour_service.Comma(chd_value))
             customer_information.RenderPrice()
 
+          });
+        $('#summit-voucher').click(function () {
+            var voucher_code = $('#summit-voucher').val()
+            if (voucher_code == undefined || voucher_code == null || voucher_code.trim() == '') {
+                _msgalert.error('Vui lòng điền vào mã giảm giá');
+                return
+            }
+            var request = {
+               
+
+            }
+            _ajax_caller.post('/hotel/TrackingVoucher', { "request": request }, function (result) {
+                if (result.isSuccess) {
+                    _msgalert.success('Áp dụng mã Voucher [' + voucher_code + '] thành công');
+
+                } else {
+                    _msgalert.error(result.message);
+                }
+            });
         });
        
     },

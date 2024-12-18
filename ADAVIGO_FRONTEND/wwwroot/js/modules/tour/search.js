@@ -57,7 +57,7 @@ var tour_search = {
 
 
                 $('.search-tour-' + start_point_id).append(html)
-                if ($('.search-tour-' + start_point_id +' .article-itemt').length >= tour_by_start_point.length) {
+                if ($('.search-tour-' + start_point_id + ' .article-itemt').length >= tour_by_start_point.length) {
                     element.hide()
                 }
             }
@@ -79,15 +79,24 @@ var tour_search = {
         });
         $('#search-tour').on('click', function (e) {
             var element = $(this);
-            request.startpoint = $("#select-address-from").find(':selected').val()
-            request.endpoint = $("#select-address-to").find(':selected').val()
-            request.tourtype = parseInt($('input[type=radio][name=filter-tour-type-tour-type]:checked').val())
+            var startpoint = $("#select-address-from").find(':selected').val()
+            var endpoint = $("#select-address-to").find(':selected').val()
+            var tourtype = parseInt($('input[type=radio][name=filter-tour-type]:checked').val())
             var tour_name = $("#select-address-to").find(':selected').text()
-            var slug = tourRenderService.RemoveUnicode(tour_name.toLowerCase())
-            slug = tourRenderService.RemoveSpecialCharacter(slug)
+            var slug = tour_service.RemoveUnicode(tour_name.toLowerCase())
+            slug = tour_service.RemoveSpecialCharacter(slug)
             slug = slug.replaceAll(' ', '-')
-            window.history.pushState('', 'Adavigo - Tìm kiếm Tour', '/tour/tim-kiem/' + slug + '_' + request.startpoint + '_' + request.endpoint + '_' + request.tourtype);
-            tour_search.SearchListing()
+            window.history.pushState('', 'Adavigo - Tìm kiếm Tour', '/tour/tim-kiem/' + slug + '_' + startpoint + '_' + endpoint + '_' + tourtype);
+            var model = {
+                "pageindex": 1,
+                "pagesize": 50,
+                "tourtype": tourtype,
+                "startpoint": startpoint,
+                "endpoint": endpoint
+            }
+
+            tour_search.SearchTour(model)
+
         });
         $('body').on('click', '.confirm-booking-tour', function () {
             var element = $(this)
@@ -297,7 +306,7 @@ var tour_search = {
                 $(tour_by_start_point).each(function (index_detail, tour_detail) {
                     html_item += tour_search.RenderSearchItem(start_point_name, tour_detail).replaceAll('{display}', (count < 6 ? '' : 'display:none;'))
                     count++
-                    
+
                     if (count >= 6) {
                         return false;
                     }
@@ -310,7 +319,7 @@ var tour_search = {
 
                 }
                 html += tour_constants.HTML.SearchItemContent.replaceAll('{id}', item).replaceAll('{items}', html_item).replaceAll('{items2}', html_item2).replaceAll('{view-more}', tour_by_start_point.length < 6 ? '' : 'display:none;')
-              
+
             }
         })
 
