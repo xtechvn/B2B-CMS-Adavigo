@@ -17,6 +17,9 @@ namespace ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher
         public double total_order_amount_before { get; set; }
         public double discount { get; set; }
         public double total_order_amount_after { get; set; }
+        public double value { get; set; }
+        public string type { get; set; }
+
 
     }
 }

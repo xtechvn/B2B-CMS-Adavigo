@@ -1059,6 +1059,10 @@ $('#hotel-order-voucher-apply').click(function () {
         _msgalert.error('Vui lòng điền vào mã giảm giá');
         return
     }
+    if (_hotel_detail.rooms.length < parseInt($('#input__number_room_order').val())) {
+        _msgalert.error('Vui lòng chọn thông tin tất cả các phòng trước khi áp dụng Voucher');
+        return
+    }
     var request = {
         "voucher_name": voucher_code,
         "service_id": $('#input__hotel_id').val(),
@@ -1076,7 +1080,7 @@ $('#hotel-order-voucher-apply').click(function () {
             $('#hotel-order-voucher-code').prop('readonly', true)
             $('#hotel-order-voucher-apply').prop('disabled', true)
             $('#hotel-order-voucher-apply').addClass('gray')
-            $('#hotel-order-voucher-apply').addClass('voucher-applied')
+            $('#hotel-order-voucher-code').addClass('voucher-applied')
             $('#hotel__booking_total_amount').html(_hotel_detail.Comma(result.data.total_order_amount_after) + ' VNĐ')
             $('#hotel-order-total-amount-old').html(_hotel_detail.Comma(result.data.total_order_amount_before) + ' VNĐ')
             $('#hotel-order-total-discount').html('- ' + _hotel_detail.Comma(result.data.total_order_amount_before - result.data.total_order_amount_after) + ' VNĐ')

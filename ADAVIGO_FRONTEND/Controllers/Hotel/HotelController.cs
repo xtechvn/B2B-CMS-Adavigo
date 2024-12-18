@@ -2,6 +2,7 @@
 using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
+using B2B.Utilities.Contants;
 using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
 using LIB.Utilities.Contants;
@@ -446,6 +447,29 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         service_id = cache_data.hotelID,
                         voucher_name = jsonData["voucher_code"].ToString()
                     });
+                    double total_discount = 0;
+                    double percent = Convert.ToDouble(response.value); // Giá trị giảm của voucher. Có thể là % hoặc vnđ                  
+                   
+                    foreach (var room in cache_data.rooms)
+                    {
+                        foreach(var rate in room.packages)
+                        {
+                            int nights = Convert.ToInt32((DateTime.ParseExact(rate.departure_date, "yyyy-MM-dd", null) - DateTime.ParseExact(rate.arrival_date, "yyyy-MM-dd", null)).TotalDays);
+                            switch (response.type)
+                            {
+                                case "percent":
+                                    //Tinh số tiền giảm theo %
+                                    total_discount += ((double)rate.amount * Convert.ToDouble(percent / 100) * nights); 
+                                    break;
+                                case "vnd":
+                                    total_discount += (percent * nights); //Math.Min(Convert.ToDouble(voucher.LimitTotalDiscount), total_fee_not_luxury) ;
+                                    break;
+
+                                default:break;
+                                    
+                            }
+                        }
+                    }
                     payment_token = CommonHelper.Encode(JsonConvert.SerializeObject(new HotelPaymentModel
                     {
                         hotelID = cache_data.hotelID,
@@ -456,7 +480,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         numberOfAdult = cache_data.rooms.Sum(s => s.adult),
                         numberOfChild = cache_data.rooms.Sum(s => s.child),
                         numberOfInfant = cache_data.rooms.Sum(s => s.infant),
-                        totalMoney = Convert.ToDecimal(response.total_order_amount_after),// model.rooms.Sum(x => x.amount),
+                        totalMoney = total_money - Convert.ToDecimal(total_discount),// model.rooms.Sum(x => x.amount),
                         extrapackagesMoney = extrapackages_money,
                         bookingID = booking_id
                     }), _KeyEncodeParam);
@@ -931,7 +955,31 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     voucher_name=request.voucher_name
                 };
                 var response = await _HotelService.TrackingVoucher(model_request);
+                double total_discount = 0;
+                double percent = Convert.ToDouble(response.value); // Giá trị giảm của voucher. Có thể là % hoặc vnđ                  
 
+                foreach (var room in request.detail.rooms)
+                {
+                    foreach (var rate in room.packages)
+                    {
+                        int nights = Convert.ToInt32((DateTime.ParseExact(rate.departure_date, "yyyy-MM-dd", null) - DateTime.ParseExact(rate.arrival_date, "yyyy-MM-dd", null)).TotalDays);
+                        switch (response.type)
+                        {
+                            case "percent":
+                                //Tinh số tiền giảm theo %
+                                total_discount += ((double)rate.amount * Convert.ToDouble(percent / 100) * nights);
+                                break;
+                            case "vnd":
+                                total_discount += (percent * nights); //Math.Min(Convert.ToDouble(voucher.LimitTotalDiscount), total_fee_not_luxury) ;
+                                break;
+
+                            default: break;
+
+                        }
+                    }
+                }
+                response.discount = total_discount;
+                response.total_order_amount_after= response.total_order_amount_before- total_discount;
                 return new JsonResult(new
                 {
                     isSuccess = true,
