@@ -465,7 +465,7 @@
                       
                     </div>
                     <div class="input-button mb16">
-                        <input type="text" class="form-control" id="hotel-order-voucher-code" placeholder="Nhập mã giảm giá"
+                        <input type="text" class="form-control  @(Model.voucher != null && Model.voucher.id > 0 ? "voucher-applied" : "")" id="hotel-order-voucher-code" placeholder="Nhập mã giảm giá"
                                data-id="@(Model.voucher != null && Model.voucher.id > 0 ? Model.voucher.id.ToString() : "")"
                                data-discount="@(Model.voucher != null && Model.voucher.discount > 0 ? Model.voucher.discount.ToString() : "0")"
                                value="@(Model.voucher != null && Model.voucher.code != null ? Model.voucher.code : "")"
