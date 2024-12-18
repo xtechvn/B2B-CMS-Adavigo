@@ -970,7 +970,8 @@ $(document).on('click', '#btn__summit_request_order',function () {
         note: $('#note').val(),
         voucher: undefined
     };
-    if ($('#hotel-order-voucher-code').attr('data-id') != undefined && $('#hotel-order-voucher-code').attr('data-id').trim() != '') {
+    if ($('#hotel-order-voucher-code').attr('data-id') != undefined && $('#hotel-order-voucher-code').attr('data-id').trim() != ''
+        && $('#hotel-order-voucher-code').hasClass('voucher-applied')) {
         obj.voucher = {
             id: $('#hotel-order-voucher-code').attr('data-id'),
             code: $('#hotel-order-voucher-code').val(),
@@ -1075,6 +1076,7 @@ $('#hotel-order-voucher-apply').click(function () {
             $('#hotel-order-voucher-code').prop('readonly', true)
             $('#hotel-order-voucher-apply').prop('disabled', true)
             $('#hotel-order-voucher-apply').addClass('gray')
+            $('#hotel-order-voucher-apply').addClass('voucher-applied')
             $('#hotel__booking_total_amount').html(_hotel_detail.Comma(result.data.total_order_amount_after) + ' VNĐ')
             $('#hotel-order-total-amount-old').html(_hotel_detail.Comma(result.data.total_order_amount_before) + ' VNĐ')
             $('#hotel-order-total-discount').html('- ' + _hotel_detail.Comma(result.data.total_order_amount_before - result.data.total_order_amount_after) + ' VNĐ')
