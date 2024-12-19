@@ -127,13 +127,30 @@ var _hotel_detail = {
 
     loadTotalMoney: function () {
         let amount_total = 0;
+        var type = $('#hotel-order-voucher-code').attr('data-type')
+        var value = parseFloat($('#hotel-order-voucher-code').attr('data-value'))
+        let total_discount = 0;
         $('#hotel__detail_grid_selected_room .selected_room_price').each(function () {
             let seft = $(this);
-            amount_total += parseInt(seft.data('amount'));
+            var amount_room = parseInt(seft.data('amount'))
+            var nights = parseInt(seft.data('nights'))
+            amount_total += amount_room
+            if (value != undefined && !isNaN(value) && type != undefined && type.trim() != '') {
+                switch (type) {
+                    case 'percent': {
+                        total_discount += (amount_room * (value/100) * nights )
+                    } break
+                    case 'vnd': {
+                        total_discount += (value * nights);
+                    } break
+                }
+
+            }
         });
 
         $('#hotel-order-total-amount-old').html(`${amount_total.toLocaleString()} VNĐ`)
-        $('#hotel__booking_total_amount').html(`${amount_total.toLocaleString()} VNĐ`)
+        $('#hotel-order-total-discount').html(`${total_discount.toLocaleString()} VNĐ`)
+        $('#hotel__booking_total_amount').html(`${(amount_total - total_discount).toLocaleString()} VNĐ`)
 
     },
 
@@ -484,7 +501,7 @@ $('#block__detail_hotel_rooms').on('click', '.ckb__package', function () {
     let adult = room_selected.data('adult');
     let child = room_selected.data('child');
     let infant = room_selected.data('infant');
-
+    let nights = seft.closest('.room-package-detail').find('.dynamic_price').data('night')
     let exist_room = $(`#hotel__detail_grid_selected_room ul[data-room="${room_tab}"]`);
     if (exist_room.length > 0) {
         exist_room.remove();
@@ -539,7 +556,7 @@ $('#block__detail_hotel_rooms').on('click', '.ckb__package', function () {
           <input type="hidden" class="departure_date" value="${departureDate}" />
           <input type="hidden" class="allotment_id" value="${allotment_id}" />
           <div class="gray col-7">Gói : <strong class="package-code">${package_code}</strong></div>
-          <div class="col-5 text-right selected_room_price" data-amount="${amount}" data-profit="${profit}">
+          <div class="col-5 text-right selected_room_price" data-amount="${amount}" data-profit="${profit}" data-nights="${nights}">
             <strong>${amount.toLocaleString()} đ</strong>
           </div>
         </li>
@@ -676,6 +693,7 @@ $(document).on('click', '.btn_add_room_package', function () {
 
     let arrival_date = ConvertJsDateToString(_hotel_detail.packageDate.from, "YYYY-MM-DD");
     let departure_date = ConvertJsDateToString(_hotel_detail.packageDate.to, "YYYY-MM-DD");
+    let nights = info_room_element.find('input.ckb__package:checked').closest('.room-package-detail').find('.dynamic_price').data('night')
 
     let room_data = _hotel_detail.rooms.find(x => x.room_number == room_tab);
 
@@ -706,7 +724,7 @@ $(document).on('click', '.btn_add_room_package', function () {
           <input type="hidden" class="departure_date" value="${departure_date}" />
           <input type="hidden" class="allotment_id" value="${allotment_id}" />
           <div class="gray col-7">Gói : <strong class="package-code">${package_code}</strong></div>
-          <div class="col-5 text-right selected_room_price" data-amount="${amount}" data-profit="${profit}">
+          <div class="col-5 text-right selected_room_price" data-amount="${amount}" data-profit="${profit}" data-nights="${nights}">
             <strong>${amount.toLocaleString()} đ</strong>
           </div>
         </li>`;
@@ -920,16 +938,36 @@ $('#btn__check_order').click(function () {
                                `
 
             });
-            var discount = ($('#hotel-order-voucher-code').attr('data-discount')) == undefined || isNaN(parseFloat($('#hotel-order-voucher-code').attr('data-discount'))) ? 0 : parseFloat($('#hotel-order-voucher-code').attr('data-discount'))
-            Amonut_packages -= discount
+
+            var type = $('#hotel-order-voucher-code').attr('data-type')
+            var value = parseFloat($('#hotel-order-voucher-code').attr('data-value'))
+            let total_discount = 0;
+            $('#hotel__detail_grid_selected_room .selected_room_price').each(function () {
+                let seft = $(this);
+                var amount_room = parseInt(seft.data('amount'))
+                var nights = parseInt(seft.data('nights'))
+                if (value != undefined && !isNaN(value) && type != undefined && type.trim() != '') {
+                    switch (type) {
+                        case 'percent': {
+                            total_discount += (amount_room * (value / 100) * nights)
+                        } break
+                        case 'vnd': {
+                            total_discount += (value * nights);
+                        } break
+                    }
+
+                }
+            });
+
+            Amonut_packages -= total_discount
             var html_table2 = `  <tr class="bg-white">
                                     <td></td>
                                     <td class="text-left"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td class="text-right"><b>Triết khấu</b></td>
-                                    <td class="text-right"><b>${_hotel_detail.Comma(discount)}</b></td>
+                                    <td class="text-right"><b>Chiết khấu</b></td>
+                                    <td class="text-right"><b>${_hotel_detail.Comma(total_discount)}</b></td>
                                 </tr>
                                     <tr class="bg-white">
                                     <td></td>
@@ -970,12 +1008,31 @@ $(document).on('click', '#btn__summit_request_order',function () {
         note: $('#note').val(),
         voucher: undefined
     };
+    var type = $('#hotel-order-voucher-code').attr('data-type')
+    var value = parseFloat($('#hotel-order-voucher-code').attr('data-value'))
+    let total_discount = 0;
+    $('#hotel__detail_grid_selected_room .selected_room_price').each(function () {
+        let seft = $(this);
+        var amount_room = parseInt(seft.data('amount'))
+        var nights = parseInt(seft.data('nights'))
+        if (value != undefined && !isNaN(value) && type != undefined && type.trim() != '') {
+            switch (type) {
+                case 'percent': {
+                    total_discount += (amount_room * (value / 100) * nights)
+                } break
+                case 'vnd': {
+                    total_discount += (value * nights);
+                } break
+            }
+
+        }
+    });
     if ($('#hotel-order-voucher-code').attr('data-id') != undefined && $('#hotel-order-voucher-code').attr('data-id').trim() != ''
         && $('#hotel-order-voucher-code').hasClass('voucher-applied')) {
         obj.voucher = {
             id: $('#hotel-order-voucher-code').attr('data-id'),
             code: $('#hotel-order-voucher-code').val(),
-            discount: $('#hotel-order-voucher-code').attr('data-discount'),
+            discount: total_discount,
         }
     }
     _ajax_caller.post('/hotel/SaveRequestData', { data: obj }, function (result) {
@@ -1086,6 +1143,8 @@ $('#hotel-order-voucher-apply').click(function () {
             $('#hotel-order-total-discount').html('- ' + _hotel_detail.Comma(result.data.total_order_amount_before - result.data.total_order_amount_after) + ' VNĐ')
             $('#hotel-order-voucher-code').attr('data-id', result.data.voucher_id)
             $('#hotel-order-voucher-code').attr('data-discount', (result.data.total_order_amount_before - result.data.total_order_amount_after))
+            $('#hotel-order-voucher-code').attr('data-type', result.data.type)
+            $('#hotel-order-voucher-code').attr('data-value', result.data.value)
 
 
         } else {
