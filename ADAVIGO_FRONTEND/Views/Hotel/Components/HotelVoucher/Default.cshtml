@@ -34,7 +34,7 @@
                                     <div class="item item-voucher" style="cursor:pointer;" data-code="@item.Code">
                                         <div class="img">
                                             <div>
-                                                <span class="des">@item.Description</span>
+                                                <span class="des">@item.Code</span>
                                               @switch(item.Unit.Trim().ToLower()){
                                                     case "percent":
                                                         {
@@ -49,7 +49,7 @@
                                             </div>
                                         </div>
                                         <div class="info">
-                                            <h4 class="name">@item.Code</h4>
+                                            <h4 class="name">@item.Description</h4>
                                             <p class="date">HSD: @(item.EDate != null ? ((DateTime)item.EDate).ToString("dd/MM/yyyy") : "")</p>
                                             @*<a href="" class="link">Điều kiện </a>*@
                                         </div>

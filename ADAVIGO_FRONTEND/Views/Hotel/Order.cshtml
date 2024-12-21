@@ -471,10 +471,10 @@
                                value="@(Model.voucher != null && Model.voucher.code != null ? Model.voucher.code : "")"
                         @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")
                        >
-                        <button id="hotel-order-voucher-apply" >
+                        <button id="hotel-order-voucher-apply" style="display:none;">
                                 Áp dụng
                           </button>
-                        <button id="hotel-order-voucher-popup" style="display:none;" class="@(Model.voucher != null && Model.voucher.id > 0 ? "gray" : "")" @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")>Chọn Voucher</button>
+                        <button id="hotel-order-voucher-popup"  class="@(Model.voucher != null && Model.voucher.id > 0 ? "gray" : "")" @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")>Chọn Voucher</button>
 
                     </div>
                     <div class="flex mb12">
