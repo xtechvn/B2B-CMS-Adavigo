@@ -364,6 +364,8 @@ $('#hotel-order-voucher-apply').click(function () {
             $('#hotel-order-voucher-code').attr('data-discount', (result.data.total_order_amount_before - result.data.total_order_amount_after))
             $('#hotel-order-voucher-code').attr('data-type', result.data.type)
             $('#hotel-order-voucher-code').attr('data-value', result.data.value)
+            $('#hotel-order-voucher-popup').attr('data-type', result.data.type)
+            $('#hotel-order-voucher-popup').attr('data-value', result.data.value)
 
         } else {
             _msgalert.error(result.message);

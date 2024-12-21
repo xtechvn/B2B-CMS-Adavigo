@@ -469,10 +469,13 @@
                                data-id="@(Model.voucher != null && Model.voucher.id > 0 ? Model.voucher.id.ToString() : "")"
                                data-discount="@(Model.voucher != null && Model.voucher.discount > 0 ? Model.voucher.discount.ToString() : "0")"
                                value="@(Model.voucher != null && Model.voucher.code != null ? Model.voucher.code : "")"
-                        @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "") >
-                        <button id="hotel-order-voucher-apply" class="@(Model.voucher != null && Model.voucher.id > 0 ? "gray" : "")" @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")>
+                        @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")
+                       >
+                        <button id="hotel-order-voucher-apply" >
                                 Áp dụng
                           </button>
+                        <button id="hotel-order-voucher-popup" style="display:none;" class="@(Model.voucher != null && Model.voucher.id > 0 ? "gray" : "")" @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")>Chọn Voucher</button>
+
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_14">Giá cũ</div>
@@ -492,6 +495,8 @@
             </div>
         </div>
     </section>
+    @await Component.InvokeAsync("HotelVoucher", new { hotel_id = @Model.hotelID })
+
 }
 else
 {
@@ -501,4 +506,6 @@ else
 @section scripts{
     <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
     <script type="text/javascript" src="~/js/modules/hotel-order.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
+
 }

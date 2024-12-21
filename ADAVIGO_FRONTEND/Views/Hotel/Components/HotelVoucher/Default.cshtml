@@ -1,0 +1,74 @@
+﻿@using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher
+@{
+    var list = (List<B2BVoucherListResponse>)ViewBag.List;
+}
+<div class="modal fade form-voucher" id="chonvoucher" style="display: none; background:rgba(57,58,63,.7)" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 640px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title-popup">Chọn voucher</h4>
+
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="content">
+                    <div class="code-voucher">
+                        <div class="form-code">
+                            <input type="text" placeholder="Nhập mã Voucher">
+                            <button type="submit" title="Tìm kiếm" class="btn-search btn-default">
+                                <svg class="icon-svg">
+                                    <use xlink:href="images/icons/icon.svg#search"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="list-voucher">
+                        @{
+                            if(list!=null && list.Count > 0)
+                            {
+                                int count = 0;
+                                foreach(var item in list)
+                                {
+                                    count++;
+                                    <div class="item item-voucher" style="cursor:pointer;" data-code="@item.Code">
+                                        <div class="img">
+                                            <div>
+                                                <span class="des">@item.Description</span>
+                                              @switch(item.Unit.Trim().ToLower()){
+                                                    case "percent":
+                                                        {
+                                                            <div class="percent">- @(Convert.ToDouble(item.PriceSales).ToString("N0")) %</div>
+                                                        }break;
+                                                    case "vnd":
+                                                        {
+                                                            <div class="percent">- @(Convert.ToDouble(item.PriceSales).ToString("N0")) VNĐ</div>
+                                                        }
+                                                        break;
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="info">
+                                            <h4 class="name">@item.Code</h4>
+                                            <p class="date">HSD: @(item.EDate != null ? ((DateTime)item.EDate).ToString("dd/MM/yyyy") : "")</p>
+                                            @*<a href="" class="link">Điều kiện </a>*@
+                                        </div>
+                                        <div class="box-radio">
+                                            <input type="radio" id="radio-@count" class="radio voucher-select" name="voucher-select">
+                                            <label for="radio-@count"></label>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                       
+                    </div>
+                </div>
+                <div class="action">
+                    <a href="javascript:;" class="btn-default  gray btn-back close">Trở lại</a>
+                    <a href="javascript:;" class="btn-default btn-base btn-save  confirm-selected">OK</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

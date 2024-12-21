@@ -754,5 +754,24 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw;
             }
         }
+        public async Task<List<B2BVoucherListResponse>> GetVoucherList(B2BVoucherListRequest model)
+        {
+            try
+            {
+                model.user_id = _UserManager.ClientID;
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetVoucherList, model);
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<List<B2BVoucherListResponse>>(jsonData["data"].ToString());
+                
+            }
+            catch
+            {
+            }
+            return new List<B2BVoucherListResponse>();
+        }
     }
 }

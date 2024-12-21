@@ -154,6 +154,7 @@
         public const string ADD_COMMENT = "/api/comment/add.json";
 
         public const string TrackingVoucher = "api/Voucher/b2b/apply.json";
+        public const string GetVoucherList = "api/Voucher/b2b/get-list";
 
 
     }

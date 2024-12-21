@@ -995,5 +995,34 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 });
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> GetVoucherList(B2BVoucherListRequest request)
+        {
+            try
+            {
+                if (request.hotel_id == null || request.hotel_id.Trim() == "")
+                {
+                    return new JsonResult(new
+                    {
+                        isSuccess = false,
+                        message = "Dữ liệu gửi lên không chính xác"
+                    });
+                }
+                var response = await _HotelService.GetVoucherList(request);
+                return new JsonResult(new
+                {
+                    isSuccess = true,
+                    data = response
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    isSuccess = false,
+                    message = ex.Message
+                });
+            }
+        }
     }
 }

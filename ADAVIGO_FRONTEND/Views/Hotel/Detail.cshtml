@@ -187,8 +187,9 @@
                 <div id="hotel__detail_grid_selected_room">
                 </div>
                 <div class="input-button mb16">
-                    <input type="text" class="form-control" id="hotel-order-voucher-code" placeholder="Nhập mã giảm giá">
-                    <button id="hotel-order-voucher-apply" class="">Áp dụng</button>
+                    <input type="text" class="form-control" id="hotel-order-voucher-code" placeholder="Mã giảm giá">
+                    <button id="hotel-order-voucher-apply"  class="">Áp dụng</button>
+                    <button id="hotel-order-voucher-popup" style="display:none;" class="">Chọn Voucher</button>
                 </div>
                 <div class="flex mb12">
                     <div class="bold txt_14">Giá cũ</div>
@@ -411,10 +412,14 @@
         
     </div>
 </section>
+@await Component.InvokeAsync("HotelVoucher", new { hotel_id = @Model.hotelID })
+
+
 @section scripts{
 <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
 <script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
 <script type="text/javascript" src="~/js/modules/hotel-detail-search.js"> </script>
+<script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
 
 }
 
