@@ -32,26 +32,26 @@
                                 {
                                     if (item == null || item.Id <= 0) continue;
                                     count++;
-                                    <div class="item item-voucher" style="cursor:pointer;" data-code="@item.Code">
+                                    <div class="item item-voucher" style="cursor:pointer;" data-code="@item.code">
                                         <div class="img">
                                             <div>
-                                                <span class="des">@item.Code</span>
-                                              @switch(item.Unit.Trim().ToLower()){
+                                                <span class="des">@item.code</span>
+                                              @switch(item.unit.Trim().ToLower()){
                                                     case "percent":
                                                         {
-                                                            <div class="percent">- @(Convert.ToDouble(item.PriceSales).ToString("N0")) %</div>
+                                                            <div class="percent">- @(Convert.ToDouble(item.price_sales).ToString("N0")) %</div>
                                                         }break;
                                                     case "vnd":
                                                         {
-                                                            <div class="percent">- @(Convert.ToDouble(item.PriceSales).ToString("N0")) VNĐ</div>
+                                                            <div class="percent">- @(Convert.ToDouble(item.price_sales).ToString("N0")) VNĐ</div>
                                                         }
                                                         break;
                                                 }
                                             </div>
                                         </div>
                                         <div class="info">
-                                            <h4 class="name">@item.Description</h4>
-                                            <p class="date">HSD: @(item.EDate != null ? ((DateTime)item.EDate).ToString("dd/MM/yyyy") : "")</p>
+                                            <h4 class="name">@item.description</h4>
+                                            <p class="date">HSD: @(item.eDate != null ? ((DateTime)item.eDate).ToString("dd/MM/yyyy") : "")</p>
                                             @*<a href="" class="link">Điều kiện </a>*@
                                         </div>
                                         <div class="box-radio">
