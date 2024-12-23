@@ -19,6 +19,26 @@
         if (infant_total > 0) ArrMemberOfRoom.Add(infant_total + " Em bé");
     }
     var strMemberOfRoom = string.Join(", ", ArrMemberOfRoom);
+    DateTime fromdate = DateTime.MinValue;
+    DateTime todate = DateTime.MinValue;
+    int days = 0;
+    try
+    {
+        fromdate = DateTime.ParseExact(Model.arrivalDate, "yyyy-MM-dd", null);
+        todate = DateTime.ParseExact(Model.departureDate, "yyyy-MM-dd", null);
+        days = Convert.ToInt32((todate - fromdate).TotalDays);
+    }catch{}
+    if (days <= 0)
+    {
+        try
+        {
+            fromdate = DateTime.ParseExact(Model.arrivalDate, "dd/MM/yyyy", null);
+            todate = DateTime.ParseExact(Model.departureDate, "dd/MM/yyyy", null);
+            days = Convert.ToInt32((todate - fromdate).TotalDays);
+        }
+        catch { }
+    }
+    if (days <= 0) days = 1;
 }
 <div class="tab-content">
     <div class="flex-row building-grid mb8">
@@ -62,7 +82,7 @@
                 </a>
             </div>
             <div class="note">
-                <a class="day_count">1</a>
+                <a class="day_count">@days</a>
                 <svg class="icon-svg">
                     <use xlink:href="/images/icons/icon.svg#night2"></use>
                 </svg>

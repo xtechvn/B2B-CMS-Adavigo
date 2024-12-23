@@ -978,6 +978,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                         }
                     }
                 }
+                total_discount = Math.Round(total_discount, 0);
                 response.discount = total_discount;
                 response.total_order_amount_after= response.total_order_amount_before- total_discount;
                 return new JsonResult(new

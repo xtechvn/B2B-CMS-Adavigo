@@ -283,7 +283,7 @@
             arrivalDate: ConvertJsDateToString(fromDate, "YYYY-MM-DD"),
             departureDate: ConvertJsDateToString(toDate, "YYYY-MM-DD"),
             hotelID: $('#input__search-hotel-id').val(),
-            hotelName: $('#input__suggest-hotel').attr('keyword') == undefined ? $('#input__suggest-hotel').val() : $('#input__suggest-hotel').attr('keyword'),
+            hotelName: $('#input__suggest-hotel').attr('keyword') == undefined || $('#input__suggest-hotel').attr('keyword').trim()=='' ? $('#input__suggest-hotel').val() : $('#input__suggest-hotel').attr('keyword'),
             productType: $('#input__search-hotel-type').val(),
             rooms: room_datas,
             isVinHotel: hotel_search_type == 1 ? true : false,

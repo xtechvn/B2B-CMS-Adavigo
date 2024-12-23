@@ -147,7 +147,7 @@ var _hotel_detail = {
 
             }
         });
-
+        total_discount = Math.round(total_discount)
         $('#hotel-order-total-amount-old').html(`${amount_total.toLocaleString()} VNĐ`)
         $('#hotel-order-total-discount').html(`${total_discount.toLocaleString()} VNĐ`)
         $('#hotel__booking_total_amount').html(`${(amount_total - total_discount).toLocaleString()} VNĐ`)
@@ -1118,6 +1118,8 @@ $('#hotel-order-voucher-apply').click(function () {
     }
     if (_hotel_detail.rooms.length < parseInt($('#input__number_room_order').val())) {
         _msgalert.error('Vui lòng chọn thông tin tất cả các phòng trước khi áp dụng Voucher');
+        $('#hotel-order-voucher-code').val('')
+        $('#hotel-order-voucher-code').removeClass('voucher-applied')
         return
     }
     var request = {
