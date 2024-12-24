@@ -1050,7 +1050,7 @@ $(document).ready(function () {
     }
     else//default
         searchFlightOneWay(TIME_UTILS.formatDay(new Date()).split('-').reverse().join(''));
-
+    UTILS.RenderSearch()
 });
 
 function getSearchObj() {

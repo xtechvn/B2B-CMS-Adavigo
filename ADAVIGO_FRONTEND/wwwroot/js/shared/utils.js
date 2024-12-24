@@ -885,11 +885,11 @@ const UTILS = {
                 // find payment cart item
                 var find = false;
                 for (var payCart of paymentCart) {
-                    
+
                     if (cartItem.Key == payCart.Key && cartItem.PeopleString == payCart.PeopleString) {
                         find = cartItem;
                         break;
-                    }      
+                    }
                 }
                 if (!find)
                     notPayCart.push(cartItem)
@@ -960,5 +960,66 @@ const UTILS = {
             },
 
         });
+    },
+    RenderSearch: function () {
+        // set default value for select place
+        // hà nội
+        UTILS.rerenderSelectGo(CONSTANTS.FLIGHTS.PLACES)
+        $("#select-go").val("1").trigger("change");
+        // hcm
+        var arrivalist = CONSTANTS.FLIGHTS.PLACES.filter(function (item) {
+            return item.id != 1;
+        });
+        UTILS.rerenderSelectArrival(arrivalist)
+        $("#select-arrival").val("2").trigger("change");
+
+        // Remove arrival selection that same as go place:
+        $("body").on("select2:select", '#select-go', function () {
+            var selected_value = $("#select-go").find(':selected').val()
+            var arrivalist_select = CONSTANTS.FLIGHTS.PLACES.filter(function (item) {
+                return item.id != selected_value;
+            });
+            UTILS.rerenderSelectArrival(arrivalist_select)
+        });
+        var Adt = parseInt($('#qty_input_adt').val())
+        var Child = parseInt($('#qty_input_chil').val())
+        var Baby = parseInt($('#qty_input_baby').val())
+        $('.guest-w .qty-customer').html('' + (Adt + Child + Baby))
+        $('.guest-w .class-seat').html(`(${Adt} người lớn` + (Child > 0 ? `,${Child} trẻ em` : '') + (Baby > 0 ? `,${Baby} em bé` : '') + `)`)
+
+
+        $('body').on('click', '#collapseGuest .giam_sl', function () {
+            let seft = $(this);
+            let inputElement = seft.parent().siblings('input');
+            let current_value = parseInt(inputElement.val());
+            if (inputElement.hasClass('qty_input_adt')) {
+                if (current_value <= 1) return
+                else {
+                    inputElement.val(current_value - 1);
+                }
+            }
+            else {
+                if (current_value <= 0) return
+                inputElement.val(current_value - 1);
+            }
+            var Adt = parseInt($('#qty_input_adt').val())
+            var Child = parseInt($('#qty_input_chil').val())
+            var Baby = parseInt($('#qty_input_baby').val())
+            $('.guest-w .qty-customer').html('' + (Adt + Child + Baby))
+            $('.guest-w .class-seat').html(`(${Adt} người lớn` + (Child > 0 ? `,${Child} trẻ em` : '') + (Baby > 0 ? `,${Baby} em bé` : '')+`)`)
+        });
+
+        $('body').on('click', '#collapseGuest .tang_sl', function () {
+            let seft = $(this);
+            let inputElement = seft.parent().siblings('input');
+            let current_value = parseInt(inputElement.val());
+            inputElement.val(current_value + 1);
+            var Adt = parseInt($('#qty_input_adt').val())
+            var Child = parseInt($('#qty_input_chil').val())
+            var Baby = parseInt($('#qty_input_baby').val())
+            $('.guest-w .qty-customer').html('' + (Adt + Child + Baby))
+            $('.guest-w .class-seat').html(`(${Adt} người lớn` + (Child > 0 ? `,${Child} trẻ em` : '') + (Baby > 0 ? `,${Baby} em bé` : '') + `)`)
+        });
+        $('#error-number-passenger').hide()
     }
 }
