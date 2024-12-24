@@ -221,7 +221,8 @@ var tour_detail = {
         $('#select-tab-' + tab_id).show()
     },
     RenderDetailSelectTourScheduleOptionTime: function (date) {
-        return ("0" + date.getDate()).slice(-2) + '/' + ("0" + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
+        let arrdate = date.split('T')[0].split('-');
+        return (arrdate[2] + "/" + arrdate[1] + "/" + arrdate[0]);
 
     },
     RenderStar: function (value) {
