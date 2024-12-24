@@ -1025,5 +1025,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 });
             }
         }
+        public IActionResult CheckRequestHotel(List<RoomOrderData> model, double discount)
+        {
+            ViewBag.discount = discount;
+            return View(model);
+        }
     }
 }

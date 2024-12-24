@@ -1,0 +1,66 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels;
+@{ 
+    Layout = null;
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    int i = 0;
+    var Amonut_packages = 0;
+}
+@model List<RoomOrderData>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        var night_number = 0; i++;
+        <tr>
+            <td>@i</td>
+            <td style="width: 30%;"><input type="email" class="form-control" id="" value="@item.room_name" disabled></td>
+            <td>
+                <div class="flexbox align-center">
+                    <div>
+                        @foreach (var item2 in item.packages)
+                        {
+                            <input type="text" class="form-control mb-2" id="" value="@item2.package_code" disabled>
+                        }
+                    </div>
+                </div>
+            </td>
+            <td>
+                @foreach (var item2 in item.packages)
+                {
+                    <input type="text" class="form-control mb-2" id="" value="@(DateTime.ParseExact(item2.arrival_date, "yyyy-MM-dd", null).ToString("dd/MM/yyyy")) - @(DateTime.ParseExact(item2.departure_date, "yyyy-MM-dd", null).ToString("dd/MM/yyyy"))" disabled>
+                    night_number += Convert.ToInt32((DateTime.ParseExact(item2.departure_date, "yyyy-MM-dd", null) - DateTime.ParseExact(item2.arrival_date, "yyyy-MM-dd", null)).TotalMilliseconds / millisecondsPerDay);
+                }
+            </td>
+            <td class="text-right"><input type="text" class="form-control text-right" id="" value="@night_number" disabled></td>
+            <td class="text-right"><input type="text" class="form-control text-right" id="" value="1" disabled></td>
+            <td class="text-right">
+                @foreach (var item2 in item.packages)
+                {
+                    <input type="text" readonly="" class="form-control text-right mb-2" id="" value="@((Convert.ToDouble(item2.amount)).ToString("N0"))" disabled>
+                    Amonut_packages += Convert.ToInt32(item2.amount);
+                }
+
+            </td>
+
+        </tr>
+    }
+    <tr class="bg-white">
+            <td></td>
+            <td class="text-left"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><b>Triết khấu</b></td>
+            <td class="text-right"><b>@((ViewBag.discount).ToString("N0"))</b></td>
+        </tr>
+        <tr class="bg-white">
+            <td></td>
+            <td class="text-left"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><b>Tổng</b></td>
+            <td class="text-right"><b>@((Amonut_packages- ViewBag.discount).ToString("N0"))</b></td>
+        </tr>
+}
+

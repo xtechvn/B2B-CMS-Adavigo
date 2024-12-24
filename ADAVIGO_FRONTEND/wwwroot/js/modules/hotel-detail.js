@@ -899,45 +899,45 @@ $('#btn__check_order').click(function () {
             var table_html = ''
             var Amonut_packages = 0;
             var millisecondsPerDay = 24 * 60 * 60 * 1000;
-            _hotel_detail.rooms.forEach((item) => {
-                var html_code = ''
-                var html_date = ''
-                var html_amount = ''
-                var night_number = 0;
-                var td1 = ` `
-                html_btn =`<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
-                item.packages.forEach((item2) => {
-                    html_code += `  <input type="text" class="form-control mb-2" id="" value="${item2.package_code}" disabled>`
-                    html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}" disabled>`
-                    html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}" disabled>`
-                    Amonut_packages += item2.amount;
-                    night_number += (ConvertToDate(_hotel_detail.ConvertToDateDotnet(item2.departure_date)) - ConvertToDate(_hotel_detail.ConvertToDateDotnet(item2.arrival_date))) / millisecondsPerDay
-                });
-                var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
-                var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
-                table_html += `  <tr>
-                                    <td>1</td>
-                                   <td style="width: 30%;"><input type="email" class="form-control" id="" value="${item.room_name}" disabled></td>
-                                    <td>
-                                        <div class="flexbox align-center">
-                                            <div>
-                                               `+ html_code + `
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                       `+ html_date + `
-                                    </td>
-                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="${night_number}" disabled></td>
-                                    <td class="text-right"><input type="text" class="form-control text-right" id="" value="1" disabled></td>
-                                    <td class="text-right">
-                                    `+ html_amount + `
-                                    </td>
+            //_hotel_detail.rooms.forEach((item) => {
+            //    var html_code = ''
+            //    var html_date = ''
+            //    var html_amount = ''
+            //    var night_number = 0;
+            //    var td1 = ` `
+            //    html_btn =`<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
+            //    item.packages.forEach((item2) => {
+            //        html_code += `  <input type="text" class="form-control mb-2" id="" value="${item2.package_code}" disabled>`
+            //        html_date += `  <input type="text" class="form-control mb-2" id="" value="${_hotel_detail.ConvertToDateDotnet(item2.arrival_date)} - ${_hotel_detail.ConvertToDateDotnet(item2.departure_date)}" disabled>`
+            //        html_amount += `<input type="text" readonly="" class="form-control text-right mb-2" id="" value="${_hotel_detail.Comma(item2.amount)}" disabled>`
+            //        Amonut_packages += item2.amount;
+            //        night_number += (ConvertToDate(_hotel_detail.ConvertToDateDotnet(item2.departure_date)) - ConvertToDate(_hotel_detail.ConvertToDateDotnet(item2.arrival_date))) / millisecondsPerDay
+            //    });
+            //    var td2 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
+            //    var td3 = `   <td class="text-right"><input type="text" class="form-control text-right" id="" value="${item.room_number}" disabled></td>`
+            //    table_html += `  <tr>
+            //                        <td>1</td>
+            //                       <td style="width: 30%;"><input type="email" class="form-control" id="" value="${item.room_name}" disabled></td>
+            //                        <td>
+            //                            <div class="flexbox align-center">
+            //                                <div>
+            //                                   `+ html_code + `
+            //                                </div>
+            //                            </div>
+            //                        </td>
+            //                        <td>
+            //                           `+ html_date + `
+            //                        </td>
+            //                        <td class="text-right"><input type="text" class="form-control text-right" id="" value="${night_number}" disabled></td>
+            //                        <td class="text-right"><input type="text" class="form-control text-right" id="" value="1" disabled></td>
+            //                        <td class="text-right">
+            //                        `+ html_amount + `
+            //                        </td>
 
-                                </tr>
-                               `
+            //                    </tr>
+            //                   `
 
-            });
+            //});
 
             var type = $('#hotel-order-voucher-code').attr('data-type')
             var value = parseFloat($('#hotel-order-voucher-code').attr('data-value'))
@@ -960,27 +960,34 @@ $('#btn__check_order').click(function () {
             });
 
             Amonut_packages -= total_discount
-            var html_table2 = `  <tr class="bg-white">
-                                    <td></td>
-                                    <td class="text-left"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right"><b>Chiết khấu</b></td>
-                                    <td class="text-right"><b>${_hotel_detail.Comma(total_discount)}</b></td>
-                                </tr>
-                                    <tr class="bg-white">
-                                    <td></td>
-                                    <td class="text-left"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right"><b>Tổng</b></td>
-                                    <td class="text-right"><b>${_hotel_detail.Comma(Amonut_packages)}</b></td>
-                                </tr>`
+            //var html_table2 = `  <tr class="bg-white">
+            //                        <td></td>
+            //                        <td class="text-left"></td>
+            //                        <td></td>
+            //                        <td></td>
+            //                        <td></td>
+            //                        <td class="text-right"><b>Chiết khấu</b></td>
+            //                        <td class="text-right"><b>${_hotel_detail.Comma(total_discount)}</b></td>
+            //                    </tr>
+            //                        <tr class="bg-white">
+            //                        <td></td>
+            //                        <td class="text-left"></td>
+            //                        <td></td>
+            //                        <td></td>
+            //                        <td></td>
+            //                        <td class="text-right"><b>Tổng</b></td>
+            //                        <td class="text-right"><b>${_hotel_detail.Comma(Amonut_packages)}</b></td>
+            //                    </tr>`
 
-            $('#table_body').html(table_html + html_table2)
-            $('#btn_summit').html(html_btn)
+            _ajax_caller.post('/hotel/CheckRequestHotel', { model: _hotel_detail.rooms, discount: total_discount }, function (result) {
+                $('#table_body').html(result)
+                if (_hotel_detail.rooms.length > 0) {
+                    html_btn = `<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
+                }
+                $('#btn_summit').html(html_btn)
+            });
+            //$('#table_body').html(table_html + html_table2)
+            //$('#btn_summit').html(html_btn)
      
             //_ajax_caller.post('/hotel/SaveRequestData', { data: obj }, function (result) {
             //    if (result.isSuccess) {
