@@ -172,10 +172,10 @@
     box-shadow: 0px 4px 34px rgba(0, 0, 0, 0.15);
     border-radius: 10px;
     padding: 15px;
-    width: calc(100% - 14px);
+    width: 55vw;
     min-width: 300px;
-    max-width: 100%;
-    right: 14px;
+    max-width: none;
+    right: 8px;
     top: 70px;
     z-index: 5;
     .row {
@@ -188,6 +188,9 @@
     }
     @media (max-width: 1025px) {}
     @media (max-width: 767px) {
+        left: 0;
+        right: 0;
+        min-width: auto;
         .line-left {
             border-left: 0
         }
@@ -3759,7 +3762,7 @@
     .guest-w {
         width: 28%;
         .item {
-            width: calc(100% - 76px);
+            width: 100%;
         }
     }
     .btn-search {
@@ -4109,7 +4112,7 @@
             margin-top: 0;
         }
     }
-    @media (max-width: 1025px) {
+    @media (max-width: 1200px) {
         flex-wrap: wrap;
         .flex-row{flex-wrap: wrap;}
         .list-address {
