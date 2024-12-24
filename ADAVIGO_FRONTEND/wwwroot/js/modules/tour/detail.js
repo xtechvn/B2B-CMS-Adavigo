@@ -221,11 +221,7 @@ var tour_detail = {
         $('#select-tab-' + tab_id).show()
     },
     RenderDetailSelectTourScheduleOptionTime: function (date) {
-<<<<<<< HEAD
         let arrdate = date.split('T')[0].split('-');
-=======
-        let arrdate = strdate.split('T')[0].split('-');
->>>>>>> e2bd52251c0e15bf21344f3a31d04d2864d59049
         return (arrdate[2] + "/" + arrdate[1] + "/" + arrdate[0]);
 
     },
