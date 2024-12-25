@@ -100,9 +100,11 @@ var customer_information = {
 
         });
           $('body').on('select2:select', '#tour-detail-schedule-fixed', function (e) {
-    
-              var adt_value = parseFloat($('#tour-schedule-flex').attr('data-adt'))
-              var chd_value = parseFloat($('#tour-schedule-flex').attr('data-chd'))
+
+              var id = $('#tour-detail-schedule-fixed').val()
+
+              var adt_value = parseFloat($('#tour-detail-schedule-fixed option[value="' + id + '"]').attr('data-adult'))
+              var chd_value = parseFloat($('#tour-detail-schedule-fixed option[value="' + id + '"]').attr('data-child'))
 
             $('.base-price-adt-nw').html(tour_service.Comma(adt_value))
             $('.base-price-chd-nw').html(tour_service.Comma(chd_value))
@@ -153,6 +155,7 @@ var customer_information = {
     },
     RenderDetail: function (result) {
         var request = sessionStorage.getItem(tour_constants.STORAGE.TourCart)
+        request = JSON.parse(request);
         $('.tour-name').attr('data-id',result.data.id)
         $('.tour-name').html(result.data.tourName)
         $('.on-star .star').html(customer_information.RenderStar(result.data.star))
@@ -200,9 +203,10 @@ var customer_information = {
         var amount = 0
         var selected_adult_price=0
         var selected_child_price=0
+         var id = $('#tour-detail-schedule-fixed').val()
 
-         selected_adult_price = parseFloat($('#tour-schedule-flex').attr('data-adt'))
-         selected_child_price = parseFloat($('#tour-schedule-flex').attr('data-chd'))
+         selected_adult_price = parseFloat($('#tour-detail-schedule-fixed option[value="' + id + '"]').attr('data-adult'))
+         selected_child_price = parseFloat($('#tour-detail-schedule-fixed option[value="' + id + '"]').attr('data-child'))
          $('.base-price-adt-nw').html(tour_service.Comma(selected_adult_price))
          $('.base-price-chd-nw').html(tour_service.Comma(selected_child_price))
         var adt = $('#qty_input-adt').val()
@@ -350,7 +354,7 @@ var customer_information = {
             numberOfAdult: $('#qty_input-adt').val(),
             numberOfChild: $('#qty_input-chd').val(),
             totalAmount: $('.total-amount').attr('data-amount'),
-            startDate: $('#tour-detail-schedule-fixed').val(option_val).text().trim(),
+            startDate: $('#tour-detail-schedule-fixed option[value="' + option_val + '"]').text().trim(),
             totalNights: $('#total_nights').attr('data-nights'),
             tourId: $('.tour-name').attr('data-id'),
             packageId: $('#tour-detail-schedule-fixed').val(),

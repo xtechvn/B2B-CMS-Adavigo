@@ -83,6 +83,18 @@ var tour_detail = {
                 $('#min_childprice').html(tour_service.Comma(chd_value))
             }
         });
+        $('body').on('click', '#tab-banggia-select-month .item', function (e) {
+            var element = $(this)
+            $('#tab-banggia-select-month .item').removeClass('active')
+            element.addClass('active')
+            $('.tb-banggia').hide()
+            if (element.attr('data-id') == undefined || element.attr('data-id').trim() == '') {
+                $('#by_month-all').show()
+            } else {
+                $('#by_month-' + element.attr('data-id')).show()
+            }
+
+        });
     },
     TourDetail: function () {
         var model = {

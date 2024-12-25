@@ -122,7 +122,7 @@
                             var month = from.packages.Select(x => ((DateTime)x.FromDate).Month).Distinct();
                             @foreach (var m in month)
                             {
-                                <li class="item"><a href="javascript:;">Tháng @m</a></li>
+                                <li class="item" data-id="@m"><a href="javascript:;">Tháng @m</a></li>
                             }
                         }
 
