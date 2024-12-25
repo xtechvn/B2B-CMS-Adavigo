@@ -303,9 +303,11 @@
                     {
                         var prices = from.packages.Where(x => x.AdultPrice != null && (double)x.AdultPrice > 0).Select(x => new { id = x.Id, price = (double)x.AdultPrice, is_daily = false, date = ((DateTime)x.FromDate).ToString("dd/MM/yyyy") }).ToList();
                         var min_price = prices.OrderBy(x => x.price).First();
-                        <a class="btn-default full mb10 tour-detail-confirm-quick" data-id="@min_price.id" data-date="@min_price.date" data-is_daily="@min_price.is_daily.ToString()" href="javascript:;" style="line-height: 1.6;padding: 5px 20px;">
-                            <div>Đặt tour ngay</div>
-                            <small>Giữ chỗ, chưa cần thanh toán</small>
+                        <a class="btn-default full mb10 tour-detail-confirm-quick" data-id="@min_price.id" data-date="@min_price.date" data-is_daily="@min_price.is_daily.ToString()" href="javascript:;" style="line-height: 1.6;padding: 5px 20px;height:100%;">
+                            <ul>
+                                <li><div>Đặt tour ngay</div></li>
+                                <li><div>Giữ chỗ, chưa cần thanh toán</div></li>
+                            </ul>
                         </a>
                     }
 
