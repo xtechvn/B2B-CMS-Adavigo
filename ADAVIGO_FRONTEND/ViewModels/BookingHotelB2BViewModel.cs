@@ -11,6 +11,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public BookingHotelB2BViewModelSearch search { get; set; }
         public List<BookingHotelB2BViewModelRooms> rooms { get; set; }
         public HotelOrderDataVoucher voucher { get; set; }
+        public List<HotelBookingRoomExtraPackages> extrapackages { get; set; }
 
     }
     public class HotelOrderDataVoucher

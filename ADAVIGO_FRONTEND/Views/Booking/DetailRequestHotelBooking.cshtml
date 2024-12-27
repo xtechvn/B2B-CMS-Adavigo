@@ -149,23 +149,24 @@
 
                         @if (Model.ExtraPackages != null && Model.ExtraPackages.Count > 0)
                         {
-
+                            double total_extra_amount = 0;
                             <ul>
                                 <li class="mb10">
                                     <div class="gray"><strong>Phụ thu</strong></div>
                                 </li>
                                 @foreach (var item in Model.ExtraPackages)
                                 {
+                                    total_extra_amount += (double)item.Amount;
                                     <li class="mb10 flex space-between">
-                                        <div class="gray">Dịch vụ phòng</div>
-                                        <div class="color-green"><strong>@item.PackageCode</strong></div>
+                                        <div class="gray">Dịch vụ: @item.PackageId - @item.PackageCode</div>
+                                        <div><span class="color-orange"> @(((double)item.Amount).ToString("N0")) đ</span> </div>
                                     </li>
-                                    <li class="mb10 flex space-between">
-                                        <div class="gray">Tổng</div>
-                                        <div>@(((double)item.Amount).ToString("N0"))</div>
-                                    </li>
+                                   
                                 }
-
+                                <li class="mb10 flex space-between">
+                                    <div class="gray"><strong>Tổng tiền phụ thu </strong></div>
+                                    <div><span class="color-orange"> @total_extra_amount.ToString("N0") đ</span> </div>
+                                </li>
 
                             </ul>
                             <div class="line-bottom mb16"></div>

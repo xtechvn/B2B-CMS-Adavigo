@@ -1,6 +1,7 @@
 ﻿using ADAVIGO_FRONTEND.Common;
 using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.ViewModels;
+using ENTITIES.ViewModels.Hotel;
 using LIB.ENTITIES.ViewModels.Hotels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -772,6 +773,26 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
             }
             return new List<B2BVoucherListResponse>();
+        }
+        public async Task<List<HotelSurchargeGridModel>> GetHotelSurcharge(string hotel_id)
+        {
+            try
+            {
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetHotelSurcharge, new
+                {
+                    hotelID=hotel_id
+                });
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<List<HotelSurchargeGridModel>>(jsonData["data"].ToString());
+
+            }
+            catch
+            {
+            }
+            return new List<HotelSurchargeGridModel>();
         }
     }
 }

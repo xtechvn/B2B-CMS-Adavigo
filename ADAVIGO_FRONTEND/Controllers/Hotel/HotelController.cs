@@ -894,6 +894,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     data_Request.voucher = data.voucher;
                 }
+                if(data.extrapackages!=null && data.extrapackages.Count > 0)
+                {
+                    data_Request.extrapackages = data.extrapackages;
+
+                }
                 var SaveRequestHotel = await _HotelService.SaveRequestHotel(data_Request);
                 return new JsonResult(new
                 {
@@ -1029,6 +1034,16 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         {
             ViewBag.discount = discount;
             return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetHotelSurchage(string hotel_id)
+        {
+            var surcharge = await _HotelService.GetHotelSurcharge(hotel_id);
+            return new JsonResult(new
+            {
+                isSuccess = true,
+                data = surcharge
+            });
         }
     }
 }

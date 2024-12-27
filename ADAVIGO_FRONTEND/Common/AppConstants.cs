@@ -155,6 +155,7 @@
 
         public const string TrackingVoucher = "api/Voucher/b2b/apply.json";
         public const string GetVoucherList = "api/Voucher/b2b/get-list";
+        public const string GetHotelSurcharge = "api/b2b/hotel/get-surcharge.json";
 
 
     }
