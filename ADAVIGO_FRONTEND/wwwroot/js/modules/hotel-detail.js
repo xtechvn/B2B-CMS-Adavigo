@@ -65,7 +65,7 @@ var _hotel_detail = {
                                         <input type="text" class="form-control hotel-detail-popup-surcharge-table-td-quanity" value="0">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control hotel-detail-popup-surcharge-table-td-price" value="0">
+                                        <input type="text" class="form-control hotel-detail-popup-surcharge-table-td-price" disabled readonly value="0">
 
                                     </td>
                                     <td>
@@ -141,7 +141,30 @@ var _hotel_detail = {
             _hotel_detail.rooms.push(room_data);
         }
     },
+    ReCalucateArrivalDepartureDate: function () {
+        var arrival_date = null
+        var departure_date = null
+        $(_hotel_detail.rooms).each(function (index, item) {
+            $(item.packages).each(function (index_package, package_item) {
+                if (arrival_date == null) {
+                    arrival_date = new Date(package_item.arrival_date)
+                }
+                if (departure_date == null) {
+                    departure_date = new Date(package_item.departure_date)
+                }
+                if (arrival_date > new Date(package_item.arrival_date)) {
+                    arrival_date = new Date(package_item.arrival_date);
+                }
+                if (departure_date < new Date(package_item.departure_date)) {
+                    departure_date = new Date(package_item.departure_date);
+                }
+               
+            })
+        })
+        _hotel_detail.hotel.arrival_date = ConvertJsDateToString(arrival_date, "YYYY-MM-DD");
+        _hotel_detail.hotel.departure_date = ConvertJsDateToString(departure_date, "YYYY-MM-DD");
 
+    },
     initial: function () {
         _hotel_detail.hotel = {
             id: $('#input__hotel_id').val(),
@@ -809,6 +832,10 @@ $(document).on('click', '.btn_add_room_package', function () {
     $(html_grid).insertBefore($(`.room-tab-grid[data-tab="${room_tab}"] .add_other_package`));
     _hotel_detail.loadTotalMoney();
     _global_popup.closeContextPopup('#modal-context-global');
+    
+    _hotel_detail.ReCalucateArrivalDepartureDate()
+    hotel_surcharge.RenderSurchargeDate('.hotel-detail-popup-surcharge-table-td-date')
+
 });
 
 $('#block__detail_hotel_rooms').on('click', '.btn__delete_package', function () {
@@ -820,6 +847,9 @@ $('#block__detail_hotel_rooms').on('click', '.btn__delete_package', function () 
     $(`#hotel__detail_grid_selected_room ul[data-room="${room_tab}"] li.package_item[data-pack="${package_id}"]`).remove();
 
     _hotel_detail.removePackage(room_tab, package_id);
+    _hotel_detail.ReCalucateArrivalDepartureDate()
+    hotel_surcharge.RenderSurchargeDate('.hotel-detail-popup-surcharge-table-td-date')
+
     _hotel_detail.loadTotalMoney();
 });
 
@@ -1068,7 +1098,7 @@ $('#btn__check_order').click(function () {
                 $(result.data).each(function (index, item) {
                     //<option value="{value}" data-id="{id}" data-code="{code}" data-amount="{amount}">{name}</option>
                     html_option += _hotel_detail.HTML.SurchageOption
-                        .replaceAll('{name}', item.Name)
+                        .replaceAll('{name}', '[' + item.Code + '] ' + item.Name + ' (' + item.Description + ')')
                         .replaceAll('{id}', item.Id)
                         .replaceAll('{value}', item.Id)
                         .replaceAll('{code}', item.Code)
@@ -1289,8 +1319,9 @@ $(document).on('click', '#hotel-detail-popup-surcharge-table .delete', function 
         var element = $(this)
         if (element.attr('id') == 'hotel-detail-popup-surcharge-table-summary') return false
         element.find('td').first().html((index+1))
-
     })
+    hotel_surcharge.CalucateTotalRequestAmount()
+
 });
 $(document).on('change', '#hotel-detail-popup-surcharge-table select', function () {
     var element = $(this)
@@ -1376,11 +1407,11 @@ var hotel_surcharge = {
         }
         return text;
     },
-    RenderSurchargeDate: function () {
+    RenderSurchargeDate: function (element_class = `.hotel-detail-popup-surcharge-table-td-new .hotel-detail-popup-surcharge-table-td-date`) {
         var StartDate = _hotel_detail.hotel.arrival_date;
         var Enddate = _hotel_detail.hotel.departure_date;
 
-        $(`.hotel-detail-popup-surcharge-table-td-new .hotel-detail-popup-surcharge-table-td-date`).daterangepicker({
+        $(`` + element_class).daterangepicker({
             autoUpdateInput: true,
             autoApply: true,
             singleDatePicker: true,

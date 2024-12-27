@@ -170,8 +170,8 @@
                         @strMemberOfRoom
                     </li>
                     <li class="flex mb8">
-                        <div class="gray">@FromDate.ToString("dd/MM/yyyy") - @ToDate.ToString("dd/MM/yyyy")</div>
-                        <div class="text-right" style="width:calc(100% - 165px);"><strong>@($"{TotalDays} ngày {TotalDays-1} đêm")</strong></div>
+                        <div class="gray" id="hotel-detail-booking-arrival-departure">@FromDate.ToString("dd/MM/yyyy") - @ToDate.ToString("dd/MM/yyyy")</div>
+                        <div class="text-right" id="hotel-detail-booking-arrival-nights" style="width:calc(100% - 165px);"><strong>@($"{TotalDays} ngày {TotalDays - 1} đêm")</strong></div>
                     </li>
                     <li class="gray mb8">@room_total Phòng</li>
                 </ul>
@@ -403,12 +403,12 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th style="min-width: 210px;" class="text-left">DỊCH VỤ</th>
+                                    <th style="min-width:500px;" class="text-left">DỊCH VỤ</th>
                                     <th style="min-width: 350px;">THỜI GIAN SỬ DỤNG</th>
                                     <th>SỐ ĐÊM</th>
                                     <th>SỐ LƯỢNG</th>
                                     <th>GIÁ DỰ TÍNH</th>
-                                    <th style="min-width: 210px;"></th>
+                                    <th style="min-width: 50px;"></th>
                                 </tr>
                             </thead>
                             <tbody id="hotel-detail-popup-surcharge-table">
