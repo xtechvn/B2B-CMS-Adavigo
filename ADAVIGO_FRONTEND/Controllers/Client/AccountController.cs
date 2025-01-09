@@ -29,15 +29,19 @@ namespace ADAVIGO_FRONTEND.Controllers.Client
 
         public async Task<IActionResult> Index()
         {
-            var TaskModel = _AccountService.GetDetail();
-            var TaskProvince = _LocationService.GetProvinceList();
-            var TaskBank = _HomeService.GetAllOnePayBank();
+            //var TaskModel = _AccountService.GetDetail();
+            //var TaskProvince = _LocationService.GetProvinceList();
+            //var TaskBank = _HomeService.GetAllOnePayBank();
 
-            await Task.WhenAll(TaskModel, TaskProvince, TaskBank);
+            //await Task.WhenAll(TaskModel, TaskProvince, TaskBank);
 
-            var model = TaskModel.Result;
-            ViewBag.Provinces = TaskProvince.Result;
-            ViewBag.Banks = TaskBank.Result;
+            //var model = TaskModel.Result;
+            //ViewBag.Provinces = TaskProvince.Result;
+            //ViewBag.Banks = TaskBank.Result;
+
+            var model = await _AccountService.GetDetail();
+            ViewBag.Provinces = await _LocationService.GetProvinceList();
+            ViewBag.Banks = await _HomeService.GetAllOnePayBank();
 
             return View(model);
         }
