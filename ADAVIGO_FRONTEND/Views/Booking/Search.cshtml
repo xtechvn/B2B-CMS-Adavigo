@@ -30,7 +30,7 @@
                 foreach (var item in Model.ListData)
                 {
                     <tr>
-                        <td><a class="cursor-pointer" onclick="_booking.Detail('@item.orderId')"><span class="color-blue">@item.orderNo</span></a></td>
+                        <td><a class="cursor-pointer" href="/Booking/Detail/?id=@item.orderId"><span class="color-blue">@item.orderNo</span></a></td>
                         <td>
                             @((item.createTime != null && item.createTime != DateTime.MinValue) ? item.createTime.Value.ToString("dd/MM/yyyy HH:mm") : "#")
                         </td>
