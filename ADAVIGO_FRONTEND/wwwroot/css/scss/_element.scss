@@ -4454,3 +4454,35 @@
         }
     }
 }
+.tongquan{
+    border-radius: 10px;
+    background: #FFF;
+    padding: 20px;
+    padding-bottom: 0;
+    .col{
+        padding-bottom: 20px;
+    }
+    .title{
+        color:  #698096;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 130%; /* 18.2px */
+        white-space: nowrap;
+    }
+    .number{
+        color:  #1254FF;
+        font-size: 18px;
+        font-weight: 700;
+        white-space: nowrap;
+        margin-top: 8px;
+    }
+    .sub-tt{
+        color:  #8C9FB1;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 130%; /* 15.6px */
+        margin-top: 8px;
+        white-space: nowrap;
+       
+    }
+}

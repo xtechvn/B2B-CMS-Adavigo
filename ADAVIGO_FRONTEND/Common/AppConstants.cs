@@ -157,6 +157,8 @@
         public const string GetVoucherList = "api/Voucher/b2b/get-list";
         public const string GetHotelSurcharge = "api/b2b/hotel/get-surcharge.json";
 
+        public const string HomeSummary = "api/b2b/home/summary.json";
+
 
     }
 

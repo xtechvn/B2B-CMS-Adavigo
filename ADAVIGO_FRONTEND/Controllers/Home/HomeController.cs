@@ -185,5 +185,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Home
                 });
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> HomeSummary()
+        {
+            ViewBag.Data = await _HomeService.HomeSummary();
+            return View();
+        }
     }
 }

@@ -178,7 +178,59 @@ $(document).on('change', '#input__add_fund', function () {
         $('#btn__submit_add_fund').addClass('gray');
     }
 });
-$(document).ready(function () {
-
-
+$(document).on('click', '#home-summary-total-amount a', function () {
+    HideSummaryPopup()
+    $('#home-summary-popup-total').addClass('show')
+    $('#home-summary-popup-total').css('display', 'block')
 });
+$(document).on('click', '#home-summary-waiting-payment a', function () {
+    HideSummaryPopup()
+    $('#home-summary-popup-waiting-payment').addClass('show')
+    $('#home-summary-popup-waiting-payment').css('display', 'block')
+});
+$(document).on('click', '#home-summary-paymment a', function () {
+    HideSummaryPopup()
+    $('#home-summary-popup-payment').addClass('show')
+    $('#home-summary-popup-payment').css('display', 'block')
+});
+$(document).on('click', '#home-summary-checkin a', function () {
+    HideSummaryPopup()
+    $('#home-summary-popup-checkin').addClass('show')
+    $('#home-summary-popup-checkin').css('display', 'block')
+});
+$(document).on('click', '#home-summary-checkout a', function () {
+    HideSummaryPopup()
+    $('#home-summary-popup-checkout').addClass('show')
+    $('#home-summary-popup-checkout').css('display', 'block')
+});
+$(document).on('click', '.home-summary-popup .close', function () {
+    HideSummaryPopup()
+   
+});
+$(document).ready(function () {
+    var input = {
+        account_client_id:1
+    }
+    _ajax_caller.post('/Home/HomeSummary', { model: input }, function (result) {
+        $('#home-summary').html(result)
+    });
+    $('#home-summary').hide()
+    $('.wrap-search').show()
+});
+function HideSummaryPopup() {
+    $('.home-summary-popup').removeClass('show')
+    $('.home-summary-popup').css('display', 'none')
+}
+function Comma(number) { //function to add commas to textboxes
+    number = ('' + number).replace(/[^0-9.,]+/g, '');
+    number += '';
+    number = number.replace(',', ''); number = number.replace(',', ''); number = number.replace(',', '');
+    number = number.replace(',', ''); number = number.replace(',', ''); number = number.replace(',', '');
+    x = number.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1))
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    return x1 + x2;
+}

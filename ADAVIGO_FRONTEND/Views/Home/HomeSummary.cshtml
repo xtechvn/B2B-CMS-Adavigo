@@ -1,0 +1,539 @@
+﻿@using ENTITIES.ViewModels.B2B
+@{
+    Layout = null;
+    HomeSummaryB2BResponseModel data = (HomeSummaryB2BResponseModel)ViewBag.Data;
+}
+<div class="tongquan mb20">
+    <h2 class="txt_20 bold">Kết quả bán hàng hôm nay</h2>
+    <div class="row">
+        <div id="home-summary-total-amount" class="col">
+            <span class="title">
+                Tổng doanh thu trong ngày
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#question"></use>
+                </svg>
+            </span>
+            <a style=" cursor: pointer; "> <h3 class="number">@data.total_amount.ToString("N0") đ</h3></a>
+            <div class="sub-tt">Tổng doanh thu</div>
+        </div>
+        <div id="home-summary-waiting-payment" class="col">
+            <span class="title">
+                Đơn hàng đã thanh toán
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#question"></use>
+                </svg>
+            </span>
+            <a style=" cursor: pointer; "> <h3 class="number">@data.total_payment.ToString("N0") đ</h3></a>
+            <div class="sub-tt"><nw class="count">@data.total_order_payment.ToString("N0")</nw> Đơn hàng</div>
+        </div>
+        <div id="home-summary-paymment" class="col">
+            <span class="title">
+                Đơn hàng chờ thanh toán
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#question"></use>
+                </svg>
+            </span>
+            <a style=" cursor: pointer; "> <h3 class="number">@data.total_waiting_payment.ToString("N0") đ</h3></a>
+            <div class="sub-tt"><nw class="count">@data.total_order_waiting_payment.ToString("N0")</nw> Đơn hàng</div>
+        </div>
+        <div id="home-summary-checkin" class="col">
+            <span class="title">
+                Đơn hàng checkin hôm nay
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#question"></use>
+                </svg>
+            </span>
+            <a style=" cursor: pointer; "> <h3 class="number">@data.total_order_checkin.ToString("N0")</h3></a>
+            <div class="sub-tt">Đơn hàng</div>
+        </div>
+        <div id="home-summary-checkout" class="col">
+            <span class="title">
+                Đơn hàng checkout hôm nay
+                <svg class="icon-svg">
+                    <use xlink:href="images/icons/icon.svg#question"></use>
+                </svg>
+            </span>
+            <a style=" cursor: pointer; "> <h3 class="number">@data.total_order_checkout.ToString("N0")</h3></a>
+            <div class="sub-tt">Đơn hàng</div>
+        </div>
+    </div>
+</div>
+<div class="modal fade home-summary-popup" style="background-color: rgba(100, 100, 100, 0.6);" id="home-summary-popup-total">
+    <div class="modal-dialog" style="max-width: 850px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="title">
+                    Đơn hàng
+                </span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <table class="table table-nowrap" border="1">
+                    <caption>
+                        Lịch sử ký quỹ
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Ngày đặt</th>
+                            <th scope="col">Tên đơn hàng</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (data.list_order != null && data.list_order.Any())
+                        {
+                            foreach (var item in data.list_order)
+                            {
+                                <tr>
+                                    <td>
+                                        @switch (item.servicetype)
+                                        {
+                                            case 1:
+                                                {
+                                                    <a class="cursor-pointer" href="/Booking/Detail/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }break;
+                                            case 3:
+                                                {
+                                                    <a class="cursor-pointer" href="/flightBooking/orderDetail?orderId=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 5:
+                                                {
+                                                    <a class="cursor-pointer" href="/tour/OrderDetailTour/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                        }
+                                        
+                                    </td>
+                                    <td>
+                                        @((item.createtime != null && item.createtime != DateTime.MinValue) ? item.createtime.Value.ToString("dd/MM/yyyy HH:mm") : "")
+                                    </td>
+
+                                    <td>@item.label</td>
+                                    <td class="medium">
+                                        @switch (item.orderstatus)
+                                        {
+                                            case 1:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span class="">Tạo mới</span>
+                                                }
+                                                break;
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span >Đang xử lý</span>
+                                                }
+                                                break;
+                                            case 6:
+                                                {
+                                                    <span class="dote-text bg-green" ></span>
+                                                    <span class="color-green">Hoàn thành</span>
+                                                }
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade home-summary-popup" style="background-color: rgba(100, 100, 100, 0.6);" id="home-summary-popup-waiting-payment">
+    <div class="modal-dialog" style="max-width: 850px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="title">
+                    Đơn hàng
+                </span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <table class="table table-nowrap" border="1">
+                    <caption>
+                        Lịch sử ký quỹ
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Ngày đặt</th>
+                            <th scope="col">Tên đơn hàng</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (data.list_order_waiting_payment != null && data.list_order_waiting_payment.Any())
+                        {
+                            foreach (var item in data.list_order_waiting_payment)
+                            {
+                                <tr>
+                                    <td>
+                                        @switch (item.servicetype)
+                                        {
+                                            case 1:
+                                                {
+                                                    <a class="cursor-pointer" href="/Booking/Detail/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 3:
+                                                {
+                                                    <a class="cursor-pointer" href="/flightBooking/orderDetail?orderId=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 5:
+                                                {
+                                                    <a class="cursor-pointer" href="/tour/OrderDetailTour/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @((item.createtime != null && item.createtime != DateTime.MinValue) ? item.createtime.Value.ToString("dd/MM/yyyy HH:mm") : "")
+                                    </td>
+
+                                    <td>@item.label</td>
+                                    <td class="medium">
+                                        @switch (item.orderstatus)
+                                        {
+                                            case 1:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span class="">Tạo mới</span>
+                                                }
+                                                break;
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span>Đang xử lý</span>
+                                                }
+                                                break;
+                                            case 6:
+                                                {
+                                                    <span class="dote-text bg-green"></span>
+                                                    <span class="color-green">Hoàn thành</span>
+                                                }
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade home-summary-popup" style="background-color: rgba(100, 100, 100, 0.6);" id="home-summary-popup-payment">
+    <div class="modal-dialog" style="max-width: 850px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="title">
+                    Đơn hàng
+                </span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <table class="table table-nowrap" border="1">
+                    <caption>
+                        Lịch sử ký quỹ
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Ngày đặt</th>
+                            <th scope="col">Tên đơn hàng</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (data.list_order_payment != null && data.list_order_payment.Any())
+                        {
+                            foreach (var item in data.list_order_payment)
+                            {
+                                <tr>
+                                    <td>
+                                        @switch (item.servicetype)
+                                        {
+                                            case 1:
+                                                {
+                                                    <a class="cursor-pointer" href="/Booking/Detail/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 3:
+                                                {
+                                                    <a class="cursor-pointer" href="/flightBooking/orderDetail?orderId=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 5:
+                                                {
+                                                    <a class="cursor-pointer" href="/tour/OrderDetailTour/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @((item.createtime != null && item.createtime != DateTime.MinValue) ? item.createtime.Value.ToString("dd/MM/yyyy HH:mm") : "")
+                                    </td>
+
+                                    <td>@item.label</td>
+                                    <td class="medium">
+                                        @switch (item.orderstatus)
+                                        {
+                                            case 1:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span class="">Tạo mới</span>
+                                                }
+                                                break;
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span>Đang xử lý</span>
+                                                }
+                                                break;
+                                            case 6:
+                                                {
+                                                    <span class="dote-text bg-green"></span>
+                                                    <span class="color-green">Hoàn thành</span>
+                                                }
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade home-summary-popup" style="background-color: rgba(100, 100, 100, 0.6);" id="home-summary-popup-checkin">
+    <div class="modal-dialog" style="max-width: 850px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="title">
+                    Đơn hàng
+                </span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <table class="table table-nowrap" border="1">
+                    <caption>
+                        Lịch sử ký quỹ
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Ngày đặt</th>
+                            <th scope="col">Tên đơn hàng</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (data.list_order_checkin != null && data.list_order_checkin.Any())
+                        {
+                            foreach (var item in data.list_order_checkin)
+                            {
+                                <tr>
+                                    <td>
+                                        @switch (item.servicetype)
+                                        {
+                                            case 1:
+                                                {
+                                                    <a class="cursor-pointer" href="/Booking/Detail/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 3:
+                                                {
+                                                    <a class="cursor-pointer" href="/flightBooking/orderDetail?orderId=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 5:
+                                                {
+                                                    <a class="cursor-pointer" href="/tour/OrderDetailTour/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @((item.createtime != null && item.createtime != DateTime.MinValue) ? item.createtime.Value.ToString("dd/MM/yyyy HH:mm") : "")
+                                    </td>
+
+                                    <td>@item.label</td>
+                                    <td class="medium">
+                                        @switch (item.orderstatus)
+                                        {
+                                            case 1:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span class="">Tạo mới</span>
+                                                }
+                                                break;
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span>Đang xử lý</span>
+                                                }
+                                                break;
+                                            case 6:
+                                                {
+                                                    <span class="dote-text bg-green"></span>
+                                                    <span class="color-green">Hoàn thành</span>
+                                                }
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade home-summary-popup" style="background-color: rgba(100, 100, 100, 0.6);" id="home-summary-popup-checkout">
+    <div class="modal-dialog" style="max-width: 850px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="title">
+                    Đơn hàng
+                </span>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <table class="table table-nowrap" border="1">
+                    <caption>
+                        Lịch sử ký quỹ
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Ngày đặt</th>
+                            <th scope="col">Tên đơn hàng</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (data.list_order_checkout != null && data.list_order_checkout.Any())
+                        {
+                            foreach (var item in data.list_order_checkout)
+                            {
+                                <tr>
+                                    <td>
+                                        @switch (item.servicetype)
+                                        {
+                                            case 1:
+                                                {
+                                                    <a class="cursor-pointer" href="/Booking/Detail/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 3:
+                                                {
+                                                    <a class="cursor-pointer" href="/flightBooking/orderDetail?orderId=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                            case 5:
+                                                {
+                                                    <a class="cursor-pointer" href="/tour/OrderDetailTour/?id=@item.id"><span class="color-blue">@item.orderno</span></a>
+
+                                                }
+                                                break;
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @((item.createtime != null && item.createtime != DateTime.MinValue) ? item.createtime.Value.ToString("dd/MM/yyyy HH:mm") : "")
+                                    </td>
+
+                                    <td>@item.label</td>
+                                    <td class="medium">
+                                        @switch (item.orderstatus)
+                                        {
+                                            case 1:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span class="">Tạo mới</span>
+                                                }
+                                                break;
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                                {
+                                                    <span class="dote-text"></span>
+                                                    <span>Đang xử lý</span>
+                                                }
+                                                break;
+                                            case 6:
+                                                {
+                                                    <span class="dote-text bg-green"></span>
+                                                    <span class="color-green">Hoàn thành</span>
+                                                }
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

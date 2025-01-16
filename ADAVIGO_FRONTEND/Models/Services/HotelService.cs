@@ -794,5 +794,6 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return new List<HotelSurchargeGridModel>();
         }
+        
     }
 }

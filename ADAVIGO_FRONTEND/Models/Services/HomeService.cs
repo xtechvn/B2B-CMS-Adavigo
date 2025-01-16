@@ -1,5 +1,6 @@
 ﻿using ADAVIGO_FRONTEND.Common;
 using ADAVIGO_FRONTEND.ViewModels;
+using ENTITIES.ViewModels.B2B;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -187,7 +188,27 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw;
             }
         }
-       
+        public async Task<HomeSummaryB2BResponseModel> HomeSummary()
+        {
+            try
+            {
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.HomeSummary, new
+                {
+                    account_client_id = _UserManager.ClientID
+                });
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<HomeSummaryB2BResponseModel>(jsonData["data"].ToString());
+
+            }
+            catch
+            {
+            }
+            return new HomeSummaryB2BResponseModel();
+        }
 
     }
 }

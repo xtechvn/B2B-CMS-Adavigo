@@ -1,6 +1,6 @@
-﻿<div class="wrap-search">
+﻿<div class="wrap-search" style="display:none;">
     <h2 class="title txt_20 bold mb16">Đặt vé nhanh</h2>
-    <div class="tab-menu flex">   
+    <div class="tab-menu flex">
         <a href="#tab-building" data-id="hotel-box-search" class="active tab-menu-item">
             <svg class="icon-svg">
                 <use xlink:href="/images/icons/icon.svg#building"></use>
@@ -17,3 +17,62 @@
     @await Html.PartialAsync("BoxFilter")
     @await Html.PartialAsync("FlightBoxFilter")
 </div>
+<nw id="home-summary">
+    <div class="tongquan mb20 placeholder">
+        <h2 class="txt_20 bold">Kết quả bán hàng hôm nay</h2>
+        <div class="row">
+            <div id="home-summary-total-amount" class="col">
+                <span class="title">
+                    Tổng doanh thu trong ngày
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#question"></use>
+                    </svg>
+                </span>
+                <a style=" cursor: pointer; "> <h3 class="number">0 đ</h3></a>
+                <div class="sub-tt">Tổng doanh thu</div>
+            </div>
+            <div id="home-summary-waiting-payment" class="col">
+                <span class="title">
+                    Đơn hàng đã thanh toán
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#question"></use>
+                    </svg>
+                </span>
+                <a style=" cursor: pointer; "> <h3 class="number">0 đ</h3></a>
+                <div class="sub-tt"><nw class="count">00</nw> Đơn hàng</div>
+            </div>
+            <div id="home-summary-paymment" class="col">
+                <span class="title">
+                    Đơn hàng chờ thanh toán
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#question"></use>
+                    </svg>
+                </span>
+                <a style=" cursor: pointer; "> <h3 class="number">0 đ</h3></a>
+                <div class="sub-tt"><nw class="count">00</nw> Đơn hàng</div>
+            </div>
+            <div id="home-summary-checkin" class="col">
+                <span class="title">
+                    Đơn hàng checkin hôm nay
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#question"></use>
+                    </svg>
+                </span>
+                <a style=" cursor: pointer; "> <h3 class="number">00</h3></a>
+                <div class="sub-tt">Đơn hàng</div>
+            </div>
+            <div id="home-summary-checkout" class="col">
+                <span class="title">
+                    Đơn hàng checkout hôm nay
+                    <svg class="icon-svg">
+                        <use xlink:href="images/icons/icon.svg#question"></use>
+                    </svg>
+                </span>
+                <a style=" cursor: pointer; "> <h3 class="number">00</h3></a>
+                <div class="sub-tt">Đơn hàng</div>
+            </div>
+        </div>
+    </div>
+</nw>
+
+
