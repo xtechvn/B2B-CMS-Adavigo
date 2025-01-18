@@ -52,6 +52,12 @@ var _global_popup = {
     closeAlertPopup: function () {
         $('#modal-warning-global').modal('hide');
     },
+    HideSummaryPopup: function () {
+        $('.home-summary-popup').removeClass('show')
+        $('.home-summary-popup').css('display', 'none')
+        $('#home-hotdeal-popup').removeClass('show')
+        $('#home-hotdeal-popup').css('display', 'none')
+    }
 };
 
 function ConvertToDate(strdate) {
@@ -377,4 +383,20 @@ $(document).ready(function () {
             }
         }
     });
+    _ajax_caller.post('/Home/GetNewsDetail', { article_id: 20338 }, function (result) {
+        if (result.isSuccess == true && result.data != undefined && result.data.id != undefined) {
+            $('#home-hotdeal span').html(result.data.lead)
+            $('#home-hotdeal-popup .modal-body').html(result.data.body)
+        }
+
+    });
+});
+$(document).on('click', '#home-hotdeal', function () {
+    _global_popup.HideSummaryPopup()
+    $('#home-hotdeal-popup').addClass('show')
+    $('#home-hotdeal-popup').css('display', 'block')
+});
+$(document).on('click', '.home-summary-popup .close, #home-hotdeal-popup .close', function () {
+    _global_popup.HideSummaryPopup()
+
 });

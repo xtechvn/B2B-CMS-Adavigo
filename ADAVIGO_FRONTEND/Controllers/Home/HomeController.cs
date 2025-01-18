@@ -191,5 +191,15 @@ namespace ADAVIGO_FRONTEND.Controllers.Home
             ViewBag.Data = await _HomeService.HomeSummary();
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> GetNewsDetail(int article_id)
+        {
+            var data = await _HomeService.GetNewsDetail(article_id);
+            return new JsonResult(new
+            {
+                isSuccess = (data != null && data.id>0),
+                data = data
+            });
+        }
     }
 }

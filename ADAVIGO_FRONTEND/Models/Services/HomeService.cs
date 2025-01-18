@@ -1,4 +1,5 @@
 ﻿using ADAVIGO_FRONTEND.Common;
+using ADAVIGO_FRONTEND.Models.News.GetDetail;
 using ADAVIGO_FRONTEND.ViewModels;
 using ENTITIES.ViewModels.B2B;
 using Microsoft.AspNetCore.Http;
@@ -208,6 +209,27 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
             }
             return new HomeSummaryB2BResponseModel();
+        }
+        public async Task<GetNewDetailResponse> GetNewsDetail( int id)
+        {
+            try
+            {
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetNewsDetail, new
+                {
+                    article_id = id
+                });
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<GetNewDetailResponse>(jsonData["data"].ToString());
+
+            }
+            catch
+            {
+            }
+            return new GetNewDetailResponse();
         }
 
     }

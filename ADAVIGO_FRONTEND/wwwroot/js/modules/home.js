@@ -179,48 +179,47 @@ $(document).on('change', '#input__add_fund', function () {
     }
 });
 $(document).on('click', '#home-summary-total-amount a', function () {
-    HideSummaryPopup()
+    _global_popup.HideSummaryPopup()
     $('#home-summary-popup-total').addClass('show')
     $('#home-summary-popup-total').css('display', 'block')
 });
 $(document).on('click', '#home-summary-waiting-payment a', function () {
-    HideSummaryPopup()
+    _global_popup.HideSummaryPopup()
     $('#home-summary-popup-waiting-payment').addClass('show')
     $('#home-summary-popup-waiting-payment').css('display', 'block')
 });
 $(document).on('click', '#home-summary-paymment a', function () {
-    HideSummaryPopup()
+    _global_popup.HideSummaryPopup()
     $('#home-summary-popup-payment').addClass('show')
     $('#home-summary-popup-payment').css('display', 'block')
 });
 $(document).on('click', '#home-summary-checkin a', function () {
-    HideSummaryPopup()
+    _global_popup.HideSummaryPopup()
     $('#home-summary-popup-checkin').addClass('show')
     $('#home-summary-popup-checkin').css('display', 'block')
 });
 $(document).on('click', '#home-summary-checkout a', function () {
-    HideSummaryPopup()
+    _global_popup.HideSummaryPopup()
     $('#home-summary-popup-checkout').addClass('show')
     $('#home-summary-popup-checkout').css('display', 'block')
 });
-$(document).on('click', '.home-summary-popup .close', function () {
-    HideSummaryPopup()
-   
+
+$(document).on('click', '#home-summary-checkout a', function () {
+    _global_popup.HideSummaryPopup()
+    $('#home-summary-popup-checkout').addClass('show')
+    $('#home-summary-popup-checkout').css('display', 'block')
 });
+
 $(document).ready(function () {
-    var input = {
-        account_client_id:1
-    }
-    _ajax_caller.post('/Home/HomeSummary', { model: input }, function (result) {
+   
+    _ajax_caller.post('/Home/HomeSummary', { id: 1 }, function (result) {
         $('#home-summary').html(result)
     });
-    $('#home-summary').hide()
-    $('.wrap-search').show()
+    //$('#home-summary').hide()
+    //$('.wrap-search').show()
+   
 });
-function HideSummaryPopup() {
-    $('.home-summary-popup').removeClass('show')
-    $('.home-summary-popup').css('display', 'none')
-}
+
 function Comma(number) { //function to add commas to textboxes
     number = ('' + number).replace(/[^0-9.,]+/g, '');
     number += '';
