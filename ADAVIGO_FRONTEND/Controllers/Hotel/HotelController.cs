@@ -869,14 +869,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                             search.numberOfChild = room.child;
                             search.numberOfInfant = room.infant;
                         }
-                        if (data.extrapackages != null && data.extrapackages.Count > 0)
-                        {
-                            foreach (var extrapackages in data.extrapackages)
-                            {
-                                total_price += (decimal)extrapackages.Amount * (decimal)extrapackages.Quantity * (decimal)extrapackages.Nights;
-                            }
-
-                        }
                            
                         room_detail.numberOfRooms = (short?)Convert.ToInt32(room.room_number);
                         room_detail.room_type_id = room.room_id;
