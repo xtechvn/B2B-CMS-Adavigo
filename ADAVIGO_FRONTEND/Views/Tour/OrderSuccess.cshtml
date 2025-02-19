@@ -1,0 +1,89 @@
+﻿<style>
+    body {
+        background-color: #f1f5f9;
+    }
+</style>
+@{
+    var ExpirationDate = (DateTime)ViewBag.ExpirationDate;
+    int? payment_type = (int?)ViewBag.PaymentType;
+}
+<section class="step-menu">
+    <div class="step step1 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Thông tin đặt chỗ
+    </div>
+    <div class="step step1 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Thông tin khách hàng
+    </div>
+    <div class="step step2 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Thanh toán
+    </div>
+    <div class="step step3 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="/images/icons/icon.svg#checkmark"></use>
+            </svg>
+        </span> Hoàn thành
+    </div>
+</section>
+<section class="main-container clearfix">
+    <div class="popup-success bg-white pd-20 radius10" style="max-width: 580px;margin: 0 auto; margin-top:50px;">
+        <div class="flex mb16">
+            <img src="/images/icons/success.png" alt="">
+            <div class="txt_24 bold" style="line-height:50px; margin-left:20px;">Khởi tạo thành công</div>
+        </div>
+        <div class="bold txt_16">Đặt phòng khách sạn thành công : <span class="color-main">@($"Giữ chỗ đến {ExpirationDate.ToString("HH:mm")} ngày {ExpirationDate.ToString("dd/MM/yyyy")}")</span></div>
+        <ul class="block_cancle_policy">
+            <li>Mã đơn hàng : <strong style="color:#1890FF;">@ViewBag.OrderNo</strong></li>
+            @{
+                string payment_type_name = "Chuyển khoản ngân hàng";
+                if(payment_type!=null)
+                {
+                    switch (payment_type)
+                    {
+                        case 2:
+                            {
+                                payment_type_name = "Thẻ ATM / Tài khoản ngân hàng";
+                            }
+                            break;
+                        case 3:
+                            {
+                                payment_type_name = "Thẻ Visa, Master Card";
+
+                            }
+                            break;
+                        case 4:
+                            {
+                                payment_type_name = "Thanh toán QR - PAY";
+
+                            }
+                            break;
+                        case 5:
+                            {
+                                payment_type_name = "Thanh toán bằng ký quỹ";
+
+                            }
+                            break;
+                    }
+                }
+            }
+            <li>Hình thức thanh toán : @payment_type_name </li>
+        </ul>
+        <p class="mb30">
+            Lưu ý: Trường hợp có những thắc mắc về đơn hàng, bạn có thể xem thêm mục câu hỏi thường gặp. Nếu bạn cần được hỗ trợ ngay, hãy gọi tổng đài hỗ trợ 0936 191 192.
+            Chúng tôi luôn sẵn sàng trả lời bạn từ 8h30 - 17h30, thứ 2 đến thứ 6 hàng tuần.
+        </p>
+        <a type="button" class="btn btn-default size" style="padding: 0 60px" href="/hotel">Quay về trang chủ</a>
+    </div>
+</section>

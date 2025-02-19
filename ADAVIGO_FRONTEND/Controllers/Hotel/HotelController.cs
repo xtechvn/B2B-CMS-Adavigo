@@ -1046,5 +1046,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 data = surcharge
             });
         }
+       
     }
 }

@@ -1,0 +1,283 @@
+﻿@using ADAVIGO_FRONTEND.Models.Common
+﻿@using ADAVIGO_FRONTEND.Models.Configs
+@using ADAVIGO_FRONTEND.Models.Tour.TourDetail
+@using ADAVIGO_FRONTEND.ViewModels
+@{
+    ViewData["Title"] = "Thông tin khách hàng";
+    AccountModel _UserManager = (AccountModel)ViewBag.UserManager;
+    BaseObjectResponse<TourDetailResponseExtend> detail = (BaseObjectResponse<TourDetailResponseExtend>)ViewBag.Detail;
+    TourProgramPackages package= (TourProgramPackages)ViewBag.Package;
+   
+}
+<style>
+    .on-star .star svg {
+        fill: #F6A500;
+    }
+    .select2-container{
+        width:100% !important;
+    }
+</style>
+<div style="display:none;" id="order-detail"
+     data-tour-id="@(detail != null && detail.data != null && detail.data.id > 0 ?detail.data.id.ToString(): "0" )"
+     data-tour-name="@(detail != null && detail.data != null && detail.data.id > 0 ?detail.data.tourName.ToString(): "" )"
+     data-id="@(package.Id <=0 ? "-1" : package.Id.ToString())"
+     data-amount-adt="@(package.AdultPrice == null ? "0" : ((double)package.AdultPrice).ToString())"
+     data-amount-chd="@(package.ChildPrice == null ? "0" : ((double)package.ChildPrice).ToString())"
+     data-start-date="@(package == null || package.FromDate==null?DateTime.Now.ToString():((DateTime)package.FromDate).ToString("dd/MM/yyyy"))">
+
+</div>
+<section class="step-menu">
+    <div class="step step1 active success">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="images/icons/icon.svg#checkmark"></use>
+            </svg>
+            1
+        </span> Thông tin khách hàng
+    </div>
+    <div class="step step2">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="images/icons/icon.svg#checkmark"></use>
+            </svg>
+            2
+        </span> Thanh toán
+    </div>
+    <div class="step step3">
+        <span class="number">
+            <svg class="icon-svg">
+                <use xlink:href="images/icons/icon.svg#checkmark"></use>
+            </svg>
+            3
+        </span> Hoàn thành
+    </div>
+</section>
+<section class="main-container clearfix">
+    <div class="flex mb16">
+        <div class="col-main">
+            <div class="bg-white pd-20 radius10 mb16">
+                <div class="mb30">
+                    <h2 class="bold txt_20 mb16">Thông tin thành viên chính</h2>
+                    <div class="line-bottom mb16"></div>
+                    <div class="form-group">
+                        <label class="" for="exampleInputEmail1">Danh xưng</label>
+                        <div class="sort-list flex">
+                            <label class="confir_res circle mb0">
+                                Ông
+                                <input type="radio" name="contact-type" class="contact-type" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res circle mb0 ml-3">
+                                Bà
+                                <input type="radio" name="contact-type" class="contact-type">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res circle mb0 ml-3">
+                                Khác
+                                <input type="radio" name="contact-type" class="contact-type">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group mb0">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="">Họ và tên đoàn trường</label>
+                                <div class="row row__grid_8">
+                                    <div class="col-md-4 mb16">
+                                        <input type="text" class="form-control" id="contact-surname" placeholder="Họ" value="@(_UserManager!=null &&_UserManager.name!=null?_UserManager.name.Split(" ")[0]:"")">
+                                    </div>
+                                    <div class="col-md-8 mb16">
+                                        <input type="email" class="form-control" id="contact-name" placeholder="Tên & Tên đệm" value="@(_UserManager!=null &&_UserManager.name!=null?_UserManager.name.Replace(_UserManager.name.Split(" ")[0]+" ",""):"")">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb16">
+                                <label class="">Số điện thoại</label>
+                                <input type="text" class="form-control" id="contact-phone" placeholder="Số điện thoại" value="@(_UserManager!=null &&_UserManager.phone!=null?_UserManager.phone:"")">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb0">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="">Địa chỉ liên hệ</label>
+                                <div class="row row__grid_8">
+                                    <div class="col-md-4 mb16">
+                                        <input type="text" class="form-control" id="contact-country" placeholder="Nhập quốc gia" value="VietNam">
+                                    </div>
+                                    <div class="col-md-8 mb16">
+                                        <input type="text" class="form-control" id="contact-address" placeholder="Nhập địa chỉ đầy đủ" value="@(_UserManager != null && _UserManager.address != null ? _UserManager.address : "")">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb16">
+                                <label class="">Email</label>
+                                <input type="email" class="form-control" id="contact-email" placeholder="Nhập email" value="@(_UserManager != null && _UserManager.email != null ? _UserManager.email : "")">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="gray" for="exampleInputEmail1">Lưu ý</label>
+                        <textarea class="form-control" id="contact-note" rows="4"></textarea>
+                    </div>
+                  
+                </div>
+                
+
+            </div>
+            <div class="bg-white pd-20 radius10 mb16">
+                <div class="mb30">
+                    <h2 class="bold txt_20 mb16">Thông tin thành viên trong đoàn</h2>
+                    @*  <div class="form-group flex">
+                    <button type="submit" class="btn btn-default upload size">
+                    <svg class="icon-svg mr-1" width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.9414 15.0002C16.9414 15.5525 16.4937 16.0002 15.9414 16.0002H1.94141C1.38912 16.0002 0.941406 15.5525 0.941406 15.0002C0.941406 14.448 1.38912 14.0002 1.94141 14.0002H15.9414C16.4937 14.0002 16.9414 14.4479 16.9414 15.0002ZM5.39838 5.5433C5.65428 5.5433 5.91022 5.44567 6.10547 5.25039L7.94141 3.41445V11.1253C7.94141 11.6775 8.38912 12.1253 8.94141 12.1253C9.49369 12.1253 9.94141 11.6775 9.94141 11.1253V3.41445L11.7773 5.25039C12.1679 5.64092 12.801 5.64092 13.1916 5.25039C13.5821 4.85986 13.5821 4.22671 13.1916 3.83617L9.6485 0.293143C9.25797 -0.0973887 8.62481 -0.0973887 8.23428 0.293143L4.69125 3.83617C4.30072 4.22671 4.30072 4.85986 4.69125 5.25039C4.88653 5.44567 5.14244 5.5433 5.39838 5.5433Z" fill="#1254FF" />
+                    </svg>
+                    Upload danh sách khách nhanh
+                    </button>
+                    <button type="submit" class="btn btn-default download size">
+                    <svg class="icon-svg mr-1" width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.90141 8.64C7.58141 8.32 7.10141 8.32 6.78141 8.64L5.34141 10.08V0.8C5.34141 0.32 5.02141 0 4.54141 0C4.06141 0 3.74141 0.32 3.74141 0.8V10.08L2.30141 8.64C1.98141 8.32 1.50141 8.32 1.18141 8.64C0.861406 8.96 0.861406 9.44 1.18141 9.76L3.98141 12.56C4.14141 12.72 4.38141 12.8 4.54141 12.8C4.70141 12.8 4.94141 12.72 5.10141 12.56L7.90141 9.76C8.22141 9.44 8.22141 8.88 7.90141 8.64Z" fill="#1254FF" />
+                    </svg>
+                    Tải mẫu danh sách khách nhanh
+                    </button>
+                    </div> *@
+                    <div class="form-group mb0">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="">Người lớn</label>
+                                <div class="sl_giohang">
+                                    <div class="input-group-prepend">
+                                        <button class="giam_sl minus-btn">-</button>
+                                    </div>
+                                    <input id="qty-adt" type="number" class="qty_input" value="1" min="1">
+                                    <div class="input-group-prepend">
+                                        <button class="tang_sl plus-btn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb16">
+                                <label class="">Trẻ em</label>
+                                <div class="sl_giohang">
+                                    <div class="input-group-prepend">
+                                        <button class="giam_sl minus-btn">-</button>
+                                    </div>
+                                    <input id="qty-chd" type="number" class="qty_input" value="0" min="0">
+                                    <div class="input-group-prepend">
+                                        <button class="tang_sl plus-btn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   @*  <div class="form-group">
+                        <label class="gray" for="exampleInputEmail1">Lưu ý</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+        <div class="col-300">
+            <div class="bg-white pd-20 radius10 mb16 sticky">
+                <div class="head-title">
+                    <h2 class="title txt_20 bold mb0">Thông tin Tour</h2>
+                </div>
+                <div class="mb12">
+                    @if(detail!=null && detail.data!=null && detail.data.id > 0)
+                    {
+                        @switch (detail.data.tourType)
+                        {
+                            case 1:
+                                {
+                                    <span class="gray">Tour nội địa</span>
+
+                                    <br>
+                                }
+                                break;
+                            case 2:
+                                {
+                                    <span class="gray">Tour Inbound</span>
+
+                                    <br>
+                                }
+                                break;
+                            case 3:
+                                {
+                                    <span class="gray">Tour quốc tế</span>
+
+                                    <br>
+                                }
+                                break;
+                        }
+                    }
+                    @if (detail != null && detail.data != null && detail.data.id > 0)
+                    {
+                       <strong>@detail.data.tourName</strong>
+                    }
+                </div>
+                <div class="line-bottom mb12"></div>
+                <div class="head-title">
+                    <h2 class="title txt_20 bold mb0">Lịch trình Tour</h2>
+                </div>
+                <ul>
+                    <li class="row mb8">
+                        <div class="gray col-7">Ngày khởi hành</div>
+                        <div class="col-5  text-right"><strong>@(((DateTime)package.FromDate).ToString("dd/MM/yyyy"))</strong></div>
+                    </li>
+                    <li class="row mb8">
+                        <div class="gray col-7">Lịch trình</div>
+                        <div class="col-5  text-right"><strong>@(detail.data.days + 1) ngày @(detail.data.days) đêm</strong></div>
+                    </li>
+                </ul>
+                <div class="head-title">
+                    <h2 class="title txt_20 bold mb0">Thành viên đoàn</h2>
+                </div>
+                <ul>
+                    <li class="gray mb8">
+                        <nw class="qty-adt">1</nw> Người lớn 
+                        - 
+                        <nw class="qty-chd">0</nw> Trẻ em</li>
+                </ul>
+                <div class="line-bottom mb12"></div>
+                <div class="head-title">
+                    <div class="title bold mb0">Thanh toán</div>
+                    <a class="icon-collapse" data-toggle="collapse" href="#collapse-room1">
+                        <svg class="icon-svg">
+                            <use xlink:href="/images/icons/icon.svg#next2"></use>
+                        </svg>
+                    </a>
+                </div>
+                <div class="collapse" id="collapse-room1">
+                    <ul>
+                        <li class="row mb8">
+                            <div class="gray col-3">Người lớn</div>
+                            <div class="gray col-4"><nw class="qty-adt">1</nw> x @((package.AdultPrice == null ? 0 : (double)package.AdultPrice).ToString("N0"))</div>
+                            <div class="col-5  text-right"><strong><nw id="amount-adt">@((package.AdultPrice == null ? 0 : (double)package.AdultPrice).ToString("N0"))</nw> VNĐ</strong></div>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="row mb8">
+                            <div class="gray col-3">Trẻ em</div>
+                            <div class="gray col-4"><nw class="qty-adt">0</nw> x @((package.ChildPrice == null ? 0 : (double)package.ChildPrice).ToString("N0"))</div>
+                            <div class="col-5  text-right"><strong><nw id="amount-chd">0</nw> VNĐ</strong></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row mb12">
+                    <div class="col-4 bold txt_16">Tổng cộng</div>
+                    <div class="col-8 bold txt_18 color-green text-right"><nw id="amount-total">@((package.AdultPrice == null ? 0 : (double)package.AdultPrice).ToString("N0"))</nw> VNĐ</div>
+                </div>
+                <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
+                <button id="btn-payment" type="submit" class="btn btn-default blue full size">Tiếp tục đơn hàng</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/tour/constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/global.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/order.js"></script>
+
+}

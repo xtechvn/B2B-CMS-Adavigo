@@ -3,39 +3,10 @@
     ViewData["Title"] = "Chi tiết Tour ";
     var from = (TourDetailResponseExtend)ViewBag.Location;
     string imageDomain = (string)ViewBag.ImageDomain;
-    string slug = (string)ViewBag.Slug;
-    string slugLocation = (string)ViewBag.SlugLocation;
-    string url_by_tour_type = "/tour/tim-kiem/tour_-1_-1_" + from.tourType == null ? "1" : from.tourType.ToString();
-    switch (from.tourType)
-    {
-        case 1:
-            {
-                url_by_tour_type = "/tour/tim-kiem/tour-noi-dia";
-            }
-            break;
-        case 2:
-            {
-                url_by_tour_type = "/tour/tim-kiem/tour-inbound";
-
-            }
-            break;
-        case 3:
-            {
-                url_by_tour_type = "/tour/tim-kiem/tour-quoc-te";
-
-            }
-            break;
-    }
+    string url_by_tour_type = "/tour/tim-kiem?start=-1&end=-1&type=" + from.tourType == null ? "1" : from.tourType.ToString();
 }
-<section class="section-main clearfix">
-    <input style="display:none;" id="tour-detail-id" value="@from.id" />
-    <input style="display:none;" id="tour-detail-tourTypeName" value="@from.tourTypeName" />
-    <input style="display:none;" id="tour-detail-organizingName" value="@from.organizingName" />
-    <input style="display:none;" id="tour-detail-star" value="@from.star" />
-    <input style="display:none;" id="tour-detail-avatar" value="@from.avatar" />
-    <input style="display:none;" id="tour-detail-oldPrice" value="@from.oldPrice" />
-    <input style="display:none;" id="tour-detail-days" value="@from.days" />
-    <div class="container">
+<section class="section-main clearfix" >
+    <div class="container" style=" margin-top:20px;">
         <div class="bg-white pd-24 radius10 mb24">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/tour">Tour</a></li>
@@ -66,7 +37,7 @@
             </div>
             <!-- Thư viện ảnh -->
             <div id="lightgallery" class="lightgallery grid grid__2">
-                <div class="item" data-src="@(from.avatar != null && from.avatar.Trim() == "" ? imageDomain+from.avatar : "/images/graphics/gallery1.jpg")">
+                <div class="item" data-src="@(from.avatar != null && from.avatar.Trim() == "" ? imageDomain + from.avatar : "/images/graphics/gallery1.jpg")">
                     <a class="thumb_img thumb_5x3" href="javascripts:;">
                         <img class="img-responsive" src="@imageDomain@from.avatar" alt="">
                     </a>
@@ -149,7 +120,7 @@
                                             <span>Tiêu chuẩn</span>
                                         </td>
                                         <td class="price">@(((double)item.AdultPrice).ToString("N0"))</td>
-                                        <td><a href="javascript:;" class="btn tour-detail-confirm">Giữ chỗ</a></td>
+                                        <td><a href="/tour/order?id=@from.id&package=@item.Id" class="btn tour-detail-confirm">Giữ chỗ</a></td>
                                     </tr>
                                 }
                             }
@@ -176,14 +147,14 @@
                                     <tbody>
                                         @foreach (var item in by_month)
                                         {
-                                            <tr data-is_daily="0" data-id="@item.Id">
+                                            <tr data-id="@item.Id">
                                                 <td class="departure-date" data-date="@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))<br />Còn chỗ</td>
                                                 <td class="hang-bay">
                                                     @* <img src="images/hang-bay/vietjet.png" alt=""> *@
                                                     <span>Tiêu chuẩn</span>
                                                 </td>
                                                 <td class="price">@(((double)item.AdultPrice).ToString("N0"))</td>
-                                                <td><a href="javascript:;" class="btn tour-detail-confirm">Giữ chỗ</a></td>
+                                                <td><a href="/tour/order?id=@from.id&package=@item.Id" class="btn">Giữ chỗ</a></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -301,37 +272,40 @@
                     </div>
                     @if (from.packages.Count > 0)
                     {
-                        var prices = from.packages.Where(x => x.AdultPrice != null && (double)x.AdultPrice > 0).Select(x => new { id = x.Id, price = (double)x.AdultPrice, is_daily = false, date = ((DateTime)x.FromDate).ToString("dd/MM/yyyy") }).ToList();
-                        var min_price = prices.OrderBy(x => x.price).First();
-                        <a class="btn-default full mb10 tour-detail-confirm-quick" data-id="@min_price.id" data-date="@min_price.date" data-is_daily="@min_price.is_daily.ToString()" href="javascript:;" style="line-height: 1.6;padding: 5px 20px;height:100%;">
+                        var packages_recent = from.packages.OrderBy(x => x.FromDate).First();
+
+                        <a class="btn-default full mb10 tour-detail-confirm-quick" href="/tour/order?id=@from.id&package=@packages_recent.Id" style="line-height: 1.6;padding: 5px 20px;height:100%;">
                             <ul>
                                 <li><div>Đặt tour ngay</div></li>
                                 <li><div>Giữ chỗ, chưa cần thanh toán</div></li>
                             </ul>
                         </a>
                     }
+                    else
+                    {
+                        <a class="btn-default full gray size TT-Lien-He" href="javascript:;">Liên hệ tư vấn</a>
 
-                    <a class="btn-default full gray size TT-Lien-He" href="javascript:;">Liên hệ tư vấn</a>
+                    }
                     <ul class="li-icon mt15 mb0">
                         <li>
                             <svg class="icon-svg">
-                                <use xlink:href="images/icons/icon.svg#date"></use>
+                                <use xlink:href="/images/icons/icon.svg#date"></use>
                             </svg> <strong>Lịch trình:</strong>
                             @switch (from.tourType)
                             {
                                 case 1:
                                     {
-                                        @(from.startPoint1   + " - " + from.groupEndPoint1 )
+                                        @(from.startPoint1 + " - " + from.groupEndPoint1)
                                     }
                                     break;
                                 case 2:
                                     {
-                                        @(from.startPoint2   + " - " + from.groupEndPoint2 )
+                                        @(from.startPoint2 + " - " + from.groupEndPoint2)
                                     }
                                     break;
                                 case 3:
                                     {
-                                        @(from.startPoint3   + " - " + from.groupEndPoint3 )
+                                        @(from.startPoint3 + " - " + from.groupEndPoint3)
                                     }
                                     break;
                             }
@@ -340,12 +314,12 @@
                         </li>
                         <li>
                             <svg class="icon-svg">
-                                <use xlink:href="images/icons/icon.svg#clock"></use>
+                                <use xlink:href="/images/icons/icon.svg#clock"></use>
                             </svg> <strong>Thời gian:</strong> @(from.days + 1) ngày @(from.days) đêm
                         </li>
                         <li>
                             <svg class="icon-svg">
-                                <use xlink:href="images/icons/icon.svg#taxi"></use>
+                                <use xlink:href="/images/icons/icon.svg#taxi"></use>
                             </svg> <strong>Khởi hành:</strong> Theo yêu cầu
                         </li>
 
@@ -358,21 +332,13 @@
             <h2 class="title-cate mb20">Tour liên quan</h2>
 
         </div>
+   </div>
 
-    </div>
 </section>
 
 @section scripts {
-    <script type="text/javascript" src="~/js/lightgallery-all.min.js"></script>
-    <script>
-        var detail = @Json.Serialize(from)
-            window.history.pushState('', 'Chi tiết Tour Du lịch', '/tour/@slugLocation.Trim()/@slug-@from.id');
-
-    </script>
-
-
-    <script src="~/js/modules/tour/detail.js" asp-append-version="true"></script>
     <script src="~/js/modules/tour/constants.js" asp-append-version="true"></script>
     <script src="~/js/modules/tour/global.js" asp-append-version="true"></script>
+    <script src="~/js/modules/tour/detail.js" asp-append-version="true"></script>
 
 }

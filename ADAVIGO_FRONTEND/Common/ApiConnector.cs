@@ -1,4 +1,5 @@
-﻿using LIB.ENTITIES.ViewModels.Hotels;
+﻿using ENTITIES.ViewModels.Payment;
+using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -19,7 +20,6 @@ namespace ADAVIGO_FRONTEND.Common
         public readonly string _ApiSecretKey;
         public readonly string _ApiSecretKeyOther;
         private readonly string API_UPLOAD_IMAGE;
-
         public ApiConnector(IConfiguration _configuration)
         {
             _HttpClient = new HttpClient(new HttpClientHandler
@@ -33,6 +33,7 @@ namespace ADAVIGO_FRONTEND.Common
             _ApiSecretKey = _configuration["API:SecretKey"];
             _ApiSecretKeyOther = _configuration["API:SecretKeyOther"];
             API_UPLOAD_IMAGE = _configuration["API_UPLOAD_IMAGE"];
+           
         }
 
         public async Task<string> ExecutePostAsync(string apiEndPoint, object paramData, int secretkeyType = 0)
@@ -182,29 +183,29 @@ namespace ADAVIGO_FRONTEND.Common
             }
             return null;
         }
-        public async Task<List<VietQRBankDetail>> GetVietQRBankList()
-        {
-            try
-            {
-                var options = new RestClientOptions("https://api.vietqr.io");
-                var client = new RestClient(options);
-                var request = new RestRequest("/v2/banks", Method.Get);
-                RestResponse response = await client.ExecuteAsync(request);
+        //public async Task<List<VietQRBankDetail>> GetVietQRBankList()
+        //{
+        //    try
+        //    {
+        //        var options = new RestClientOptions("https://api.vietqr.io");
+        //        var client = new RestClient(options);
+        //        var request = new RestRequest("/v2/banks", Method.Get);
+        //        RestResponse response = await client.ExecuteAsync(request);
 
-                var jsonData = JObject.Parse(response.Content);
-                var status = int.Parse(jsonData["code"].ToString());
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return JsonConvert.DeserializeObject<List<VietQRBankDetail>>(jsonData["data"].ToString());
-                }
+        //        var jsonData = JObject.Parse(response.Content);
+        //        var status = int.Parse(jsonData["code"].ToString());
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return JsonConvert.DeserializeObject<List<VietQRBankDetail>>(jsonData["data"].ToString());
+        //        }
 
-            }
-            catch
-            {
-                throw;
-            }
-            return null;
-        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //    return null;
+        //}
 
     }
 }

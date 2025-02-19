@@ -2,6 +2,7 @@
 using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.ViewModels;
 using ENTITIES.ViewModels.Hotel;
+using ENTITIES.ViewModels.Payment;
 using LIB.ENTITIES.ViewModels.Hotels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
         private readonly string API_UPLOAD_IMAGE;
         private string _KeyEncodeParam;
         private string _ElasticHost;
+        private List<BankingAccountQRModel> BANK_ACCOUNT;
 
         public HotelService(ApiConnector apiConnector, IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration) : base(apiConnector, httpContextAccessor)
@@ -28,6 +30,57 @@ namespace ADAVIGO_FRONTEND.Models.Services
             _KeyEncodeParam = configuration["KeyEncodeParam"];
             _ElasticHost = configuration["DataBaseConfig:Elasticsearch"];
             API_UPLOAD_IMAGE = configuration["API_UPLOAD_IMAGE"];
+            BANK_ACCOUNT = new List<BankingAccountQRModel>()
+            {
+                new BankingAccountQRModel()
+                {
+                    AccountName = "Công ty cổ phần Thương mại và Dịch vụ Quốc tế Đại Việt",
+                    AccountNumber = "19131835226016",
+                    BankId = "Techcombank",
+                    Branch = "Đông Đô",
+                    Bin="970407",
+                    Image="https://static-image.adavigo.com/uploads/images/banklogo/TCB.png",
+                    ClientId = null,
+                    CreatedBy = 18,
+                    CreatedDate = DateTime.Now,
+                    Id = 1,
+                    SupplierId = 604,
+                    UpdatedBy = 18,
+                    UpdatedDate = DateTime.Now,
+                },
+                new BankingAccountQRModel()
+                {
+                    AccountName = "Công ty cổ phần Thương mại và Dịch vụ Quốc tế Đại Việt",
+                    AccountNumber = "371704070000023",
+                    BankId = "HDBank",
+                    Bin="970437",
+                    Image="https://static-image.adavigo.com/uploads/images/banklogo/HDB.png",
+                    Branch = "Hà Nội",
+                    ClientId = null,
+                    CreatedBy = 18,
+                    CreatedDate = DateTime.Now,
+                    Id = 2,
+                    SupplierId = 604,
+                    UpdatedBy = 18,
+                    UpdatedDate = DateTime.Now,
+                },
+                new BankingAccountQRModel()
+                {
+                    AccountName = "Công ty cổ phần Thương mại và Dịch vụ Quốc tế Đại Việt",
+                    AccountNumber = "113600558866",
+                    BankId = "VietinBank",
+                    Branch = "Tràng An",
+                    Bin="970415",
+                    Image="https://static-image.adavigo.com/uploads/images/banklogo/ICB.png",
+                    ClientId = null,
+                    CreatedBy = 18,
+                    CreatedDate = DateTime.Now,
+                    Id = 3,
+                    SupplierId = 604,
+                    UpdatedBy = 18,
+                    UpdatedDate = DateTime.Now,
+                },
+            };
         }
 
         public async Task<IEnumerable<HotelESSuggestModel>> GetHotelList(string hotelName, int search_type)
@@ -552,10 +605,9 @@ namespace ADAVIGO_FRONTEND.Models.Services
         {
             try
             {
-                var data = await _ApiConnector.GetVietQRBankList();
-                var selected_bank = data.Count > 0 ? data.FirstOrDefault(x => x.shortName.Trim().ToLower().Contains(model.short_name.Trim().ToLower())) : null;
+                var selected = BANK_ACCOUNT.FirstOrDefault(x => x.Bin == model.bank_code);
                 string bank_code = model.bank_code;
-                if (selected_bank != null) bank_code = selected_bank.bin;
+               // if (selected_bank != null) bank_code = selected_bank.bin;
                 var result = await _ApiConnector.GetVietQRCode(model.bank_account, bank_code, model.order_no, Convert.ToDouble(model.amount));
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["code"].ToString());
@@ -570,18 +622,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return null;
         }
-        public async Task<List<VietQRBankDetail>> GetVietQRBankList()
-        {
-            try
-            {
-               return await _ApiConnector.GetVietQRBankList();
-               
-            }
-            catch
-            {
-            }
-            return null;
-        }
+     
         public async Task<List<BankingAccount>> GetBankAccount(string token = "ShFEWV1JGgkSCHBjZBISNyEkRltUW0US")
         {
             try

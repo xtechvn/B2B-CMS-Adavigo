@@ -155,8 +155,17 @@ namespace ADAVIGO_FRONTEND
                   name: "tour",
                   pattern: "tour/{slug_location}/{slug}-{id}",
                   defaults: new { controller = "Tour", action = "Detail" }
+                );  
+                endpoints.MapControllerRoute(
+                  name: "tour",
+                  pattern: "/tour/tim-kiem",
+                  defaults: new { controller = "Tour", action = "Search" }
                 );
-
+                endpoints.MapControllerRoute(
+                 name: "tour",
+                 pattern: "/tour/san-pham/{slug}--{id}",
+                 defaults: new { controller = "Tour", action = "Detail" }
+               );
             });
 
 

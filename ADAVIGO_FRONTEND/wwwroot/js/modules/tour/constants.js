@@ -18,13 +18,7 @@
         BreadcumbItem: ` <li class="breadcrumb-item {active}"><a href="{url}">{name}</a></li>`,
         Breadcumb: `<ol class="breadcrumb">{items}</ol>`,
         Option: `<option value="{value}">{text}</option>`,
-        NotFound: `<div class="search-null center mb40">
-                        <div class="mb24">
-                            <img src="/images/graphics/icon-search.png" alt="">
-                        </div>
-                        <h2 class="title txt_24">Không tìm thấy kết quả</h2>
-                        <div class="gray">Chúng tôi không tìm thấy thông tin mà bạn cần, vui lòng thử lại</div>
-                    </div> `,
+
         StarTemplate: '<svg class="icon-svg"> <use xlink:href="/images/icons/icon.svg#star"> </use> </svg>',
         SearchTourDetailItem: `
 
@@ -90,13 +84,13 @@
               {item}
                 
             </div>`,
-        SearchItemHeader:`<div class="header-title mb16">
+        SearchItemHeader: `<div class="header-title mb16">
                 <h2 class="title-cate">Khởi hành từ {start_point}</h2>
                 <p class="gray">
                     Chúng tôi tìm thấy {count} tour cho Quý khách.
                 </p>
             </div>`,
-        SearchItemContent:`<div class="list-article grid grid__3 mb20 search-tour-{id}">
+        SearchItemContent: `<div class="list-article grid grid__3 mb20 search-tour-{id}">
                {items}
             </div>{items2}`,
         Star: '<svg class="icon-svg"> <use xlink:href="/images/icons/icon.svg#star"> </use> </svg>',

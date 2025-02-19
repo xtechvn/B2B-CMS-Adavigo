@@ -532,5 +532,44 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour.Bussiness
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<TourPaymentModel> GetBookingPayment(string booking_id)
+        {
+            try
+            {
+
+                var data = JsonConvert.SerializeObject(new
+                {
+                    booking_id
+                });
+
+                var token = AdavigoHelper.Encode(data, _configuration["SecretKey:b2b"]);
+                var request = new[]
+                {
+                    new KeyValuePair<string, string>("token", token),
+                };
+
+                var url = TourConstants.AdavigoApiRoutes.GetBookingPayment;
+                HttpResponseMessage response = await _httpClient.PostAsync(url, new FormUrlEncodedContent(request));
+
+                var stringResult = "";
+                if (response.IsSuccessStatusCode)
+                {
+                    stringResult = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<BaseObjectResponse<TourPaymentModel>>(stringResult);
+                    if (result.status != 0)
+                    {
+                        await SendExceptionLogTele(TourConstants.AdavigoApiRoutes.SaveBooking, "API Call Not Success Token [" + token + "]: " + stringResult);
+                        return null;
+                    }
+                    return result.data;
+                }
+            }
+            catch (Exception ex)
+            {
+                await SendExceptionLogTele(TourConstants.AdavigoApiRoutes.ConfirmTour, ex.Message);
+                throw new Exception(ex.Message);
+            }
+            return null;
+        }
     }
 }

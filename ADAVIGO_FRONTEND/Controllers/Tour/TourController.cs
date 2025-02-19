@@ -19,8 +19,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot.Requests.Abstractions;
 using Utilities.Contants;
 
 namespace ADAVIGO_FRONTEND.Controllers.Tour
@@ -50,15 +52,105 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
         {
             return View();
         }
-        public IActionResult Listing()
+        public async Task<IActionResult> Search(int? start=null, int? end=null, int? type=null,int index=1)
         {
+            ViewBag.Start = start; 
+            ViewBag.End=end;
+            ViewBag.Type=type;
+            ViewBag.List = new TourListingResponseExtension();
+            ViewBag.StartPoint = new List<int>();
+            ViewBag.StaticDomain = _configuration["API_UPLOAD_IMAGE"];
+            try
+            {
+                //-- memory_cache:
+                var cacheKey = CacheKeys.TourLocationStart + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(new
+                {
+                    start,end,type,index
+                }));
+                TourListingResponseExtension listing = new TourListingResponseExtension();
+                // Đặt khóa cho cache
+                if (_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
+                {
+                    ViewBag.List = result;
+                    listing = JsonConvert.DeserializeObject<TourListingResponseExtension> (JsonConvert.SerializeObject(result));
+                }
+                else
+                {
+                    var TaskModel = _AccountService.GetDetail().Result;
+                    TourListingRequest request = new TourListingRequest()
+                    {
+                        clienttype = TaskModel.client_type,
+                        endpoint = (end == null ? -1 : (int)end),
+                        startpoint = (start == null ? -1 : (int)start),
+                        tourtype = (type == null ? 1 : (int)type),
+                        tour_id = -1,
+                        pageindex = index,
+                        pagesize = 20
+                    };
+                    var detail = await _adavigoTourService.SearchTour(request);
+                    if (detail.data != null && detail.data.Count > 0)
+                    {
+                        var listIMG = detail.data.Select(s => s.avatar).ToList();
+                        detail.listimages = listIMG;
+                    }
+                    ViewBag.List = detail;
+                    // Lưu vào cache với thời gian hết hạn 
+                    //_cache.Set(cacheKey, detail, TimeSpan.FromSeconds(120));
+                    listing = detail;
+                }
+                if (listing != null && listing.data != null && listing.data.Count > 0) {
+
+                    ViewBag.StartPoint = listing.data.Select(x => x.startpoint).Distinct().ToList();
+                
+                }
+            }
+            catch (Exception ex) { 
+            
+            }
             return View();
         }
-        public IActionResult Search()
+        [HttpPost]
+        public async Task<IActionResult> LocationStart(TourLocationRequestModel request)
         {
-            return View();
+            if (request.tour_type <= 0)
+            {
+                return BadRequest();
+            }
+
+            //-- memory_cache:
+            var cacheKey = CacheKeys.TourLocationStart + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(request)); // Đặt khóa cho cache
+            if (!_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
+            {
+                result = await _adavigoTourService.GetLocationStart(request);
+                if (result != null)
+                {
+                    // Lưu vào cache với thời gian hết hạn 
+                    _cache.Set(cacheKey, result, TimeSpan.FromSeconds(120));
+                }
+            }
+            return Ok(result);
         }
-        public IActionResult Detail(string slug_location = "", string slug = "", int id = 0)
+        [HttpPost]
+        public async Task<IActionResult> LocationEnd(TourLocationRequestModel request)
+        {
+            if (request.tour_type <= 0 || request.tour_type < -1)
+            {
+                return BadRequest();
+            }
+            //-- memory_cache:
+            var cacheKey = CacheKeys.TourLocationEnd + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(request)); // Đặt khóa cho cache
+            if (!_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
+            {
+                result = await _adavigoTourService.GetLocationEnd(request);
+                if (result != null)
+                {
+                    // Lưu vào cache với thời gian hết hạn 
+                    _cache.Set(cacheKey, result, TimeSpan.FromSeconds(120));
+                }
+            }
+            return Ok(result);
+        }
+        public IActionResult Detail( string slug = "", int id = 0)
         {
             var TaskModel = _AccountService.GetDetail().Result;
             if (id <= 0)
@@ -97,12 +189,40 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             }
             return View();
         }
-     
-        public IActionResult CustomerInfo()
+        public async Task<IActionResult> Order(int? id=null, long? package=null)
         {
-            var TaskModel = _AccountService.GetDetail().Result;
-            ViewBag.UserManager = TaskModel;
-            return View();
+            if(id==null || package == null|| id <=0 || package <= 0)
+            {
+                return Redirect("Error");
+
+            }
+            ViewBag.UserManager = new AccountModel();
+            ViewBag.Detail = new BaseObjectResponse<TourDetailResponseExtend>();
+            ViewBag.Package = new TourProgramPackages();
+            try
+            {
+                var TaskModel = await _AccountService.GetDetail();
+                ViewBag.UserManager = TaskModel;
+                var detail = await  _adavigoTourService.GetTourDetail(new TourDetailRequest()
+                {
+                    tour_id=(int)id,
+                    type = TaskModel.client_type
+                });
+                if (detail != null)
+                {
+                    ViewBag.Detail = detail;
+                    if(detail.data!=null && detail.data.packages!=null && detail.data.packages.Count > 0)
+                    {
+                        ViewBag.Package = detail.data.packages.FirstOrDefault(x => x.Id == (long)package);
+                    }
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Redirect("Error");
         }
         public async Task<IActionResult> SaveTour(TourPaymentModel model)
         {
@@ -132,39 +252,59 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                 BookingRequest.guest = guest;
 
                 var booking_id = await _adavigoTourService.SaveBooking(BookingRequest);
-
                 model.bookingId = booking_id.data;
-                var cache_name = Guid.NewGuid().ToString();
-                _MemoryCache.Set(cache_name, model, TimeSpan.FromMinutes(30));
+                 _MemoryCache.Set(model.bookingId, model, TimeSpan.FromMinutes(30));
                 return new JsonResult(new
                 {
                     isSuccess = true,
-                    data = cache_name
+                    data = booking_id
                 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new JsonResult(new
                 {
                     isSuccess = false,
                 });
             }
-            
-        }
-        public IActionResult Payment(string booking)
-        {
-            var model = _MemoryCache.Get<TourPaymentModel>(booking);
 
-            var fund_datas = _HomeService.GetAmountDeposit().Result;
+        }
+        public async Task<IActionResult> Payment(string booking,string order_no)
+        {
+            ViewBag.Data = new TourPaymentModel();
             ViewBag.Fund = new FundDataModel();
-            if (fund_datas != null && fund_datas.Count() > 0)
+            ViewBag.OrderNo = "";
+            try
             {
-                ViewBag.Fund = fund_datas.Where(x => x.service_type == 1).FirstOrDefault();
+                var model = _MemoryCache.Get<TourPaymentModel>(booking);
+                var fund_datas = _HomeService.GetAmountDeposit().Result;
+                if (fund_datas != null && fund_datas.Count() > 0)
+                {
+                    ViewBag.Fund = fund_datas.Where(x => x.service_type == 5).FirstOrDefault();
+                }
+                if (model == null || model.bookingId == null || model.bookingId.Trim() == "")
+                {
+                    ViewBag.Data = await _adavigoTourService.GetBookingPayment(booking.Trim());
+                }
+                else
+                {
+                    ViewBag.Data = model;
+                }
+                if(order_no != null && order_no.Trim()=="")
+                {
+                    ViewBag.OrderNo = order_no;
+                }
+            }catch(Exception ex)
+            {
+
             }
-            return View(model);
+            return View();
         }
         public async Task<IActionResult> SavePayment(PaymentHotelModel model)
         {
+
+
+
             try
             {
 
@@ -240,96 +380,34 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                 });
             }
         }
-
         [HttpPost]
         public async Task<TourListingResponseExtension> SearchTour(TourListingRequest request)
         {
             var TaskModel = _AccountService.GetDetail().Result;
             request.clienttype = TaskModel.client_type;
             var detail = await _adavigoTourService.SearchTour(request);
-            if(detail.data != null&& detail.data.Count > 0)
+            if (detail.data != null && detail.data.Count > 0)
             {
                 var listIMG = detail.data.Select(s => s.avatar).ToList();
                 detail.listimages = listIMG;
             }
             return detail;
         }
-        [HttpPost]
-        public async Task<BaseObjectResponse<TourDetailResponseExtend>> TourDetail(TourDetailRequest request)
+        public IActionResult OrderSuccess(string order_no, int? payment_type)
         {
-            var TaskModel = _AccountService.GetDetail().Result;
-            request.type = TaskModel.client_type;
-            var detail = await _adavigoTourService.GetTourDetail(request);
-
-            return detail;
-        }
-        public async Task<IActionResult> GetListTour()
-        {
-            return View();
-        }
-        public async Task<IActionResult> SearchOrderTour(TourOrdersListingRequest request)
-        {
-
-            var TaskModel = _AccountService.GetDetail().Result;
-            request.account_id = TaskModel.id;
-            request.pageindex = 1;
-            request.pagesize = 20;
-            ViewBag.request = request;
-            ViewBag.request = request;
-            var detail = await _adavigoTourService.GetTourOrdersListing(request);
-            return View(detail);
-        }
-        public async Task<IActionResult> OrderDetailTour(long id)
-        {
-            var model = new TourOrdersDetailRequest();
-            model.tour_id = id;
-            var detail = await _adavigoTourService.GetTourOrderDetail(model);
-            if (detail.status == 0)
-            {
-                return View(detail.data);
-            }
+            ViewBag.PaymentType = payment_type;
+            ViewBag.OrderNo = order_no;
+            ViewBag.ExpirationDate = DateTime.Now.AddHours(3);
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> LocationStart(TourLocationRequestModel request)
+        public async Task<IActionResult> GenQRCode(PaymentHotelModel model)
         {
-            if (request.tour_type <= 0)
+            return new JsonResult(new
             {
-                return BadRequest();
-            }
-
-            //-- memory_cache:
-            var cacheKey = CacheKeys.TourLocationStart + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(request)); // Đặt khóa cho cache
-            if (!_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
-            {
-                result = await _adavigoTourService.GetLocationStart(request);
-                if (result != null)
-                {
-                    // Lưu vào cache với thời gian hết hạn 
-                    _cache.Set(cacheKey, result, TimeSpan.FromSeconds(120));
-                }
-            }
-            return Ok(result);
-        }
-        [HttpPost]
-        public async Task<IActionResult> LocationEnd(TourLocationRequestModel request)
-        {
-            if (request.tour_type <= 0 || request.tour_type < -1)
-            {
-                return BadRequest();
-            }
-            //-- memory_cache:
-            var cacheKey = CacheKeys.TourLocationEnd + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(request)); // Đặt khóa cho cache
-            if (!_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
-            {
-                result = await _adavigoTourService.GetLocationEnd(request);
-                if (result != null)
-                {
-                    // Lưu vào cache với thời gian hết hạn 
-                    _cache.Set(cacheKey, result, TimeSpan.FromSeconds(120));
-                }
-            }
-            return Ok(result);
+                isSuccess = true,
+                data = await _HotelService.GetVietQRCode(model)
+            });
         }
     }
 }

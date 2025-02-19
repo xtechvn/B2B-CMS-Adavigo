@@ -1,4 +1,18 @@
-﻿var tour_service = {
+﻿var tour_global = {
+    LocationStart: function (tour_type) {
+        var result = tour_global.POSTSynchorus('/Tour/LocationStart', { tour_type: tour_type });
+        if (result != null && result != undefined && result.data != null && result.data != undefined) {
+            return result.data
+        }
+        return undefined
+    },
+    LocationEnd: function (tour_type, location_start) {
+        var result = tour_global.POSTSynchorus('/Tour/LocationEnd', { tour_type: tour_type, start_point: location_start })
+        if (result != null && result != undefined && result.data != null && result.data != undefined) {
+            return result.data
+        }
+        return undefined
+    },
     RemoveUnicode: function (str) {
         if (str == null || str == undefined || str.trim() == '') {
             return str
@@ -9,6 +23,8 @@
         for (var i = 0, l = from.length; i < l; i++) {
             str = str.replaceAll(from[i], to[i]);
         }
+
+
 
         str = str.toLowerCase()
             .trim()
@@ -32,5 +48,34 @@
         while (rgx.test(x1))
             x1 = x1.replace(rgx, '$1' + ',' + '$2');
         return x1 + x2;
+    },
+    POSTSynchorus: function (url, model) {
+        var data = undefined
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: model,
+            success: function (result) {
+                data = result;
+            },
+            error: function (err) {
+                console.log(err)
+            },
+            async: false
+        });
+        return data
+    },
+    POST: function (url, model, callback) {
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: model,
+            success: function (result) {
+                callback(result)
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
     },
 }

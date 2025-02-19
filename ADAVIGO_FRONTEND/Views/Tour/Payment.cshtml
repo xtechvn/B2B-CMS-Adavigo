@@ -1,25 +1,22 @@
 ﻿@using ADAVIGO_FRONTEND.ViewModels;
 @using ADAVIGO_FRONTEND.Models.Tour.TourListing
-@model TourPaymentModel
 @{
+    TourPaymentModel data = (TourPaymentModel)ViewBag.Data;
     var TotalDays = 1;
     var ArrMemberOfRoom = new List<string>();
-
-    if (Model.numberOfAdult > 0)
+    if (data.numberOfAdult > 0)
     {
-        ArrMemberOfRoom.Add(Model.numberOfAdult + " Người lớn");
+        ArrMemberOfRoom.Add(data.numberOfAdult + " Người lớn");
     }
-
-    if (Model.numberOfChild > 0)
+    if (data.numberOfChild > 0)
     {
-        ArrMemberOfRoom.Add(Model.numberOfChild + " Trẻ em");
+        ArrMemberOfRoom.Add(data.numberOfChild + " Trẻ em");
     }
-
     var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
     var fund = (FundDataModel?)ViewBag.Fund;
-
+    string order_no = (string)ViewBag.OrderNo;
 }
-
+<input style="display:none;" id="re-payment-info" data-no="@order_no"/>
 <section class="step-menu">
     <div class="step step1 active success">
         <span class="number">
@@ -126,36 +123,122 @@
                     <h2 class="title txt_20 bold mb0">Thông tin thanh toán</h2>
                 </div>
                 <div class="mb12">
-                    <div class="gray">Đặt phòng với hồ sơ:</div>
-                    <strong>Dai Viet Tourist</strong>
+                    <div class="gray">Thông tin Tour:</div>
+                    <strong>@data.tourName</strong>
                 </div>
                 <div class="line-bottom mb12"></div>
 
-                <div class="">
-                    <strong>@Model.tourName</strong>
-                    <div class="gray mb12">(@strMemberOfRoom)</div>
+                <div class="row mb12">
+                    <div class="col-5 gray">Ngày khởi hành:</div>
+                    <div class="col-7 bold text-right">
+                        @data.startDate
+                    </div>
                 </div>
-
+                <div class="mb12">
+                    <div class="gray">Thành viên: </div>
+                    <strong>
+                        @data.numberOfAdult.ToString("N0") người lớn
+                    </strong>
+                    <strong>@data.numberOfChild.ToString("N0") trẻ em</strong>
+                </div>
                 <div class="row mb12">
                     <div class="col-5 gray">Tổng tiền</div>
-                    <div class="col-7 bold text-right">@(Model.totalAmount.ToString("N0")) VND</div>
+                    <div class="col-7 bold text-right">@(data.totalAmount.ToString("N0")) VND</div>
                 </div>
 
                 <div class="line-bottom mb12"></div>
                 <div class="row mb12">
                     <div class="col-5 bold txt_16">Thành tiền</div>
-                    <div class="col-7 bold color-green txt_18 text-right">@Model.totalAmount.ToString("N0") VND</div>
+                    <div class="col-7 bold color-green txt_18 text-right">@data.totalAmount.ToString("N0") VND</div>
                     <div class="col-12 gray text-right txt_12">Đã bao gồm thuế, phí, VAT</div>
                 </div>
                 @*<input type="hidden" value="@Model.bookingID" id="input__hotel_payment_bookingid" />*@
-                <input type="hidden" value="@Model.orderId" id="input__tour_payment_orderid" />
-                <input type="hidden" value="@Model.totalAmount" id="input__tour_payment_amount" />
-                <input type="hidden" value="@Model.bookingId" id="input__tour_payment_bookingid" />
+                <input type="hidden" value="@data.orderId" id="input__tour_payment_orderid" />
+                <input type="hidden" value="@data.totalAmount" id="input__tour_payment_amount" />
+                <input type="hidden" value="@data.bookingId" id="input__tour_payment_bookingid" />
                 <button type="button" id="btn__submit_tour_payment" class="btn btn-default full size">Thanh toán</button>
             </div>
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="modal-payment-transfer" data-backdrop="static" style="background-color: rgba(55, 55, 55, 0.6);">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:800px;place-self:center;">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin chuyển khoản</h4>
+                <button type="button" class="close confirm-payment" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <table class="table table-bordered" border="1">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>Số tài khoản</div>
+                                </td>
+                                <td>
+                                    <div id="popup-payment-bankaccount"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Chủ tài khoản</div>
+                                </td>
+                                <td>
+                                    <div>Công ty cổ phần Thương mại và Dịch vụ Quốc tế Đại Việt</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Ngân hàng</div>
+                                </td>
+                                <td>
+                                    <div id="popup-payment-bankname"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Số tiền chuyển khoản</div>
+                                </td>
+                                <td>
+                                    <div>@data.totalAmount.ToString("N0")</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Nội dung chuyển khoản</div>
+                                </td>
+                                <td>
+                                    <div><nw id="popup-payment-order-no"></nw> THANH TOAN</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="position:relative;">
+                                    <div style="position:absolute;top:40%;">Mã QR chuyển khoản</div>
+                                </td>
+                                <td>
+                                    <div><img id="popup-payment-qr" style="max-width:240px;" src="" /></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p class="txt_16 bold" style="margin: 0px;">Lưu ý:</p>
+                    <div class="pd-10">
+                        <p><strong>1.</strong> Bạn vui lòng điền chính xác thông tin chuyển khoản bao gồm “Số tiền chuyển khoản” & “Nội dung chuyển khoản” để việc đặt hàng diễn ra nhanh chóng.</p>
+                        <p><strong>2.</strong> Đơn hàng của bạn sẽ được xác nhận thanh toán sau khi hệ thống của Adavigo ghi nhận thông báo thanh toán thành công từ ngân hàng.</p>
+                        <p><strong>3.</strong> Bạn vui lòng giữ lại các chứng từ giao dịch để đối chiếu khi có phát sinh vấn đề</p>
+                        <p><strong>4.</strong> Bạn có thể thực hiện thanh toán tại quầy giao dịch ngân hàng, Mobile Banking, ATM, hoặc thanh toán qua dịch vụ Internet Banking của ngân hàng tại đây.</p>
+                    </div>
+
+                    <a id="confirm-payment" type="button" class="btn btn-default mt10 full size confirm-payment" style="width: 240px;" href="/tour/OrderSuccess?order_no=">Xác nhận đã chuyển khoản</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section scripts{

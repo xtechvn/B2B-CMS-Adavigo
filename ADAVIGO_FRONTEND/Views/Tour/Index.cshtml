@@ -11,13 +11,13 @@
                 <div class="content">
                     <h2 class="title">Tìm kiếm tour mà bạn muốn</h2>
                     <div class="tab-menu flex">
-                        <a href="javascript:;" class="filter-tour-type active" data-id="1">
+                        <a href="javascript:;" class="tour-type active" data-id="1">
                             <svg class="icon-svg">
                                 <use xlink:href="/images/icons/icon.svg#flight"></use>
                             </svg>
                             <span>Du lịch trong nước</span>
                         </a>
-                        <a href="javascript:;" class="filter-tour-type" data-id="3">
+                        <a href="javascript:;" class="tour-type" data-id="3">
                             <svg class="icon-svg">
                                 <use xlink:href="/images/icons/icon.svg#world"></use>
                             </svg>
@@ -39,7 +39,7 @@
                                             <svg class="icon-svg">
                                                 <use xlink:href="/images/icons/icon.svg#address"></use>
                                             </svg>
-                                            <select class=" filter-address-from" name="" id="select-address-from" style="width: 100%;"></select>
+                                            <select class="from" name="address-from" id="from" style="width: 100%;" disabled></select>
                                         </div>
                                     </a>
                                 </div>
@@ -55,7 +55,7 @@
                                             <svg class="icon-svg">
                                                 <use xlink:href="/images/icons/icon.svg#address"></use>
                                             </svg>
-                                            <select class=" filter-address-to" name="" id="select-address-to" style="width: 100%; display:none;" disabled ></select>
+                                            <select class="to" name="address-to" id="to" style="width: 100%;" disabled></select>
                                         </div>
                                     </a>
                                 </div>
@@ -95,6 +95,7 @@
 </section>
 @section scripts {
     <script type="text/javascript" src="~/js/modules/tour/constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/global.js"></script>
     <script type="text/javascript" src="~/js/modules/tour/index.js"></script>
 
 }
