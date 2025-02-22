@@ -28,7 +28,7 @@
         </div>
         @await Html.PartialAsync("BoxFilter", Model)
     </div>
-    <div id="hotel_listing_holder" style="display: none;">
+   @*  <div id="hotel_listing_holder" style="display: none;">
         @await Html.PartialAsync("ListingFilter")
     </div>
     <div class="flex" id="hotel_fund_data_holder">
@@ -46,15 +46,17 @@
     <div id="hotel_listings_sale">
         <partial name="/Views/Hotel/HotelExclusiveListing.cshtml" />
 
-    </div>
+    </div> *@
+    <partial name="/Views/Hotel/HotelByLocation.cshtml" />
     
 </section>
 @section scripts{
     <script type="text/javascript" src="~/js/modules/home.js"></script>
     <script type="text/javascript" src="~/js/modules/hotel.js"></script>
     <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel-exclusive-listing.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel-commit-listing.js"></script>
+  @*   <script type="text/javascript" src="~/js/modules/hotel-exclusive-listing.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-commit-listing.js"></script> *@
+    <script type="text/javascript" src="~/js/modules/hotel-location.js"></script>
 
 }
 

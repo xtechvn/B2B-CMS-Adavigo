@@ -160,6 +160,7 @@
         public const string HomeSummary = "api/b2b/home/summary.json";
         public const string GetNewsDetail = "api/b2b/news/get-detail.json";
 
+        public const string GetHotelListByLocationArea = "api/b2b/hotel/v2-list-by-location";
 
     }
 

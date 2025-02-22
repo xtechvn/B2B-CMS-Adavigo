@@ -16,7 +16,20 @@
                 window.location.href = "/";
             }
         });
-    }
+    },
+    Comma: function (number) { //function to add commas to textboxes
+        number = ('' + number).replace(/[^0-9.,]+/g, '');
+        number += '';
+        number = number.replace(',', ''); number = number.replace(',', ''); number = number.replace(',', '');
+        number = number.replace(',', ''); number = number.replace(',', ''); number = number.replace(',', '');
+        x = number.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        return x1 + x2;
+    },
 };
 
 var _global_popup = {
@@ -350,6 +363,22 @@ var _ajax_caller = {
                 reject(err);
             }
         });;
+    },
+    POSTSynchorus: function (url, model) {
+        var data = undefined
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: model,
+            success: function (result) {
+                data = result;
+            },
+            error: function (err) {
+                console.log(err)
+            },
+            async: false
+        });
+        return data
     },
 };
 

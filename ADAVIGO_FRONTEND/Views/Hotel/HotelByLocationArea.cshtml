@@ -1,0 +1,70 @@
+﻿@using LIB.ENTITIES.ViewModels.Hotels
+@using Newtonsoft.Json
+@{
+    Layout = null;
+    List<HotelExclusiveResponse> data = (List<HotelExclusiveResponse>)ViewBag.Data;
+    int type = (int)ViewBag.Type;
+    string name = (string)ViewBag.Location;
+    dynamic booking_data = (dynamic)ViewBag.URLBase;
+
+}
+@if (data != null && data.Count > 0)
+{
+    foreach (var item in data)
+    {
+        <div class="swiper-slide">
+            <div class="article-itemt full article-hotel-item" data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" style="height:390px; overflow:hidden;">
+                <div class="article-thumb">
+                    <a class="thumb_img thumb_5x3" href="#">
+                        @if (item.img_thumb != null && item.img_thumb.Count > 0)
+                        {
+                            <img src="@item.img_thumb[0]" alt="">
+                        }
+                        else
+                        {
+                            <img src="/images/graphics/thumb1.jpg" alt="">
+                        }
+
+                        <div class="tag2">GIÁ ĐỘC QUYỀN</div>
+                    </a>
+                </div>
+                <div class="article-content">
+                    <h3 class="title_new" style="height:50px; overflow:hidden;">
+                        @{
+                            booking_data.hotelID = item.hotel_id;
+                            booking_data.hotelName = item.name.Replace("\"","");
+                        }
+                        <a href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">@item.name</a>
+                    </h3>
+                    <div class="on-star">
+                        @if (item.star > 0)
+                        {
+                            <div class="star">
+                                @for (int i = 0; i <= item.star; i++)
+                                {
+                                    <svg class="icon-svg">
+                                        <use xlink:href="images/icons/icon.svg#star">
+                                        </use>
+                                    </svg>
+                                }
+                            </div>
+                            <span>(@(item.star <= 0 ? "" : item.star.ToString("N1") + "/5.0"))</span>
+                        }
+                    </div>
+                    <div class="number-vote">
+                        <span>(@item.review_count.ToString("N0") đánh giá)</span>
+                    </div>
+                    <div class="bottom-content">
+                        <p class="price-old placeholder">569.000 đ</p>
+                        <div class="price placeholder">533.000 đ</div>
+                    </div>
+                    <div class="block-code placeholder">
+                        <nw class="block-code-text"> Mã:</nw><span class="code">MUNGXUAN2025</span>
+                        <span class="sale">-2%</span>
+                        <div class="price-new">1.881.055 VND</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

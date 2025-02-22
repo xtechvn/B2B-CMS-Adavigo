@@ -175,7 +175,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     numberOfInfant = model.rooms.Sum(s => s.number_infant),
                     product_type = model.productType,
                     clientType = _UserManager.ClientType,
-                    isVinHotel=model.isVinHotel,
+                    isVinHotel = model.isVinHotel,
                     client_id = _UserManager.ClientID
                 });
 
@@ -267,12 +267,12 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 if (status == (int)ENUM_API_RESULT.SUCCESS)
                 {
                     var datas = JsonConvert.DeserializeObject<IEnumerable<string>>(jsonData["data"].ToString());
-                    return datas.Where(s => !string.IsNullOrEmpty(s)).Select(image => image.Contains("https://")? image: $"{API_UPLOAD_IMAGE}{image}");
+                    return datas.Where(s => !string.IsNullOrEmpty(s)).Select(image => image.Contains("https://") ? image : $"{API_UPLOAD_IMAGE}{image}");
                 }
             }
             catch
             {
-                
+
             }
             return urls;
         }
@@ -485,7 +485,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
                 model.client_type = _UserManager.ClientType;
 
-                var endpoints =  CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION;
+                var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION;
 
                 var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
@@ -540,7 +540,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 var dataModel = new HotelDataModel();
                 var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_GET_LOCATION_LIST, new
                 {
-                    confirm=1
+                    confirm = 1
                 });
 
                 var jsonData = JObject.Parse(result);
@@ -585,7 +585,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             try
             {
                 request.service_type = 1;
-                request.client_id= _UserManager.ClientID;
+                request.client_id = _UserManager.ClientID;
                 request.clientType = _UserManager.ClientType;
                 var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.CONFIRM_PAYMENT_WITH_FUND, request);
                 var jsonData = JObject.Parse(result);
@@ -607,7 +607,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
                 var selected = BANK_ACCOUNT.FirstOrDefault(x => x.Bin == model.bank_code);
                 string bank_code = model.bank_code;
-               // if (selected_bank != null) bank_code = selected_bank.bin;
+                // if (selected_bank != null) bank_code = selected_bank.bin;
                 var result = await _ApiConnector.GetVietQRCode(model.bank_account, bank_code, model.order_no, Convert.ToDouble(model.amount));
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["code"].ToString());
@@ -622,7 +622,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return null;
         }
-     
+
         public async Task<List<BankingAccount>> GetBankAccount(string token = "ShFEWV1JGgkSCHBjZBISNyEkRltUW0US")
         {
             try
@@ -722,11 +722,11 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 {
                     return (JsonConvert.DeserializeObject<List<HotelExclusiveDetailResponse>>(jsonData["data"].ToString())).FirstOrDefault();
                 }
-               
+
             }
             catch
             {
-               
+
             }
             return null;
         }
@@ -776,7 +776,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
                 throw;
             }
-        } 
+        }
         public async Task<B2BTrackingVoucherResponse> TrackingVoucher(B2BTrackingVoucherRequest model)
         {
             try
@@ -808,7 +808,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 if (status == (int)ENUM_API_RESULT.SUCCESS)
                     return JsonConvert.DeserializeObject<List<B2BVoucherListResponse>>(jsonData["data"].ToString());
-                
+
             }
             catch
             {
@@ -816,12 +816,17 @@ namespace ADAVIGO_FRONTEND.Models.Services
             return new List<B2BVoucherListResponse>();
         }
         public async Task<List<HotelSurchargeGridModel>> GetHotelSurcharge(string hotel_id)
+
         {
             try
             {
                 var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetHotelSurcharge, new
                 {
-                    hotelID=hotel_id
+                    hotelID = hotel_id
+
+
+
+
                 });
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["status"].ToString());
@@ -835,6 +840,34 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return new List<HotelSurchargeGridModel>();
         }
-        
+        #region v2:
+        public async Task<List<HotelExclusiveResponse>> GetHotelByLocation(string name, int type)
+        {
+            try
+            {
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetHotelListByLocationArea, new
+                {
+                    type = type,
+                    client_type = _UserManager.ClientID,
+                    fromdate = DateTime.Now.AddDays(1),
+                    todate = DateTime.Now.AddDays(2),
+                    name = name
+                });
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
+
+            }
+            catch
+            {
+            }
+            return new List<HotelExclusiveResponse>();
+        }
+
+        #endregion
+
+
     }
 }

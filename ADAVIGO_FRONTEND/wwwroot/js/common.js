@@ -184,7 +184,29 @@
                 }
             }
         });
-
+        var swiperPopular = new Swiper(".slide-popular .swiper-container", {
+            slidesPerView: 5,
+            spaceBetween: 16,
+            navigation: {
+                nextEl: ".slide-popular .swiper-button-next",
+                prevEl: ".slide-popular .swiper-button-prev",
+            },
+            breakpoints: {
+                1400: {
+                    slidesPerView:4,
+                },
+                1200: {
+                    slidesPerView: 3,
+                },
+                767: {
+                    slidesPerView: 2,
+                },
+                414: {
+                    slidesPerView: 1,
+                }
+            }
+        });
+       
     }
 
     function datepicker() {

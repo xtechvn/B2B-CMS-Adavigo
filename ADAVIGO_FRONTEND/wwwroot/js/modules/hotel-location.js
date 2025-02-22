@@ -1,0 +1,97 @@
+﻿$(document).ready(function () {
+   hotel_location.Initialization()
+})
+var hotel_location = {
+    Initialization: function () {
+
+        $('#hotel-location .box-hotel-home').each(function (index, item) {
+            var element = $(this)
+            var name = element.attr('data-name')
+            var type = element.attr('data-type')
+            hotel_location.RenderHotelByLocation(element, name, type)
+
+        })
+    },
+    RenderHotelByLocation: function (element, name, type) {
+        var input = {
+            name: name,
+            type:type
+        }
+        _ajax_caller.post('/hotel/HotelByLocationArea', input, function (result) {
+            if (result != undefined) {
+                element.find('.swiper-wrapper').html(result)
+                hotel_location.RenderDetail()
+                hotel_location.RenderHotelPrice(element)
+
+            }
+            element.removeClass('placeholder')
+            element.removeClass('box-placeholder')
+        });
+    },
+    RenderDetail: function () {
+        var swiper_hotel_home = new Swiper(".box-hotel-home .swiper-container", {
+            slidesPerView: 5,
+            spaceBetween: 16,
+            navigation: {
+                nextEl: ".box-hotel-home .swiper-button-next",
+                prevEl: ".box-hotel-home .swiper-button-prev",
+            },
+            breakpoints: {
+                1400: {
+                    slidesPerView: 5,
+                },
+                1200: {
+                    slidesPerView: 4,
+                },
+                767: {
+                    slidesPerView: 3,
+                },
+                414: {
+                    slidesPerView: 2,
+                }
+            }
+        });
+       
+    },
+    RenderHotelPrice: function (element) {
+        element.find('.article-hotel-item').each(function (index, item) {
+            var element_detail=$(this)
+            var input = {
+                hotelid: element_detail.attr('data-id'), 
+                is_vin_hotel:element_detail.attr('data-isvin')
+            }
+            _ajax_caller.post('/hotel/HotelByLocationAreaDetail', { request_model: input }, function (result) {
+                if (result != undefined && result.isSuccess == true && result.data != undefined && result.data.min_price != undefined) {
+                    element_detail.find('.bottom-content').find('.price').removeClass('placeholder')
+                    element_detail.find('.bottom-content').find('.price-old').removeClass('placeholder')
+                    element_detail.find('.bottom-content').find('.price').html(_global.Comma(result.data.min_price) + ' VND')
+                    element_detail.find('.bottom-content').find('.price').attr('data-price', result.data.min_price)
+                    element_detail.find('.bottom-content').find('.price-old').html('')
+                   
+                    hotel_location.RenderHotelPriceVoucher(element_detail)
+                }
+                if (result.data == undefined|| parseFloat(result.data.min_price) == undefined || parseFloat(result.data.min_price) <= 0) {
+                    element_detail.closest('.swiper-slide').hide()
+                }
+            });
+        })
+       
+    },
+    RenderHotelPriceVoucher: function (element_detail) {
+        var input = {
+            hotel_id: element_detail.attr('data-id'),
+        }
+        var price= element_detail.find('.bottom-content').find('.price').attr('data-price')
+        _ajax_caller.post('/hotel/HotelByLocationAreaDiscount', { request: input, price: price }, function (result) {
+            if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
+                element_detail.find('.block-code').removeClass('placeholder')
+                element_detail.find('.block-code').find('.block-code-text').html('Mã:')
+                element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code:'')
+                element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
+                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' VND')
+            }
+
+        });
+       
+    }
+}

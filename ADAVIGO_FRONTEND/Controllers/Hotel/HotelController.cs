@@ -1,4 +1,5 @@
 ﻿using ADAVIGO_FRONTEND.Common;
+using ADAVIGO_FRONTEND.Models.Flights;
 using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
@@ -609,8 +610,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             ViewBag.ExpirationDate = DateTime.Now.AddHours(3);
             return View();
         }
-
-
         [HttpPost]
         public async Task<IActionResult> GetDataFromFile(IFormFile file)
         {
@@ -632,186 +631,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 });
             }
         }
-        public IActionResult HotelExclusiveListing()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetExclusiveHotel(HotelExclusiveRequest request_model)
-        {
-            try
-            {
-                var result_data = await _HotelService.ListHotelExclusive(request_model);
-                return new JsonResult(new
-                {
-                    isSuccess = true,
-                    data = result_data
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetExclusiveHotelPosition(HotelExclusiveRequest request_model)
-        {
-            try
-            {
-                request_model.position_type = 1;
-                var result_data = await _HotelService.ListHotelExclusivePosition(request_model);
-                return new JsonResult(new
-                {
-                    isSuccess = true,
-                    data = result_data
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetExclusiveHotelDetail(HotelExclusiveDetailRequest request_model)
-        {
-            try
-            {
-                var result_data = await _HotelService.ListHotelExclusiveDetail(request_model);
-                if (result_data != null)
-                {
-                    return new JsonResult(new
-                    {
-                        isSuccess = true,
-                        data = result_data
-                    });
-                }
-                return new JsonResult(new
-                {
-                    isSuccess = false
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        public IActionResult HotelExclusives()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetHotelExclusiveFilter()
-        {
-            try
-            {
-                var data = await _HotelService.GetHotelExclusiveFilter();
 
-                return new JsonResult(new
-                {
-                    isSuccess = true,
-                    message = "Thành công",
-                    data = data
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        public IActionResult HotelCommitListing()
-        {
-            return View();
-        }
-        public IActionResult HotelCommit()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetHotelCommit(HotelExclusiveRequest request_model)
-        {
-            try
-            {
-                var result_data = await _HotelService.GetHotelCommit(request_model);
-                return new JsonResult(new
-                {
-                    isSuccess = true,
-                    data = result_data
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetHotelCommitLocation(string id = "")
-        {
-            try
-            {
-                var result_data = await _HotelService.GetHotelCommitLocation();
-                return new JsonResult(new
-                {
-                    isSuccess = true,
-                    data = result_data
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetHotelCommitDetail(HotelExclusiveDetailRequest request_model)
-        {
-            try
-            {
-                var result_data = await _HotelService.GetHotelCommitDetail(request_model);
-                if (result_data != null)
-                {
-                    return new JsonResult(new
-                    {
-                        isSuccess = true,
-                        data = result_data
-                    });
-                }
-                return new JsonResult(new
-                {
-                    isSuccess = false
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
         [HttpPost]
         public async Task<IActionResult> SaveRequestData(HotelOrderDataModel data)
         {
@@ -1046,6 +866,127 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 data = surcharge
             });
         }
-       
+
+        public IActionResult HotelByLocation()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> HotelByLocationArea(string name,int type=0)
+        {
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type);
+            ViewBag.Location = name;
+            ViewBag.Type = type;
+            string url_base = @"{
+            ""arrivalDate"": ""2025-02-23"",
+            ""departureDate"": ""2025-02-23"",
+            ""hotelID"": 107,
+            ""hotelName"": ""Sunset Beach Phú Quốc"",
+            ""productType"": ""0"",
+            ""rooms"": [
+                {
+                    ""room"": 1,
+                    ""number_adult"": 2,
+                    ""number_child"": 0,
+                    ""number_infant"": 0
+                }
+            ],
+                ""isVinHotel"": false,
+                ""address"": ""100C2 Đường Trần Hưng Đạo, TT. Dương Đông, Phú Quốc, Kiên Giang"",
+                ""telephone"": """",
+                ""email"": """"
+            }";
+            var data_url = JsonConvert.DeserializeObject<dynamic>(url_base);
+            data_url.arrivalDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+            data_url.departureDate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
+            
+            ViewBag.URLBase = data_url;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> HotelByLocationAreaDetail(HotelExclusiveDetailRequest request_model)
+        {
+            try
+            {
+                request_model.fromdate = DateTime.Now.AddDays(1);
+                request_model.todate = DateTime.Now.AddDays(2);
+                var result_data = await _HotelService.ListHotelExclusiveDetail(request_model);
+                if (result_data != null)
+                {
+                    return new JsonResult(new
+                    {
+                        isSuccess = true,
+                        data = result_data
+                    });
+                }
+                return new JsonResult(new
+                {
+                    isSuccess = false
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    isSuccess = false,
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> HotelByLocationAreaDiscount(B2BVoucherListRequest request,double price)
+        {
+            try
+            {
+                if (request.hotel_id == null || request.hotel_id.Trim() == "" || price<=0)
+                {
+                    return new JsonResult(new
+                    {
+                        isSuccess = false,
+                        message = "Dữ liệu gửi lên không chính xác",
+                        data=price
+                    });
+                }
+                var response = await _HotelService.GetVoucherList(request);
+                var amount = price;
+                string discount_value = "";
+                string code = "";
+                if(response!=null && response.Count > 0)
+                {
+                    code = response[0].code;
+                    switch (response[0].unit)
+                    {
+                        case "percent":
+                            {
+                                amount = price - Math.Round((price * (double)response[0].price_sales / 100),0);
+                                discount_value ="-"+ ((double)response[0].price_sales).ToString("N0") + "%";
+                            }
+                            break;
+                        default:
+                            {
+                                amount = price - (double)response[0].price_sales;
+                                discount_value = "-" + Math.Round((double)response[0].price_sales / 1000, 0) + "K";
+                            }
+                            break;
+                    }
+                }
+                return new JsonResult(new
+                {
+                    isSuccess = true,
+                    data = amount,
+                    discount= discount_value,
+                    code=code
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    isSuccess = false,
+                    message = ex.Message,
+                    data = price
+                });
+            }
+        }
     }
 }
