@@ -15,7 +15,9 @@ var hotel_location = {
     RenderHotelByLocation: function (element, name, type) {
         var input = {
             name: name,
-            type:type
+            type: type,
+            index: 1,
+            size: 10
         }
         _ajax_caller.post('/hotel/HotelByLocationArea', input, function (result) {
             if (result != undefined) {
@@ -71,7 +73,12 @@ var hotel_location = {
                     hotel_location.RenderHotelPriceVoucher(element_detail)
                 }
                 if (result.data == undefined|| parseFloat(result.data.min_price) == undefined || parseFloat(result.data.min_price) <= 0) {
-                    element_detail.closest('.swiper-slide').hide()
+                    element_detail.find('.bottom-content').find('.price').removeClass('placeholder')
+                    element_detail.find('.bottom-content').find('.price-old').removeClass('placeholder')
+                    element_detail.find('.bottom-content').find('.price').html('Giá liên hệ')
+                    element_detail.find('.bottom-content').find('.price').attr('data-price', '0')
+                    element_detail.find('.bottom-content').find('.price-old').html('')
+                    element_detail.find('.block-code').hide()
                 }
             });
         })

@@ -1,0 +1,214 @@
+﻿@{
+    Layout = null;
+    string title = (string)ViewBag.Title;
+}
+<div id="hotel-listing" class="bg-white pd-20 radius10 mb20">
+    <!-- Khách sạn giá sốc chỉ có trên Adavigo  -->
+    <div class="head-category mb20">
+        <div class="title-cate">
+            <img src="/images/icons/fire.png" alt="">Khách sạn giá sốc chỉ có trên Adavigo
+        </div>
+    </div>
+    <div class="flex">
+        <div class="col-300">
+            <div class="bg-white radius_10 pd-24">
+                <div class="header-fillter">
+                    <div class="flex space-between align-center">
+                        <div class="txt_16"><strong>Bộ lọc</strong></div>
+                        <a class="clear" href="#">
+                            Xóa lọc&nbsp;
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#refresh"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="gray">Sắp xếp kết quả theo lựa chọn</div>
+                </div>
+                <div class="price-filter mb24">
+                    <div class="mb16"><strong>Khoảng giá</strong></div>
+                    <div class="price-filter-container">
+                        <div id="slider-range"></div>
+                        <form>
+                            <input type="hidden" name="min-value" value="">
+                            <input type="hidden" name="max-value" value="">
+                        </form>
+                        <div class="row slider-labels">
+                            <div class="col-6">
+                                <div class="wrap">
+                                    <span id="slider-range-value1"></span> đ
+                                </div>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="wrap text-right">
+                                    <span id="slider-range-value2"></span> đ
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="mb24">
+                    <div class="head-title mb0">
+                        <div class="bold">Chính sách đặt phòng</div>
+                        <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse1">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#next2"></use>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="collapse show mt16" id="collapse1">
+                        <label class="confir_res">
+                            Miễn phí hủy phòng
+                            <input type="checkbox" name="inlineGoi3" id="">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            Miễn phí hủy phòng
+                            <input type="checkbox" name="inlineGoi3" id="">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div> *@
+                <div class="mb24">
+                    <div class="head-title mb0">
+                        <div class="bold">Hạng sao</div>
+                        <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse2">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#next2"></use>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="collapse show mt16" id="collapse2">
+                        <label class="confir_res">
+                            <div class="flex list-star">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                            </div>
+                            <input type="checkbox" name="filter-listing-star" value="1">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            <div class="flex list-star">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                            </div>
+                            <input type="checkbox" name="filter-listing-star" value="2">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            <div class="flex list-star">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                            </div>
+                            <input type="checkbox" name="filter-listing-star" value="3">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            <div class="flex list-star">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                            </div>
+                            <input type="checkbox" name="filter-listing-star" value="4">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            <div class="flex list-star">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                            </div>
+                            <input type="checkbox" name="filter-listing-star" value="5">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb24">
+                    <div class="head-title mb0">
+                        <div class="bold">Địa điểm</div>
+                        <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse3">
+                            <svg class="icon-svg">
+                                <use xlink:href="/images/icons/icon.svg#next2"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="collapse show mt16" id="collapse3">
+                        <label class="confir_res">
+                            Nha Trang
+                            <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Nha Trang" data-type="1">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            Đà Nẵng
+                            <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Đà Nẵng" data-type="1">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            Phú Quốc
+                            <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Phú Quốc" data-type="1">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            Hạ Long
+                            <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hạ Long" data-type="1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-main">
+            <div class="list-article grid grid__5">
+
+
+            </div>
+            <div class="text-center mt20">
+                <a id="hotel-listing-viewmore" data-index="1" class="btn-default gray size" href="javascript:;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="17" viewBox="0 0 16 17" fill="none">
+                        <path d="M13.3537 8.57719C13.4002 8.62363 13.4371 8.67877 13.4623 8.73947C13.4874 8.80017 13.5004 8.86523 13.5004 8.93094C13.5004 8.99665 13.4874 9.06171 13.4623 9.12241C13.4371 9.18311 13.4002 9.23826 13.3537 9.28469L8.35372 14.2847C8.30729 14.3312 8.25214 14.3681 8.19144 14.3932C8.13074 14.4184 8.06568 14.4313 7.99997 14.4313C7.93427 14.4313 7.8692 14.4184 7.8085 14.3932C7.7478 14.3681 7.69266 14.3312 7.64622 14.2847L2.64622 9.28469C2.5524 9.19087 2.49969 9.06362 2.49969 8.93094C2.49969 8.79826 2.5524 8.67101 2.64622 8.57719C2.74004 8.48337 2.86729 8.43066 2.99997 8.43066C3.13265 8.43066 3.2599 8.48337 3.35372 8.57719L7.99997 13.2241L12.6462 8.57719C12.6927 8.5307 12.7478 8.49382 12.8085 8.46866C12.8692 8.4435 12.9343 8.43055 13 8.43055C13.0657 8.43055 13.1307 8.4435 13.1914 8.46866C13.2521 8.49382 13.3073 8.5307 13.3537 8.57719ZM7.64622 9.28469C7.69266 9.33118 7.7478 9.36806 7.8085 9.39322C7.8692 9.41838 7.93427 9.43133 7.99997 9.43133C8.06568 9.43133 8.13074 9.41838 8.19144 9.39322C8.25214 9.36806 8.30729 9.33118 8.35372 9.28469L13.3537 4.28469C13.4475 4.19087 13.5003 4.06362 13.5003 3.93094C13.5003 3.79826 13.4475 3.67101 13.3537 3.57719C13.2599 3.48337 13.1327 3.43066 13 3.43066C12.8673 3.43066 12.74 3.48337 12.6462 3.57719L7.99997 8.22407L3.35372 3.57719C3.2599 3.48337 3.13265 3.43066 2.99997 3.43066C2.86729 3.43066 2.74004 3.48337 2.64622 3.57719C2.5524 3.67101 2.49969 3.79826 2.49969 3.93094C2.49969 4.06362 2.5524 4.19087 2.64622 4.28469L7.64622 9.28469Z"
+                              fill="#FF5B00" />
+                    </svg> &nbsp;
+                    <nw class="viewmore-text">Xem thêm</nw>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

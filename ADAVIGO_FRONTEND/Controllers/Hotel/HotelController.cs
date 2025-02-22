@@ -1,30 +1,22 @@
-﻿using ADAVIGO_FRONTEND.Common;
-using ADAVIGO_FRONTEND.Models.Flights;
-using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
+﻿using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
-using B2B.Utilities.Contants;
 using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
 using LIB.Utilities.Contants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
-using OfficeOpenXml.FormulaParsing.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Telegram.Bot.Requests.Abstractions;
 using Utilities.Contants;
 
 namespace ADAVIGO_FRONTEND.Controllers.Hotel
@@ -872,9 +864,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> HotelByLocationArea(string name,int type=0)
+        public async Task<IActionResult> HotelByLocationArea(string name,int type=0,int index=1,int size=30)
         {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type);
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type,1,index,size);
             ViewBag.Location = name;
             ViewBag.Type = type;
             string url_base = @"{
@@ -987,6 +979,52 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     data = price
                 });
             }
+        }
+        [HttpPost]
+        public IActionResult HotelListing(string title)
+        {
+            ViewBag.Title = title;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            { 
+            
+            }
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> HotelListingItems(string name, int type = 0, int index = 1, int size = 30)
+        {
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type,0,index,size);
+            ViewBag.Location = name;
+            ViewBag.Type = type;
+            string url_base = @"{
+            ""arrivalDate"": ""2025-02-23"",
+            ""departureDate"": ""2025-02-23"",
+            ""hotelID"": 107,
+            ""hotelName"": ""Sunset Beach Phú Quốc"",
+            ""productType"": ""0"",
+            ""rooms"": [
+                {
+                    ""room"": 1,
+                    ""number_adult"": 2,
+                    ""number_child"": 0,
+                    ""number_infant"": 0
+                }
+            ],
+                ""isVinHotel"": false,
+                ""address"": ""100C2 Đường Trần Hưng Đạo, TT. Dương Đông, Phú Quốc, Kiên Giang"",
+                ""telephone"": """",
+                ""email"": """"
+            }";
+            var data_url = JsonConvert.DeserializeObject<dynamic>(url_base);
+            data_url.arrivalDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+            data_url.departureDate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
+
+            ViewBag.URLBase = data_url;
+            return View();
         }
     }
 }

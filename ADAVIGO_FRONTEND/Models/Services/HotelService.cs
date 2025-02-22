@@ -841,7 +841,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             return new List<HotelSurchargeGridModel>();
         }
         #region v2:
-        public async Task<List<HotelExclusiveResponse>> GetHotelByLocation(string name, int type)
+        public async Task<List<HotelExclusiveResponse>> GetHotelByLocation(string name, int type, int hotel_position,int index=1,int size=30)
         {
             try
             {
@@ -851,7 +851,10 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     client_type = _UserManager.ClientID,
                     fromdate = DateTime.Now.AddDays(1),
                     todate = DateTime.Now.AddDays(2),
-                    name = name
+                    name = name,
+                    hotel_position= hotel_position,
+                    index,
+                    size
                 });
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["status"].ToString());
