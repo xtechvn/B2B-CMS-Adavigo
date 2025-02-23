@@ -17,9 +17,11 @@ var hotel_location = {
             name: name,
             type: type,
             index: 1,
-            size: 10
+            size: 10,
+            committype: hotel_location.GetHotelCommitType()
+
         }
-        _ajax_caller.post('/hotel/HotelByLocationArea', input, function (result) {
+        _ajax_caller.post('/hotel/ListingItems', input, function (result) {
             if (result != undefined) {
                 element.find('.swiper-wrapper').html(result)
                 hotel_location.RenderDetail()
@@ -100,5 +102,8 @@ var hotel_location = {
 
         });
        
+    },
+    GetHotelCommitType: function () {
+        return 1
     }
 }

@@ -863,38 +863,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> HotelByLocationArea(string name,int type=0,int index=1,int size=30)
-        {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type,1,index,size);
-            ViewBag.Location = name;
-            ViewBag.Type = type;
-            string url_base = @"{
-            ""arrivalDate"": ""2025-02-23"",
-            ""departureDate"": ""2025-02-23"",
-            ""hotelID"": 107,
-            ""hotelName"": ""Sunset Beach Phú Quốc"",
-            ""productType"": ""0"",
-            ""rooms"": [
-                {
-                    ""room"": 1,
-                    ""number_adult"": 2,
-                    ""number_child"": 0,
-                    ""number_infant"": 0
-                }
-            ],
-                ""isVinHotel"": false,
-                ""address"": ""100C2 Đường Trần Hưng Đạo, TT. Dương Đông, Phú Quốc, Kiên Giang"",
-                ""telephone"": """",
-                ""email"": """"
-            }";
-            var data_url = JsonConvert.DeserializeObject<dynamic>(url_base);
-            data_url.arrivalDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
-            data_url.departureDate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
-            
-            ViewBag.URLBase = data_url;
-            return View();
-        }
+        
         [HttpPost]
         public async Task<IActionResult> HotelByLocationAreaDetail(HotelExclusiveDetailRequest request_model)
         {
@@ -994,12 +963,52 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             }
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> HotelListingItems(string name, int type = 0, int index = 1, int size = 30)
+       
+        public IActionResult Listing(string name, int type = 0, int index = 1, int size = 30,int? committype=0)
         {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type,0,index,size);
+            ViewBag.name = name;
+            ViewBag.type = type;
+            ViewBag.index = index;
+            ViewBag.size = size;
+            ViewBag.committype = committype;
+            switch (committype)
+            {
+                default:
+                    {
+                        ViewBag.Title = "Khách sạn giá sốc chỉ có trên Adavigo";
+                        ViewBag.Avatar = "/images/icons/fire.png";
+                    }break;
+                case 1:
+                    {
+                        ViewBag.Title = "Khách sạn chiến lược của Adavigo";
+                        ViewBag.Avatar = "/images/icons/hotel.png";
+                    }
+                    break;
+            }
+            ViewBag.SearchModel = new HotelSearchParamModel()
+            {
+                arrivalDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy"),
+                departureDate = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
+                rooms = new RoomData[]
+                {
+                    new RoomData
+                    {
+                        room = 1,
+                        number_adult =2,
+                        number_child = 0,
+                        number_infant = 0
+                    }
+                }
+            };
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ListingItems(string name, int type = 0, int index = 1, int size = 30, int committype = 0)
+        {
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type, committype, index, size);
             ViewBag.Location = name;
             ViewBag.Type = type;
+            ViewBag.committype = committype;
             string url_base = @"{
             ""arrivalDate"": ""2025-02-23"",
             ""departureDate"": ""2025-02-23"",

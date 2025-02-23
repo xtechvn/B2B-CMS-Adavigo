@@ -4,7 +4,7 @@
 var hotel_listing = {
     Initialization: function () {
         hotel_listing.DynamicBind()
-        hotel_listing.RenderHotelByLocation($('#hotel-listing'),'',0)
+        hotel_listing.RenderHotelByLocation($('#hotel-listing'), $('#hotel-listing').attr('data-name'),0)
     },
     DynamicBind: function () {
         $('body').on('click', '#hotel-listing-viewmore', function (e) {
@@ -22,26 +22,27 @@ var hotel_listing = {
         });
         $('body').on('click', '.filter-listing-location', function (e) {
             var element = $(this)
-            $('.filter-listing-location').prop('checked', false)
-            element.prop('checked', true)
-            element.attr('data-index', '1')
+            //$('.filter-listing-location').prop('checked', false)
+            //element.prop('checked', true)
+            //element.attr('data-index', '1')
 
-            setTimeout(function () {
-                hotel_listing.RenderHotelByLocation($('#hotel-listing'), hotel_listing.GetFilterLocationName(), hotel_listing.GetFilterLocationType(), 1)
-            }, 2000);
+            //setTimeout(function () {
+            //    hotel_listing.RenderHotelByLocation($('#hotel-listing'), hotel_listing.GetFilterLocationName(), hotel_listing.GetFilterLocationType(), 1)
+            //}, 2000);
+            window.location.href = element.closest('a').attr('href')
           
         });
-        $('body').on('click', '.filter-listing-location', function (e) {
-            var element = $(this)
-            $('.filter-listing-location').prop('checked', false)
-            element.prop('checked', true)
-            element.attr('data-index', '1')
+        //$('body').on('click', '.filter-listing-location', function (e) {
+        //    var element = $(this)
+        //    $('.filter-listing-location').prop('checked', false)
+        //    element.prop('checked', true)
+        //    element.attr('data-index', '1')
 
-            setTimeout(function () {
-                hotel_listing.RenderHotelByLocation($('#hotel-listing'), hotel_listing.GetFilterLocationName(), hotel_listing.GetFilterLocationType(), 1)
-            }, 2000);
+        //    setTimeout(function () {
+        //        hotel_listing.RenderHotelByLocation($('#hotel-listing'), hotel_listing.GetFilterLocationName(), hotel_listing.GetFilterLocationType(), 1)
+        //    }, 2000);
 
-        });
+        //});
     },
     GetFilterLocationName: function () {
         var index_name = "";
@@ -81,9 +82,10 @@ var hotel_listing = {
             name: name,
             type: type,
             index: index,
-            size: size
+            size: size,
+            committype: hotel_listing.GetHotelCommitType()
         }
-        _ajax_caller.post('/hotel/HotelListingItems', input, function (result) {
+        _ajax_caller.post('/hotel/ListingItems', input, function (result) {
             if (result != undefined) {
                 if (index <= 1) {
                     element.find('.col-main').find('.list-article').html(result)
@@ -122,7 +124,12 @@ var hotel_listing = {
                     hotel_listing.RenderHotelPriceVoucher(element_detail)
                 }
                 if (result.data == undefined || parseFloat(result.data.min_price) == undefined || parseFloat(result.data.min_price) <= 0) {
-                    element_detail.hide()
+                    element_detail.find('.bottom-content').find('.price').removeClass('placeholder')
+                    element_detail.find('.bottom-content').find('.price-old').removeClass('placeholder')
+                    element_detail.find('.bottom-content').find('.price').html('Giá liên hệ')
+                    element_detail.find('.bottom-content').find('.price').attr('data-price', '0')
+                    element_detail.find('.bottom-content').find('.price-old').html('')
+                    element_detail.find('.block-code').hide()
                 }
                 element_detail.attr('data-completed','1')
             });
@@ -145,5 +152,19 @@ var hotel_listing = {
 
         });
 
+    },
+    GetHotelCommitType: function () {
+        var commit_type = $('#hotel-listing').attr('data-commitype')
+        if (commit_type == undefined
+            || isNaN(parseInt(commit_type))
+            || parseInt(commit_type) < 0
+
+        )
+        {
+            return 0
+        }
+        else {
+            return parseInt(commit_type)
+        }
     }
 }
