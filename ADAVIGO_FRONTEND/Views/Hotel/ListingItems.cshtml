@@ -1,4 +1,5 @@
 ﻿@using LIB.ENTITIES.ViewModels.Hotels
+@using LIB.Utilities.Common
 @using Newtonsoft.Json
 @{
     Layout = null;
@@ -11,15 +12,19 @@
 }
 @if (data != null && data.Count > 0)
 {
+    <input class="list-items-detail" value="@data.Count" style="display:none;" />
+
     switch(committype){
         case 1:{
                 foreach (var item in data)
                 {
+                    booking_data.hotelID = item.hotel_id;
+                    booking_data.hotelName = CommonHelper.RemoveSpecialCharacterExceptVietnameseCharacter(item.name.Replace("\"", "quotequote").Replace("&", "andand"));
                     <div class="swiper-slide">
 
                         <div class="article-itemt full article-hotel-item" data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" style="min-height:390px">
                             <div class="article-thumb">
-                                <a class="thumb_img thumb_5x3" href="#">
+                                <a class="thumb_img thumb_5x3" href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">
                                     @if (item.img_thumb != null && item.img_thumb.Count > 0)
                                     {
                                         <img src="@item.img_thumb[0]" alt="">
@@ -34,10 +39,7 @@
                             </div>
                             <div class="article-content">
                                 <h3 class="title_new" style="height:50px; overflow:hidden;">
-                                    @{
-                                        booking_data.hotelID = item.hotel_id;
-                                        booking_data.hotelName = item.name.Replace("\"", "");
-                                    }
+                                  
                                     <a href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">@item.name</a>
                                 </h3>
                                 <div class="on-star">
@@ -79,7 +81,7 @@
 
                     <div class="article-itemt full article-hotel-item" data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" style="min-height:390px">
                             <div class="article-thumb">
-                                <a class="thumb_img thumb_5x3" href="#">
+                            <a class="thumb_img thumb_5x3" href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">
                                     @if (item.img_thumb != null && item.img_thumb.Count > 0)
                                     {
                                         <img src="@item.img_thumb[0]" alt="">
@@ -96,8 +98,8 @@
                                 <h3 class="title_new" style="height:50px; overflow:hidden;">
                                     @{
                                         booking_data.hotelID = item.hotel_id;
-                                        booking_data.hotelName = item.name.Replace("\"", "");
-                                    }
+                                    booking_data.hotelName = CommonHelper.RemoveSpecialCharacterExceptVietnameseCharacter(item.name.Replace("\"", "quotequote").Replace("&", "andand"));
+                                }
                                     <a href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">@item.name</a>
                                 </h3>
                                 <div class="on-star">

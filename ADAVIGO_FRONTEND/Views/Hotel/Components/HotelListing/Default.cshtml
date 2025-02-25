@@ -20,13 +20,13 @@
                 @if (item.img_thumb != null && item.img_thumb.Any())
                 {
                     var img = @item.img_thumb.FirstOrDefault(s => !string.IsNullOrEmpty(s));
-                    <a class="thumb_img thumb_5x4">
+                    <a class="thumb_img thumb_5x4" href="javascript:;" onclick="_hotel.redirectToDetail(this);">
                         <img class="img_rechange_url" src="" data-url="@(img ?? "/images/graphics/thumb1x1.jpg")">
                     </a>
                 }
                 else
                 {
-                    <a class="thumb_img thumb_5x4">
+                    <a class="thumb_img thumb_5x4" href="javascript:;" onclick="_hotel.redirectToDetail(this);">
                         <img src="/images/graphics/thumb1x1.jpg" alt="">
                     </a>
                 }

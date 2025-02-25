@@ -169,6 +169,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         {
             //var strJsonData = CommonHelper.Decode(token, _KeyEncodeParam);
             var model = JsonConvert.DeserializeObject<RoomDetailViewModel>(filter);
+            model.hotelName = CommonHelper.RemoveSpecialCharacterExceptVietnameseCharacter(model.hotelName).Replace("quotequote", "\"").Replace("andand", "&");
             return View(model);
         }
 

@@ -97,6 +97,7 @@ var hotel_home_listing = {
             if (result.trim() != '') $('#hotel-listing-viewmore').show()
             $('#hotel-listing-viewmore').prop('disabled', false)
             $('#hotel-listing-viewmore').find('.viewmore-text').html('Xem thêm')
+           
             element.removeClass('placeholder')
             element.removeClass('box-placeholder')
         });
