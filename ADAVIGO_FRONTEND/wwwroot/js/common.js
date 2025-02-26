@@ -305,33 +305,33 @@
         });
         var dataAddress = [{
                 id: 1,
-                use: '<use xlink:href="images/icons/icon.svg#address"></use>',
+                use: '<use xlink:href="/images/icons/icon.svg#address"></use>',
                 text: '<div class="address-code">SGN (</div><div class="address-name name">Hồ Chí Minh</div>)',
                 // src: '<div class="address">\n\t\t\t\t<div class="name">Hà Nội</div><div>HAN - Sân bay Nội Bài</div>\n\t\t\t</div>',
             },
             {
                 id: 2,
-                use: '<use xlink:href="images/icons/icon.svg#address"></use>',
+                use: '<use xlink:href="/images/icons/icon.svg#address"></use>',
                 text: '<div class="address-code">HAN (</div><div class="address-name name">Hà Nội</div>)',
             },
             {
                 id: 3,
-                use: '<use xlink:href="images/icons/icon.svg#address"></use>',
+                use: '<use xlink:href="/images/icons/icon.svg#address"></use>',
                 text: '<div class="address-code">HAN (</div><div class="address-name name">Hà Nội</div>)',
             },
             {
                 id: 4,
-                use: '<use xlink:href="images/icons/icon.svg#address"></use>',
+                use: '<use xlink:href="/images/icons/icon.svg#address"></use>',
                 text: '<div class="address-code">HAN (</div><div class="address-name name">Hà Nội</div>)',
             },
             {
                 id: 5,
-                use: '<use xlink:href="images/icons/icon.svg#address"></use>',
+                use: '<use xlink:href="/images/icons/icon.svg#address"></use>',
                 text: '<div class="address-code">SGN (</div><div class="address-name name">Hồ Chí Minh</div>)',
             },
             {
                 id: 6,
-                use: '<use xlink:href="images/icons/icon.svg#address"></use>',
+                use: '<use xlink:href="/images/icons/icon.svg#address"></use>',
                 text: '<div class="address-code">SGN (</div><div class="address-name name">Hồ Chí Minh</div>)',
             },
         ];

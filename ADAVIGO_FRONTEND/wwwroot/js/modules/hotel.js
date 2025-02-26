@@ -1,144 +1,7 @@
-﻿var _hotel = {
+﻿var _hotel_search = {
     CACHE_OBJECT_SEARCH: "CACHE_OBJECT_SEARCH",
     CACHE_SUGGEST_SEARCH: "CACHE_SUGGEST_SEARCH",
-    CACHE_DETAIL_HOTEL: "CACHE_DETAIL_HOTEL",
-
-    suggestInputHotel: function (query) {
-
-        var hotel_type = $('.hotel_tab_type.active').data('id');
-
-        if (query == null || query == '') {
-            $('#input__suggest-hotel').parents('.form-search').removeClass('active');
-            return;
-        };
-        $('.hotel_tab_type').each(function (index, item) {
-            var element = $(item)
-            if (element.hasClass('active')) {
-                search_type = element.attr('data-id')
-            }
-        })
-
-        _ajax_caller.get('/hotel/GetSuggestHotel', { textSearch: query, limit: 20, search_type: search_type }, function (result) {
-            let html_data = "";
-            if (result.isSuccess) {
-                if (result.data.length > 0) {
-                    result.data.forEach((item) => {
-                        let arr_des = [];
-                        if (item.state && item.state != null && item.state != "") arr_des.push(item.state);
-                        if (item.city && item.city != null && item.city != "") arr_des.push(item.city);
-
-                        var logo_image = "";
-                        if (item.product_type == 0) {
-                            logo_image =
-                                `<a class="thumb_img thumb_5x5" href="#">
-                                   <img src="${item.imagethumb}" alt="#">
-                                </a>`;
-                        } else {
-                            logo_image =
-                                `<a class="thumb_img thumb_5x5" href="#" style="background:#e9e9e9">
-                                   <img src="/images/icons/location.svg" style="width:50%; height:50%; margin:auto" />
-                                </a>`;
-                        }
-
-                        switch (item.product_type) {
-                            case 0: {
-                                html_data += `
-                                <div class="article-itemt" data-id="${item.hotelid}" data-type="${item.product_type}">
-                                    <div class="article-thumb">
-                                       ${logo_image}
-                                    </div>
-                                    <div class="article-content">
-                                        <h3 class="title_new">
-                                            <a href="#">${item.name}</a>
-                                        </h3>
-                                        <div class="des">${(item.street != null && item.street != undefined ? item.street : '')}</div>
-                                        <div class="tag">
-                                           ${(item.typeofroom && item.typeofroom != null ? `<a>${item.typeofroom}</a>` : "")}</a>
-                                        </div>
-                                    </div>
-                                </div>`;
-                            } break;
-                            case 1: {
-                                html_data += `
-                                <div class="article-itemt" data-id="${item.hotelid}" data-type="${item.product_type}">
-                                    <div class="article-thumb">
-                                       ${logo_image}
-                                    </div>
-                                    <div class="article-content">
-                                        <h3 class="title_new">
-                                            <a href="#">${item.name}</a>
-                                        </h3>
-                                        <div class="des"></div>
-                                        <div class="tag">
-                                        </div>
-                                    </div>
-                                </div>`;
-                            } break;
-                            case 2: {
-                                html_data += `
-                                <div class="article-itemt" data-id="${item.hotelid}" data-type="${item.product_type}">
-                                    <div class="article-thumb">
-                                       ${logo_image}
-                                    </div>
-                                    <div class="article-content">
-                                        <h3 class="title_new">
-                                            <a href="#">${item.name}</a>
-                                        </h3>
-                                        <div class="des">${item.city}</div>
-                                        <div class="tag">
-                                           
-                                        </div>
-                                    </div>
-                                </div>`;
-                            } break;
-                        }
-                    });
-                } else {
-                    html_data = `<div class="article-itemt">
-                        <div class="article-thumb">
-                          <a class="thumb_img thumb_5x5" href="#" style="background:#e9e9e9">
-                            <img src="/images/icons/location.svg" style="width:50%; height:50%; margin:auto" />
-                          </a>
-                        </div>
-                        <div class="article-content">
-                            <h3 class="title_new">
-                                <a>Hệ thống không tìm thấy kết quả</a>
-                            </h3>
-                            <div class="des">Vui lòng nhập chính xác thông tin tìm kiếm</div>
-                        </div>
-                    </div>`;
-                }
-
-                $('#block__suggest-hotel').children().html(html_data);
-                $('#input__suggest-hotel').parents('.form-search').addClass('active');
-
-            } else {
-                $('#input__suggest-hotel').parents('.form-search').removeClass('active');
-            }
-        });
-    },
-
-    changeSearchRoom: function () {
-        let arr = [];
-        let room = $('#collapseGuest').find('.sl_giohang_room .qty_input').val();
-        let adult = 0;
-        let baby = 0;
-        let infant = 0;
-
-        $('#block_room_search_content .line-bottom').each(function () {
-            let seft = $(this);
-            adult += parseInt(seft.find('.adult .qty_input').val());
-            baby += parseInt(seft.find('.baby .qty_input').val());
-            infant += parseInt(seft.find('.infant .qty_input').val());
-        });
-
-        if (room > 0) arr.push(`${room} Phòng`);
-        if (adult > 0) arr.push(`${adult} Người lớn`);
-        if (baby > 0) arr.push(`${baby} Trẻ em`);
-        if (infant > 0) arr.push(`${infant} Em bé`);
-
-        $('#text__search_room').text(arr.join(', '));
-    },
+    CACHE_DETAIL_hotel_search: "CACHE_DETAIL_hotel_search",
 
     changeImageUrl: function () {
         $('#hotel__filter_listing .article-itemt').each(function () {
@@ -167,178 +30,9 @@
     },
 
     searchHotel: function () {
-        let fromDate = ConvertToDate($('.date-range-fromdate').val());
-        let toDate = ConvertToDate($('.date-range-todate').val());
+    
 
-        let room_datas = [];
-        let valid_room = true;
-        $('#block_room_search_content .line-bottom').each(function () {
-            let seft = $(this);
-            let num_adult = parseInt(seft.find('.adult .qty_input').val());
-            if (num_adult <= 0) valid_room = false;
-
-            room_datas.push({
-                room: seft.data('room'),
-                number_adult: num_adult,
-                number_child: parseInt(seft.find('.baby .qty_input').val()),
-                number_infant: parseInt(seft.find('.infant .qty_input').val())
-            });
-        });
-
-        if (!valid_room) {
-            _msgalert.error("Mỗi phòng phải có ít nhất một người lớn.");
-            return;
-        }
-
-        var hotel_search_type = parseInt($('.hotel_tab_type.active').data('id'));
-
-        var obj = {
-            arrivalDate: ConvertJsDateToString(fromDate, "YYYY-MM-DD"),
-            departureDate: ConvertJsDateToString(toDate, "YYYY-MM-DD"),
-            hotelID: $('#input__search-hotel-id').val(),
-            hotelName: $('#input__suggest-hotel').attr('keyword') == undefined || $('#input__suggest-hotel').attr('keyword').trim() == '' ? $('#input__suggest-hotel').val() : $('#input__suggest-hotel').attr('keyword'),
-            productType: $('#input__search-hotel-type').val(),
-            rooms: room_datas,
-            isVinHotel: hotel_search_type == 1 ? true : false,
-        };
-
-        //if (obj.hotelID === "" && hotel_search_type == 1) {
-        //    _msgalert.error("Bạn phải chọn khách sạn, điểm đến");
-        //    return;
-        //}
-
-        if (obj.arrivalDate === "" || obj.departureDate === "") {
-            _msgalert.error("Bạn phải chọn ngày nhận phòng và trả phòng");
-            return;
-        }
-
-        if (obj.rooms.length <= 0) {
-            _msgalert.error("Bạn phải nhập thông tin phòng và số lượng người lớn");
-            return;
-        }
-
-        $('#hotel_fund_data_holder').hide();
-        $('#hotel_fund_data_holder').hide();
-        $('#hotel_listing_holder').show();
-
-        let place_hoder_grid = `<div class="article-itemt bg-white pd-16 radius10 mb16 box-placeholder">
-                <div class="article-thumb">
-                    <a class="thumb_img thumb_5x4" href="#">
-                        <img src="images/graphics/thumb1x1.jpg" alt="">
-                        <span class="like">
-                            <svg class="icon-svg">
-                                <use xlink:href="images/icons/icon.svg#heart">
-                                </use>
-                            </svg>
-                        </span>
-                    </a>
-                </div>
-                <div class="article-content">
-                    <div class="row flex-end">
-                        <div class="col-sm-8">
-                            <div class="tag-title flex">
-                                <span class="blue">GIÁ ĐỘC QUYỀN</span>
-                            </div>
-                            <h3 class="title_new">
-                                <a href="#">InterContinental Phú Quốc Long Beach Resort</a>
-                            </h3>
-                            <div class="on-star">
-                                <div class="star">
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#star">
-                                        </use>
-                                    </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#star">
-                                        </use>
-                                    </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#star">
-                                        </use>
-                                    </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#star">
-                                        </use>
-                                    </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#star">
-                                        </use>
-                                    </svg>
-                                </div>
-                                <a href="#" class="lbl">Khu nghỉ dưỡng</a>
-                            </div>
-                            <div class="number-vote">
-                                <span class="point">9,7</span>
-                                <span>Tuyệt vời (177 đánh giá)</span>
-                            </div>
-                            <ul class="service">
-                                <li>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#address">
-                                        </use>
-                                    </svg> Gành dầu, Phú quốc
-                                </li>
-                                <li>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#bed">
-                                        </use>
-                                    </svg> Biệt thự 2 phòng ngủ
-                                </li>
-                                <li class="color-green">
-                                    <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#dinner">
-                                        </use>
-                                    </svg> Bữa sáng miễn phí
-                                </li>
-                                <li class="gray">
-                                    <img src="images/icons/lightning2.svg" alt=""> Xác nhận ngay
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="price text-right">
-                                <div class="sale">-2%</div>
-                                <div class="price-old">2.648.104 đ</div>
-                                <div class="price-new">2.571.000 đ</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        $('#hotel__filter_listing').html(place_hoder_grid);
-
-        _ajax_caller.post('/hotel/SearchHotel', { model: obj }, function (result) {
-            $('#hotel_result_title').html(obj.hotelName);
-            $('#hotel__filter_listing').html(result);
-
-            let strSearchObj = localStorage.getItem(_hotel.CACHE_SUGGEST_SEARCH);
-            let arrSearchObj = strSearchObj && strSearchObj != null ? JSON.parse(strSearchObj) : [];
-
-            if (arrSearchObj && arrSearchObj != null) {
-                let model_search = arrSearchObj.find(x => x.searchType == hotel_search_type);
-                let model_search_index = arrSearchObj.indexOf(model_search);
-                if (model_search_index > -1) arrSearchObj.splice(model_search_index, 1);
-            }
-
-            arrSearchObj.push({
-                hotelName: obj.hotelName,
-                hotelID: obj.hotelID,
-                productType: obj.productType,
-                searchType: hotel_search_type,
-                arrivalDate: ConvertJsDateToString(fromDate, "DD/MM/YYYY"),
-                departureDate: ConvertJsDateToString(toDate, "DD/MM/YYYY"),
-            });
-
-            localStorage.setItem(_hotel.CACHE_SUGGEST_SEARCH, JSON.stringify(arrSearchObj));
-            localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(obj));
-
-            _hotel.changeImageUrl();
-            _hotel.loadPriceData();
-            _hotel.loadFilterData();
-            $('.item_vin_filter').prop('disabled', false);
-            $('.item_vin_filter').removeClass('gray');
-            
-        });
+       
     },
 
     initSlideRange: function () {
@@ -411,13 +105,13 @@
 
     loadFilterData: function () {
         let cache_id = $('#hotel_grid_cache_search').val();
-        let filter_grid = $('#hotel__filter_options');
+        let filter_grid = $('.col-left');
         filter_grid.addClass('placeholder');
         _ajax_caller.get("/hotel/GetHotelFilter", { cacheId: cache_id }, function (result) {
             filter_grid.html(result);
             filter_grid.removeClass('placeholder');
             if (filter_grid.children().length > 0) {
-                _hotel.initSlideRange();
+                _hotel_search.initSlideRange();
             }
         });
     },
@@ -462,9 +156,9 @@
                 "firstDay": 1
             }
         }, function (start, end, label) {
-            _hotel.applyDaterange(fromDateElement, toDateElement, start, end);
+            _hotel_search.applyDaterange(fromDateElement, toDateElement, start, end);
         }).on('apply.daterangepicker', function (ev, picker) {
-            _hotel.applyDaterange(fromDateElement, toDateElement, picker.startDate, picker.endDate);
+            _hotel_search.applyDaterange(fromDateElement, toDateElement, picker.startDate, picker.endDate);
         }).on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
         });
@@ -535,7 +229,7 @@
 
     redirectToDetail: function (element) {
         let seft_parent = $(element).closest('.article-itemt');
-        let objSearch = localStorage.getItem(_hotel.CACHE_OBJECT_SEARCH);
+        let objSearch = localStorage.getItem(_hotel_search.CACHE_OBJECT_SEARCH);
 
         let obj = JSON.parse(objSearch);
         obj.hotelID = seft_parent.data('id');
@@ -567,166 +261,10 @@
     }
 };
 
-var _IntervalSuggestHotel = null;
-$('#input__suggest-hotel').keyup(function (e) {
-    let query = e.target.value;
-    if (query == null || query == '') {
-        $('#input__suggest-hotel').parents('.form-search').removeClass('active');
-        return;
-    } else {
-        $("#input__search-hotel-id").val("");
-        $("#input__search-hotel-type").val(0);
-    }
 
-    if (e.which === 13) {
-        _hotel.suggestInputHotel(query);
-    } else {
-        clearInterval(_IntervalSuggestHotel);
-        _IntervalSuggestHotel = setInterval(function () {
-            _hotel.suggestInputHotel(query);
-            clearInterval(_IntervalSuggestHotel);
-        }, 200);
-    }
-}).focus(function () {
-    $(this).select();
-});
-
-$('#block__suggest-hotel').on('click', '.article-itemt', function () {
-    let seft = $(this);
-    let id = seft.data('id');
-    var text = seft.find('.title_new a').text();
-    var keyword = seft.find('.title_new a span').text();
-    if (!id || id == null || id == "") {
-        keyword=text
-    }
-
-    let type = seft.data('type');
-    var text = seft.find('.title_new a').text();
-    var keyword = seft.find('.title_new a span').text();
-    $('#input__suggest-hotel').attr('keyword', keyword);
-    $('#input__suggest-hotel').val(text);
-    $('#input__search-hotel-id').val(id);
-    $('#input__search-hotel-type').val(type);
-    $('#input__suggest-hotel').parents('.form-search').removeClass('active');
-    $('.item_vin_filter').prop('disabled', false);
-    $('.item_vin_filter').removeClass('gray');
-
-});
-
-$('.btn__filter_hotel').click(function () {
-    _hotel.searchHotel();
-});
-
-$(".tab-menu a").click(function (event) {
-    $(".tab-menu a").removeClass("active");
-    if (!$(this).hasClass("active")) {
-        $(this).addClass("active");
-    } else {
-        $(this).removeClass("active");
-    }
-    event.preventDefault();
-
-    //var tab = $(this).data("id");
-    //if (tab == 0) {
-    //    $('.item_vin_filter').show();
-    //    $('.item_normal_filter').hide();
-    //} else {
-    //    $('.item_vin_filter').hide();
-    //    $('.item_normal_filter').show();
-    //}
-});
-
-$('#collapseGuest').on('click', '.giam_sl', function () {
-    let seft = $(this);
-    let inputElement = seft.parent().siblings('input');
-    let current_value = parseInt(inputElement.val());
-    let is_room = seft.closest('.sl_giohang_room').length > 0;
-    let is_adult = seft.closest('.adult').length > 0;
-    //let room = 1;
-    //$('#block_room_search_content .line-bottom').each(function () {
-    //    let seft2 = $(this);
-    //    if (seft2.data('room') > 1) {
-    //        room = seft2.data('room');
-    //    } 
-    //});
-    if (current_value >= 0) {
-        if (is_room || is_adult) {
-            if (current_value > 1) {
-                inputElement.val(current_value - 1);
-                if (is_room) $('#block_room_search_content .line-bottom:last').remove();
-            }
-        } else {
-            if (current_value <= 0) {
-                inputElement.val(current_value);
-            } else {
-                inputElement.val(current_value - 1);
-            }
-        }
-    }
-
-    _hotel.changeSearchRoom();
-});
-
-$('#collapseGuest').on('click', '.tang_sl', function () {
-    let seft = $(this);
-    let inputElement = seft.parent().siblings('input');
-    let current_value = parseInt(inputElement.val());
-    let is_room = seft.closest('.sl_giohang_room').length > 0;
-    //var room = 1;
-    //$('#block_room_search_content .line-bottom').each(function () {
-    //    let seft2 = $(this); 
-    //    if (seft2.data('room') > 1) {
-    //        room = seft2.data('room');
-    //    }
-    //});
-    if (is_room) {
-        if (current_value < 9) {
-            inputElement.val(current_value + 1);
-            _hotel.appendRoomSearch(current_value + 1);
-        }
-    } else {
-        inputElement.val(current_value + 1);
-
-
-    }
-
-    _hotel.changeSearchRoom();
-});
-
-$('.hotel.tab-menu .hotel_tab_type').click(function () {
-    let seft = $(this);
-    let hotel_search_type = parseInt(seft.data('id'));
-
-    let strSearchObj = localStorage.getItem(_hotel.CACHE_SUGGEST_SEARCH);
-    let arrSearchObj = (strSearchObj && strSearchObj != null) ? JSON.parse(strSearchObj) : [];
-    let model_search = arrSearchObj.find(x => x.searchType == hotel_search_type);
-
-    if (model_search) {
-        //$('#input__suggest-hotel').val(model_search.hotelName);
-        $('#input__suggest-hotel').val(model_search.keyword);
-        $('#input__search-hotel-id').val(model_search.hotelID);
-        $('#input__search-hotel-type').val(model_search.productType);
-    } else {
-        $('#input__suggest-hotel').val("");
-        $('#input__search-hotel-id').val("");
-        $('#input__search-hotel-type').val(0);
-    }
-    setTimeout(function () {
-        $('.tab-content .flex-row').show()
-
-    }, 1000);
-});
 
 $(document).ready(function () {
-    //let strSearchObj = localStorage.getItem(_hotel.CACHE_SUGGEST_SEARCH);
-    //let arrSearchObj = (strSearchObj && strSearchObj != null) ? JSON.parse(strSearchObj) : [];
-    //let model_search = arrSearchObj.find(x => x.searchType == 0);
-    //if (model_search && model_search != null) {
-    //    $('#input__suggest-hotel').val(model_search.keyword);
-    //    $('#input__search-hotel-id').val(model_search.hotelID);
-    //    $('#input__search-hotel-type').val(model_search.productType);
-    //}
-    var filter = _hotel.getUrlParameter('filter')
+    var filter = _hotel_search.getUrlParameter('filter')
     if (filter) {
         var json_obj = JSON.parse(filter)
         if (json_obj != undefined) {
@@ -735,18 +273,17 @@ $(document).ready(function () {
             $('#input__search-hotel-type').val(json_obj.productType);
         }
     }
-    _hotel.initDateRange('.date-range-fromdate', '.date-range-todate');
+    _hotel_search.initDateRange('.date-range-fromdate', '.date-range-todate');
     _ui_common.toggleFocusOut('#collapseGuest');
     _ui_common.toggleFocusOut('#block__suggest-hotel');
 
     let quick_search = $("#hotel_quick_search").val();
-    if (quick_search > 0) {
-        _hotel.searchHotel();
-    }
-    $('#fund_hotel_holder').find('.head-title').hide()
-    $('#fund_hotel_holder').find('.gray').hide()
-    $('#fund_hotel_holder').find('.align-center').hide()
-    $('#fund_hotel_holder').find('.fund-list').hide()
+
+
+    $('#fund_hotel_search_holder').find('.head-title').hide()
+    $('#fund_hotel_search_holder').find('.gray').hide()
+    $('#fund_hotel_search_holder').find('.align-center').hide()
+    $('#fund_hotel_search_holder').find('.fund-list').hide()
     $('#hotel_fund_data_holder').find('.col-300').hide()
     //$('#hotel_fund_data_holder').hide();
     $(window).scroll(function () {
@@ -761,5 +298,7 @@ $(document).ready(function () {
 
     $('.item_vin_filter').prop('disabled', true);
     $('.item_vin_filter').addClass('gray');
-
+    _hotel_search.changeImageUrl();
+    _hotel_search.loadPriceData();
+    _hotel_search.loadFilterData();
 });

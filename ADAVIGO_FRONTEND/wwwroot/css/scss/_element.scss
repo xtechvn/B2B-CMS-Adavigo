@@ -4647,15 +4647,16 @@
         color: #FF5B00 !important;
     }
     .grid__5, .grid__6{
-        @media (max-width:1400px) {
+        @media (max-width:1800px) {
             grid-template-columns: repeat(4, minmax(0, 1fr));
         }
-        @media (max-width:1000px) {
+        @media (max-width:1300px) {
             grid-template-columns: repeat(3, minmax(0, 1fr));
         }
     }
     .col-300 {
         width: 270px;
+        flex-shrink: 0;
         @media (max-width:767px) {
               width: 100%;
         }

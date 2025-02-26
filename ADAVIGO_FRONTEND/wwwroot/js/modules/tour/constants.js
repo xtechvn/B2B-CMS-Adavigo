@@ -98,7 +98,7 @@
                         <a class="btn-default white search-tour-viewmore" style="(viewmore_style)" href="javascript:;" data-startpointid="(start_point)">
                             Xem thêm
                             <svg class="icon-svg min ml-1 rotate90">
-                                <use xlink:href="images/icons/icon.svg#next2"></use>
+                                <use xlink:href="/images/icons/icon.svg#next2"></use>
                             </svg>
                         </a>
                     </div>`,

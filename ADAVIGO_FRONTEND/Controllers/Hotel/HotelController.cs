@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using Utilities.Contants;
@@ -73,7 +74,41 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
 
             return View(model);
         }
+        public IActionResult Search(string filter)
+        {
+            var model = new HotelSearchParamModel()
+            {
+                arrivalDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy"),
+                departureDate = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
+                rooms = new RoomData[]
+                {
+                    new RoomData
+                    {
+                        room = 1,
+                        number_adult =2,
+                        number_child = 0,
+                        number_infant = 0
+                    }
+                }
+            };
 
+            try
+            {
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    model = JsonConvert.DeserializeObject<HotelSearchParamModel>(filter);
+                    model.arrivalDate = DateTime.Parse(model.arrivalDate).ToString("dd/MM/yyyy");
+                    model.departureDate = DateTime.Parse(model.departureDate).ToString("dd/MM/yyyy");
+                    model.quickSearch = 1;
+                }
+            }
+            catch
+            {
+
+            }
+
+            return View(model);
+        }
         [HttpGet]
         public async Task<IActionResult> GetSuggestHotel(string textSearch, int search_type, int limit)
         {
@@ -106,11 +141,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             }
         }
 
-        [HttpPost]
-        public IActionResult SearchHotel(HotelSearchParamModel model)
-        {
-            return ViewComponent("HotelListing", model);
-        }
+        
 
         [HttpPost]
         public async Task<IActionResult> GetBlockedImageUrl(IEnumerable<string> url_images)
@@ -165,11 +196,35 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         }
 
 
-        public IActionResult Detail(string filter)
+        public async Task<IActionResult> Detail(string filter)
         {
+            ViewBag.Hotel = new HotelGridInfoModel();
             //var strJsonData = CommonHelper.Decode(token, _KeyEncodeParam);
             var model = JsonConvert.DeserializeObject<RoomDetailViewModel>(filter);
             model.hotelName = CommonHelper.RemoveSpecialCharacterExceptVietnameseCharacter(model.hotelName).Replace("quotequote", "\"").Replace("andand", "&");
+            try
+            {
+                var hotel = await _HotelService.SearchHotel(new HotelSearchParamModel()
+                {
+                    arrivalDate = model.arrivalDate,
+                    departureDate = model.departureDate,
+                    hotelID = model.hotelID,
+                    hotelName = model.hotelName,
+                    isVinHotel = model.isVinHotel==null?"false": model.isVinHotel,
+                    productType = "0",
+                    quickSearch=model.quickSearch,
+                    rooms=model.rooms
+                });
+                if (hotel != null && hotel.hotels != null && hotel.hotels.Any())
+                {
+                    ViewBag.Hotel = hotel.hotels.First();
+                    model.hotelName = hotel.hotels.First().name;
+                }
+            }
+            catch
+            {
+
+            }
             return View(model);
         }
 

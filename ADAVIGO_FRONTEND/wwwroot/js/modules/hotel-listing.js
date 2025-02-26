@@ -4,8 +4,10 @@
 var hotel_listing = {
     Initialization: function () {
         hotel_listing.DynamicBind()
-        hotel_listing.RenderHotelByLocation($('#hotel-listing'), $('#hotel-listing').attr('data-name'),0)
+        hotel_listing.RenderHotelByLocation($('#hotel-listing'), $('#hotel-listing').attr('data-name'), 0)
+       
     },
+    
     DynamicBind: function () {
         $('body').on('click', '#hotel-listing-viewmore', function (e) {
             var element = $(this)
@@ -92,10 +94,15 @@ var hotel_listing = {
                 } else {
                     element.find('.col-main').find('.list-article').append(result)
                 }
+               
                 hotel_listing.RenderHotelPrice(element)
 
             }
-            if (result.trim() != '') $('#hotel-listing-viewmore').show()
+            var count = element.find('.col-main').find('.list-article').find('.list-items-detail').val()
+            if (parseInt(count) == undefined || isNaN(parseInt(count)) || parseInt(count) < size) {
+                $('#hotel-listing-viewmore').hide()
+            }
+            element.find('.col-main').find('.list-article').find('.list-items-detail').remove()
             $('#hotel-listing-viewmore').prop('disabled', false)
             $('#hotel-listing-viewmore').find('.viewmore-text').html('Xem thêm')
             element.removeClass('placeholder')
@@ -120,7 +127,7 @@ var hotel_listing = {
                     element_detail.find('.bottom-content').find('.price').html(_global.Comma(result.data.min_price) + ' VND')
                     element_detail.find('.bottom-content').find('.price').attr('data-price', result.data.min_price)
                     element_detail.find('.bottom-content').find('.price-old').html('')
-
+                    
                     hotel_listing.RenderHotelPriceVoucher(element_detail)
                 }
                 if (result.data == undefined || parseFloat(result.data.min_price) == undefined || parseFloat(result.data.min_price) <= 0) {
@@ -166,5 +173,6 @@ var hotel_listing = {
         else {
             return parseInt(commit_type)
         }
-    }
+    },
+  
 }

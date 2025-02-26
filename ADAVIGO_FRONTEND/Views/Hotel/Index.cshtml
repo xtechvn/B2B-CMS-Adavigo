@@ -28,37 +28,22 @@
         </div>
         @await Html.PartialAsync("BoxFilter", Model)
     </div>
-   @*  <div id="hotel_listing_holder" style="display: none;">
-        @await Html.PartialAsync("ListingFilter")
-    </div>
-    <div class="flex" id="hotel_fund_data_holder">
-        <div class="col-main mb16" id="fund_hotel_holder">
-            @await Component.InvokeAsync("FundHotel")
-        </div>
-        <div class="col-300 mb16">
-            @await Component.InvokeAsync("NewsFeed", new { isShowSlider = true })
-        </div>
-    </div>
-    <div id="hotel_listings_commit">
-        <partial name="/Views/Hotel/HotelCommitListing.cshtml" />
 
-    </div>
-    <div id="hotel_listings_sale">
-        <partial name="/Views/Hotel/HotelExclusiveListing.cshtml" />
-
-    </div> *@
     <partial name="/Views/Hotel/HotelByLocation.cshtml" />
     <partial name="/Views/Hotel/HotelListing.cshtml" />
+    <partial name="/Views/Hotel/Recent.cshtml" />
 
 </section>
 @section scripts{
     <script type="text/javascript" src="~/js/modules/home.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel.js"></script>
+    
     <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
   @*   <script type="text/javascript" src="~/js/modules/hotel-exclusive-listing.js"></script>
     <script type="text/javascript" src="~/js/modules/hotel-commit-listing.js"></script> *@
     <script type="text/javascript" src="~/js/modules/hotel-home-location.js"></script>
     <script type="text/javascript" src="~/js/modules/hotel-home-listing.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-home-recents.js"></script>
 
 }
 

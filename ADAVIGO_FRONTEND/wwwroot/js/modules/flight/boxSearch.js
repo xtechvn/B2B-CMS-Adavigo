@@ -239,7 +239,7 @@ $(document).ready(function () {
         listHtmlAddress +=
             `<li>
             <svg class="icon-svg">
-                <use xlink:href="images/icons/icon.svg#address"></use>
+                <use xlink:href="/images/icons/icon.svg#address"></use>
             </svg>
             <div class="address">
                 <div class="address-name name">${address.name}</div>

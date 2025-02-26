@@ -1,0 +1,82 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@{
+    ViewData["Title"] = "Search";
+    bool isVinHotel = Convert.ToBoolean(Model.isVinHotel);
+}
+@model HotelSearchParamModel
+
+<section class="tab-menu-folder">
+    <a href="#" class="active">Đặt phòng</a>
+    <a class="hidden" href="#">Giữ chỗ của tôi</a>
+</section>
+<section class="main-container clearfix">
+    <div class="wrap-search">
+        <h2 class="title txt_20 bold mb16">Đặt phòng</h2>
+        <div class="hotel tab-menu flex">
+            <a class="cursor-pointer hotel_tab_type @(!isVinHotel ? "active":"")" data-id="0">
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#building"></use>
+                </svg>
+                <span>Khách sạn toàn quốc</span>
+            </a>
+            <a class="cursor-pointer hotel_tab_type @(isVinHotel ? "active":"")" data-id="1">
+                <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#building"></use>
+                </svg>
+                <span>Khách sạn Vinpearl</span>
+            </a>
+        </div>
+        @await Html.PartialAsync("BoxFilter", Model)
+    </div>
+    <h2 class="title txt_24 mb24 bold">138 Khách sạn tại Phú Quốc, Kiên Giang</h2>
+    <div class="flex mb40">
+        <div class="col-left">
+
+
+        </div>
+        <div class="col-right">
+            <div class="bg-white pd-12 radius10 mb16">
+                <div class="head-sort flex space-between align-center">
+                    <div class="sort">
+                        <span class="gray">Sắp xếp :</span>
+                        <a class="btn-default min" href="#">Phù hợp nhất</a>
+                        <a class="medium ml-2" href="#">Rẻ nhất</a>
+                        <span class="line-left ml-2"></span>
+                        <a class="medium ml-2" href="#">Đắt nhất</a>
+                        <span class="line-left ml-2"></span>
+                        <a class="medium ml-2" href="#">Xếp hạng sao</a>
+                        <span class="line-left ml-2"></span>
+                        <a class="medium ml-2" href="#">Đánh giá cao nhất</a>
+                    </div>
+                    <div class="flex">
+                        <span class="gray">
+                            <img src="images/icons/lightning.svg" alt="">
+                            Xác nhận ngay
+                        </span>
+                        <div class="btn-on-off ml-3">
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-article list-article__v2">
+                @await Component.InvokeAsync("HotelListing", Model)
+
+
+            </div>
+        </div>
+    </div>
+
+
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
+    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel.js"></script>
+
+}
+

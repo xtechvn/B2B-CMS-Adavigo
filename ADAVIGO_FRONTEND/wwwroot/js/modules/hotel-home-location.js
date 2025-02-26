@@ -24,48 +24,47 @@ var hotel_location = {
         _ajax_caller.post('/hotel/ListingItems', input, function (result) {
             if (result != undefined) {
                 element.find('.swiper-wrapper').html(result)
-                hotel_location.RenderDetail()
                 hotel_location.RenderHotelPrice(element)
+                hotel_location.RenderDetail(element.find('.swiper-container'))
 
             }
             element.removeClass('placeholder')
             element.removeClass('box-placeholder')
         });
     },
-    RenderDetail: function () {
+    RenderDetail: function ($swiperContainer) {
 
-        $(".box-hotel-home .swiper-container").each(function () {
-            let $swiperContainer = $(this);
-            var swiper_hotel_home = new Swiper($swiperContainer, {
-                slidesPerView: 5,
-                spaceBetween: 16,
-                navigation: {
-                    nextEl: ".box-hotel-home .swiper-button-next",
-                    prevEl: ".box-hotel-home .swiper-button-prev",
+        var nextElement = '#' + $swiperContainer.closest('.box-hotel-home').attr('id') + " .swiper-button-next";
+        var prevElement = '#' + $swiperContainer.closest('.box-hotel-home').attr('id') + " .swiper-button-prev";
+        var swiper_hotel_home = new Swiper($swiperContainer, {
+            slidesPerView: 5,
+            spaceBetween: 16,
+            navigation: {
+                nextEl: nextElement,
+                prevEl: prevElement,
+            },
+            breakpoints: {
+                1400: {
+                    slidesPerView: 5,
                 },
-                breakpoints: {
-                    1400: {
-                        slidesPerView: 5,
-                    },
-                    1200: {
-                        slidesPerView: 4,
-                    },
-                    767: {
-                        slidesPerView: 3,
-                    },
-                    414: {
-                        slidesPerView: 2,
-                    }
+                1200: {
+                    slidesPerView: 4,
                 },
-                on: {
-                    init: function () {
-                        hotel_location.checkNavigation(this, $swiperContainer);
-                    },
-                    resize: function () {
-                        hotel_location.checkNavigation(this, $swiperContainer);
-                    },
+                767: {
+                    slidesPerView: 3,
                 },
-            });
+                414: {
+                    slidesPerView: 2,
+                }
+            },
+            on: {
+                init: function () {
+                    hotel_location.checkNavigation(this, $swiperContainer);
+                },
+                resize: function () {
+                    hotel_location.checkNavigation(this, $swiperContainer);
+                },
+            },
         });
 
     },

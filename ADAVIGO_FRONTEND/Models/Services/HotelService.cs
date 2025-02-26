@@ -153,8 +153,26 @@ namespace ADAVIGO_FRONTEND.Models.Services
         {
             try
             {
-                var startDate = DateTime.Parse(model.arrivalDate);
-                var endDate = DateTime.Parse(model.departureDate);
+                var startDate =DateTime.MinValue;
+                var endDate = DateTime.MinValue;
+
+                try
+                {
+                     startDate = DateTime.Parse(model.arrivalDate);
+                     endDate = DateTime.Parse(model.departureDate);
+
+
+                }
+                catch
+                {
+                     startDate = DateTime.ParseExact(model.arrivalDate, "dd/MM/yyyy", null);
+                     endDate = DateTime.ParseExact(model.departureDate, "dd/MM/yyyy", null);
+
+                }
+                if(startDate==DateTime.MinValue || endDate == DateTime.MinValue)
+                {
+                    return null;
+                }
                 var dataModel = new HotelDataModel()
                 {
                     night_time = (int)(endDate - startDate).TotalDays,
@@ -165,8 +183,8 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 var result = await _ApiConnector.ExecutePostAsync(endpoints, new
                 {
-                    arrivalDate = model.arrivalDate,
-                    departureDate = model.departureDate,
+                    arrivalDate = startDate.ToString(),
+                    departureDate = endDate.ToString(),
                     hotelID = model.hotelID,
                     hotelName = model.hotelName,
                     numberOfRoom = model.rooms.Count(),

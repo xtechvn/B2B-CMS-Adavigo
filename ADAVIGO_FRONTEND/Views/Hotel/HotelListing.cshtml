@@ -15,7 +15,7 @@
                 <div class="header-fillter">
                     <div class="flex space-between align-center">
                         <div class="txt_16"><strong>Bộ lọc</strong></div>
-                        <a class="clear" href="#">
+                        <a id="filter-hotel-clear" class="clear" href="javascript:;">
                             Xóa lọc&nbsp;
                             <svg class="icon-svg">
                                 <use xlink:href="/images/icons/icon.svg#refresh"></use>
@@ -27,21 +27,21 @@
                 <div class="price-filter mb24">
                     <div class="mb16"><strong>Khoảng giá</strong></div>
                     <div class="price-filter-container">
-                        <div id="slider-range"></div>
+                        <div id="slider-range-price"></div>
                         <form>
-                            <input type="hidden" name="min-value" value="">
-                            <input type="hidden" name="max-value" value="">
+                            <input type="hidden" name="price-min-value" value="">
+                            <input type="hidden" name="price-max-value" value="">
                         </form>
                         <div class="row slider-labels">
                             <div class="col-6">
                                 <div class="wrap">
-                                    <span id="slider-range-value1"></span> đ
+                                    <span id="price-slider-range-value1"></span> đ
                                 </div>
 
                             </div>
                             <div class="col-6">
                                 <div class="wrap text-right">
-                                    <span id="slider-range-value2"></span> đ
+                                    <span id="price-slider-range-value2"></span> đ
                                 </div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                                     <use xlink:href="/images/icons/icon.svg#star"></use>
                                 </svg>
                             </div>
-                            <input type="checkbox" name="filter-listing-star" value="1">
+                            <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="1">
                             <span class="checkmark"></span>
                         </label>
                         <label class="confir_res">
@@ -99,22 +99,7 @@
                                     <use xlink:href="/images/icons/icon.svg#star"></use>
                                 </svg>
                             </div>
-                            <input type="checkbox" name="filter-listing-star" value="2">
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="confir_res">
-                            <div class="flex list-star">
-                                <svg class="icon-svg">
-                                    <use xlink:href="/images/icons/icon.svg#star"></use>
-                                </svg>
-                                <svg class="icon-svg">
-                                    <use xlink:href="/images/icons/icon.svg#star"></use>
-                                </svg>
-                                <svg class="icon-svg">
-                                    <use xlink:href="/images/icons/icon.svg#star"></use>
-                                </svg>
-                            </div>
-                            <input type="checkbox" name="filter-listing-star" value="3">
+                            <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="2">
                             <span class="checkmark"></span>
                         </label>
                         <label class="confir_res">
@@ -128,11 +113,8 @@
                                 <svg class="icon-svg">
                                     <use xlink:href="/images/icons/icon.svg#star"></use>
                                 </svg>
-                                <svg class="icon-svg">
-                                    <use xlink:href="/images/icons/icon.svg#star"></use>
-                                </svg>
                             </div>
-                            <input type="checkbox" name="filter-listing-star" value="4">
+                            <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="3">
                             <span class="checkmark"></span>
                         </label>
                         <label class="confir_res">
@@ -149,11 +131,29 @@
                                 <svg class="icon-svg">
                                     <use xlink:href="/images/icons/icon.svg#star"></use>
                                 </svg>
+                            </div>
+                            <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="4">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="confir_res">
+                            <div class="flex list-star">
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
+                                <svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#star"></use>
+                                </svg>
                                 <svg class="icon-svg">
                                     <use xlink:href="/images/icons/icon.svg#star"></use>
                                 </svg>
                             </div>
-                            <input type="checkbox" name="filter-listing-star" value="5">
+                            <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="5">
                             <span class="checkmark"></span>
                         </label>
                     </div>

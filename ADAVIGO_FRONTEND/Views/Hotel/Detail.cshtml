@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Chi tiết khách sạn";
+    HotelGridInfoModel hotel = (HotelGridInfoModel)ViewBag.Hotel;
 }
 @using ADAVIGO_FRONTEND.ViewModels
 @model RoomDetailViewModel
@@ -41,6 +42,23 @@
 <input type="hidden" id="input__hotel_number_adult" value="@adult_total" />
 <input type="hidden" id="input__hotel_number_child" value="@child_total" />
 <input type="hidden" id="input__hotel_number_infant" value="@infant_total" />
+@if (hotel != null && hotel.hotel_id!=null && hotel.hotel_id.Trim()!=""){
+    <input type="hidden" id="input__hotel_recent"
+           value="1"
+           data-id="@(hotel.hotel_id)"
+           data-avt="@(hotel.img_thumb != null && hotel.img_thumb.Any() ? hotel.img_thumb.First() : "")"
+           data-name="@(hotel.name)"
+           data-star="@(hotel.star)"
+           data-review_count="@(hotel.review_count)" 
+           data-review_rate="@(hotel.review_rate)" 
+           data-review_rate="@(hotel.review_rate)"
+           data-isVinHotel="@(Model.isVinHotel)" 
+           
+           
+           />
+}
+
+
 <style>
     .select-tab {
         display: inline-block;
@@ -467,6 +485,7 @@
 <script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
 <script type="text/javascript" src="~/js/modules/hotel-detail-search.js"> </script>
 <script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
+    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
 
 }
 

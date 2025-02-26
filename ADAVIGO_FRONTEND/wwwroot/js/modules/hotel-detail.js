@@ -1,5 +1,11 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
 
+    _hotel_detail.initial();
+    if ($('#input__hotel_recent') != undefined && $('#input__hotel_recent').length > 0) {
+        _hotel_detail.SaveRecent();
+
+    }
     _hotel_detail.LoadingSurcharge()
     $('#hotel-room-filter').closest('.pd-12').hide()
     _hotel_detail.hotel.is_vin_hotel = $('#input__hotel_search_type').val().toLowerCase() === "true" ? true : false
@@ -386,7 +392,63 @@ var _hotel_detail = {
             $('#btn__check_order').attr('data-toggle', 'modal')
         }
     },
-    
+    SaveRecent: function () {
+        var detail = {
+            hotel_id: $('#input__hotel_recent').attr('data-id'),
+            avatar: $('#input__hotel_recent').attr('data-avt'),
+            name: $('#input__hotel_recent').attr('data-name'),
+            star: $('#input__hotel_recent').attr('data-star'),
+            review_count: $('#input__hotel_recent').attr('data-review_count'),
+            review_rate: $('#input__hotel_recent').attr('data-review_rate'),
+            isVinHotel: $('#input__hotel_recent').attr('data-data-isVinHotel'),
+            arrival_date: $('#input__hotel_arrival_date').val(),
+            departure_date: $('#input__hotel_departure_date').val(),
+        }
+        _hotel_detail.RenderHotelPrice(detail)
+        var recents = window.localStorage.getItem('HotelRecent');
+        var recents_object = []
+        if (recents != undefined && recents.trim() != '') {
+            recents_object = JSON.parse(recents)
+            recents_object = recents_object.filter(item => item.hotel_id != detail.hotel_id && item.hotel_id != undefined);
+        } else {
+            recents_object = []
+        }
+        if (detail.hotel_id != undefined && detail.hotel_id.trim() != '') {
+            recents_object = [detail, ...recents_object];
+        }
+        window.localStorage.setItem('HotelRecent', JSON.stringify(recents_object))
+
+    },
+    RenderHotelPrice: function (detail) {
+        var input = {
+            hotelid: detail.id,
+            is_vin_hotel: detail.isVinHotel
+        }
+        var result = _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDetail', { request_model: input });
+        if (result != undefined && result.data != undefined && result.data.min_price != undefined && result.data.min_price > 0) {
+            detail.min_price = _hotel_detail.Comma(result.data.min_price)
+            _hotel_detail.RenderHotelPriceVoucher(detail)
+        } else {
+            detail.min_price = 'Giá liên hệ'
+
+        }
+
+    },
+    RenderHotelPriceVoucher: function (detail) {
+        var input = {
+            hotel_id: detail.id
+        }
+        var result = _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDiscount', { request: input, price: parseFloat(detail.min_price.replaceAll(',','')) })
+        if (result != undefined && result.data != undefined && result.code != undefined && result.code.trim() != '') {
+            detail.discount_code = result.code
+            detail.discount = _hotel_detail.Comma(result.discount)
+            detail.amount = _hotel_detail.Comma(result.data)
+        } else {
+            detail.discount_code = ''
+            detail.discount = ''
+            detail.amount = ''
+        }
+    },
 };
 
 $(document).on('click', '.btn__toggle_room_package', function () {
@@ -1452,8 +1514,6 @@ var hotel_surcharge = {
         })
 
     },
+   
 }
 
-$(document).ready(function () {
-    _hotel_detail.initial();
-});

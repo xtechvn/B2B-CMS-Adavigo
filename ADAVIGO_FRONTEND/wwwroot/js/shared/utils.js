@@ -333,7 +333,7 @@ const UTILS = {
         var stars = "";
         for (var i = 0; i < starNum; i++) {
             stars += ` <svg class="icon-svg">
-                                        <use xlink:href="images/icons/icon.svg#star">
+                                        <use xlink:href="/images/icons/icon.svg#star">
                                         </use>
                                     </svg>`
         }
