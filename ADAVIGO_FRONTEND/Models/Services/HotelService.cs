@@ -158,15 +158,13 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 try
                 {
-                     startDate = DateTime.Parse(model.arrivalDate);
-                     endDate = DateTime.Parse(model.departureDate);
-
-
+                    startDate = DateTime.ParseExact(model.arrivalDate, "dd/MM/yyyy", null);
+                    endDate = DateTime.ParseExact(model.departureDate, "dd/MM/yyyy", null);
                 }
                 catch
                 {
-                     startDate = DateTime.ParseExact(model.arrivalDate, "dd/MM/yyyy", null);
-                     endDate = DateTime.ParseExact(model.departureDate, "dd/MM/yyyy", null);
+                    startDate = DateTime.Parse(model.arrivalDate);
+                    endDate = DateTime.Parse(model.departureDate);
 
                 }
                 if(startDate==DateTime.MinValue || endDate == DateTime.MinValue)
@@ -183,8 +181,8 @@ namespace ADAVIGO_FRONTEND.Models.Services
 
                 var result = await _ApiConnector.ExecutePostAsync(endpoints, new
                 {
-                    arrivalDate = startDate.ToString(),
-                    departureDate = endDate.ToString(),
+                    arrivalDate = Convert.ToBoolean(model.isVinHotel) ? startDate.ToString("yyyy-MM-dd") : startDate.ToString(),
+                    departureDate = Convert.ToBoolean(model.isVinHotel) ? endDate.ToString("yyyy-MM-dd") : endDate.ToString(),
                     hotelID = model.hotelID,
                     hotelName = model.hotelName,
                     numberOfRoom = model.rooms.Count(),

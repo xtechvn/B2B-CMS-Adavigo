@@ -4645,6 +4645,10 @@
 .home-v2{
     .btn-default{
         color: #FF5B00 !important;
+        outline: 0;
+    }
+    .wrap-search .btn-search{
+        color: #fff !important;
     }
     .grid__5, .grid__6{
         @media (max-width:1800px) {

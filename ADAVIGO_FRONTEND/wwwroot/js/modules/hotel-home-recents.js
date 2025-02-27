@@ -32,13 +32,13 @@ var hotel_recents = {
                         .replaceAll('@url', url)
                         .replaceAll('The Sailing Bay Beach Resort', item.name)
                         .replaceAll('The Sailing Bay Beach Resort', item.name)
-                        .replaceAll('@rate', item.review_rate)
+                        .replaceAll('@rate', item.star)
                         .replaceAll('@count', item.review_count)
                         .replaceAll('@old', '')
-                        .replaceAll('@price', item.min_price)
+                        .replaceAll('@price', isNaN(parseFloat(item.min_price)) ? item.min_price : item.min_price+' VND')
                         .replaceAll('@code', item.discount_code)
                         .replaceAll('@discount', item.discount)
-                        .replaceAll('@new', item.amount)
+                        .replaceAll('@new', isNaN(parseFloat(item.amount)) ? item.amount : item.amount + ' đ')
                         .replaceAll('@item.is_vin_hotel.ToString()', item.isVinHotel)
                         .replaceAll('@style_blockcode', (item.discount_code == undefined || item.discount_code.trim() == '')?'display:none':'')
                     var html_star = ''
@@ -53,13 +53,46 @@ var hotel_recents = {
                 })
             }
         }
-        $('#hotel-recent .list-article').html(html)
+        $('#hotel-recent .list-article .swiper-wrapper').html(html)
         $('#hotel-recent').removeClass('placeholder')
         $('#hotel-recent .list-article').removeClass('placeholder')
         $('#hotel-recent').removeClass('box-placeholder')
+        let $swiperContainer = $("#hotel-recent .swiper-container");
+        var swiper_hotel_home = new Swiper($swiperContainer, {
+            slidesPerView: 4,
+            spaceBetween: 16,
+            navigation: {
+                nextEl: "#hotel-recent .swiper-button-next",
+                prevEl: "#hotel-recent .swiper-button-prev",
+            },
+            breakpoints: {
+                1400: {
+                    slidesPerView: 5,
+                },
+                1366: {
+                    slidesPerView: 4,
+                },
+                1200: {
+                    slidesPerView: 3,
+                },
+                572: {
+                    slidesPerView: 2,
+                }
+            },
 
+            on: {
+                init: function () {
+                    hotel_recents.checkNavigation(this, $swiperContainer);
+                },
+                resize: function () {
+                    hotel_recents.checkNavigation(this, $swiperContainer);
+                },
+            },
+        });
     },
     HTML: `
+                        <div class="swiper-slide">
+
             <div class="article-itemt full article-hotel-item"data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" style="min-height:390px">
             <div class="article-thumb">
                 <a class="thumb_img thumb_5x3" href="@url">
@@ -83,17 +116,31 @@ var hotel_recents = {
                 </div>
                 <div class="bottom-content">
                     <p class="price-old">@old</p>
-                    <div class="price">@price đ</div>
+                    <div class="price">@price</div>
                 </div>
                 <div class="block-code" style="@style_blockcode">
                     Mã:<span class="code">@code</span>
                     <span class="sale">@discount</span>
-                    <div class="price-new">@new VND</div>
+                    <div class="price-new">@new</div>
                 </div>
             </div>
         </div>
+        </div>
 
     
-    `
+    `,
+    checkNavigation: function (swiper, $container) {
+        let totalSlides = swiper.slides.length;
+        let $nextButton = $container.find(".swiper-button-next");
+        let $prevButton = $container.find(".swiper-button-prev");
+
+        if (totalSlides <= swiper.params.slidesPerView) {
+            $nextButton.hide();
+            $prevButton.hide();
+        } else {
+            $nextButton.show();
+            $prevButton.show();
+        }
+    }
 
 }

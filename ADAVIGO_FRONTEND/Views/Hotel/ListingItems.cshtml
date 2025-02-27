@@ -46,7 +46,7 @@
                                     @if (item.star > 0)
                                     {
                                         <div class="star">
-                                            @for (int i = 0; i <= item.star; i++)
+                                            @for (int i = 0; i < item.star; i++)
                                             {
                                                 <svg class="icon-svg">
                                                     <use xlink:href="/images/icons/icon.svg#star">
@@ -105,7 +105,7 @@
                                 @if (item.star > 0)
                                 {
                                     <div class="star">
-                                        @for (int i = 0; i <= item.star; i++)
+                                        @for (int i = 0; i < item.star; i++)
                                         {
                                             <svg class="icon-svg">
                                                 <use xlink:href="/images/icons/icon.svg#star">

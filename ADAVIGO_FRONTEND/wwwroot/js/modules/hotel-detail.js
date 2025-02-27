@@ -403,8 +403,17 @@ var _hotel_detail = {
             isVinHotel: $('#input__hotel_recent').attr('data-data-isVinHotel'),
             arrival_date: $('#input__hotel_arrival_date').val(),
             departure_date: $('#input__hotel_departure_date').val(),
+            min_price: parseFloat($('.room_detail').first().find('.dynamic_price').attr('data-amount')),
+            discount_code: '',
+            discount: '',
+            amount: ''
         }
-        _hotel_detail.RenderHotelPrice(detail)
+        var min_price = $('.room_detail').first().find('.dynamic_price').attr('data-amount')
+        if (min_price == undefined || isNaN(parseFloat(min_price)) || parseFloat(min_price)<=0) {
+            detail.min_price = 'Giá liên hệ'
+        } else {
+            detail.min_price = _hotel_detail.Comma(parseFloat(min_price))
+        }
         var recents = window.localStorage.getItem('HotelRecent');
         var recents_object = []
         if (recents != undefined && recents.trim() != '') {
@@ -419,36 +428,7 @@ var _hotel_detail = {
         window.localStorage.setItem('HotelRecent', JSON.stringify(recents_object))
 
     },
-    RenderHotelPrice: function (detail) {
-        var input = {
-            hotelid: detail.id,
-            is_vin_hotel: detail.isVinHotel
-        }
-        var result = _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDetail', { request_model: input });
-        if (result != undefined && result.data != undefined && result.data.min_price != undefined && result.data.min_price > 0) {
-            detail.min_price = _hotel_detail.Comma(result.data.min_price)
-            _hotel_detail.RenderHotelPriceVoucher(detail)
-        } else {
-            detail.min_price = 'Giá liên hệ'
-
-        }
-
-    },
-    RenderHotelPriceVoucher: function (detail) {
-        var input = {
-            hotel_id: detail.id
-        }
-        var result = _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDiscount', { request: input, price: parseFloat(detail.min_price.replaceAll(',','')) })
-        if (result != undefined && result.data != undefined && result.code != undefined && result.code.trim() != '') {
-            detail.discount_code = result.code
-            detail.discount = _hotel_detail.Comma(result.discount)
-            detail.amount = _hotel_detail.Comma(result.data)
-        } else {
-            detail.discount_code = ''
-            detail.discount = ''
-            detail.amount = ''
-        }
-    },
+    
 };
 
 $(document).on('click', '.btn__toggle_room_package', function () {
