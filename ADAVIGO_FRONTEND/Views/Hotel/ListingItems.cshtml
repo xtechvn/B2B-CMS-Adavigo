@@ -78,7 +78,7 @@
         default:{
                 foreach (var item in data)
                 {
-  <div class="article-itemt full article-hotel-item" data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()">
+                    <div class="article-itemt full article-hotel-item" data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" data-star="@item.star">
                         <div class="article-thumb">
                             <a class="thumb_img thumb_5x3" href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">
                                 @if (item.img_thumb != null && item.img_thumb.Count > 0)

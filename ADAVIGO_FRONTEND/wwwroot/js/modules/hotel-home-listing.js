@@ -18,6 +18,7 @@ var hotel_home_listing = {
                 index_value = parseInt(index)
             }
             element.attr('data-index', ++index_value)
+            hotel_home_listing.AddLoading()
 
             hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), hotel_home_listing.GetFilterLocationName(), hotel_home_listing.GetFilterLocationType(), index_value)
         });
@@ -26,10 +27,8 @@ var hotel_home_listing = {
             $('.filter-listing-location').prop('checked', false)
             element.prop('checked', true)
             element.attr('data-index', '1')
-
-            setTimeout(function () {
-                hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), hotel_home_listing.GetFilterLocationName(), hotel_home_listing.GetFilterLocationType(), 1)
-            }, 2000);
+            hotel_home_listing.AddLoading()
+            hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), hotel_home_listing.GetFilterLocationName(), hotel_home_listing.GetFilterLocationType(), 1)
 
         });
         $('body').on('change', '.filter-listing-star', function (e) {
@@ -40,8 +39,25 @@ var hotel_home_listing = {
             $('.filter-listing-star').prop('checked',false)
             var rangeSlider = document.getElementById('slider-range-price');
             rangeSlider.noUiSlider.set([0, hotel_home_listing.GetMaxSliderPriceValue()]);
-            hotel_home_listing.FilterHotel()
+            $('.filter-listing-location').each(function (index, item) {
+                var element_checkbox = $(this)
+                element_checkbox.prop('checked',false)
+            })
+            hotel_home_listing.AddLoading()
+            hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), '', 0)
         });
+    },
+    AddLoading: function () {
+        $('#hotel-listing .col-300').addClass('placeholder')
+        $('#hotel-listing .col-main').addClass('placeholder')
+        $('#hotel-listing .col-300').addClass('box-placeholder')
+        $('#hotel-listing .col-main').addClass('box-placeholder')
+    },
+    RemoveLoading: function () {
+        $('#hotel-listing .col-300').removeClass('placeholder')
+        $('#hotel-listing .col-main').removeClass('placeholder')
+        $('#hotel-listing .col-300').removeClass('box-placeholder')
+        $('#hotel-listing .col-main').removeClass('box-placeholder')
     },
     GetFilterLocationName: function () {
         var index_name = "";
@@ -94,6 +110,8 @@ var hotel_home_listing = {
                 hotel_home_listing.RenderHotelPrice(element)
 
             }
+            hotel_home_listing.RemoveLoading()
+
             if (result.trim() != '') $('#hotel-listing-viewmore').show()
             $('#hotel-listing-viewmore').prop('disabled', false)
             $('#hotel-listing-viewmore').find('.viewmore-text').html('Xem thêm')
@@ -127,8 +145,9 @@ var hotel_home_listing = {
                 element_detail.hide()
             }
             element_detail.attr('data-completed', '1')
+            hotel_home_listing.SliderPrice()
+
         })
-        hotel_home_listing.SliderPrice()
 
     },
     RenderHotelPriceVoucher: function (element_detail) {
@@ -136,16 +155,18 @@ var hotel_home_listing = {
             hotel_id: element_detail.attr('data-id'),
         }
         var price = element_detail.find('.bottom-content').find('.price').attr('data-price')
- var result= _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDiscount', { request: input, price: price });
-        if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
-            element_detail.find('.block-code').removeClass('placeholder')
-            element_detail.find('.block-code').find('.block-code-text').html('Mã:')
-            element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
-            element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
-            element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' VND')
-        } else {
-            element_detail.find('.block-code').hide()
-        }
+        _ajax_caller.post('/hotel/HotelByLocationAreaDiscount', { request: input, price: price }, function (result) {
+            if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
+                element_detail.find('.block-code').removeClass('placeholder')
+                element_detail.find('.block-code').find('.block-code-text').html('Mã:')
+                element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
+                element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
+                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' VND')
+            } else {
+                element_detail.find('.block-code').hide()
+            }
+        });
+       
     },
     GetHotelCommitType: function () {
         return 0
@@ -160,6 +181,11 @@ var hotel_home_listing = {
             thousand: ',',
             // prefix: 'VNĐ'
         });
+        try {
+            rangeSlider.noUiSlider.destroy();
+        } catch {
+
+        }
         noUiSlider.create(rangeSlider, {
             start: [minPrice, maxPrice],
             step: 1,
@@ -173,6 +199,9 @@ var hotel_home_listing = {
 
         // Set visual min and max values and also update value hidden form inputs
         rangeSlider.noUiSlider.on('update', function (values, handle) {
+            if (isNaN(parseFloat(values[0]))) {
+                return
+            }
             var min = parseFloat(values[0].replaceAll(',', ''))
             var max = parseFloat(values[1].replaceAll(',', ''))
             document.getElementById('price-slider-range-value1').innerHTML = values[0];

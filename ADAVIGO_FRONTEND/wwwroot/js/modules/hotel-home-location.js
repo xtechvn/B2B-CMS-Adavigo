@@ -22,11 +22,13 @@ var hotel_location = {
 
         }
         _ajax_caller.post('/hotel/ListingItems', input, function (result) {
-            if (result != undefined) {
+            if (result != undefined && result.trim() != '') {
                 element.find('.swiper-wrapper').html(result)
                 hotel_location.RenderHotelPrice(element)
                 hotel_location.RenderDetail(element.find('.swiper-container'))
 
+            } else {
+                element.hide()
             }
             element.removeClass('placeholder')
             element.removeClass('box-placeholder')
