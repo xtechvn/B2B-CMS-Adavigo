@@ -136,7 +136,7 @@ var hotel_home_listing = {
             hotel_id: element_detail.attr('data-id'),
         }
         var price = element_detail.find('.bottom-content').find('.price').attr('data-price')
-        var result= _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDiscount', { request: input, price: price });
+ var result= _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDiscount', { request: input, price: price });
         if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
             element_detail.find('.block-code').removeClass('placeholder')
             element_detail.find('.block-code').find('.block-code-text').html('Mã:')

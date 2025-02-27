@@ -154,7 +154,7 @@ var hotel_listing = {
                 element_detail.find('.block-code').find('.block-code-text').html('Mã:')
                 element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
                 element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
-                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' VND')
+                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' đ')
             }
 
         });

@@ -33,39 +33,41 @@ var hotel_location = {
         });
     },
     RenderDetail: function ($swiperContainer) {
+        $(".box-hotel-home .swiper-container").each(function () {
+            let $swiperContainer = $(this);
+            var swiper_hotel_home = new Swiper($swiperContainer, {
+                slidesPerView: 4,
+                spaceBetween: 16,
+                navigation: {
+                    nextEl: ".box-hotel-home .swiper-button-next",
+                    prevEl: ".box-hotel-home .swiper-button-prev",
+                },
+                breakpoints: {
+                    1400: {
+                        slidesPerView: 4,
+                    },
+                    1366: {
+                        slidesPerView: 4,
+                    },
+                    1200: {
+                        slidesPerView: 3,
+                    },
+                    572: {
+                        slidesPerView: 2,
+                    }
+                },
 
-        var nextElement = '#' + $swiperContainer.closest('.box-hotel-home').attr('id') + " .swiper-button-next";
-        var prevElement = '#' + $swiperContainer.closest('.box-hotel-home').attr('id') + " .swiper-button-prev";
-        var swiper_hotel_home = new Swiper($swiperContainer, {
-            slidesPerView: 5,
-            spaceBetween: 16,
-            navigation: {
-                nextEl: nextElement,
-                prevEl: prevElement,
-            },
-            breakpoints: {
-                1400: {
-                    slidesPerView: 5,
+                on: {
+                    init: function () {
+                        hotel_location.checkNavigation(this, $swiperContainer);
+                    },
+                    resize: function () {
+                        hotel_location.checkNavigation(this, $swiperContainer);
+                    },
                 },
-                1200: {
-                    slidesPerView: 4,
-                },
-                767: {
-                    slidesPerView: 3,
-                },
-                414: {
-                    slidesPerView: 2,
-                }
-            },
-            on: {
-                init: function () {
-                    hotel_location.checkNavigation(this, $swiperContainer);
-                },
-                resize: function () {
-                    hotel_location.checkNavigation(this, $swiperContainer);
-                },
-            },
-        });
+            });
+        })
+	
 
     },
     RenderHotelPrice: function (element) {
@@ -108,7 +110,7 @@ var hotel_location = {
                 element_detail.find('.block-code').find('.block-code-text').html('Mã:')
                 element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
                 element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
-                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' VND')
+                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + '  đ')
             }
 
         });
