@@ -182,6 +182,12 @@
         }).on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
         });
+
+        $(fromDateElement).data('daterangepicker').setStartDate($('' + fromDateElement).val());
+        $(fromDateElement).data('daterangepicker').setEndDate($('' + toDateElement).val());
+
+        $(toDateElement).data('daterangepicker').setStartDate($('' + fromDateElement).val());
+        $(toDateElement).data('daterangepicker').setEndDate($('' + toDateElement).val());
     },
 
     applyDaterange: function (fromDateElement, toDateElement, startDate, endDate) {
@@ -280,8 +286,8 @@
 
         });
         var obj = {
-            arrivalDate: ConvertJsDateToString(fromDate, "YYYY-MM-DD"),
-            departureDate: ConvertJsDateToString(toDate, "YYYY-MM-DD"),
+            arrivalDate: ConvertJsDateToString(fromDate, "DD/MM/YYYY"),
+            departureDate: ConvertJsDateToString(toDate, "DD/MM/YYYY"),
             hotelID: $('#input__search-hotel-id').val(),
             hotelName: $('#input__suggest-hotel').attr('keyword') == undefined || $('#input__suggest-hotel').attr('keyword').trim()=='' ? $('#input__suggest-hotel').val() : $('#input__suggest-hotel').attr('keyword'),
             productType: $('#input__search-hotel-type').val(),
@@ -302,7 +308,12 @@
         var filter = JSON.stringify(obj);
         localStorage.removeItem(_hotel.CACHE_OBJECT_SEARCH);
         localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(obj));
-        window.location.href = `/hotel/search?filter=${encodeURIComponent(filter)}`;
+        if ($('#input__hotel_id') != undefined && $('#input__hotel_id').length > 0 && $('#input__hotel_id').val().trim() == $('#input__search-hotel-id').val().trim()) {
+            window.location.href = `/hotel/detail?filter=${encodeURIComponent(filter)}`;
+        } else {
+            window.location.href = `/hotel/search?filter=${encodeURIComponent(filter)}`;
+
+        }
 
     },
     changeSearchRoom: function () {
@@ -364,9 +375,9 @@ $('#block__suggest-hotel').on('click', '.article-itemt', function () {
     $('#input__search-hotel-id').val(id);
     $('#input__search-hotel-type').val(type);
     $('#input__suggest-hotel').parents('.form-search').removeClass('active');
+   
     $('.item_vin_filter').prop('disabled', false);
     $('.item_vin_filter').removeClass('gray');
-
 });
 
 $('#collapseGuest').on('click', '.giam_sl', function () {
@@ -426,34 +437,17 @@ $('#collapseGuest').on('click', '.tang_sl', function () {
     _hotel.changeSearchRoom();
 });
 
-
+$('.item_vin_filter').click(function (e) {
+    _hotel.searchHotel();
+});
 
 $(document).ready(function () {
    
-    let strSearchObj = localStorage.getItem(_hotel.CACHE_SUGGEST_SEARCH);
-    let arrSearchObj = (strSearchObj && strSearchObj != null) ? JSON.parse(strSearchObj) : [];
-    let model_search = arrSearchObj.find(x => x.searchType == 0);
-    if (model_search && model_search != null) {
-        $('#input__suggest-hotel').val(model_search.keyword);
-        $('#input__search-hotel-id').val(model_search.hotelID);
-        $('#input__search-hotel-type').val(model_search.productType);
-        $('.date-range-fromdate').val(model_search.arrivalDate)
-        $('.date-range-todate').val(model_search.departureDate)
-    }
-
-
    
     _hotel.initDateRange('.date-range-fromdate', '.date-range-todate');
     _ui_common.toggleFocusOut('#collapseGuest');
     _ui_common.toggleFocusOut('#block__suggest-hotel');
-    $('.item_vin_filter').prop('disabled', true);
-    $('.item_vin_filter').addClass('gray');
-
-    $('.btn__filter_hotel').off('click');
-    $('.btn__filter_hotel').click(function (e) {
-        e.preventDefault()
-        _hotel.searchHotel();
-    });
+    
     $('.hotel_tab_type').click(function (e) {
         setTimeout(function () {
             $('.tab-content .flex-row').show()
@@ -461,4 +455,14 @@ $(document).ready(function () {
         }, 1000);
 
     });
+
+    if ($('#input__hotel_id') != undefined && $('#input__hotel_id').length > 0 && $('#input__hotel_id').val().trim() == $('#input__search-hotel-id').val().trim()) {
+        $('.item_vin_filter').removeProp('disabled');
+        $('.item_vin_filter').removeClass('gray');
+       
+    } else {
+        $('.item_vin_filter').prop('disabled', true);
+        $('.item_vin_filter').addClass('gray');
+    }
+    
 });

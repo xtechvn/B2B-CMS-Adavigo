@@ -16,7 +16,7 @@ namespace ADAVIGO_FRONTEND.ViewComponents
             _HotelService = hotelService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string cache_id, string room_id, int night_time, int view_type, DateTime? arrivalDate, DateTime? departureDate, bool isVinHotel)
+        public async Task<IViewComponentResult> InvokeAsync(string cache_id, string room_id, int night_time, int view_type, string arrivalDate, string departureDate, bool isVinHotel)
         {
             HotelPackageDataModel models = new HotelPackageDataModel();
             try

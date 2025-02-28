@@ -18,3 +18,6 @@
 .home-v2 .article-hotel-item .sale {
     font-size: 8px;
 }
+.box-hotel-home .swiper-slide {
+    min-height: 390px !important;
+}

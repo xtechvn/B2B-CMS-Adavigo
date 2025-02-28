@@ -99,7 +99,6 @@ var hotel_home_listing = {
             type: type,
             index: index,
             size: size,
-            committype: hotel_home_listing.GetHotelCommitType()
         }
         _ajax_caller.post('/hotel/ListingItems', input, function (result) {
             if (result != undefined && result.trim() !='') {
@@ -108,7 +107,7 @@ var hotel_home_listing = {
                 } else {
                     element.find('.col-main').find('.list-article').append(result)
                 }
-                hotel_home_listing.RenderHotelPrice(element)
+                hotel_home_listing.RenderHotelPriceVoucher(element)
 
             } else {
                 $('#hotel-listing-search-null').show()
@@ -130,55 +129,27 @@ var hotel_home_listing = {
 
         });
     },
-    RenderHotelPrice: function (element) {
+    RenderHotelPriceVoucher: function (element) {
         element.find('.article-hotel-item').each(function (index, item) {
             var element_detail = $(this)
-            var completed = element_detail.attr('data-completed')
-            if (completed != undefined && completed.trim() != '') {
-                return true
-            }
             var input = {
-                hotelid: element_detail.attr('data-id'),
-                is_vin_hotel: element_detail.attr('data-isvin')
+                hotel_id: element_detail.attr('data-id'),
             }
-            var result = _ajax_caller.POSTSynchorus('/hotel/HotelByLocationAreaDetail', { request_model: input });
-            if (result != undefined && result.isSuccess == true && result.data != undefined && result.data.min_price != undefined) {
-                element_detail.find('.bottom-content').find('.price').removeClass('placeholder')
-                element_detail.find('.bottom-content').find('.price-old').removeClass('placeholder')
-                element_detail.find('.bottom-content').find('.price').html(_global.Comma(result.data.min_price) + ' VND')
-                element_detail.find('.bottom-content').find('.price').attr('data-price', result.data.min_price)
-                element_detail.find('.bottom-content').find('.price-old').html('')
+            var price = element_detail.find('.bottom-content').find('.price').attr('data-price')
+            _ajax_caller.post('/hotel/HotelByLocationAreaDiscount', { request: input, price: price }, function (result) {
+                if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
+                    element_detail.find('.block-code').show()
+                    element_detail.find('.block-code').removeClass('placeholder')
+                    element_detail.find('.block-code').find('.block-code-text').html('Mã:')
+                    element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
+                    element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
+                    element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + '  đ')
+                }
 
-                hotel_home_listing.RenderHotelPriceVoucher(element_detail)
-            }
-            if (result.data == undefined || parseFloat(result.data.min_price) == undefined || parseFloat(result.data.min_price) <= 0) {
-                element_detail.hide()
-            }
-            element_detail.attr('data-completed', '1')
-
+            });
         })
 
-    },
-    RenderHotelPriceVoucher: function (element_detail) {
-        var input = {
-            hotel_id: element_detail.attr('data-id'),
-        }
-        var price = element_detail.find('.bottom-content').find('.price').attr('data-price')
-        _ajax_caller.post('/hotel/HotelByLocationAreaDiscount', { request: input, price: price }, function (result) {
-            if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
-                element_detail.find('.block-code').removeClass('placeholder')
-                element_detail.find('.block-code').find('.block-code-text').html('Mã:')
-                element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
-                element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
-                element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + ' VND')
-            } else {
-                element_detail.find('.block-code').hide()
-            }
-        });
-       
-    },
-    GetHotelCommitType: function () {
-        return 0
+
     },
     SliderPrice: function () {
         let minPrice = 0;

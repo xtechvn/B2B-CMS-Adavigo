@@ -163,11 +163,11 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 }
                 catch
                 {
-                    startDate = DateTime.Parse(model.arrivalDate);
-                    endDate = DateTime.Parse(model.departureDate);
+
+                    throw;
 
                 }
-                if(startDate==DateTime.MinValue || endDate == DateTime.MinValue)
+                if (startDate==DateTime.MinValue || endDate == DateTime.MinValue)
                 {
                     return null;
                 }
@@ -300,11 +300,12 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 var resultModel = new HotelRoomGridModel();
 
                 var endpoints = Convert.ToBoolean(model.isVinHotel) ? CONST_API_ENDPOINTS.GET_HOTEL_ROOM_LIST : CONST_API_ENDPOINTS.GET_HOTEL_ROOM_MANUAL_LIST;
-
+                var startDate = DateTime.ParseExact(model.arrivalDate, "dd/MM/yyyy", null);
+                var endDate = DateTime.ParseExact(model.departureDate, "dd/MM/yyyy", null);
                 var result = await _ApiConnector.ExecutePostAsync(endpoints, new
                 {
-                    arrivalDate = model.arrivalDate,
-                    departureDate = model.departureDate,
+                    arrivalDate = Convert.ToBoolean(model.isVinHotel) ? startDate.ToString("yyyy-MM-dd") : startDate.ToString(),
+                    departureDate = Convert.ToBoolean(model.isVinHotel) ? endDate.ToString("yyyy-MM-dd") : endDate.ToString(),
                     numberOfRoom = model.rooms.Count(),
                     hotelID = model.hotelID,
                     numberOfAdult = model.rooms.Sum(s => s.number_adult),
@@ -323,7 +324,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     resultModel.cache_id = jsonData["cache_id"].ToString();
                     resultModel.surcharge = jsonData["surcharge"].ToString();
                     resultModel.rooms = JsonConvert.DeserializeObject<IEnumerable<HotelRoomDataModel>>(jsonData["data"].ToString());
-                    resultModel.night_time = (int)(Convert.ToDateTime(model.departureDate) - Convert.ToDateTime(model.arrivalDate)).TotalDays;
+                    //resultModel.night_time = (int)(Convert.ToDateTime(model.departureDate) - Convert.ToDateTime(model.arrivalDate)).TotalDays;
                     return resultModel;
                 }
                 else
@@ -337,23 +338,20 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
         }
 
-        public async Task<HotelPackageDataModel> GetRoomPagekageList(string cacheId, string roomId, DateTime? arrivalDate, DateTime? departureDate, bool isVinHotel)
+        public async Task<HotelPackageDataModel> GetRoomPagekageList(string cacheId, string roomId, string arrivalDate, string departureDate, bool isVinHotel)
         {
             try
             {
                 var endpoints = isVinHotel ? CONST_API_ENDPOINTS.GET_ROOM_PACKAGE_LIST : CONST_API_ENDPOINTS.GET_ROOM_MANUAL_PACKAGE_LIST;
-
                 var result = await _ApiConnector.ExecutePostAsync(endpoints, new
                 {
                     cache_id = cacheId,
                     roomID = roomId,
-                    arrivalDate = arrivalDate != null ? arrivalDate.Value.ToString("yyyy-MM-dd") : null,
-                    departureDate = departureDate != null ? departureDate.Value.ToString("yyyy-MM-dd") : null,
+                    arrivalDate = (arrivalDate != null && arrivalDate.Contains("/")) ? DateTime.ParseExact(arrivalDate, "dd/MM/yyyy", null).ToString():null,
+                    departureDate = (departureDate != null && departureDate.Contains("/")) ? DateTime.ParseExact(departureDate, "dd/MM/yyyy", null).ToString() : null,
                     clientType = _UserManager.ClientType,
-
                     client_id = _UserManager.ClientID
                 });
-
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["status"].ToString());
 
@@ -494,88 +492,88 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw new Exception("File không đúng định dạng");
             }
         }
-        public async Task<List<HotelExclusiveResponse>> ListHotelExclusive(HotelExclusiveRequest model)
-        {
+        //public async Task<List<HotelExclusiveResponse>> ListHotelExclusive(HotelExclusiveRequest model)
+        //{
 
-            try
-            {
-                model.client_type = _UserManager.ClientType;
+        //    try
+        //    {
+        //        model.client_type = _UserManager.ClientType;
 
-                var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION;
+        //        var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION;
 
-                var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
+        //        var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
-                }
-                else
-                {
-                    throw new Exception(jsonData["msg"].ToString());
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<HotelExclusiveDetailResponse> ListHotelExclusiveDetail(HotelExclusiveDetailRequest model)
-        {
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
+        //        }
+        //        else
+        //        {
+        //            throw new Exception(jsonData["msg"].ToString());
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+        //public async Task<HotelExclusiveDetailResponse> ListHotelExclusiveDetail(HotelExclusiveDetailRequest model)
+        //{
 
-            try
-            {
-                model.client_type = _UserManager.ClientType;
+        //    try
+        //    {
+        //        model.client_type = _UserManager.ClientType;
 
-                var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION_DETAIL;
+        //        var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION_DETAIL;
 
-                var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
+        //        var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return (JsonConvert.DeserializeObject<List<HotelExclusiveDetailResponse>>(jsonData["data"].ToString())).FirstOrDefault();
-                }
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return (JsonConvert.DeserializeObject<List<HotelExclusiveDetailResponse>>(jsonData["data"].ToString())).FirstOrDefault();
+        //        }
 
-            }
-            catch
-            {
+        //    }
+        //    catch
+        //    {
 
-            }
-            return null;
-        }
+        //    }
+        //    return null;
+        //}
 
-        public async Task<List<HotelExclusiveFilterResponse>> GetHotelExclusiveFilter()
-        {
-            try
-            {
-                var dataModel = new HotelDataModel();
-                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_GET_LOCATION_LIST, new
-                {
-                    confirm = 1
-                });
+        //public async Task<List<HotelExclusiveFilterResponse>> GetHotelExclusiveFilter()
+        //{
+        //    try
+        //    {
+        //        var dataModel = new HotelDataModel();
+        //        var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_GET_LOCATION_LIST, new
+        //        {
+        //            confirm = 1
+        //        });
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return JsonConvert.DeserializeObject<List<HotelExclusiveFilterResponse>>(jsonData["data"].ToString());
-                }
-                else
-                {
-                    throw new Exception(jsonData["msg"].ToString());
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return JsonConvert.DeserializeObject<List<HotelExclusiveFilterResponse>>(jsonData["data"].ToString());
+        //        }
+        //        else
+        //        {
+        //            throw new Exception(jsonData["msg"].ToString());
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
         public async Task<CheckFundAvailableResponse> CheckFundPaymentAvailable(CheckFundAvailableRequest request)
         {
             try
@@ -662,118 +660,118 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw;
             }
         }
-        public async Task<List<HotelExclusiveResponse>> GetHotelCommit(HotelExclusiveRequest model)
-        {
+        //public async Task<List<HotelExclusiveResponse>> GetHotelCommit(HotelExclusiveRequest model)
+        //{
 
-            try
-            {
-                model.client_type = _UserManager.ClientType;
+        //    try
+        //    {
+        //        model.client_type = _UserManager.ClientType;
 
-                var endpoints = CONST_API_ENDPOINTS.COMMIT_HOTEL;
+        //        var endpoints = CONST_API_ENDPOINTS.COMMIT_HOTEL;
 
-                var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
+        //        var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
-                }
-                else
-                {
-                    throw new Exception(jsonData["msg"].ToString());
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<List<HotelCommitLocationResponse>> GetHotelCommitLocation()
-        {
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
+        //        }
+        //        else
+        //        {
+        //            throw new Exception(jsonData["msg"].ToString());
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+        //public async Task<List<HotelCommitLocationResponse>> GetHotelCommitLocation()
+        //{
 
-            try
-            {
-                var model = new
-                {
-                    time = DateTime.Now
-                };
-                var endpoints = CONST_API_ENDPOINTS.COMMIT_HOTEL_LOCATION;
+        //    try
+        //    {
+        //        var model = new
+        //        {
+        //            time = DateTime.Now
+        //        };
+        //        var endpoints = CONST_API_ENDPOINTS.COMMIT_HOTEL_LOCATION;
 
-                var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
+        //        var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return JsonConvert.DeserializeObject<List<HotelCommitLocationResponse>>(jsonData["data"].ToString());
-                }
-                else
-                {
-                    throw new Exception(jsonData["msg"].ToString());
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<HotelExclusiveDetailResponse> GetHotelCommitDetail(HotelExclusiveDetailRequest model)
-        {
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return JsonConvert.DeserializeObject<List<HotelCommitLocationResponse>>(jsonData["data"].ToString());
+        //        }
+        //        else
+        //        {
+        //            throw new Exception(jsonData["msg"].ToString());
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+        //public async Task<HotelExclusiveDetailResponse> GetHotelCommitDetail(HotelExclusiveDetailRequest model)
+        //{
 
-            try
-            {
-                model.client_type = _UserManager.ClientType;
+        //    try
+        //    {
+        //        model.client_type = _UserManager.ClientType;
 
-                var endpoints = CONST_API_ENDPOINTS.COMMIT_HOTEL_DETAIL;
+        //        var endpoints = CONST_API_ENDPOINTS.COMMIT_HOTEL_DETAIL;
 
-                var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
+        //        var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return (JsonConvert.DeserializeObject<List<HotelExclusiveDetailResponse>>(jsonData["data"].ToString())).FirstOrDefault();
-                }
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return (JsonConvert.DeserializeObject<List<HotelExclusiveDetailResponse>>(jsonData["data"].ToString())).FirstOrDefault();
+        //        }
 
-            }
-            catch
-            {
+        //    }
+        //    catch
+        //    {
 
-            }
-            return null;
-        }
-        public async Task<List<HotelExclusiveResponse>> ListHotelExclusivePosition(HotelExclusiveRequest model)
-        {
+        //    }
+        //    return null;
+        //}
+        //public async Task<List<HotelExclusiveResponse>> ListHotelExclusivePosition(HotelExclusiveRequest model)
+        //{
 
-            try
-            {
-                model.client_type = _UserManager.ClientType;
+        //    try
+        //    {
+        //        model.client_type = _UserManager.ClientType;
 
-                var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION_POSITION;
+        //        var endpoints = CONST_API_ENDPOINTS.EXCLUSIVE_HOTEL_BY_LOCATION_POSITION;
 
-                var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
+        //        var result = await _ApiConnector.ExecutePostAsync(endpoints, model);
 
-                var jsonData = JObject.Parse(result);
-                var status = int.Parse(jsonData["status"].ToString());
+        //        var jsonData = JObject.Parse(result);
+        //        var status = int.Parse(jsonData["status"].ToString());
 
-                if (status == (int)ENUM_API_RESULT.SUCCESS)
-                {
-                    return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
-                }
-                else
-                {
-                    throw new Exception(jsonData["msg"].ToString());
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        //        if (status == (int)ENUM_API_RESULT.SUCCESS)
+        //        {
+        //            return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
+        //        }
+        //        else
+        //        {
+        //            throw new Exception(jsonData["msg"].ToString());
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
         public async Task<string> SaveRequestHotel(BookingHotelB2BViewModel model)
         {
             try
@@ -864,7 +862,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetHotelListByLocationArea, new
                 {
                     type = type,
-                    client_type = _UserManager.ClientID,
+                    client_type = _UserManager.ClientType,
                     fromdate = DateTime.Now.AddDays(1),
                     todate = DateTime.Now.AddDays(2),
                     name = name,

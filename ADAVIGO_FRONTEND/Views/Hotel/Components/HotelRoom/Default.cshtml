@@ -117,7 +117,7 @@
                                     @if (item.min_price > 0)
                                     {
                                         <div class="gray">Chỉ từ</div>
-                                        <div class="txt_18 bold dynamic_price" data-amount="@item.min_price" data-night="@Model.night_time">@((item.min_price / nights).ToString("N0")) đ</div>
+                                        <div class="txt_18 bold dynamic_price" data-amount="@item.min_price" data-night="@nights">@((item.min_price / nights).ToString("N0")) đ</div>
                                         <div class="gray">/ <strong class="night">1</strong> Đêm</div>
                                         <a class="btn-default cursor-pointer choose-room btn__toggle_room_package" data-toggle="collapse" data-target="#room-info-@item.id" data-id="@item.id" data-code="@item.code">Chọn phòng</a>
                                     }

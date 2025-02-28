@@ -167,8 +167,8 @@ var _hotel_detail = {
                
             })
         })
-        _hotel_detail.hotel.arrival_date = ConvertJsDateToString(arrival_date, "YYYY-MM-DD");
-        _hotel_detail.hotel.departure_date = ConvertJsDateToString(departure_date, "YYYY-MM-DD");
+        _hotel_detail.hotel.arrival_date = ConvertJsDateToString(arrival_date, "DD/MM/YYYY");
+        _hotel_detail.hotel.departure_date = ConvertJsDateToString(departure_date, "DD/MM/YYYY");
 
     },
     initial: function () {
@@ -193,7 +193,7 @@ var _hotel_detail = {
         });
 
         _hotel_detail.changeImageUrl();
-        $('.btn__filter_hotel').prop('disabled', true);
+        //$('.btn__filter_hotel').prop('disabled', true);
     },
 
     getRoomPackages: function (cacheId, roomId, nightTime, viewType, callback) {

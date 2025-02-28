@@ -134,14 +134,14 @@
 
 
 
-        public const string EXCLUSIVE_HOTEL_BY_LOCATION = "api/b2b/hotel/search-by-location";
-        public const string EXCLUSIVE_HOTEL_BY_LOCATION_POSITION = "api/b2b/hotel/search-by-location-position";
-        public const string EXCLUSIVE_HOTEL_BY_LOCATION_DETAIL = "api/b2b/hotel/search-by-location-detail";
-        public const string EXCLUSIVE_HOTEL_GET_LOCATION_LIST = "api/b2b/hotel/get-hotel-location";
+        //public const string EXCLUSIVE_HOTEL_BY_LOCATION = "api/b2b/hotel/search-by-location";
+        //public const string EXCLUSIVE_HOTEL_BY_LOCATION_POSITION = "api/b2b/hotel/search-by-location-position";
+        //public const string EXCLUSIVE_HOTEL_BY_LOCATION_DETAIL = "api/b2b/hotel/search-by-location-detail";
+        //public const string EXCLUSIVE_HOTEL_GET_LOCATION_LIST = "api/b2b/hotel/get-hotel-location";
 
-        public const string COMMIT_HOTEL = "api/b2b/hotel/commit";
-        public const string COMMIT_HOTEL_LOCATION = "api/b2b/hotel/hotel-commit-location";
-        public const string COMMIT_HOTEL_DETAIL = "api/b2b/hotel/commit-detail";
+        //public const string COMMIT_HOTEL = "api/b2b/hotel/commit";
+        //public const string COMMIT_HOTEL_LOCATION = "api/b2b/hotel/hotel-commit-location";
+        //public const string COMMIT_HOTEL_DETAIL = "api/b2b/hotel/commit-detail";
         /// <summary>
         /// Thanh toán bằng ký quỹ
         /// </summary>

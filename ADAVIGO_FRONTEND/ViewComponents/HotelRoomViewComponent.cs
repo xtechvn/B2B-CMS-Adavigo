@@ -21,10 +21,15 @@ namespace ADAVIGO_FRONTEND.ViewComponents
             HotelRoomGridModel models = new HotelRoomGridModel();
             try
             {
-                models = await _HotelService.GetHotelRoomList(input);
-                var startDate = DateTime.Parse(input.arrivalDate);
-                var endDate = DateTime.Parse(input.departureDate);
+
+                var startDate = DateTime.ParseExact(input.arrivalDate, "dd/MM/yyyy", null);
+                var endDate = DateTime.ParseExact(input.departureDate, "dd/MM/yyyy", null);
                 int nights = (int)(endDate - startDate).TotalDays;
+                models = await _HotelService.GetHotelRoomList(input);
+                if(models!=null && models.rooms!=null && models.rooms.Count() > 0)
+                {
+                    models.night_time = nights < 1 ? 1 : nights;
+                }
                 ViewBag.Nights = nights < 1 ? 1 : nights;
             }
             catch

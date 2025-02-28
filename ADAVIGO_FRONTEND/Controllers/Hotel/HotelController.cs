@@ -11,6 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -56,22 +57,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     }
                 }
             };
-
-            try
-            {
-                if (!string.IsNullOrEmpty(filter))
-                {
-                    model = JsonConvert.DeserializeObject<HotelSearchParamModel>(filter);
-                    model.arrivalDate = DateTime.Parse(model.arrivalDate).ToString("dd/MM/yyyy");
-                    model.departureDate = DateTime.Parse(model.departureDate).ToString("dd/MM/yyyy");
-                    model.quickSearch = 1;
-                }
-            }
-            catch
-            {
-
-            }
-
             return View(model);
         }
         public IActionResult Search(string filter)
@@ -97,8 +82,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 if (!string.IsNullOrEmpty(filter))
                 {
                     model = JsonConvert.DeserializeObject<HotelSearchParamModel>(filter);
-                    model.arrivalDate = DateTime.Parse(model.arrivalDate).ToString("dd/MM/yyyy");
-                    model.departureDate = DateTime.Parse(model.departureDate).ToString("dd/MM/yyyy");
+                    //model.arrivalDate = DateTime.Parse(model.arrivalDate).ToString("dd/MM/yyyy");
+                    //model.departureDate = DateTime.Parse(model.departureDate).ToString("dd/MM/yyyy");
                     model.quickSearch = 1;
                 }
             }
@@ -199,6 +184,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         public async Task<IActionResult> Detail(string filter)
         {
             ViewBag.Hotel = new HotelGridInfoModel();
+            ViewBag.FromDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+            ViewBag.ToDate = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
+
             //var strJsonData = CommonHelper.Decode(token, _KeyEncodeParam);
             var model = JsonConvert.DeserializeObject<RoomDetailViewModel>(filter);
             model.hotelName = CommonHelper.RemoveSpecialCharacterExceptVietnameseCharacter(model.hotelName).Replace("quotequote", "\"").Replace("andand", "&");
@@ -220,8 +208,24 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     ViewBag.Hotel = hotel.hotels.First();
                     model.hotelName = hotel.hotels.First().name;
                 }
+                var search_model = new HotelSearchParamModel()
+                {
+                    arrivalDate = model.arrivalDate,
+                    departureDate = model.departureDate,
+                    rooms = model.rooms,
+                    hotelID = model.hotelID,
+                    hotelName = model.hotelName,
+                    isVinHotel = model.isVinHotel == null ? "false" : model.isVinHotel,
+                    productType = "0",
+                    quickSearch = 1
+                };
+
+
+                ViewBag.FromDate = DateTime.ParseExact(model.arrivalDate, "dd/MM/yyyy", null);
+                ViewBag.ToDate = DateTime.ParseExact(model.departureDate, "dd/MM/yyyy", null);
+                ViewBag.SearchModel = search_model;
             }
-            catch
+            catch (Exception ex)
             {
 
             }
@@ -238,7 +242,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             return View(model);
         }
 
-        public IActionResult GetRoomPackages(string cache_id, string room_id, int night_time, int view_type, DateTime? arrival_date, DateTime? departure_date, bool isVinHotel)
+        public IActionResult GetRoomPackages(string cache_id, string room_id, int night_time, int view_type, string arrival_date, string departure_date, bool isVinHotel)
         {
             return ViewComponent("RoomPackage", new { cache_id, room_id, night_time, view_type, arrivalDate = arrival_date, departureDate = departure_date, isVinHotel });
         }
@@ -919,64 +923,64 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         {
             return View();
         }
-        
+
+        //[HttpPost]
+        //public async Task<IActionResult> HotelByLocationAreaDetail(HotelExclusiveDetailRequest request_model)
+        //{
+        //    try
+        //    {
+        //        request_model.fromdate = DateTime.Now.AddDays(1);
+        //        request_model.todate = DateTime.Now.AddDays(2);
+        //        var result_data = await _HotelService.ListHotelExclusiveDetail(request_model);
+        //        if (result_data != null)
+        //        {
+        //            return new JsonResult(new
+        //            {
+        //                isSuccess = true,
+        //                data = result_data
+        //            });
+        //        }
+        //        return new JsonResult(new
+        //        {
+        //            isSuccess = false
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new JsonResult(new
+        //        {
+        //            isSuccess = false,
+        //            message = ex.Message
+        //        });
+        //    }
+        //}
         [HttpPost]
-        public async Task<IActionResult> HotelByLocationAreaDetail(HotelExclusiveDetailRequest request_model)
+        public async Task<IActionResult> HotelByLocationAreaDiscount(B2BVoucherListRequest request, double price)
         {
             try
             {
-                request_model.fromdate = DateTime.Now.AddDays(1);
-                request_model.todate = DateTime.Now.AddDays(2);
-                var result_data = await _HotelService.ListHotelExclusiveDetail(request_model);
-                if (result_data != null)
-                {
-                    return new JsonResult(new
-                    {
-                        isSuccess = true,
-                        data = result_data
-                    });
-                }
-                return new JsonResult(new
-                {
-                    isSuccess = false
-                });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message
-                });
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> HotelByLocationAreaDiscount(B2BVoucherListRequest request,double price)
-        {
-            try
-            {
-                if (request.hotel_id == null || request.hotel_id.Trim() == "" || price<=0)
+                if (request.hotel_id == null || request.hotel_id.Trim() == "" || price <= 0)
                 {
                     return new JsonResult(new
                     {
                         isSuccess = false,
                         message = "Dữ liệu gửi lên không chính xác",
-                        data=price
+                        data = price
                     });
                 }
                 var response = await _HotelService.GetVoucherList(request);
                 var amount = price;
                 string discount_value = "";
                 string code = "";
-                if(response!=null && response.Count > 0)
+                if (response != null && response.Count > 0)
                 {
                     code = response[0].code;
                     switch (response[0].unit)
                     {
                         case "percent":
                             {
-                                amount = price - Math.Round((price * (double)response[0].price_sales / 100),0);
-                                discount_value ="-"+ ((double)response[0].price_sales).ToString("N0") + "%";
+                                amount = price - Math.Round((price * (double)response[0].price_sales / 100), 0);
+                                discount_value = "-" + ((double)response[0].price_sales).ToString("N0") + "%";
                             }
                             break;
                         default:
@@ -991,8 +995,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     isSuccess = true,
                     data = amount,
-                    discount= discount_value,
-                    code=code
+                    discount = discount_value,
+                    code = code
                 });
             }
             catch (Exception ex)
@@ -1059,12 +1063,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ListingItems(string name, int type = 0, int index = 1, int size = 30, int committype = 0)
+        public async Task<IActionResult> ListingItems(string name, int type = 0, int index = 1, int size = 30)
         {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type, committype, index, size);
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type, 0, index, size);
             ViewBag.Location = name;
             ViewBag.Type = type;
-            ViewBag.committype = committype;
             string url_base = @"{
             ""arrivalDate"": ""2025-02-23"",
             ""departureDate"": ""2025-02-23"",
@@ -1085,8 +1088,40 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 ""email"": """"
             }";
             var data_url = JsonConvert.DeserializeObject<dynamic>(url_base);
-            data_url.arrivalDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
-            data_url.departureDate = DateTime.Now.AddDays(2).ToString("yyyy-MM-dd");
+            data_url.arrivalDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+            data_url.departureDate = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
+
+            ViewBag.URLBase = data_url;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ListingSlideItems(string name, int type = 0, int index = 1, int size = 30)
+        {
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type, 1, index, size);
+            ViewBag.Location = name;
+            ViewBag.Type = type;
+            string url_base = @"{
+            ""arrivalDate"": ""2025-02-23"",
+            ""departureDate"": ""2025-02-23"",
+            ""hotelID"": 107,
+            ""hotelName"": ""Sunset Beach Phú Quốc"",
+            ""productType"": ""0"",
+            ""rooms"": [
+                {
+                    ""room"": 1,
+                    ""number_adult"": 2,
+                    ""number_child"": 0,
+                    ""number_infant"": 0
+                }
+            ],
+                ""isVinHotel"": false,
+                ""address"": ""100C2 Đường Trần Hưng Đạo, TT. Dương Đông, Phú Quốc, Kiên Giang"",
+                ""telephone"": """",
+                ""email"": """"
+            }";
+            var data_url = JsonConvert.DeserializeObject<dynamic>(url_base);
+            data_url.arrivalDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+            data_url.departureDate = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
 
             ViewBag.URLBase = data_url;
             return View();

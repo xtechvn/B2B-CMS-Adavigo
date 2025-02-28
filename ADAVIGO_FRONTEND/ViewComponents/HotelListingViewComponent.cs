@@ -22,24 +22,11 @@ namespace ADAVIGO_FRONTEND.ViewComponents
             try
             {
                 models = await _HotelService.SearchHotel(input);
-                try
-                {
-                    var startDate = DateTime.Parse(input.arrivalDate);
-                    var endDate = DateTime.Parse(input.departureDate);
-                    int nights = (int)(endDate - startDate).TotalDays;
+                var startDate = DateTime.ParseExact(input.arrivalDate, "dd/MM/yyyy", null);
+                var endDate = DateTime.ParseExact(input.departureDate, "dd/MM/yyyy", null);
+                int nights = (int)(endDate - startDate).TotalDays;
+                ViewBag.Nights = nights < 1 ? 1 : nights;
 
-                    ViewBag.Nights = nights < 1 ? 1 : nights;
-
-                }
-                catch
-                {
-                    var startDate = DateTime.ParseExact(input.arrivalDate, "dd/MM/yyyy", null);
-                    var endDate = DateTime.ParseExact(input.departureDate, "dd/MM/yyyy", null);
-                    int nights = (int)(endDate - startDate).TotalDays;
-
-                    ViewBag.Nights = nights < 1 ? 1 : nights;
-                }
-               
             }
             catch
             {

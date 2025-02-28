@@ -29,8 +29,57 @@
         });
     },
 
-    searchHotel: function () {
-    
+    CacheSearchData: function () {
+        let fromDate = ConvertToDate($('.date-range-fromdate').val());
+        let toDate = ConvertToDate($('.date-range-todate').val());
+
+        let room_datas = [];
+        let valid_room = true;
+        $('#block_room_search_content .line-bottom').each(function () {
+            let seft = $(this);
+            let num_adult = parseInt(seft.find('.adult .qty_input').val());
+            if (num_adult <= 0) valid_room = false;
+
+            room_datas.push({
+                room: seft.data('room'),
+                number_adult: num_adult,
+                number_child: parseInt(seft.find('.baby .qty_input').val()),
+                number_infant: parseInt(seft.find('.infant .qty_input').val())
+            });
+        });
+
+        if (!valid_room) {
+            return;
+        }
+        var hotel_search_type = 0
+        $('.hotel_tab_type').each(function () {
+            var tab_type = $(this)
+            if (tab_type.hasClass('active')) {
+                hotel_search_type = tab_type.attr('data-id')
+                return false
+            }
+
+        });
+        var obj = {
+            arrivalDate: ConvertJsDateToString(fromDate, "DD/MM/YYYY"),
+            departureDate: ConvertJsDateToString(toDate, "DD/MM/YYYY"),
+            hotelID: $('#input__search-hotel-id').val(),
+            hotelName: $('#input__suggest-hotel').attr('keyword') == undefined || $('#input__suggest-hotel').attr('keyword').trim() == '' ? $('#input__suggest-hotel').val() : $('#input__suggest-hotel').attr('keyword'),
+            productType: $('#input__search-hotel-type').val(),
+            rooms: room_datas,
+            isVinHotel: hotel_search_type == 1 ? true : false,
+        };
+
+        if (obj.arrivalDate === "" || obj.departureDate === "") {
+            return;
+        }
+
+        if (obj.rooms.length <= 0) {
+            return;
+        }
+
+        localStorage.removeItem(_hotel.CACHE_OBJECT_SEARCH);
+        localStorage.setItem(_hotel.CACHE_OBJECT_SEARCH, JSON.stringify(obj));
 
        
     },
@@ -296,9 +345,10 @@ $(document).ready(function () {
         }
     });
 
-    $('.item_vin_filter').prop('disabled', true);
-    $('.item_vin_filter').addClass('gray');
+    //$('.item_vin_filter').prop('disabled', true);
+    //$('.item_vin_filter').addClass('gray');
     _hotel_search.changeImageUrl();
     _hotel_search.loadPriceData();
     _hotel_search.loadFilterData();
+    _hotel_search.CacheSearchData();
 });

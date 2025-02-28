@@ -6,8 +6,8 @@
 @model RoomDetailViewModel
 
 @{
-    var FromDate = DateTime.Parse(Model.arrivalDate);
-    var ToDate = DateTime.Parse(Model.departureDate);
+    DateTime FromDate = (DateTime)ViewBag.FromDate;
+    DateTime ToDate = (DateTime)ViewBag.ToDate;
     var TotalDays = (ToDate - FromDate).TotalDays + 1;
     var ArrMemberOfRoom = new List<string>();
 
@@ -27,7 +27,8 @@
     var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
     long nights = Convert.ToInt64((ToDate - FromDate).TotalDays <= 1 ? 1 : (ToDate - FromDate).TotalDays);
     bool isVinHotel = Convert.ToBoolean(Model.isVinHotel);
-
+    HotelSearchParamModel search_model = (HotelSearchParamModel)ViewBag.SearchModel;
+   
 }
 
 <input type="hidden" id="input__hotel_id" value="@Model.hotelID" />
@@ -92,7 +93,7 @@
             <span>Khách sạn Vinpearl</span>
         </a>
     </div>
-    @await Html.PartialAsync("BoxFilter")
+    @await Html.PartialAsync("BoxFilter", search_model)
 </div>
 <section class="tab-menu-folder">
     <a href="#" class="active">Đặt phòng</a>
@@ -482,10 +483,9 @@
 
 @section scripts{
 <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+<script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
 <script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
-<script type="text/javascript" src="~/js/modules/hotel-detail-search.js"> </script>
 <script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
-    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
 
 }
 
