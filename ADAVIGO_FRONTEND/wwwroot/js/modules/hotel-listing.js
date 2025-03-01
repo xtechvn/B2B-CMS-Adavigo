@@ -108,9 +108,10 @@ var hotel_listing = {
                 }
                 hotel_listing.RenderHotelPriceVoucher($('#hotel-listing'))
 
-            } else if ($('#hotel-listing').find('.col-main').find('.list-article').html().trim() == '') {
+            } else if (index <= 1) {
                 $('#hotel-listing-search-null').show()
 
+                $('#hotel-listing').find('.col-main').find('.list-article').html(result)
             }
             if (result.trim() != '') $('#hotel-listing-viewmore').show()
             $('#hotel-listing-viewmore').prop('disabled', false)
