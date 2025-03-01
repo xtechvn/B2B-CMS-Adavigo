@@ -5,7 +5,7 @@ var hotel_home_listing = {
     Initialization: function () {
         hotel_home_listing.DynamicBind()
         $('#hotel-listing .col-main').addClass('placeholder')
-        hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), '', 0)
+        hotel_home_listing.RenderHotelByLocation(1)
     },
     DynamicBind: function () {
         $('body').on('click', '#hotel-listing-viewmore', function (e) {
@@ -13,14 +13,14 @@ var hotel_home_listing = {
             var index_value = 1;
             var index = element.attr('data-index')
             if (index == undefined || isNaN(parseInt(index)) || parseInt(index) < 1) {
-                index_value = 0
+                index_value = 1
             } else {
                 index_value = parseInt(index)
             }
             element.attr('data-index', ++index_value)
             hotel_home_listing.AddLoading()
 
-            hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), hotel_home_listing.GetFilterLocationName(), hotel_home_listing.GetFilterLocationType(), index_value)
+            hotel_home_listing.RenderHotelByLocation(index_value)
         });
         $('body').on('click', '.filter-listing-location', function (e) {
             var element = $(this)
@@ -28,23 +28,23 @@ var hotel_home_listing = {
             element.prop('checked', true)
             element.attr('data-index', '1')
             hotel_home_listing.AddLoading()
-            hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), hotel_home_listing.GetFilterLocationName(), hotel_home_listing.GetFilterLocationType(), 1)
+            hotel_home_listing.RenderHotelByLocation(1)
 
         });
         $('body').on('change', '.filter-listing-star', function (e) {
-            hotel_home_listing.FilterHotel()
+            hotel_home_listing.RenderHotelByLocation(1)
 
         });
         $('body').on('click', '#filter-hotel-clear', function (e) {
-            $('.filter-listing-star').prop('checked',false)
+            $('.filter-listing-star').prop('checked', false)
             var rangeSlider = document.getElementById('slider-range-price');
             rangeSlider.noUiSlider.set([0, hotel_home_listing.GetMaxSliderPriceValue()]);
             $('.filter-listing-location').each(function (index, item) {
                 var element_checkbox = $(this)
-                element_checkbox.prop('checked',false)
+                element_checkbox.prop('checked', false)
             })
             hotel_home_listing.AddLoading()
-            hotel_home_listing.RenderHotelByLocation($('#hotel-listing'), '', 0)
+            hotel_home_listing.RenderHotelByLocation(1)
         });
     },
     AddLoading: function () {
@@ -58,6 +58,10 @@ var hotel_home_listing = {
         $('#hotel-listing .col-main').removeClass('placeholder')
         $('#hotel-listing .col-300').removeClass('box-placeholder')
         $('#hotel-listing .col-main').removeClass('box-placeholder')
+    },
+    IfLoading: function () {
+        if ($('#hotel-listing .col-300').hasClass('placeholder')) { return true; }
+        return false
     },
     GetFilterLocationName: function () {
         var index_name = "";
@@ -74,58 +78,51 @@ var hotel_home_listing = {
         }
         return index_name
     },
-    GetFilterLocationType: function () {
-        var location_selected = undefined
-        var type = -1;
-        $('.filter-listing-location').each(function (index, item) {
-            var element_checkbox = $(this)
-            if (element_checkbox.is(':checked')) {
-                location_selected = element_checkbox
-                return false
-            }
-        })
-        if (location_selected != undefined) {
-            type = location_selected.attr('data-type')
-        }
-        return type
-    },
-    RenderHotelByLocation: function (element, name, type = -1, index = 1, size = 30) {
+    RenderHotelByLocation: function (index = 1) {
+        hotel_home_listing.AddLoading()
         $('#hotel-listing-viewmore').hide()
         $('#hotel-listing-viewmore').prop('disabled', true)
         $('#hotel-listing-viewmore').find('.viewmore-text').html('Vui lòng chờ')
-        element.find('.list-items-detail').remove()
+        $('#hotel-listing').find('.list-items-detail').remove()
+        var stars = []
+        $('.filter-listing-star').each(function (index, item) {
+            var element_star = $(this)
+            if (element_star.is(':checked')) {
+                stars.push(parseInt(element_star.val()))
+            }
+        })
         var input = {
-            name: name,
-            type: type,
-            index: index,
-            size: size,
+            location: hotel_home_listing.GetFilterLocationName(),
+            page_index: index,
+            page_size: 30,
+            stars: stars.join(","),
+            min_price: $('#price-slider-range-value1').val(),
+            max_price: $('#price-slider-range-value2').val()
         }
         _ajax_caller.post('/hotel/ListingItems', input, function (result) {
-            if (result != undefined && result.trim() !='') {
+            if (result != undefined && result.trim() != '') {
                 if (index <= 1) {
-                    element.find('.col-main').find('.list-article').html(result)
+                    $('#hotel-listing').find('.col-main').find('.list-article').html(result)
                 } else {
-                    element.find('.col-main').find('.list-article').append(result)
+                    $('#hotel-listing').find('.col-main').find('.list-article').append(result)
                 }
-                hotel_home_listing.RenderHotelPriceVoucher(element)
+                hotel_home_listing.RenderHotelPriceVoucher($('#hotel-listing'))
 
-            } else {
+            } else if ($('#hotel-listing').find('.col-main').find('.list-article').html().trim() == '') {
                 $('#hotel-listing-search-null').show()
 
             }
-            hotel_home_listing.RemoveLoading()
-
             if (result.trim() != '') $('#hotel-listing-viewmore').show()
             $('#hotel-listing-viewmore').prop('disabled', false)
             $('#hotel-listing-viewmore').find('.viewmore-text').html('Xem thêm')
-            
-           
-
-            element.removeClass('placeholder')
-            element.removeClass('box-placeholder')
-            $('#hotel-listing .col-main').removeClass('placeholder')
             hotel_home_listing.SliderPrice()
-            hotel_home_listing.FilterHotel(size)
+            var count = $('#hotel-listing .list-items-detail').val()
+            if (parseInt(count) == undefined || isNaN(parseInt(count)) || parseInt(count) < 30) {
+                $('#hotel-listing-viewmore').hide()
+            } else {
+                $('#hotel-listing-viewmore').show()
+            }
+            hotel_home_listing.RemoveLoading()
 
         });
     },
@@ -161,7 +158,7 @@ var hotel_home_listing = {
             thousand: ',',
             // prefix: 'VNĐ'
         });
-       
+
         if (rangeSlider.noUiSlider) {
             let currentValue = rangeSlider.noUiSlider.get(); // Get current value
 
@@ -175,6 +172,7 @@ var hotel_home_listing = {
             // Ensure the value is within the new range before setting it
             let newValue = Math.max(minPrice, Math.min(maxPrice, currentValue));
             rangeSlider.noUiSlider.set(newValue);
+            return
         }
 
         else {
@@ -188,7 +186,6 @@ var hotel_home_listing = {
                 format: moneyFormat,
                 connect: true
             });
-            // Set visual min and max values and also update value hidden form inputs
             rangeSlider.noUiSlider.on('update', function (values, handle) {
                 if (isNaN(parseFloat(values[0]))) {
                     return
@@ -203,12 +200,30 @@ var hotel_home_listing = {
                     values[1]);
                 $('#price-slider-range-value1').val(min)
                 $('#price-slider-range-value2').val(max)
-                hotel_home_listing.FilterHotel()
+                // hotel_home_listing.FilterHotel()
+            });
+            rangeSlider.noUiSlider.on('set', function (values, handle) {
+                if (isNaN(parseFloat(values[0]))) {
+                    return
+                }
+                var min = parseFloat(values[0].replaceAll(',', ''))
+                var max = parseFloat(values[1].replaceAll(',', ''))
+                document.getElementById('price-slider-range-value1').innerHTML = values[0];
+                document.getElementById('price-slider-range-value2').innerHTML = values[1];
+                document.getElementsByName('price-min-value').value = moneyFormat.from(
+                    values[0]);
+                document.getElementsByName('price-max-value').value = moneyFormat.from(
+                    values[1]);
+                $('#price-slider-range-value1').val(min)
+                $('#price-slider-range-value2').val(max)
+                if (hotel_home_listing.IfLoading() == false) {
+                    hotel_home_listing.RenderHotelByLocation(1)
 
+                }
             });
         }
 
-      
+
     },
     GetMaxSliderPriceValue: function () {
         let maxPrice = 0;
@@ -221,48 +236,5 @@ var hotel_home_listing = {
         })
         return maxPrice
     },
-    FilterHotel: function (size) {
-        $('#hotel-listing-search-null').hide()
-        var stars = []
-        $('.filter-listing-star').each(function (index, item) {
-            var element_star = $(this)
-            if (element_star.is(':checked')) {
-                stars.push(parseInt(element_star.val()))
-            }
-        })
-        var min= $('#price-slider-range-value1').val()
-        var max = $('#price-slider-range-value2').val()
-      
-        $('#hotel-listing').find('.article-hotel-item').each(function (index, item) {
-            var element = $(this)
-            var price = element.find('.bottom-content').find('.price').attr('data-price')
-            var star = element.attr('data-star')
-            if (parseFloat(price) != undefined && !isNaN(parseFloat(price)) && parseFloat(price) >= min && parseFloat(price) <= max
-                && (stars.length <= 0 || (parseInt(star) != undefined && !isNaN(parseInt(star)) && stars.includes(parseInt(star))))) {
-                element.show()
-            } else {
-                element.hide()
-            }
-        })
-        var none_showing = true
-        var count = $('#hotel-listing').find('.list-items-detail').val()
-        if (parseInt(count) == undefined || isNaN(parseInt(count)) || parseInt(count) < size) {
-            $('#hotel-listing-viewmore').hide()
-        } else {
-            $('#hotel-listing-viewmore').show()
-        }
-        $('#hotel-listing').find('.article-hotel-item').each(function (index, item) {
-            var element = $(this)
-            if (element.is(':hidden')) {
-
-            } else {
-                none_showing = false
-                return false
-            }
-        })
-        if (none_showing == true) {
-            $('#hotel-listing-search-null').show()
-            $('#hotel-listing-viewmore').hide()
-        }
-    }
+   
 }

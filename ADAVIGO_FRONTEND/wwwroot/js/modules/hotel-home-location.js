@@ -7,15 +7,13 @@ var hotel_location = {
         $('#hotel-location .box-hotel-home').each(function (index, item) {
             var element = $(this)
             var name = element.attr('data-name')
-            var type = element.attr('data-type')
-            hotel_location.RenderHotelByLocation(element, name, type)
+            hotel_location.RenderHotelByLocation(element, name)
 
         })
     },
-    RenderHotelByLocation: function (element, name, type) {
+    RenderHotelByLocation: function (element, name) {
         var input = {
-            name: name,
-            type: type,
+            location: name,
             index: 1,
             size: 10,
 

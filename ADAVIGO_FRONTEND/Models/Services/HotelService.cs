@@ -855,20 +855,23 @@ namespace ADAVIGO_FRONTEND.Models.Services
             return new List<HotelSurchargeGridModel>();
         }
         #region v2:
-        public async Task<List<HotelExclusiveResponse>> GetHotelByLocation(string name, int type, int hotel_position,int index=1,int size=30)
+        public async Task<List<HotelExclusiveResponse>> GetHotelByLocation(string name,int location_type, string location = null, string stars = "", double? min_price = -1, double? max_price = -1, int? page_index = 1, int? page_size = 30)
         {
             try
             {
                 var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetHotelListByLocationArea, new
                 {
-                    type = type,
                     client_type = _UserManager.ClientType,
                     fromdate = DateTime.Now.AddDays(1),
                     todate = DateTime.Now.AddDays(2),
-                    name = name,
-                    hotel_position= hotel_position,
-                    index,
-                    size
+                    hotel_position=location_type,
+                    name,
+                    location,
+                    stars,
+                    min_price,
+                    max_price,
+                    index= page_index,
+                    size= page_size
                 });
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["status"].ToString());

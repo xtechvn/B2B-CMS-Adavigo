@@ -47,7 +47,7 @@
                     <div class="header-fillter">
                         <div class="flex space-between align-center">
                             <div class="txt_16"><strong>Bộ lọc</strong></div>
-                            <a class="clear" href="#">
+                            <a id="filter-hotel-clear" class="clear" href="javascript:;">
                                 Xóa lọc&nbsp;
                                 <svg class="icon-svg">
                                     <use xlink:href="/images/icons/icon.svg#refresh"></use>
@@ -59,21 +59,21 @@
                     <div class="price-filter mb24">
                         <div class="mb16"><strong>Khoảng giá</strong></div>
                         <div class="price-filter-container">
-                            <div id="slider-range"></div>
+                            <div id="slider-range-price"></div>
                             <form>
-                                <input type="hidden" name="min-value" value="">
-                                <input type="hidden" name="max-value" value="">
+                                <input type="hidden" name="price-min-value" value="">
+                                <input type="hidden" name="price-max-value" value="">
                             </form>
                             <div class="row slider-labels">
                                 <div class="col-6">
                                     <div class="wrap">
-                                        <span id="slider-range-value1"></span> đ
+                                        <span id="price-slider-range-value1"></span> đ
                                     </div>
 
                                 </div>
                                 <div class="col-6">
                                     <div class="wrap text-right">
-                                        <span id="slider-range-value2"></span> đ
+                                        <span id="price-slider-range-value2"></span> đ
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@
                                         <use xlink:href="/images/icons/icon.svg#star"></use>
                                     </svg>
                                 </div>
-                                <input type="checkbox" name="filter-listing-star" value="1">
+                                <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="1">
                                 <span class="checkmark"></span>
                             </label>
                             <label class="confir_res">
@@ -131,22 +131,7 @@
                                         <use xlink:href="/images/icons/icon.svg#star"></use>
                                     </svg>
                                 </div>
-                                <input type="checkbox" name="filter-listing-star" value="2">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label class="confir_res">
-                                <div class="flex list-star">
-                                    <svg class="icon-svg">
-                                        <use xlink:href="/images/icons/icon.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="/images/icons/icon.svg#star"></use>
-                                    </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="/images/icons/icon.svg#star"></use>
-                                    </svg>
-                                </div>
-                                <input type="checkbox" name="filter-listing-star" value="3">
+                                <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="2">
                                 <span class="checkmark"></span>
                             </label>
                             <label class="confir_res">
@@ -160,11 +145,8 @@
                                     <svg class="icon-svg">
                                         <use xlink:href="/images/icons/icon.svg#star"></use>
                                     </svg>
-                                    <svg class="icon-svg">
-                                        <use xlink:href="/images/icons/icon.svg#star"></use>
-                                    </svg>
                                 </div>
-                                <input type="checkbox" name="filter-listing-star" value="4">
+                                <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="3">
                                 <span class="checkmark"></span>
                             </label>
                             <label class="confir_res">
@@ -181,11 +163,29 @@
                                     <svg class="icon-svg">
                                         <use xlink:href="/images/icons/icon.svg#star"></use>
                                     </svg>
+                                </div>
+                                <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="4">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                <div class="flex list-star">
+                                    <svg class="icon-svg">
+                                        <use xlink:href="/images/icons/icon.svg#star"></use>
+                                    </svg>
+                                    <svg class="icon-svg">
+                                        <use xlink:href="/images/icons/icon.svg#star"></use>
+                                    </svg>
+                                    <svg class="icon-svg">
+                                        <use xlink:href="/images/icons/icon.svg#star"></use>
+                                    </svg>
+                                    <svg class="icon-svg">
+                                        <use xlink:href="/images/icons/icon.svg#star"></use>
+                                    </svg>
                                     <svg class="icon-svg">
                                         <use xlink:href="/images/icons/icon.svg#star"></use>
                                     </svg>
                                 </div>
-                                <input type="checkbox" name="filter-listing-star" value="5">
+                                <input type="checkbox" class="filter-listing-star" name="filter-listing-star" value="5">
                                 <span class="checkmark"></span>
                             </label>
                         </div>
@@ -201,66 +201,58 @@
                             </a>
                         </div>
                         <div class="collapse show mt16" id="collapse3">
-                            <a href="/hotel/listing?name=Nha Trang&type=@type&index=1&size=@size&committype=@committype">
-                                <label class="confir_res">
-                                    Nha Trang
-                                    @if (name.Trim() == "Nha Trang")
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Nha Trang" checked data-type="1">
-                                    }
+                            <label class="confir_res">
+                                Nha Trang
+                                @if (name.Trim() == "Nha Trang")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Nha Trang" checked data-type="1">
+                                }
 
-                                    else
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Nha Trang" data-type="1">
-                                    }
-                                    <span class="checkmark"></span>
-                                </label>
-                            </a>
-                            <a href="/hotel/listing?name=Đà Nẵng&type=@type&index=1&size=@size&committype=@committype">
-                                <label class="confir_res">
-                                    Đà Nẵng
-                                    @if (name.Trim() == "Đà Nẵng")
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" checked value="Đà Nẵng" data-type="1">
-                                    }
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Nha Trang" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Đà Nẵng
+                                @if (name.Trim() == "Đà Nẵng")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" checked value="Đà Nẵng" data-type="1">
+                                }
 
-                                    else
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Đà Nẵng" data-type="1">
-                                    }
-                                    <span class="checkmark"></span>
-                                </label>
-                            </a>
-                            <a href="/hotel/listing?name=Phú Quốc&type=@type&index=1&size=@size&committype=@committype">
-                                <label class="confir_res">
-                                    Phú Quốc
-                                    @if (name.Trim() == "Phú Quốc")
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" checked value="Phú Quốc" data-type="1">
-                                    }
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Đà Nẵng" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Phú Quốc
+                                @if (name.Trim() == "Phú Quốc")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" checked value="Phú Quốc" data-type="1">
+                                }
 
-                                    else
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Phú Quốc" data-type="1">
-                                    }
-                                    <span class="checkmark"></span>
-                                </label>
-                            </a>
-                            <a href="/hotel/listing?name=Hạ Long&type=@type&index=1&size=@size&committype=@committype">
-                                <label class="confir_res">
-                                    Hạ Long
-                                    @if (name.Trim() == "Hạ Long")
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hạ Long" checked data-type="1">
-                                    }
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Phú Quốc" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Hạ Long
+                                @if (name.Trim() == "Hạ Long")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hạ Long" checked data-type="1">
+                                }
 
-                                    else
-                                    {
-                                        <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hạ Long" data-type="1">
-                                    }
-                                    <span class="checkmark"></span>
-                                </label>
-                            </a>
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hạ Long" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
 
                         </div>
                     </div>
@@ -278,6 +270,13 @@
                         </svg> &nbsp;
                         <nw class="viewmore-text">Xem thêm</nw>
                     </a>
+                </div>
+                <div id="hotel-listing-search-null" class="search-null center mb40" style="display:none;">
+                    <div class="mb24">
+                        <img src="/images/graphics/icon-search.png" alt="">
+                    </div>
+                    <h2 class="title txt_24">Không tìm thấy kết quả</h2>
+                    <div class="gray">Chúng tôi không tìm thấy thông tin mà bạn cần, vui lòng thử lại</div>
                 </div>
             </div>
         </div>

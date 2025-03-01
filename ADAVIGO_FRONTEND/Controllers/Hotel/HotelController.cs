@@ -1063,11 +1063,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ListingItems(string name, int type = 0, int index = 1, int size = 30)
+        public async Task<IActionResult> ListingItems(string name, string location = null, string stars = "", double? min_price = -1, double? max_price = -1, int? page_index = 1, int? page_size = 30)
         {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type, 0, index, size);
+            ViewBag.Data = await _HotelService.GetHotelByLocation(name,0,  location, stars,min_price,max_price,page_index,page_size);
             ViewBag.Location = name;
-            ViewBag.Type = type;
             string url_base = @"{
             ""arrivalDate"": ""2025-02-23"",
             ""departureDate"": ""2025-02-23"",
@@ -1095,11 +1094,10 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ListingSlideItems(string name, int type = 0, int index = 1, int size = 30)
+        public async Task<IActionResult> ListingSlideItems(string location, int index = 1, int size = 30)
         {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name, type, 1, index, size);
-            ViewBag.Location = name;
-            ViewBag.Type = type;
+            ViewBag.Data = await _HotelService.GetHotelByLocation("",1, location, null,null,null, index, size);
+            ViewBag.Location = location;
             string url_base = @"{
             ""arrivalDate"": ""2025-02-23"",
             ""departureDate"": ""2025-02-23"",
