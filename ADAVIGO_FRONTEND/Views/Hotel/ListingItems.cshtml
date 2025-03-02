@@ -13,9 +13,12 @@
     <input class="list-items-detail" value="@data.Count" style="display:none;" />
     foreach (var item in data)
     {
+        booking_data.hotelID = item.hotel_id;
+        booking_data.hotelName = "";
+        booking_data.isVinHotel = item.is_vin_hotel;
         <div class="article-itemt full article-hotel-item" data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" data-star="@item.star">
             <div class="article-thumb">
-                <a class="thumb_img thumb_5x3" href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">
+                <a class="thumb_img thumb_5x3" href="/hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">
                     @if (item.img_thumb != null && item.img_thumb.Count > 0)
                     {
                         <img src="@item.img_thumb[0]" alt="">
@@ -30,13 +33,8 @@
             </div>
             <div class="article-content">
                 <h3 class="title_new">
-                    @{
-                        booking_data.hotelID = item.hotel_id;
-                        booking_data.hotelName = "";
-                        booking_data.isVinHotel = item.is_vin_hotel;
 
-                    }
-                    <a href="hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">@item.name</a>
+                    <a href="/hotel/detail?filter=@(JsonConvert.SerializeObject(booking_data))">@item.name</a>
                 </h3>
                 <div class="on-star">
                     @if (item.star > 0)
@@ -54,7 +52,7 @@
                     }
                 </div>
                 <div class="number-vote">
-                    <span>(@item.review_count.ToString("N0") đánh giá)</span>
+                    <span style="@(item.review_count>0?"":"display:none")">(@item.review_count.ToString("N0") đánh giá)</span>
                 </div>
                 <div class="bottom-content">
                     <p class="price-old"></p>

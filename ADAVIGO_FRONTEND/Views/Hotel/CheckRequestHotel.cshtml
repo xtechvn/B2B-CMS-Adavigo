@@ -27,8 +27,8 @@
             <td>
                 @foreach (var item2 in item.packages)
                 {
-                    <input type="text" class="form-control mb-2" id="" value="@(DateTime.ParseExact(item2.arrival_date, "yyyy-MM-dd", null).ToString("dd/MM/yyyy")) - @(DateTime.ParseExact(item2.departure_date, "yyyy-MM-dd", null).ToString("dd/MM/yyyy"))" disabled>
-                    night_number += Convert.ToInt32((DateTime.ParseExact(item2.departure_date, "yyyy-MM-dd", null) - DateTime.ParseExact(item2.arrival_date, "yyyy-MM-dd", null)).TotalMilliseconds / millisecondsPerDay);
+                    <input type="text" class="form-control mb-2" id="" value="@item2.arrival_date - @item2.departure_date" disabled>
+                    night_number += Convert.ToInt32((DateTime.ParseExact(item2.departure_date, "dd/MM/yyyy", null) - DateTime.ParseExact(item2.arrival_date, "dd/MM/yyyy", null)).TotalMilliseconds / millisecondsPerDay);
                 }
             </td>
             <td class="text-right"><input type="text" class="form-control text-right" id="" value="@night_number" disabled></td>

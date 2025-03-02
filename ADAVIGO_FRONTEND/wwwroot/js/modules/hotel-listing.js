@@ -2,6 +2,7 @@
     hotel_listing.Initialization()
 })
 var hotel_listing = {
+    Loading: false,
     Initialization: function () {
         hotel_listing.DynamicBind()
         $('#hotel-listing .col-main').addClass('placeholder')
@@ -59,10 +60,6 @@ var hotel_listing = {
         $('#hotel-listing .col-300').removeClass('box-placeholder')
         $('#hotel-listing .col-main').removeClass('box-placeholder')
     },
-    IfLoading: function () {
-        if ($('#hotel-listing .col-300').hasClass('placeholder')) { return true; }
-        return false
-    },
     GetFilterLocationName: function () {
         var index_name = "";
         var location_selected = undefined
@@ -79,6 +76,10 @@ var hotel_listing = {
         return index_name
     },
     RenderHotelByLocation: function (index = 1) {
+        if (hotel_listing.Loading == true) {
+            return
+        }
+        hotel_listing.Loading = true
         hotel_listing.AddLoading()
         $('#hotel-listing-viewmore').hide()
         $('#hotel-listing-viewmore').prop('disabled', true)
@@ -101,6 +102,7 @@ var hotel_listing = {
         }
         _ajax_caller.post('/hotel/ListingItems', input, function (result) {
             if (result != undefined && result.trim() != '') {
+                $('#hotel-listing-search-null').hide()
                 if (index <= 1) {
                     $('#hotel-listing').find('.col-main').find('.list-article').html(result)
                 } else {
@@ -124,6 +126,7 @@ var hotel_listing = {
                 $('#hotel-listing-viewmore').show()
             }
             hotel_listing.RemoveLoading()
+            hotel_listing.Loading = false
 
         });
     },
@@ -135,13 +138,16 @@ var hotel_listing = {
             }
             var price = element_detail.find('.bottom-content').find('.price').attr('data-price')
             _ajax_caller.post('/hotel/HotelByLocationAreaDiscount', { request: input, price: price }, function (result) {
-                if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
+                if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0 && (result.code != undefined && result.code.trim() !='')) {
                     element_detail.find('.block-code').show()
                     element_detail.find('.block-code').removeClass('placeholder')
                     element_detail.find('.block-code').find('.block-code-text').html('Mã:')
                     element_detail.find('.block-code').find('.code').html((result.code != undefined) ? result.code : '')
                     element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
                     element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + '  đ')
+                }
+                else {
+                    element_detail.find('.block-code').hide()
                 }
 
             });
@@ -220,7 +226,7 @@ var hotel_listing = {
                     values[1]);
                 $('#price-slider-range-value1').val(min)
                 $('#price-slider-range-value2').val(max)
-                if (hotel_listing.IfLoading() == false) {
+                if (hotel_listing.Loading == false) {
                     hotel_listing.RenderHotelByLocation(1)
 
                 }

@@ -186,7 +186,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             ViewBag.Hotel = new HotelGridInfoModel();
             ViewBag.FromDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
             ViewBag.ToDate = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
-
+            ViewBag.Address = "";
             //var strJsonData = CommonHelper.Decode(token, _KeyEncodeParam);
             var model = JsonConvert.DeserializeObject<RoomDetailViewModel>(filter);
             model.hotelName = CommonHelper.RemoveSpecialCharacterExceptVietnameseCharacter(model.hotelName).Replace("quotequote", "\"").Replace("andand", "&");
@@ -207,6 +207,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     ViewBag.Hotel = hotel.hotels.First();
                     model.hotelName = hotel.hotels.First().name;
+                    ViewBag.Address = hotel.hotels.First().street;
+
                 }
                 var search_model = new HotelSearchParamModel()
                 {
@@ -701,8 +703,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     detai.image_thumb = "";
                     detai.address = "";
                     detai.note = data.note;
-                    detai.check_out_time = DateTime.Parse(data.arrivalDate);
-                    detai.check_in_time = DateTime.Parse(data.departureDate);
+                    detai.check_out_time = DateTime.ParseExact(data.arrivalDate, "dd/MM/yyyy", null);
+                    detai.check_in_time = DateTime.ParseExact(data.departureDate, "dd/MM/yyyy", null);
 
                     var search = new BookingHotelB2BViewModelSearch();
                     search.arrivalDate = data.arrivalDate;
@@ -1082,7 +1084,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 }
             ],
                 ""isVinHotel"": false,
-                ""address"": ""100C2 Đường Trần Hưng Đạo, TT. Dương Đông, Phú Quốc, Kiên Giang"",
                 ""telephone"": """",
                 ""email"": """"
             }";
@@ -1113,7 +1114,6 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 }
             ],
                 ""isVinHotel"": false,
-                ""address"": ""100C2 Đường Trần Hưng Đạo, TT. Dương Đông, Phú Quốc, Kiên Giang"",
                 ""telephone"": """",
                 ""email"": """"
             }";

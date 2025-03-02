@@ -460,7 +460,13 @@ $(document).ready(function () {
         $('.item_vin_filter').removeProp('disabled');
         $('.item_vin_filter').removeClass('gray');
        
-    } else {
+    }
+    else if ($('#input__search-hotel-id').val() != undefined && $('#input__search-hotel-id').val().trim()!='')
+    {
+        $('.item_vin_filter').removeProp('disabled');
+        $('.item_vin_filter').removeClass('gray');
+    }
+    else {
         $('.item_vin_filter').prop('disabled', true);
         $('.item_vin_filter').addClass('gray');
     }

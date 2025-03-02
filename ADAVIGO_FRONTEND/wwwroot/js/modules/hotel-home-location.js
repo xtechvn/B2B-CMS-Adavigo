@@ -76,7 +76,7 @@ var hotel_location = {
             }
             var price = element_detail.find('.bottom-content').find('.price').attr('data-price')
             _ajax_caller.post('/hotel/HotelByLocationAreaDiscount', { request: input, price: price }, function (result) {
-                if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0) {
+                if (result != undefined && result.isSuccess == true && result.data != undefined && result.data > 0 && (result.code != undefined && result.code.trim() != '')) {
                     element_detail.find('.block-code').show()
                     element_detail.find('.block-code').removeClass('placeholder')
                     element_detail.find('.block-code').find('.block-code-text').html('Mã:')
@@ -84,6 +84,10 @@ var hotel_location = {
                     element_detail.find('.block-code').find('.sale').html((result.discount != undefined) ? result.discount : '')
                     element_detail.find('.block-code').find('.price-new').html(_global.Comma(result.data) + '  đ')
                 }
+                else {
+                    element_detail.find('.block-code').hide()
+                }
+
 
             });
         })

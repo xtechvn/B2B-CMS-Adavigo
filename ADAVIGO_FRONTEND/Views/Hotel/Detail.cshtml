@@ -27,6 +27,7 @@
     var strMemberOfRoom = string.Join(" - ", ArrMemberOfRoom);
     long nights = Convert.ToInt64((ToDate - FromDate).TotalDays <= 1 ? 1 : (ToDate - FromDate).TotalDays);
     bool isVinHotel = Convert.ToBoolean(Model.isVinHotel);
+    string address = (string)ViewBag.Address;
     HotelSearchParamModel search_model = (HotelSearchParamModel)ViewBag.SearchModel;
    
 }
@@ -106,7 +107,7 @@
     </ol>
     <div class="mb8" id="block__detail_hotel_title">
         <h2 class="txt_24 bold">@Model.hotelName</h2>
-        @Model.address
+        @address
     </div>
     <div class="row mb16">
         <div class="col-12">
