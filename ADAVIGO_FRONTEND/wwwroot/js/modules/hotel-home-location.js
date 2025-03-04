@@ -15,7 +15,7 @@ var hotel_location = {
         var input = {
             location: name,
             index: 1,
-            size: 10,
+            size: 15,
 
         }
         _ajax_caller.post('/hotel/ListingSlideItems', input, function (result) {

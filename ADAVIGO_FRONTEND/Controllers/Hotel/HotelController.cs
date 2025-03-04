@@ -842,7 +842,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     foreach (var rate in room.packages)
                     {
-                        int nights = Convert.ToInt32((DateTime.ParseExact(rate.departure_date, "yyyy-MM-dd", null) - DateTime.ParseExact(rate.arrival_date, "yyyy-MM-dd", null)).TotalDays);
+                        int nights = Convert.ToInt32((DateTime.ParseExact(rate.departure_date, "dd/MM/yyyy", null) - DateTime.ParseExact(rate.arrival_date, "dd/MM/yyyy", null)).TotalDays);
                         switch (response.type)
                         {
                             case "percent":
