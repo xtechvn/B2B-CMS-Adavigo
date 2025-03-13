@@ -3,13 +3,28 @@
 })
 var hotel_location = {
     Initialization: function () {
-
+        hotel_location.DynamicBind()
         $('#hotel-location .box-hotel-home').each(function (index, item) {
             var element = $(this)
             var name = element.attr('data-name')
             hotel_location.RenderHotelByLocation(element, name)
 
         })
+    },
+    DynamicBind: function () {
+        $('body').on('click', '#hotel-location-block-view-more', function (e) {
+            $('#hotel-location .box-hotel-home').each(function (index, item) {
+                var element = $(this)
+                if (element.is(':hidden') && element.find('.article-hotel-item').length>0) {
+                    element.show()
+                    hotel_location.RenderDetail(element.find('.swiper-container'))
+
+                }
+               
+            })
+            $('#hotel-location-block-view-more').remove()
+
+        });
     },
     RenderHotelByLocation: function (element, name) {
         var input = {

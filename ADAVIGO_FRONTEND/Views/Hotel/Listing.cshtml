@@ -81,27 +81,27 @@
                     </div>
                     @* <div class="mb24">
                     <div class="head-title mb0">
-                        <div class="bold">Chính sách đặt phòng</div>
-                        <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse1">
-                            <svg class="icon-svg">
-                                <use xlink:href="/images/icons/icon.svg#next2"></use>
-                            </svg>
-                        </a>
+                    <div class="bold">Chính sách đặt phòng</div>
+                    <a class="icon-collapse" data-toggle="collapse" aria-expanded="true" href="#collapse1">
+                    <svg class="icon-svg">
+                    <use xlink:href="/images/icons/icon.svg#next2"></use>
+                    </svg>
+                    </a>
                     </div>
 
                     <div class="collapse show mt16" id="collapse1">
-                        <label class="confir_res">
-                            Miễn phí hủy phòng
-                            <input type="checkbox" name="inlineGoi3" id="">
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="confir_res">
-                            Miễn phí hủy phòng
-                            <input type="checkbox" name="inlineGoi3" id="">
-                            <span class="checkmark"></span>
-                        </label>
+                    <label class="confir_res">
+                    Miễn phí hủy phòng
+                    <input type="checkbox" name="inlineGoi3" id="">
+                    <span class="checkmark"></span>
+                    </label>
+                    <label class="confir_res">
+                    Miễn phí hủy phòng
+                    <input type="checkbox" name="inlineGoi3" id="">
+                    <span class="checkmark"></span>
+                    </label>
                     </div>
-                </div> *@
+                    </div> *@
                     <div class="mb24">
                         <div class="head-title mb0">
                             <div class="bold">Hạng sao</div>
@@ -250,6 +250,58 @@
                                 else
                                 {
                                     <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hạ Long" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Hải PHòng
+                                @if (name.Trim() == "Hải PHòng")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hải PHòng" checked data-type="1">
+                                }
+
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hải PHòng" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Vĩnh Phúc
+                                @if (name.Trim() == "Vĩnh Phúc")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Vĩnh Phúc" checked data-type="1">
+                                }
+
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Vĩnh Phúc" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Phú Thọ
+                                @if (name.Trim() == "Phú Thọ")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Phú Thọ" checked data-type="1">
+                                }
+
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Phú Thọ" data-type="1">
+                                }
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res">
+                                Hội An
+                                @if (name.Trim() == "Hội An")
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hội An" checked data-type="1">
+                                }
+
+                                else
+                                {
+                                    <input type="checkbox" class="filter-listing-location" name="filter-listing-location" value="Hội An" data-type="1">
                                 }
                                 <span class="checkmark"></span>
                             </label>
