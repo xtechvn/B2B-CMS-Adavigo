@@ -1067,7 +1067,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         [HttpPost]
         public async Task<IActionResult> ListingItems(string name, string location = null, string stars = "", double? min_price = -1, double? max_price = -1, int? page_index = 1, int? page_size = 30)
         {
-            ViewBag.Data = await _HotelService.GetHotelByLocation(name,0,  location, stars,min_price,max_price,page_index,page_size);
+            ViewBag.Data = await _HotelService.GetAllHotelByLocation(name,0,  location, stars,min_price,max_price,page_index,page_size);
             ViewBag.Location = name;
             string url_base = @"{
             ""arrivalDate"": ""2025-02-23"",

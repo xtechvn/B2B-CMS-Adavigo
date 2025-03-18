@@ -885,6 +885,36 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return new List<HotelExclusiveResponse>();
         }
+        public async Task<List<HotelExclusiveResponse>> GetAllHotelByLocation(string name, int location_type, string location = null, string stars = "", double? min_price = -1, double? max_price = -1, int? page_index = 1, int? page_size = 30)
+        {
+            try
+            {
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GetAllHotelListByLocationArea, new
+                {
+                    client_type = _UserManager.ClientType,
+                    fromdate = DateTime.Now.AddDays(1),
+                    todate = DateTime.Now.AddDays(2),
+                    hotel_position = location_type,
+                    name,
+                    location,
+                    stars,
+                    min_price,
+                    max_price,
+                    index = page_index,
+                    size = page_size
+                });
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<List<HotelExclusiveResponse>>(jsonData["data"].ToString());
+
+            }
+            catch
+            {
+            }
+            return new List<HotelExclusiveResponse>();
+        }
 
         #endregion
 
