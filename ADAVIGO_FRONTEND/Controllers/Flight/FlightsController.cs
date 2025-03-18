@@ -13,7 +13,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
             _adavigoService = adavigoService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string dtcr = null, string dtcp = null)
         {
             return View();
 

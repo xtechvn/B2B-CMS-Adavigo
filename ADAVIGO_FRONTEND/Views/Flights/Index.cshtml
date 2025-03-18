@@ -15,15 +15,26 @@
             </a>
 
         </div>
-        <div class="tab-content">
+@*         <div class="tab-content">
             <div id="tab-flight">
                 <div class="flex-row">
                     <partial name="_SearchFlightBox" />
                 </div>
             </div>
-        </div>
+        </div> *@
     </div>
+    <div class="wrap-search">
+        <div id="dtc-plugin" data-flight-url="/flights" data-key="DTC10303"></div>
+        <script type="text/javascript">
+            (function () {
+                var dtcScript = document.createElement('script');
+                dtcScript.src = 'https://plg.datacom.vn/js/plugin.js';
 
+                // Chèn thẻ script vào trong phần head
+                document.head.appendChild(dtcScript);
+            })();
+        </script>
+    </div>
 
     <!--Index content-->
     @*    <div class="flex">
