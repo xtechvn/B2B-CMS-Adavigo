@@ -29,6 +29,9 @@ var hotel_home_listing = {
             $('.filter-listing-location').prop('checked', false)
             element.prop('checked', true)
             element.attr('data-index', '1')
+            $('#price-slider-range-value1').val('-1').trigger('change')
+            $('#price-slider-range-value2').val('-1').trigger('change')
+            $('.filter-listing-star').prop('checked', false)
             hotel_home_listing.AddLoading()
             hotel_home_listing.RenderHotelByLocation(1)
 
