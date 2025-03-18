@@ -885,7 +885,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return new List<HotelExclusiveResponse>();
         }
-        public async Task<List<HotelExclusiveResponse>> GetAllHotelByLocation(string name, int location_type, string location = null, string stars = "", double? min_price = -1, double? max_price = -1, int? page_index = 1, int? page_size = 30)
+        public async Task<List<HotelExclusiveResponse>> GetAllHotelByLocation(string name, int location_type, string location = null, string stars = "", double? min_price = -1, double? max_price = -1, int? page_index = 1, int? page_size = 30, bool? is_commit = false)
         {
             try
             {
@@ -901,7 +901,8 @@ namespace ADAVIGO_FRONTEND.Models.Services
                     min_price,
                     max_price,
                     index = page_index,
-                    size = page_size
+                    size = page_size,
+                    is_commit=(is_commit == null ? false : is_commit)
                 });
                 var jsonData = JObject.Parse(result);
                 var status = int.Parse(jsonData["status"].ToString());

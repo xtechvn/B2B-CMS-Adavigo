@@ -98,7 +98,8 @@ var hotel_listing = {
             page_size: 30,
             stars: stars.join(","),
             min_price: $('#price-slider-range-value1').val(),
-            max_price: $('#price-slider-range-value2').val()
+            max_price: $('#price-slider-range-value2').val(),
+            is_commit: $('#hotel-listing').attr('data-commitype')
         }
         _ajax_caller.post('/hotel/ListingItems', input, function (result) {
             if (result != undefined && result.trim() != '') {
