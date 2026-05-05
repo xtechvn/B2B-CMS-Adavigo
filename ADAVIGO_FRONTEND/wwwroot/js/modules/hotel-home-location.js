@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     hotel_location.Initialization()
 })
 var hotel_location = {
@@ -6,21 +6,26 @@ var hotel_location = {
         hotel_location.DynamicBind()
         $('#hotel-location .box-hotel-home').each(function (index, item) {
             var element = $(this)
-            var name = element.attr('data-name')
-            hotel_location.RenderHotelByLocation(element, name)
-
+            if (!element.is(':hidden')) {
+                var name = element.attr('data-name')
+                hotel_location.RenderHotelByLocation(element, name)
+            }
         })
     },
     DynamicBind: function () {
         $('body').on('click', '#hotel-location-block-view-more', function (e) {
             $('#hotel-location .box-hotel-home').each(function (index, item) {
                 var element = $(this)
-                if (element.is(':hidden') && element.find('.article-hotel-item').length>0) {
+                if (element.is(':hidden')) {
                     element.show()
-                    hotel_location.RenderDetail(element.find('.swiper-container'))
-
+                    if (element.find('.article-hotel-item').length > 0) {
+                        hotel_location.RenderDetail(element.find('.swiper-container'))
+                    } else {
+                        var name = element.attr('data-name')
+                        hotel_location.RenderHotelByLocation(element, name)
+                    }
                 }
-               
+
             })
             $('#hotel-location-block-view-more').remove()
 
@@ -42,8 +47,8 @@ var hotel_location = {
             } else {
                 element.hide()
             }
-            element.removeClass('placeholder')
-            element.removeClass('box-placeholder')
+            element.find('.list-article').removeClass('placeholder box-placeholder')
+            element.find('.list-article').attr('style', '')
         });
     },
     RenderDetail: function ($swiperContainer) {
@@ -82,7 +87,7 @@ var hotel_location = {
         });
 
     },
-    
+
     RenderHotelPriceVoucher: function (element) {
         element.find('.article-hotel-item').each(function (index, item) {
             var element_detail = $(this)
@@ -106,7 +111,7 @@ var hotel_location = {
 
             });
         })
-       
+
 
     },
     checkNavigation: function (swiper, $container) {

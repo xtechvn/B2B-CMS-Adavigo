@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Index";
     bool isVinHotel = Convert.ToBoolean(Model.isVinHotel);
 }
@@ -30,20 +30,20 @@
     </div>
 
     <partial name="/Views/Hotel/HotelByLocation.cshtml" />
-    <partial name="/Views/Hotel/HotelListing.cshtml" />
+   @*  <partial name="/Views/Hotel/HotelListing.cshtml" /> *@
     <partial name="/Views/Hotel/Recent.cshtml" />
 
 </section>
 @section scripts{
-    <script type="text/javascript" src="~/js/modules/home.js"></script>
+    <script type="text/javascript" src="~/js/modules/home.js" defer></script>
     
-    <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
-    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-constants.js" defer></script>
+    <script type="text/javascript" src="~/js/modules/filter_hotel.js" defer></script>
   @*   <script type="text/javascript" src="~/js/modules/hotel-exclusive-listing.js"></script>
     <script type="text/javascript" src="~/js/modules/hotel-commit-listing.js"></script> *@
-    <script type="text/javascript" src="~/js/modules/hotel-home-location.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel-home-listing.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel-home-recents.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-home-location.js" defer></script>
+    <script type="text/javascript" src="~/js/modules/hotel-home-listing.js" defer></script>
+    <script type="text/javascript" src="~/js/modules/hotel-home-recents.js" defer></script>
 
 }
 
