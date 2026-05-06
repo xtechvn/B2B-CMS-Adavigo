@@ -29,10 +29,11 @@
     bool isVinHotel = Convert.ToBoolean(Model.isVinHotel);
     string address = (string)ViewBag.Address;
     HotelSearchParamModel search_model = (HotelSearchParamModel)ViewBag.SearchModel;
-   
+
 }
 
 <input type="hidden" id="input__hotel_id" value="@Model.hotelID" />
+
 <input type="hidden" id="input__hotel_phone" value="@Model.telephone" />
 <input type="hidden" id="input__hotel_email" value="@Model.email" />
 <input type="hidden" id="input__hotel_arrival_date" value="@Model.arrivalDate" />
@@ -44,20 +45,19 @@
 <input type="hidden" id="input__hotel_number_adult" value="@adult_total" />
 <input type="hidden" id="input__hotel_number_child" value="@child_total" />
 <input type="hidden" id="input__hotel_number_infant" value="@infant_total" />
-@if (hotel != null && hotel.hotel_id!=null && hotel.hotel_id.Trim()!=""){
+@if (hotel != null && hotel.hotel_id != null && hotel.hotel_id.Trim() != "")
+{
+    <input type="hidden" id="hotel_supplier_id" value="@hotel.hotel_supplier_id" />
     <input type="hidden" id="input__hotel_recent"
            value="1"
            data-id="@(hotel.hotel_id)"
            data-avt="@(hotel.img_thumb != null && hotel.img_thumb.Any() ? hotel.img_thumb.First() : "")"
            data-name="@(hotel.name)"
            data-star="@(hotel.star)"
-           data-review_count="@(hotel.review_count)" 
-           data-review_rate="@(hotel.review_rate)" 
+           data-review_count="@(hotel.review_count)"
            data-review_rate="@(hotel.review_rate)"
-           data-isVinHotel="@(Model.isVinHotel)" 
-           
-           
-           />
+           data-review_rate="@(hotel.review_rate)"
+           data-isVinHotel="@(Model.isVinHotel)" />
 }
 
 
@@ -73,6 +73,7 @@
         padding-left: 15px;
         padding-right: 15px;
     }
+
     .select-tab-active {
         background: #070BA0 !important;
         color: #fff !important;
@@ -148,11 +149,11 @@
                 @await Component.InvokeAsync("HotelRoom", new HotelSearchParamModel
                 {
                     hotelID = Model.hotelID,
-                arrivalDate = Model.arrivalDate,
-                departureDate = Model.departureDate,
-                rooms = Model.rooms,
-                isVinHotel = Model.isVinHotel
-                })
+                                arrivalDate = Model.arrivalDate,
+                                departureDate = Model.departureDate,
+                                rooms = Model.rooms,
+                                isVinHotel = Model.isVinHotel
+                                })
             </div>
             <div class="detail_tin bg-white pd-20 radius10 mb20">
                 <div class="flex tab-room mb20">
@@ -161,8 +162,6 @@
                     </a>
                 </div>
                 <div id="select-tab-1" class="dotted select-tab-tab" style=" padding-left: 5px; ">
-
-
                 </div>
 
             </div>
@@ -209,7 +208,7 @@
                 <div class="input-button mb16">
                     <input type="text" class="form-control" id="hotel-order-voucher-code" placeholder="Mã giảm giá">
                     <button id="hotel-order-voucher-apply" style="display:none;" class="">Áp dụng</button>
-                    <button id="hotel-order-voucher-popup"  class="">Chọn Voucher</button>
+                    <button id="hotel-order-voucher-popup" class="">Chọn Voucher</button>
                 </div>
                 <div class="flex mb12">
                     <div class="bold txt_14">Giá cũ</div>
@@ -411,7 +410,6 @@
                                 </tr>
                             </thead>
                             <tbody id="table_body">
-                              
                             </tbody>
                         </table>
                     </div>
@@ -432,7 +430,7 @@
                                 </tr>
                             </thead>
                             <tbody id="hotel-detail-popup-surcharge-table">
-                          
+
                                 <tr id="hotel-detail-popup-surcharge-table-summary" class="bg-white">
                                     <td colspan="2">
                                         <a id="hotel-detail-popup-surcharge-table-add-surcharge" href="javascript:;" class="btn-default blue-line min2">
@@ -450,7 +448,7 @@
                             </tbody>
                         </table>
                         <table class="table table-nowrap text-center">
-                           
+
                             <tbody id="hotel-detail-popup-total-table">
                                 <tr id="hotel-detail-popup-totaltotal-table-summary" class="bg-white">
                                     <td class="text-right" colspan="2"><b>Tổng giá trị đơn</b></td>
@@ -460,15 +458,13 @@
                             </tbody>
                         </table>
                     </div>
-                    
-                    
+
+
                     <div class="form-group mb-3">
                         <label class="gray">Ghi chú</label>
                         <textarea rows="4" class="form-control" id="note"></textarea>
                     </div>
                     <div class="text-center" id="btn_summit">
-                        
-
                     </div>
                 </div>
             </div>
@@ -476,17 +472,16 @@
     </div>
     <!--POPUP Kiểm tra tình trạng phòng -->
     <div class="modal fade" id="myModal15" aria-hidden="true" style="display: none;">
-        
     </div>
 </section>
 @await Component.InvokeAsync("HotelVoucher", new { hotel_id = @Model.hotelID })
 
 
-@section scripts{
-<script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
-<script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
-<script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
-<script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/filter_hotel.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-detail.js"></script>
+    <script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
 
 }
 

@@ -1,7 +1,8 @@
-﻿
+
 $(document).ready(function () {
 
     _hotel_detail.initial();
+    _hotel_detail.loadRoomFund();
     if ($('#input__hotel_recent') != undefined && $('#input__hotel_recent').length > 0) {
         _hotel_detail.SaveRecent();
 
@@ -90,8 +91,8 @@ var _hotel_detail = {
         
         `,
         SurchageOption: `<option value="{value}" data-id="{id}" data-code="{code}" data-amount="{amount}" data-name="{name}">{name}</option>`,
-        SurchageOptionRendered:``,
-        SurchageSummary:` <tr id="hotel-detail-popup-surcharge-table-summary" class="bg-white">
+        SurchageOptionRendered: ``,
+        SurchageSummary: ` <tr id="hotel-detail-popup-surcharge-table-summary" class="bg-white">
                                     <td></td>
                                     <td colspan="2">
                                         <a id="hotel-detail-popup-surcharge-table-add-surcharge" href="javascript:;" class="btn-default blue-line min2">
@@ -164,12 +165,97 @@ var _hotel_detail = {
                 if (departure_date < new Date(package_item.departure_date)) {
                     departure_date = new Date(package_item.departure_date);
                 }
-               
+
             })
         })
         _hotel_detail.hotel.arrival_date = ConvertJsDateToString(arrival_date, "DD/MM/YYYY");
         _hotel_detail.hotel.departure_date = ConvertJsDateToString(departure_date, "DD/MM/YYYY");
 
+    },
+    loadRoomFund: function () {
+        var hotelId = $('#input__hotel_id').val();
+        var supplierId = $('#hotel_supplier_id').val() || 0;
+        var arrivalDate = $('#input__hotel_arrival_date').val();
+        var departureDate = $('#input__hotel_departure_date').val();
+
+        if (!hotelId || !arrivalDate || !departureDate) return;
+
+        _ajax_caller.post('/Hotel/GetListRoomFund', {
+            hotelId: hotelId,
+            supplierId: supplierId,
+            startDate: arrivalDate,
+            endDate: departureDate
+        }, function (result) {
+            if (result.isSuccess) {
+                var funds = result.data || [];
+
+                var adParts = arrivalDate.split('/');
+                var ddParts = departureDate.split('/');
+                var startDateObj = new Date(adParts[2], adParts[1] - 1, adParts[0]);
+                var endDateObj = new Date(ddParts[2], ddParts[1] - 1, ddParts[0]);
+
+                var dates = [];
+                var currentDate = new Date(startDateObj);
+                while (currentDate < endDateObj) {
+                    var d = currentDate.getDate();
+                    var m = currentDate.getMonth() + 1;
+                    var dateStr = (d < 10 ? '0' + d : d) + '/' + (m < 10 ? '0' + m : m);
+                    dates.push({
+                        date: new Date(currentDate),
+                        display: dateStr
+                    });
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                $('.room-night-status-list').each(function () {
+                    var container = $(this);
+                    var roomId = container.data('room-id');
+
+                    var roomFunds = funds.filter(function (x) {
+                        var rId = x.hotelRoomId !== undefined ? x.hotelRoomId : x.HotelRoomId;
+                        return rId == roomId;
+                    });
+
+                    var html = '';
+                    dates.forEach(function (d) {
+                        var dTime = d.date.getTime();
+                        var nightFund = roomFunds.find(function (x) {
+                            var sDate = x.startDate || x.StartDate;
+                            var eDate = x.endDate || x.EndDate;
+                            if (!sDate) return false;
+
+                            var fStartDate = new Date(sDate);
+                            fStartDate.setHours(0, 0, 0, 0);
+
+                            var fEndDate = eDate ? new Date(eDate) : new Date(fStartDate);
+                            fEndDate.setHours(0, 0, 0, 0);
+
+                            return dTime >= fStartDate.getTime() && dTime <= fEndDate.getTime();
+                        });
+
+                        var count = 0;
+                        if (nightFund) {
+                            count = nightFund.numberOfRoomsAvailable !== undefined ? nightFund.numberOfRoomsAvailable : nightFund.NumberOfRoomsAvailable;
+                        }
+
+                        var bgStyle = '';
+                        if (count === 0) {
+                            bgStyle = ' style="background-color: #ed1c24;"';
+                        } else if (count <= 5) {
+                            bgStyle = ' style="background-color: #f39c12;"';
+                        }
+                        
+                        html += '<div class="night-status-item">';
+                        html += '<div class="night-status-date">' + d.display + '</div>';
+                        html += '<div class="night-status-circle"' + bgStyle + '>' + count + '</div>';
+                        html += '</div>';
+                    });
+
+                    container.html(html);
+                    container.removeClass('placeholder box-placeholder');
+                });
+            }
+        });
     },
     initial: function () {
         _hotel_detail.hotel = {
@@ -227,7 +313,7 @@ var _hotel_detail = {
             if (value != undefined && !isNaN(value) && type != undefined && type.trim() != '') {
                 switch (type) {
                     case 'percent': {
-                        total_discount += (amount_room * (value/100) * nights )
+                        total_discount += (amount_room * (value / 100) * nights)
                     } break
                     case 'vnd': {
                         total_discount += (value * nights);
@@ -409,7 +495,7 @@ var _hotel_detail = {
             amount: ''
         }
         var min_price = $('.room_detail').first().find('.dynamic_price').attr('data-amount')
-        if (min_price == undefined || isNaN(parseFloat(min_price)) || parseFloat(min_price)<=0) {
+        if (min_price == undefined || isNaN(parseFloat(min_price)) || parseFloat(min_price) <= 0) {
             detail.min_price = 'Giá liên hệ'
         } else {
             detail.min_price = _hotel_detail.Comma(parseFloat(min_price))
@@ -428,7 +514,7 @@ var _hotel_detail = {
         window.localStorage.setItem('HotelRecent', JSON.stringify(recents_object))
 
     },
-    
+
 };
 
 $(document).on('click', '.btn__toggle_room_package', function () {
@@ -874,7 +960,7 @@ $(document).on('click', '.btn_add_room_package', function () {
     $(html_grid).insertBefore($(`.room-tab-grid[data-tab="${room_tab}"] .add_other_package`));
     _hotel_detail.loadTotalMoney();
     _global_popup.closeContextPopup('#modal-context-global');
-    
+
     _hotel_detail.ReCalucateArrivalDepartureDate()
     hotel_surcharge.RenderSurchargeDate('.hotel-detail-popup-surcharge-table-td-date')
 
@@ -986,7 +1072,7 @@ $('#btn__check_order').click(function () {
         //            <button type="button" data-dismiss="modal" class="btn btn-default">Đồng ý</button>`;
         //_global_popup.showAlertPopup("width:335px", htmlBody);
 
-    
+
     } else {
         sessionStorage.removeItem(hotel_constants.CONSTATNTS.STORAGE.OrderID)
 
@@ -1011,8 +1097,8 @@ $('#btn__check_order').click(function () {
                 package_addition.removeClass('hidden');
                 checkbox_package.closest('label.confir_res').addClass('hidden');
             });
-           
-      
+
+
         } else {
             $('#btn__check_order').attr('data-target', '#myModal14')
             $('#btn__check_order').attr('data-toggle', 'modal')
@@ -1121,7 +1207,7 @@ $('#btn__check_order').click(function () {
             });
             //$('#table_body').html(table_html + html_table2)
             //$('#btn_summit').html(html_btn)
-     
+
             //_ajax_caller.post('/hotel/SaveRequestData', { data: obj }, function (result) {
             //    if (result.isSuccess) {
             //        sessionStorage.removeItem(hotel_constants.CONSTATNTS.STORAGE.OrderID)
@@ -1148,12 +1234,12 @@ $('#btn__check_order').click(function () {
 
                 })
                 _hotel_detail.HTML.SurchageOptionRendered = html_option
-               
+
             }
         });
     }
 });
-$(document).on('click', '#btn__summit_request_order',function () {
+$(document).on('click', '#btn__summit_request_order', function () {
 
     let obj = {
         hotelID: _hotel_detail.hotel.id,
@@ -1165,7 +1251,7 @@ $(document).on('click', '#btn__summit_request_order',function () {
         rooms: _hotel_detail.rooms,
         note: $('#note').val(),
         voucher: undefined,
-        extrapackages:[]
+        extrapackages: []
     };
     var type = $('#hotel-order-voucher-code').attr('data-type')
     var value = parseFloat($('#hotel-order-voucher-code').attr('data-value'))
@@ -1206,7 +1292,7 @@ $(document).on('click', '#btn__summit_request_order',function () {
             "HotelBookingRoomId": 0,
             "Amount": (parseFloat(price) * nights * quanity),
             "UnitPrice": (parseFloat(price) * nights * quanity),
-            "StartDate": hotel_surcharge.GetDayText(start_date,true),
+            "StartDate": hotel_surcharge.GetDayText(start_date, true),
             "EndDate": hotel_surcharge.GetDayText(end_date, true),
             "Nights": nights,
             "Quantity": quanity,
@@ -1263,7 +1349,7 @@ $(document).on('click', '.close_modal', function () {
     $('.homepage').removeClass('modal-open')
     $('.modal-backdrop').removeClass('modal-backdrop fade show')
     $('#myModal15').removeClass('show')
-    $('#myModal15').attr('style','display: none;')
+    $('#myModal15').attr('style', 'display: none;')
 });
 $('input[name="radio_price_type"]').click(function () {
     let value = $(this).val();
@@ -1360,7 +1446,7 @@ $(document).on('click', '#hotel-detail-popup-surcharge-table .delete', function 
     $('#hotel-detail-popup-surcharge-table tr').each(function (index, item) {
         var element = $(this)
         if (element.attr('id') == 'hotel-detail-popup-surcharge-table-summary') return false
-        element.find('td').first().html((index+1))
+        element.find('td').first().html((index + 1))
     })
     hotel_surcharge.CalucateTotalRequestAmount()
 
@@ -1415,7 +1501,7 @@ var hotel_surcharge = {
         $('#hotel__detail_grid_selected_room .selected_room_price').each(function () {
             let seft = $(this);
             var amount_room = parseInt(seft.data('amount'))
-            total_amount+=amount_room
+            total_amount += amount_room
             var nights = parseInt(seft.data('nights'))
             if (value != undefined && !isNaN(value) && type != undefined && type.trim() != '') {
                 switch (type) {
@@ -1494,6 +1580,6 @@ var hotel_surcharge = {
         })
 
     },
-   
+
 }
 

@@ -2,9 +2,11 @@
 using ADAVIGO_FRONTEND.Models.News.GetDetail;
 using ADAVIGO_FRONTEND.ViewModels;
 using ENTITIES.ViewModels.B2B;
+using LIB.ENTITIES.ViewModels.Hotels;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -210,7 +212,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return new HomeSummaryB2BResponseModel();
         }
-        public async Task<GetNewDetailResponse> GetNewsDetail( int id)
+        public async Task<GetNewDetailResponse> GetNewsDetail(int id)
         {
             try
             {
@@ -230,6 +232,33 @@ namespace ADAVIGO_FRONTEND.Models.Services
             {
             }
             return new GetNewDetailResponse();
+        }
+
+    
+        public async Task<List<HotelRoomFundDetailModel>> GetListRoomFund( int hotelId, int supplierId, string startDate, string endDate)
+        {
+            try
+            {
+
+                var result = await _ApiConnector.ExecutePostAsync(CONST_API_ENDPOINTS.GET_ROOM_FUND, new
+                {
+
+                    hotelId = hotelId,
+                    supplierId = supplierId,
+                    startDate = startDate,
+                    endDate = endDate,
+                });
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                    return JsonConvert.DeserializeObject<List<HotelRoomFundDetailModel>>(jsonData["data"].ToString());
+
+            }
+            catch
+            {
+            }
+            return new List<HotelRoomFundDetailModel>();
         }
 
     }

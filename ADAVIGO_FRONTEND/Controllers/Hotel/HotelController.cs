@@ -1124,5 +1124,28 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             ViewBag.URLBase = data_url;
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> GetListRoomFund(int hotelId, int supplierId, string startDate, string endDate)
+        {
+            try
+            {
+                var data =await _HomeService.GetListRoomFund(hotelId,supplierId,startDate,endDate);
+                return new JsonResult(new
+                {
+                    isSuccess = true,
+                    data = data,
+                   
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    isSuccess = false,
+                    message = ex.Message,
+                 
+                });
+            }
+        }
     }
 }

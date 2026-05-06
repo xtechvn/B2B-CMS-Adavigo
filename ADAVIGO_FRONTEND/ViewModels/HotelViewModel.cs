@@ -74,6 +74,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
     public class HotelGridInfoModel
     {
         public string hotel_id { get; set; }
+        public int hotel_supplier_id { get; set; }
         public string name { get; set; }
         public int number_of_roooms { get; set; }
         public DateTime check_in_time { get; set; }
