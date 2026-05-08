@@ -187,70 +187,50 @@ var _hotel_detail = {
             startDate: arrivalDate,
             endDate: departureDate
         }, function (result) {
-            if (result.isSuccess) {
-                var funds = result.data || [];
-
-                var adParts = arrivalDate.split('/');
-                var ddParts = departureDate.split('/');
-                var startDateObj = new Date(adParts[2], adParts[1] - 1, adParts[0]);
-                var endDateObj = new Date(ddParts[2], ddParts[1] - 1, ddParts[0]);
-
-                var dates = [];
-                var currentDate = new Date(startDateObj);
-                while (currentDate < endDateObj) {
-                    var d = currentDate.getDate();
-                    var m = currentDate.getMonth() + 1;
-                    var dateStr = (d < 10 ? '0' + d : d) + '/' + (m < 10 ? '0' + m : m);
-                    dates.push({
-                        date: new Date(currentDate),
-                        display: dateStr
-                    });
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
+            if (result.status === 0 || result.isSuccess) {
+                var categories = result.categories || [];
+                var dates = result.dates || [];
 
                 $('.room-night-status-list').each(function () {
                     var container = $(this);
                     var roomId = container.data('room-id');
 
-                    var roomFunds = funds.filter(function (x) {
-                        var rId = x.hotelRoomId !== undefined ? x.hotelRoomId : x.HotelRoomId;
+                    var category = categories.find(function (c) {
+                        var rId = c.hotelRoomId !== undefined ? c.hotelRoomId : c.HotelRoomId;
                         return rId == roomId;
                     });
 
                     var html = '';
-                    dates.forEach(function (d) {
-                        var dTime = d.date.getTime();
-                        var nightFund = roomFunds.find(function (x) {
-                            var sDate = x.startDate || x.StartDate;
-                            var eDate = x.endDate || x.EndDate;
-                            if (!sDate) return false;
+                    if (category && category.dailyData) {
+                        category.dailyData.forEach(function (day) {
+                            var allocated = day.allocated !== undefined ? day.allocated : day.Allocated;
+                            var booked = day.booked !== undefined ? day.booked : day.Booked;
+                            var count = (allocated || 0) - (booked || 0);
+                            count = count <= 0 ? 0 : count;
 
-                            var fStartDate = new Date(sDate);
-                            fStartDate.setHours(0, 0, 0, 0);
+                            var bgStyle = '';
+                            if (count === 0) {
+                                bgStyle = ' style="background-color: #ed1c24;"';
+                            } else if (count <= 5) {
+                                bgStyle = ' style="background-color: #f39c12;"';
+                            }
 
-                            var fEndDate = eDate ? new Date(eDate) : new Date(fStartDate);
-                            fEndDate.setHours(0, 0, 0, 0);
+                            var displayDate = day.date ? day.date.substring(0, 5) : '';
 
-                            return dTime >= fStartDate.getTime() && dTime < fEndDate.getTime();
+                            html += '<div class="night-status-item">';
+                            html += '<div class="night-status-date">' + displayDate + '</div>';
+                            html += '<div class="night-status-circle"' + bgStyle + '>' + count + '</div>';
+                            html += '</div>';
                         });
-
-                        var count = 0;
-                        if (nightFund) {
-                            count = nightFund.numberOfRoomsAvailable !== undefined ? nightFund.numberOfRoomsAvailable : nightFund.NumberOfRoomsAvailable;
-                        }
-                        count = count <= 0 ? 0 : count;
-                        var bgStyle = '';
-                        if (count === 0) {
-                            bgStyle = ' style="background-color: #ed1c24;"';
-                        } else if (count <= 5) {
-                            bgStyle = ' style="background-color: #f39c12;"';
-                        }
-
-                        html += '<div class="night-status-item">';
-                        html += '<div class="night-status-date">' + d.display + '</div>';
-                        html += '<div class="night-status-circle"' + bgStyle + '>' + count + '</div>';
-                        html += '</div>';
-                    });
+                    } else if (dates && dates.length > 0) {
+                        dates.forEach(function (d) {
+                            var displayDate = d.date ? d.date.substring(0, 5) : '';
+                            html += '<div class="night-status-item">';
+                            html += '<div class="night-status-date">' + displayDate + '</div>';
+                            html += '<div class="night-status-circle" style="background-color: #ed1c24;">0</div>';
+                            html += '</div>';
+                        });
+                    }
 
                     container.html(html);
                     container.removeClass('placeholder box-placeholder');
@@ -272,26 +252,9 @@ var _hotel_detail = {
             startDate: arrivalDate,
             endDate: departureDate
         }, function (result) {
-            if (result.isSuccess) {
-                var funds = result.data || [];
-
-                var adParts = arrivalDate.split('/');
-                var ddParts = departureDate.split('/');
-                var startDateObj = new Date(adParts[2], adParts[1] - 1, adParts[0]);
-                var endDateObj = new Date(ddParts[2], ddParts[1] - 1, ddParts[0]);
-
-                var dates = [];
-                var currentDate = new Date(startDateObj);
-                while (currentDate < endDateObj) {
-                    var d = currentDate.getDate();
-                    var m = currentDate.getMonth() + 1;
-                    var dateStr = (d < 10 ? '0' + d : d) + '/' + (m < 10 ? '0' + m : m);
-                    dates.push({
-                        date: new Date(currentDate),
-                        display: dateStr
-                    });
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
+            if (result.status === 0 || result.isSuccess) {
+                var categories = result.categories || [];
+                var dates = result.dates || [];
 
                 var $targets = $(selector).find('.room-night-status-list');
                 if ($(selector).hasClass('room-night-status-list')) {
@@ -302,54 +265,21 @@ var _hotel_detail = {
                     var container = $(this);
                     var roomId = container.data('room-id');
 
-                    var roomFunds = funds.filter(function (x) {
-                        var rId = x.hotelRoomId !== undefined ? x.hotelRoomId : x.HotelRoomId;
+                    var category = categories.find(function (c) {
+                        var rId = c.hotelRoomId !== undefined ? c.hotelRoomId : c.HotelRoomId;
                         return rId == roomId;
                     });
 
                     var html = '';
                     dates.forEach(function (d) {
-                        var dTime = d.date.getTime();
-                        var nightFund = roomFunds.find(function (x) {
-                            var sDate = x.startDate || x.StartDate;
-                            var eDate = x.endDate || x.EndDate;
-                            if (!sDate) return false;
+                        var dParts = d.date.split('/');
+                        var dTime = new Date(dParts[2], dParts[1] - 1, dParts[0]).getTime();
 
-                            var fStartDate;
-                            if (typeof sDate === 'string' && sDate.indexOf('T') >= 0) {
-                                var parts = sDate.split('T')[0].split('-');
-                                fStartDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                            } else if (typeof sDate === 'string' && sDate.indexOf('-') >= 0) {
-                                var parts = sDate.split('-');
-                                fStartDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                            } else {
-                                fStartDate = new Date(sDate);
-                            }
-                            fStartDate.setHours(0, 0, 0, 0);
-
-                            var fEndDate;
-                            if (eDate) {
-                                if (typeof eDate === 'string' && eDate.indexOf('T') >= 0) {
-                                    var parts = eDate.split('T')[0].split('-');
-                                    fEndDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                                } else if (typeof eDate === 'string' && eDate.indexOf('-') >= 0) {
-                                    var parts = eDate.split('-');
-                                    fEndDate = new Date(parts[0], parts[1] - 1, parts[2]);
-                                } else {
-                                    fEndDate = new Date(eDate);
-                                }
-                            } else {
-                                fEndDate = new Date(fStartDate);
-                            }
-                            fEndDate.setHours(0, 0, 0, 0);
-
-                            return dTime >= fStartDate.getTime() && dTime < fEndDate.getTime();
-                        });
-
-                        var count = 0;
-                        if (nightFund) {
-                            count = nightFund.numberOfRoomsAvailable !== undefined ? nightFund.numberOfRoomsAvailable : nightFund.NumberOfRoomsAvailable;
-                        }
+                        var dayData = category ? (category.dailyData || []).find(x => x.date == d.date) : null;
+                        var allocated = dayData ? (dayData.allocated !== undefined ? dayData.allocated : dayData.Allocated) : 0;
+                        var booked = dayData ? (dayData.booked !== undefined ? dayData.booked : dayData.Booked) : 0;
+                        var count = (allocated || 0) - (booked || 0);
+                        count = count <= 0 ? 0 : count;
 
                         // Subtract requested rooms from _hotel_detail.rooms
                         var requestedCount = 0;
@@ -410,7 +340,7 @@ var _hotel_detail = {
                         }
 
                         html += '<div class="night-status-item">';
-                        html += '<div class="night-status-date">' + d.display + '</div>';
+                        html += '<div class="night-status-date">' + d.date.substring(0, 5) + '</div>';
                         var isSimple = container.data('simple') === true || container.data('simple') === "true";
                         html += '<div class="night-status-circle' + (isSimple ? ' simple-status' : '') + '"' + bgStyle + '>' + displayText + '</div>';
                         html += '</div>';

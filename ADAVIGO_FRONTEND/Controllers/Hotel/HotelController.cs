@@ -1,4 +1,4 @@
-﻿using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
+using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
 using LIB.ENTITIES.ViewModels.Hotels;
@@ -1129,22 +1129,91 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
         {
             try
             {
-                var data =await _HomeService.GetListRoomFund(hotelId,supplierId,startDate,endDate);
-                return new JsonResult(new
+                var id = hotelId;
+                var start = DateTime.ParseExact(startDate, "dd/MM/yyyy", null);
+                var end = DateTime.ParseExact(endDate, "dd/MM/yyyy", null);
+                var displayDates = new List<DateTime>();
+                for (var dt = start; dt < end; dt = dt.AddDays(1))
                 {
-                    isSuccess = true,
-                    data = data,
-                   
-                });
+                    displayDates.Add(dt);
+                }
+
+                // Lấy tất cả chi tiết trong khoảng thời gian này
+                var details = await _HomeService.GetListRoomFund(hotelId, supplierId, startDate, endDate);
+                if (details == null) details = new List<HotelRoomFundDetailModel>();
+
+                // Lấy danh sách mỗi Hạng phòng 1 bản ghi đại diện (unique categories)
+                var uniqueCategories = details.GroupBy(d => d.HotelRoomId).Select(i => i.First()).ToList();
+
+                // Khởi tạo danh sách kết quả cho từng hạng phòng
+                var rowList = uniqueCategories.Select(c => new
+                {
+                    hotelRoomId = c.HotelRoomId,
+                    roomName = c.RoomName,
+                    totalCapacity = details.Where(d => d.HotelRoomId == c.HotelRoomId).Sum(s => s.TotalRoomNights),
+                    dailyList = new List<object>()
+                }).ToList();
+
+                var categories = new List<object>();
+
+                // Truy vấn theo từng đêm (để lấy booked chính xác)
+                foreach (var date in displayDates)
+                {
+                    var dateStr = date.ToString("dd/MM/yyyy");
+                    var nextDateStr = date.AddDays(1).ToString("dd/MM/yyyy");
+
+                    var nightDetails = await _HomeService.GetListRoomFund(hotelId, supplierId, dateStr, nextDateStr);
+
+                    foreach (var row in rowList)
+                    {
+                        var categoryNights = nightDetails?.Where(d => d.HotelRoomId == row.hotelRoomId).ToList();
+                        decimal allocated = 0;
+                        decimal booked = 0;
+
+                        if (categoryNights != null && categoryNights.Any())
+                        {
+                            allocated = categoryNights[0].NumberOfRooms;
+                            booked = (decimal)categoryNights[0].TotalBookedRooms;
+                        }
+
+                        row.dailyList.Add(new
+                        {
+                            date = date.ToString("dd/MM/yyyy"),
+                            day = date.Day,
+                            dayOfWeek = date.ToString("ddd", new System.Globalization.CultureInfo("vi-VN")).ToUpper(),
+                            isToday = date.Date == DateTime.Today,
+                            allocated = (double)allocated,
+                            booked = (double)booked,
+                            percentage = allocated > 0 ? Math.Round((booked / allocated) * 100, 0) : 0
+                        });
+                    }
+                }
+
+                // Chuyển đổi sang định dạng categories cuối cùng
+                foreach (var row in rowList)
+                {
+                    categories.Add(new
+                    {
+                        hotelRoomId = row.hotelRoomId,
+                        roomName = row.roomName,
+                        totalCapacity = row.totalCapacity,
+                        dailyData = row.dailyList
+                    });
+                }
+
+                var dates = displayDates.Select(d => new
+                {
+                    date = d.ToString("dd/MM/yyyy"),
+                    dayOfWeek = d.ToString("ddd", new System.Globalization.CultureInfo("vi-VN")).ToUpper(),
+                    day = d.Day,
+                    isToday = d.Date == DateTime.Today
+                }).ToList();
+
+                return Json(new { status = 0, dates = dates, categories = categories });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new
-                {
-                    isSuccess = false,
-                    message = ex.Message,
-                 
-                });
+                return Json(new { status = -1, msg = ex.Message });
             }
         }
     }
