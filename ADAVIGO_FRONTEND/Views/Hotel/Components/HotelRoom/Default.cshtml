@@ -38,6 +38,12 @@
         font-size: 11px;
         font-weight: 700;
     }
+    .night-status-circle.simple-status {
+        width: auto;
+        min-width: 26px;
+        padding: 0 4px;
+        border-radius: 4px;
+    }
 </style>
 <div style="display:none;" id="hotel_detail_surcharge">
     @Html.Raw(Model == null || Model.surcharge == null ? "" : Model.surcharge)
@@ -60,7 +66,7 @@
                  <div class="row flex" style="align-items: center;">
                      <div class="col-4"></div>
                      <div class="col-3 text-center"><span style=" padding-bottom: 5px; display: inline-block;">Tình trạng từng đêm</span></div>
-                     <div class="col-2 text-center">Giá net / @nights đêm</div>
+                     <div class="col-2 text-center">Giá net</div>
                      <div class="col-3 text-right">Hành động</div>
                  </div>
             </div>
@@ -145,8 +151,8 @@
                             <div class="col-2 text-center">
                                 @if (item.min_price > 0)
                                 {
-                                    <div class="txt_16 bold dynamic_price" data-amount="@item.min_price" data-night="@nights">@item.min_price.ToString("N0") đ</div>
-                                    <div class="gray txt_12">~ @((item.min_price / nights).ToString("N0")) đ / Đêm</div>
+                                    <div class="txt_16 bold dynamic_price" data-amount="@item.min_price" data-night="@nights">@((item.min_price / nights).ToString("N0")) đ</div>
+                                    
                                 }
                                 else
                                 {

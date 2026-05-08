@@ -3,6 +3,7 @@ $(document).ready(function () {
 
     _hotel_detail.initial();
     _hotel_detail.loadRoomFund();
+    setInterval(() => _hotel_detail.loadRoomFund(), 120000);
     if ($('#input__hotel_recent') != undefined && $('#input__hotel_recent').length > 0) {
         _hotel_detail.SaveRecent();
 
@@ -230,7 +231,119 @@ var _hotel_detail = {
                             var fEndDate = eDate ? new Date(eDate) : new Date(fStartDate);
                             fEndDate.setHours(0, 0, 0, 0);
 
-                            return dTime >= fStartDate.getTime() && dTime <= fEndDate.getTime();
+                            return dTime >= fStartDate.getTime() && dTime < fEndDate.getTime();
+                        });
+
+                        var count = 0;
+                        if (nightFund) {
+                            count = nightFund.numberOfRoomsAvailable !== undefined ? nightFund.numberOfRoomsAvailable : nightFund.NumberOfRoomsAvailable;
+                        }
+                        count = count <= 0 ? 0 : count;
+                        var bgStyle = '';
+                        if (count === 0) {
+                            bgStyle = ' style="background-color: #ed1c24;"';
+                        } else if (count <= 5) {
+                            bgStyle = ' style="background-color: #f39c12;"';
+                        }
+
+                        html += '<div class="night-status-item">';
+                        html += '<div class="night-status-date">' + d.display + '</div>';
+                        html += '<div class="night-status-circle"' + bgStyle + '>' + count + '</div>';
+                        html += '</div>';
+                    });
+
+                    container.html(html);
+                    container.removeClass('placeholder box-placeholder');
+                });
+            }
+        });
+    },
+    loadRoomFundPopup: function (selector) {
+        var hotelId = $('#input__hotel_id').val();
+        var supplierId = $('#hotel_supplier_id').val() || 0;
+        var arrivalDate = $('#input__hotel_arrival_date').val();
+        var departureDate = $('#input__hotel_departure_date').val();
+
+        if (!hotelId || !arrivalDate || !departureDate) return;
+
+        _ajax_caller.post('/Hotel/GetListRoomFund', {
+            hotelId: hotelId,
+            supplierId: supplierId,
+            startDate: arrivalDate,
+            endDate: departureDate
+        }, function (result) {
+            if (result.isSuccess) {
+                var funds = result.data || [];
+
+                var adParts = arrivalDate.split('/');
+                var ddParts = departureDate.split('/');
+                var startDateObj = new Date(adParts[2], adParts[1] - 1, adParts[0]);
+                var endDateObj = new Date(ddParts[2], ddParts[1] - 1, ddParts[0]);
+
+                var dates = [];
+                var currentDate = new Date(startDateObj);
+                while (currentDate < endDateObj) {
+                    var d = currentDate.getDate();
+                    var m = currentDate.getMonth() + 1;
+                    var dateStr = (d < 10 ? '0' + d : d) + '/' + (m < 10 ? '0' + m : m);
+                    dates.push({
+                        date: new Date(currentDate),
+                        display: dateStr
+                    });
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                var $targets = $(selector).find('.room-night-status-list');
+                if ($(selector).hasClass('room-night-status-list')) {
+                    $targets = $targets.add($(selector));
+                }
+
+                $targets.each(function () {
+                    var container = $(this);
+                    var roomId = container.data('room-id');
+
+                    var roomFunds = funds.filter(function (x) {
+                        var rId = x.hotelRoomId !== undefined ? x.hotelRoomId : x.HotelRoomId;
+                        return rId == roomId;
+                    });
+
+                    var html = '';
+                    dates.forEach(function (d) {
+                        var dTime = d.date.getTime();
+                        var nightFund = roomFunds.find(function (x) {
+                            var sDate = x.startDate || x.StartDate;
+                            var eDate = x.endDate || x.EndDate;
+                            if (!sDate) return false;
+
+                            var fStartDate;
+                            if (typeof sDate === 'string' && sDate.indexOf('T') >= 0) {
+                                var parts = sDate.split('T')[0].split('-');
+                                fStartDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                            } else if (typeof sDate === 'string' && sDate.indexOf('-') >= 0) {
+                                var parts = sDate.split('-');
+                                fStartDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                            } else {
+                                fStartDate = new Date(sDate);
+                            }
+                            fStartDate.setHours(0, 0, 0, 0);
+
+                            var fEndDate;
+                            if (eDate) {
+                                if (typeof eDate === 'string' && eDate.indexOf('T') >= 0) {
+                                    var parts = eDate.split('T')[0].split('-');
+                                    fEndDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                                } else if (typeof eDate === 'string' && eDate.indexOf('-') >= 0) {
+                                    var parts = eDate.split('-');
+                                    fEndDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                                } else {
+                                    fEndDate = new Date(eDate);
+                                }
+                            } else {
+                                fEndDate = new Date(fStartDate);
+                            }
+                            fEndDate.setHours(0, 0, 0, 0);
+
+                            return dTime >= fStartDate.getTime() && dTime < fEndDate.getTime();
                         });
 
                         var count = 0;
@@ -238,16 +351,68 @@ var _hotel_detail = {
                             count = nightFund.numberOfRoomsAvailable !== undefined ? nightFund.numberOfRoomsAvailable : nightFund.NumberOfRoomsAvailable;
                         }
 
-                        var bgStyle = '';
-                        if (count === 0) {
-                            bgStyle = ' style="background-color: #ed1c24;"';
-                        } else if (count <= 5) {
-                            bgStyle = ' style="background-color: #f39c12;"';
+                        // Subtract requested rooms from _hotel_detail.rooms
+                        var requestedCount = 0;
+                        var roomOrderIndex = container.data('room-index');
+                        var limit = (roomOrderIndex !== undefined && roomOrderIndex !== null && roomOrderIndex !== "") ? parseInt(roomOrderIndex) : 999999;
+                        var typeCounter = 0;
+
+                        if (_hotel_detail.rooms && _hotel_detail.rooms.length > 0) {
+                            _hotel_detail.rooms.forEach(function (r) {
+                                if (r.room_id == roomId) {
+                                    typeCounter++;
+                                    if (typeCounter <= limit && r.packages) {
+                                        r.packages.forEach(function (p) {
+                                            var ad, dd;
+                                            if (p.arrival_date.indexOf('/') > 0) {
+                                                var parts = p.arrival_date.split('/');
+                                                ad = new Date(parts[2], parts[1] - 1, parts[0]);
+                                            } else if (p.arrival_date.indexOf('-') > 0) {
+                                                var parts = p.arrival_date.split('-');
+                                                ad = new Date(parts[0], parts[1] - 1, parts[2]);
+                                            } else {
+                                                ad = new Date(p.arrival_date);
+                                            }
+
+                                            if (p.departure_date.indexOf('/') > 0) {
+                                                var parts = p.departure_date.split('/');
+                                                dd = new Date(parts[2], parts[1] - 1, parts[0]);
+                                            } else if (p.departure_date.indexOf('-') > 0) {
+                                                var parts = p.departure_date.split('-');
+                                                dd = new Date(parts[0], parts[1] - 1, parts[2]);
+                                            } else {
+                                                dd = new Date(p.departure_date);
+                                            }
+                                            ad.setHours(0, 0, 0, 0);
+                                            dd.setHours(0, 0, 0, 0);
+
+                                            if (dTime >= ad.getTime() && dTime < dd.getTime()) {
+                                                requestedCount++;
+                                            }
+                                        });
+                                    }
+                                }
+                            });
                         }
-                        
+
+                        var finalCount = count - requestedCount;
+
+                        var bgStyle = '';
+                        if (finalCount < 0) {
+                            bgStyle = ' style="background-color: #ed1c24;"'; // Hết (Negative)
+                        } else if (finalCount <= 5) {
+                            bgStyle = ' style="background-color: #f39c12;"'; // Sắp hết (0-5)
+                        }
+
+                        var displayText = finalCount < 0 ? 0 : finalCount;
+                        if (container.data('simple') === true || container.data('simple') === "true") {
+                            displayText = finalCount >= 0 ? 'Còn' : 'Hết';
+                        }
+
                         html += '<div class="night-status-item">';
                         html += '<div class="night-status-date">' + d.display + '</div>';
-                        html += '<div class="night-status-circle"' + bgStyle + '>' + count + '</div>';
+                        var isSimple = container.data('simple') === true || container.data('simple') === "true";
+                        html += '<div class="night-status-circle' + (isSimple ? ' simple-status' : '') + '"' + bgStyle + '>' + displayText + '</div>';
                         html += '</div>';
                     });
 
@@ -964,6 +1129,7 @@ $(document).on('click', '.btn_add_room_package', function () {
     _hotel_detail.ReCalucateArrivalDepartureDate()
     hotel_surcharge.RenderSurchargeDate('.hotel-detail-popup-surcharge-table-td-date')
 
+    _hotel_detail.loadRoomFund();
 });
 
 $('#block__detail_hotel_rooms').on('click', '.btn__delete_package', function () {
@@ -979,6 +1145,7 @@ $('#block__detail_hotel_rooms').on('click', '.btn__delete_package', function () 
     hotel_surcharge.RenderSurchargeDate('.hotel-detail-popup-surcharge-table-td-date')
 
     _hotel_detail.loadTotalMoney();
+    _hotel_detail.loadRoomFund();
 });
 
 $('#block__detail_hotel_rooms').on('click', '.btn_back_to_room_list', function () {
@@ -1200,6 +1367,7 @@ $('#btn__check_order').click(function () {
 
             _ajax_caller.post('/hotel/CheckRequestHotel', { model: _hotel_detail.rooms, discount: total_discount }, function (result) {
                 $('#table_body').html(result)
+                _hotel_detail.loadRoomFundPopup('#table_body');
                 if (_hotel_detail.rooms.length > 0) {
                     html_btn = `<button type="button" id="btn__summit_request_order" class="btn btn-default">Gửi</button>`
                 }
@@ -1339,6 +1507,7 @@ $(document).on('click', '#btn__summit_request_order', function () {
             $('#myModal15').html(html_myModal15)
             $('#myModal15').show();
             $('#myModal15').addClass('show');
+            _hotel_detail.loadRoomFund();
             /* window.location.href = "/booking/DetailRequestHotelBooking/?BookingId=" + result.id;*/
         } else {
             _msgalert.error(result.message);
