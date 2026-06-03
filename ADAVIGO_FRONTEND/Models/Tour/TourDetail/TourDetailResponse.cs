@@ -36,6 +36,7 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourDetail
         public string tourTypeName { get; set; }
         public string organizingName { get; set; }
         public string dateDeparture { get; set; }
+
     }
 
     public class TourProductScheduleModel
@@ -67,7 +68,8 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourDetail
         public DateTime? CreatedDate { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
-
+        public int RemainingQuantity { get; set; }
+        public string StatusName { get; set; }
     }
 
 }

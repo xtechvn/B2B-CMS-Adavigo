@@ -24,6 +24,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Requests.Abstractions;
 using Utilities.Contants;
+using static ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants.TourConstants;
 
 namespace ADAVIGO_FRONTEND.Controllers.Tour
 {
@@ -409,5 +410,33 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                 data = await _HotelService.GetVietQRCode(model)
             });
         }
+        [HttpPost]
+        public async Task<IActionResult> GetListTourItinerary(string  id)
+        {
+            try
+            {
+                var data = await _adavigoTourService.GetListTourItinerary(id);
+                if (data != null && data.status == 0)
+                {
+                    return new JsonResult(new
+                    {
+                        isSuccess = true,
+                        data = data.data,
+                        
+                    }); 
+                }
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return new JsonResult(new
+            {
+                isSuccess = false,
+               
+            });
+        }
     }
+    
 }

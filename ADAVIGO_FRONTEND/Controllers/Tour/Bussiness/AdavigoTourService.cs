@@ -571,5 +571,45 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour.Bussiness
             }
             return null;
         }
+        public async Task<BaseObjectResponse<List<TourItinerary>>> GetListTourItinerary(string id)
+        {
+            try
+            {
+                BaseObjectResponse<List<TourItinerary>> result = null;
+                var j_param = new Dictionary<string, string>
+                {
+                    {"id", id}
+                };
+                var data = JsonConvert.SerializeObject(j_param);
+
+                var token = AdavigoHelper.Encode(data, _configuration["SecretKey:b2b"]);
+                var request = new[]
+                {
+                    new KeyValuePair<string, string>("token", token),
+                };
+
+                var url = TourConstants.AdavigoApiRoutes.GetListTourItinerary;
+                HttpResponseMessage response = await _httpClient.PostAsync(url, new FormUrlEncodedContent(request));
+
+                var stringResult = "";
+                if (response.IsSuccessStatusCode)
+                {
+                    stringResult = await response.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<BaseObjectResponse<List<TourItinerary>>>(stringResult);
+                    if (result.status != 0)
+                    {
+                        await SendExceptionLogTele(TourConstants.AdavigoApiRoutes.GetListTourItinerary, "API Call Not Success Token [" + token + "]: " + stringResult);
+
+                    }
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await SendExceptionLogTele(TourConstants.AdavigoApiRoutes.GetListTourByType, ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

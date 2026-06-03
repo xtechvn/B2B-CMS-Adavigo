@@ -5,7 +5,7 @@
     string imageDomain = (string)ViewBag.ImageDomain;
     string url_by_tour_type = "/tour/tim-kiem?start=-1&end=-1&type=" + from.tourType == null ? "1" : from.tourType.ToString();
 }
-<section class="section-main clearfix" >
+<section class="section-main clearfix">
     <div class="container" style=" margin-top:20px;">
         <div class="bg-white pd-24 radius10 mb24">
             <ul class="breadcrumb">
@@ -101,9 +101,12 @@
                     <table class="tb-banggia" id="by_month-all" style="">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Ngày<br /> khởi hành</th>
-                                <th>Hạng tour</th>
+                                <th>Ngày về</th>
                                 <th>Giá tour</th>
+                                <th>Còn chỗ</th>
+                                <th>Trạng thái</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -114,13 +117,35 @@
                                 @foreach (var item in from.packages)
                                 {
                                     <tr class="tr-row" data-is_daily="0" data-id="@item.Id">
-                                        <td class="departure-date" data-date="@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))<br />Còn chỗ</td>
-                                        <td class="hang-bay">
-                                            @* <img src="images/hang-bay/vietjet.png" alt=""> *@
-                                            <span>Tiêu chuẩn</span>
+                                        <td class="text-center">
+                                            <svg class="icon-svg" style="width:12px; height:12px;">
+                                                <use xlink:href="/images/icons/icon.svg#next2"></use>
+                                            </svg>
                                         </td>
+                                        <td class="departure-date" data-date="@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))</td>
+                                        <td data-date="@(((DateTime)item.ToDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.ToDate).ToString("dd/MM/yyyy"))</td>
                                         <td class="price">@(((double)item.AdultPrice).ToString("N0"))</td>
+                                        <td>@item.RemainingQuantity.ToString("N0")</td>
+                                        <td>@item.StatusName</td>
                                         <td><a href="/tour/order?id=@from.id&package=@item.Id" class="btn tour-detail-confirm">Giữ chỗ</a></td>
+                                    </tr>
+                                    <tr class="detail-row" style="display:none;">
+                                        <td colspan="6">
+                                            <div class="row">
+                                                <div class="col-md-6" style=" text-align: left !important;">
+                                                    <h5 class="bold mb10">Chi tiết </h5>
+                                                    <div class="flight-detail">
+                                                        <span>Đang cập nhật...</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style=" text-align: left !important;">
+                                                    <h5 class="bold mb10">Thông tin khác</h5>
+                                                    <ul class="list-unstyled">                                                      
+                                                        <li><strong>Hạn nhận hồ sơ:</strong> Đang cập nhật...</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
                             }
@@ -139,22 +164,47 @@
                                     <thead>
                                         <tr>
                                             <th>Ngày<br /> khởi hành</th>
-                                            <th>Hạng tour</th>
+                                            <th>Ngày về</th>
                                             <th>Giá tour</th>
+                                            <th>Còn chỗ</th>
+                                            <th>Trạng thái</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in by_month)
                                         {
-                                            <tr data-id="@item.Id">
-                                                <td class="departure-date" data-date="@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))<br />Còn chỗ</td>
-                                                <td class="hang-bay">
-                                                    @* <img src="images/hang-bay/vietjet.png" alt=""> *@
-                                                    <span>Tiêu chuẩn</span>
+                                            <tr class="tr-row" data-id="@item.Id">
+                                                <td class="text-center">
+                                                    <svg class="icon-svg" style="width:12px; height:12px;">
+                                                        <use xlink:href="/images/icons/icon.svg#next2"></use>
+                                                    </svg>
                                                 </td>
+                                                <td class="departure-date" data-date="@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.FromDate).ToString("dd/MM/yyyy"))</td>
+                                                <td data-date="@(((DateTime)item.ToDate).ToString("dd/MM/yyyy"))">@(((DateTime)item.ToDate).ToString("dd/MM/yyyy"))</td>
                                                 <td class="price">@(((double)item.AdultPrice).ToString("N0"))</td>
+                                                <td>@item.RemainingQuantity.ToString("N0")</td>
+                                                <td>@item.StatusName</td>
                                                 <td><a href="/tour/order?id=@from.id&package=@item.Id" class="btn">Giữ chỗ</a></td>
+                                            </tr>
+                                            <tr class="detail-row" style="display:none;">
+                                                <td colspan="6">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h4 class="bold mb10">Chi tiết </h4>
+                                                            <div class="flight-detail">
+                                                                <span>Đang cập nhật...</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h4 class="bold mb10">Thông tin khác</h4>
+                                                            <ul class="list-unstyled">
+
+                                                                <li><strong>Hạn nhận hồ sơ:</strong> Đang cập nhật...</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
@@ -197,6 +247,7 @@
                                             @(Html.Raw(schedule.day_description))
                                         </div>
                                     </div>
+
                                 }
                             }
                         }
@@ -332,7 +383,7 @@
             <h2 class="title-cate mb20">Tour liên quan</h2>
 
         </div>
-   </div>
+    </div>
 
 </section>
 
