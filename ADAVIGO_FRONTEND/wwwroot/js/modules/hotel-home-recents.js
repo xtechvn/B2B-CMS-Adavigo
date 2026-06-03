@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     hotel_recents.Initialization()
 })
 var hotel_recents = {
@@ -96,7 +96,7 @@ var hotel_recents = {
             <div class="article-itemt full article-hotel-item"data-id="@item.hotel_id" data-isvin="@item.is_vin_hotel.ToString()" style="min-height:390px">
             <div class="article-thumb">
                 <a class="thumb_img thumb_5x3" href="@url">
-                    <img src="images/graphics/thumb1.jpg" alt="">
+                    <img src="images/graphics/thumb1.jpg" alt="" loading="lazy">
 
                     <div class="tag2">GIÁ ĐỘC QUYỀN</div>
                 </a>
