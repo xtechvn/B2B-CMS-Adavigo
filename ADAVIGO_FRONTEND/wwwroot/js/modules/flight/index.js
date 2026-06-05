@@ -1,4 +1,4 @@
-﻿var cheapestFare = '500.000';
+var cheapestFare = '500.000';
 var codeAddressGoChosen = 'SGN';
 var nameAddressGoChosen = "Hồ Chí Minh";
 var codeAddressArrivalChosen = 'HAN';
@@ -83,6 +83,7 @@ $(document).ready(function () {
     
     renderSearchHistory();
     renderListAddress();
+    GetListFl();
     $("body").removeClass("h-100vh");
     isLoadFirst = true;
     var listHtmlAddress = '';
@@ -880,8 +881,20 @@ function renderSearchHistory() {
 
         $("#searchHistory").html(result);
     }
-}
-
+};
+function GetListFl() {
+    var obj = {
+        BookingCode: $('#search-booking-code').val(),
+        DeparturePoint: $('#search-departure').val() ? $('#search-departure').val().toString() : '',
+        ArrivalPoint: $('#search-arrival').val() ? $('#search-arrival').val().toString() : '',
+        Airline: $('#search-airline').val(),
+        Date: $('#Date').val(),
+        FundType: $('#search-fund-type').val()
+    };
+    _ajax_caller.post("/Flights/Search", { searchModel: obj }, function (result) {
+        $('#grid-data-b2b').html(result);
+    });
+};
 
 
 

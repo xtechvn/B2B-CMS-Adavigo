@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -21,7 +21,7 @@
                     <partial name="_SearchFlightBox" />
                 </div>
             </div>
-        </div> *@
+        </div> 
     </div>
     <div class="wrap-search">
         <div id="dtc-plugin" data-flight-url="/flights" data-key="DTC10303"></div>
@@ -37,7 +37,7 @@
     </div>
 
     <!--Index content-->
-    @*    <div class="flex">
+     <div class="flex">
     <div class="col-main">
     <div class="bg-white pd-20 radius10 mb16">
     <div class="head-title">
@@ -243,7 +243,7 @@
     </div>
     </div>
     </div>
-    *@
+    
     <!-- Giá tốt nhất 6 tháng tới -->
     <h2 class="title-cate txt_32 mb24">Giá tốt nhất 6 tháng tới</h2>
     <div id="min-price-places" class="tab-default2 tab-blue mr min-price">
@@ -287,8 +287,63 @@
         <div id="list-article" class="list-article grid grid__4 mb40 d-none">
         </div>
     </div>
+*@
+ <!-- danh sách vé -->
+
+    <div class="">
+        <h2 class="title_page">Kho vé máy bay</h2>
+        <div class="bg_white filter-search">
+            <div class="row">
+                <div class="col-md-2 mb10" style="display:none">
+                    <input type="hidden" class="form-control" id="search-booking-code" placeholder="Mã booking">
+                </div>
+                <div class="col-md-2 mb10">
+                    <select type="text" class="form-control service-fly-select-route-from-departure" id="search-departure"  placeholder="Điểm đi"></select>
+                </div>
+                <div class="col-md-2 mb10">
+                    <select type="text" class="form-control service-fly-select-route-from-arrival" id="search-arrival"  placeholder="Điểm đến"></select>
+                </div>
+                <div class="col-md-2 mb10" style="display:none">
+                    <input type="text" class="form-control" id="search-airline" placeholder="Hãng bay">
+                </div>
+                <div class="col-md-2 mb10">
+                    <select type="text" class="form-control" id="Date">
+                        <option value="0">Chọn Tháng</option>
+                        <option value="1">Tháng 1</option>
+                        <option value="2">Tháng 2</option>
+                        <option value="3">Tháng 3</option>
+                        <option value="4">Tháng 4</option>
+                        <option value="5">Tháng 5</option>
+                        <option value="6">Tháng 6</option>
+                        <option value="7">Tháng 7</option>
+                        <option value="8">Tháng 8</option>
+                        <option value="9">Tháng 9</option>
+                        <option value="10">Tháng 10</option>
+                        <option value="11">Tháng 11</option>
+                        <option value="12">Tháng 12</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb10" style="display:none">
+                    <select class="form-control" id="search-fund-type">
+                        <option value="0">Tất Quỹ</option>
+                        <option value="1">Quỹ mềm</option>
+                        <option value="2">Quỹ cứng</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb10">
+                    <button type="button" class="btn btn-default" onclick="index_b2b.GetListFl()">Tìm kiếm</button>
+                   
+                </div>
+            </div>
+        </div>
+        <div id="grid-data-b2b">
+            <!-- List data will be loaded here -->
+        </div>
+    </div>
+
 </section>
 
 @section scripts{
     <script type="text/javascript" src="~/js/modules/flight/index.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/modules/flight/indexB2B.js" asp-append-version="true"></script>
 }

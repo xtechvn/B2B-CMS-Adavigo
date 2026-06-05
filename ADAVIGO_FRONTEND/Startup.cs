@@ -92,6 +92,7 @@ namespace ADAVIGO_FRONTEND
             services.AddTransient<BookingService>();
             services.AddTransient<AccountService>();
             services.AddTransient<B2CFlightService>();
+            services.AddTransient<B2BFlightService>();
             services.AddTransient<LocationService>();
             services.AddHttpClient<DataComService>();
             services.AddHttpClient<AdavigoTourService>();

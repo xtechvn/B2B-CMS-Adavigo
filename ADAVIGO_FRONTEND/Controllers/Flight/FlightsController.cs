@@ -1,6 +1,9 @@
-﻿using ADAVIGO_FRONTEND.Models.Services;
+using ADAVIGO_FRONTEND.Models.Services;
+using ADAVIGO_FRONTEND.ViewModels;
+using B2B.Utilities.Contants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ADAVIGO_FRONTEND.Controllers.Flight
 {
@@ -8,9 +11,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
     public class FlightsController : Controller
     {
         private readonly B2CFlightService _adavigoService;
-        public FlightsController(B2CFlightService adavigoService)
+        private readonly B2BFlightService _B2BFlightService;
+        public FlightsController(B2CFlightService adavigoService, B2BFlightService b2BFlightService)
         {
             _adavigoService = adavigoService;
+            _B2BFlightService = b2BFlightService;
         }
 
         public IActionResult Index(string dtcr = null, string dtcp = null)
@@ -19,7 +24,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
 
         }
         public IActionResult CustomerInfo()
-        {          
+        {
             return View();
         }
 
@@ -34,13 +39,24 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
         }
 
         public IActionResult FlightList()
-        {        
+        {
             return View();
         }
 
         public IActionResult Account()
         {
             return View();
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> Search(GetListFlightWarehouseModel searchModel)
+        {
+            var result = await _B2BFlightService.GetList(searchModel);
+            if (result !=null )
+            {
+                return PartialView(result);
+            }
+            return PartialView();
         }
 
         [HttpGet]

@@ -1,0 +1,113 @@
+﻿@using ADAVIGO_FRONTEND.ViewModels
+@model List<FlightWarehouseBookingViewModel>
+
+<style>
+    .group-flight-header {
+        background: #f8f9fa;
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+        border-bottom: none;
+        display: flex;
+        align-items: center;
+        border-radius: 4px 4px 0 0;
+        margin-top: 20px;
+    }
+    .group-flight-header h5 {
+        margin: 0;
+        font-weight: bold;
+        color: #333;
+        text-transform: uppercase;
+    }
+    .group-flight-header .badge {
+        margin-left: 15px;
+        padding: 5px 10px;
+    }
+    .table-group {
+        border-radius: 0 0 4px 4px;
+        margin-bottom: 20px;
+    }
+</style>
+
+@if (Model != null &&  Model.Count > 0)
+{
+    var groupedData = Model.GroupBy(x => x.RouteName).ToList();
+
+    foreach (var group in groupedData)
+    {
+        var routeItems = group.ToList();
+        <div class="group-flight-container">
+            <div class="group-flight-header">
+                <i class="fa fa-exchange mr-2 text-primary"></i>
+                <h5>@group.Key</h5>
+                <span class="badge badge-secondary">@routeItems.Count Chuỗi vé</span>
+            </div>
+            <div class="table-responsive bg_white table-group">
+                <table class="table table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="bg-light">
+                            <th style="width: 50px;" class="text-center">STT</th>
+                            <th>HÀNH TRÌNH</th>
+                            <th class="text-right">GIÁ DL / KL</th>
+                            <th class="text-center">SL</th>
+                            <th class="text-center">ĐỘ DÀI</th>
+                            <th class="text-center">SHCB</th>
+                            <th class="text-center">NGÀY ĐI</th>
+                            <th class="text-center">SHCB(V)</th>
+                            <th class="text-center">NGÀY VỀ</th>
+                            <th class="text-center" style="width: 100px;">THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int innerStt = 0;
+                        }
+                        @foreach (var item in routeItems)
+                        {
+                            innerStt++;
+                            <tr>
+                                <td class="text-center">@innerStt</td>
+                                <td>
+                                    <span class="text-muted small">@item.Airline</span>
+                                    <div class="badge badge-light border text-primary mb-1 cursor-pointer">@item.FlightPNRCodeGo</div><br />
+                                    @if (item.FundType == 1)
+                                    {
+                                        <span class="badge badge-light border text-primary mb-1 cursor-pointer">Quỹ mềm</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-light border cursor-pointer">Quỹ cứng</span>
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    <div class="bold green">@item.PriceDisplay</div>
+                                </td>
+                                <td class="text-center font-weight-bold">@item.TotalTicket</td>
+                                <td class="text-center">@item.TotalDay</td>
+                                <td class="text-center">@item.FlightCodeGo</td>
+                                <td class="text-center">
+                                    @(item.DepartureDate != DateTime.MinValue ? item.DepartureDate.ToString("dd/MM/yyyy HH:mm") : "---")
+                                </td>
+                                <td class="text-center">@item.FlightCodeBack</td>
+                                <td class="text-center">
+                                    @(item.ReturnDate != DateTime.MinValue ? item.ReturnDate.ToString("dd/MM/yyyy HH:mm") : "---")
+                                </td>
+                                <td class="text-center">
+                                    <a class="text-info" title="Xem chi tiết"><i class="fa fa-eye" style="font-size: 18px;"></i> Xem chi tiết</a>
+                                    <a class="text-info" title="Giữ chỗ"><i class="fa fa-eye" style="font-size: 18px;"></i> Giữ chỗ</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+   
+}
+else
+{
+    <div class="table-responsive bg_white border rounded p-3 text-center">
+        <p class="mb-0">Không có dữ liệu hiển thị</p>
+    </div>
+}
