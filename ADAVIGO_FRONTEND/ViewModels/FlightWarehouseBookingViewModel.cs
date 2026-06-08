@@ -8,6 +8,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public string Id { get; set; }
         public string RouteName { get; set; }
         public string PriceDisplay { get; set; }
+        public string AmountDL { get; set; }
         public string TotalTicket { get; set; }
         public string TotalDay { get; set; }
 

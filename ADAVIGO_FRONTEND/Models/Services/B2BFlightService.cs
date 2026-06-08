@@ -43,6 +43,27 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 throw new Exception(ex.Message);
             }
             return null;
+        }  
+        public async Task<FlightWarehouseBookingDetail> GetDetail(int id)
+        {
+            try
+            {
+                var result = await _ApiConnector.ExecutePostAsync(SystemConstants.AdavigoApiRoutes.GetDetailFl, new {id=id});
+
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                {
+                    return JsonConvert.DeserializeObject<FlightWarehouseBookingDetail>(jsonData["data"].ToString());
+                }
+                
+            }
+            catch (Exception ex)
+            {
+               
+                throw new Exception(ex.Message);
+            }
+            return null;
         }
     }
 }

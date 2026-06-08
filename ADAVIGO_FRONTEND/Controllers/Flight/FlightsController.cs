@@ -3,6 +3,7 @@ using ADAVIGO_FRONTEND.ViewModels;
 using B2B.Utilities.Contants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace ADAVIGO_FRONTEND.Controllers.Flight
@@ -57,6 +58,27 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
                 return PartialView(result);
             }
             return PartialView();
+        }  
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> Detail(int id)
+        {
+            try
+            {
+                var result = await _B2BFlightService.GetDetail(id);
+                if (result != null)
+                {
+
+                    return Json(new { status = 0, data = result });
+                }
+            }
+            catch(Exception ex)
+            {
+                return Json(new { status = -1, msg = ex.Message });
+            }
+           
+
+            return Json(new { status = 1, msg = "Ch?a có data" });
         }
 
         [HttpGet]

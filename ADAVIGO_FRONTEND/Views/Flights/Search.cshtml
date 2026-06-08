@@ -1,4 +1,4 @@
-﻿@using ADAVIGO_FRONTEND.ViewModels
+@using ADAVIGO_FRONTEND.ViewModels
 @model List<FlightWarehouseBookingViewModel>
 
 <style>
@@ -47,7 +47,7 @@
                         <tr class="bg-light">
                             <th style="width: 50px;" class="text-center">STT</th>
                             <th>HÀNH TRÌNH</th>
-                            <th class="text-right">GIÁ DL / KL</th>
+                            <th class="text-right">GIÁ DL</th>
                             <th class="text-center">SL</th>
                             <th class="text-center">ĐỘ DÀI</th>
                             <th class="text-center">SHCB</th>
@@ -79,7 +79,7 @@
                                     }
                                 </td>
                                 <td class="text-right">
-                                    <div class="bold green">@item.PriceDisplay</div>
+                                    <div class="bold green">@item.AmountDL</div>
                                 </td>
                                 <td class="text-center font-weight-bold">@item.TotalTicket</td>
                                 <td class="text-center">@item.TotalDay</td>
@@ -92,7 +92,7 @@
                                     @(item.ReturnDate != DateTime.MinValue ? item.ReturnDate.ToString("dd/MM/yyyy HH:mm") : "---")
                                 </td>
                                 <td class="text-center">
-                                    <a class="text-info" title="Xem chi tiết"><i class="fa fa-eye" style="font-size: 18px;"></i> Xem chi tiết</a>
+                                    <a class="text-info cursor-pointer" title="Xem chi tiết" onclick="index_b2b.ViewDetail('@item.Id', this)"><i class="fa fa-eye" style="font-size: 18px;"></i> Xem chi tiết</a>
                                     <a class="text-info" title="Giữ chỗ"><i class="fa fa-eye" style="font-size: 18px;"></i> Giữ chỗ</a>
                                 </td>
                             </tr>
