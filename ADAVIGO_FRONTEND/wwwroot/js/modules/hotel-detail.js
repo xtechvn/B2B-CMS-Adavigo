@@ -1143,7 +1143,7 @@ $('#btn__continue_order').click(function () {
                 rooms: _hotel_detail.rooms
             };
 
-            _ajax_caller.post('/hotel/SaveCustomerData', { data: obj }, function (result) {
+            _ajax_caller.post('/hotel/SaveCustomerDataV1', { data: obj }, function (result) {
                 if (result.isSuccess) {
                     sessionStorage.removeItem(hotel_constants.CONSTATNTS.STORAGE.OrderID)
                     sessionStorage.setItem(hotel_constants.CONSTATNTS.STORAGE.HotelDetailURL, window.location.href)

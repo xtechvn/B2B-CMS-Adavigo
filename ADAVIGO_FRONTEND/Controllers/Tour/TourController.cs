@@ -254,7 +254,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
 
                 var booking_id = await _adavigoTourService.SaveBooking(BookingRequest);
                 model.bookingId = booking_id.data;
-                 _MemoryCache.Set(model.bookingId, model, TimeSpan.FromMinutes(30));
+                 //_MemoryCache.Set(model.bookingId, model, TimeSpan.FromMinutes(30));
                 return new JsonResult(new
                 {
                     isSuccess = true,

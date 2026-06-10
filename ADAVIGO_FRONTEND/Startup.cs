@@ -167,6 +167,11 @@ namespace ADAVIGO_FRONTEND
                  pattern: "/tour/san-pham/{slug}--{id}",
                  defaults: new { controller = "Tour", action = "Detail" }
                );
+                endpoints.MapControllerRoute(
+               name: "OrderV1",
+               pattern: "/Hotel/OrderV1",
+               defaults: new { controller = "Hotel", action = "OrderV1" }
+             );
             });
 
 

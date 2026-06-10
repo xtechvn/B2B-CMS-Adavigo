@@ -14,24 +14,19 @@
     var clientNameClaim = claimsIdentity.FindFirst(nameof(SystemUserModel.ClientName));
 
     var _UserManager = new SystemUserModel
-    {
-        ClientID = clientIdClaim != null ? int.Parse(clientIdClaim.Value) : 0,
-        ClientType = clientTypeClaim != null ? int.Parse(clientTypeClaim.Value) : 0,
-        ClientName = clientNameClaim != null ? clientNameClaim.Value : string.Empty,
-        Phone = phone != null ? phone.Value : string.Empty,
-        Address = address != null ? address.Value : string.Empty,
-        Email = email != null ? email.Value : string.Empty
-    };
+                {
+                    ClientID = clientIdClaim != null ? int.Parse(clientIdClaim.Value) : 0,
+                    ClientType = clientTypeClaim != null ? int.Parse(clientTypeClaim.Value) : 0,
+                    ClientName = clientNameClaim != null ? clientNameClaim.Value : string.Empty,
+                    Phone = phone != null ? phone.Value : string.Empty,
+                    Address = address != null ? address.Value : string.Empty,
+                    Email = email != null ? email.Value : string.Empty
+                };
 
-
-    var TotalDays = (int)ViewBag.TotalDays;
+    var FromDate = DateTime.Parse(Model.arrivalDate != null ? Model.arrivalDate : DateTime.Now.ToString("yyyy-MM-dd"), new System.Globalization.CultureInfo("vi-VN"));
+    var ToDate = DateTime.Parse(Model.departureDate != null ? Model.departureDate : DateTime.Now.ToString("yyyy-MM-dd"), new System.Globalization.CultureInfo("vi-VN"));
+    var TotalDays = (ToDate - FromDate).TotalDays + 1;
     decimal TotalMoney = 0;
-    double TotalEX = Model.extrapackages != null && Model.extrapackages.Count > 0 ? Model.extrapackages.Sum(s => (double)s.Amount) : 0;
-    double discount=0;
-    if(Model.voucher!=null && Model.voucher.id > 0)
-    {
-        discount = Model.voucher.discount;
-    }
     var ArrMemberOfRoom = new List<string>();
 
     int room_total = 0, adult_total = 0, child_total = 0, infant_total = 0;
@@ -125,13 +120,13 @@
                             <div class="form-group mb0">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <label class="">Quốc gia / Quốc tịch</label>
+                                        <label class="">Địa chỉ (Quốc gia, tỉnh, thành phố)</label>
                                         <div class="row row__grid_8">
                                             <div class="col-md-4 mb16">
-                                                <input type="text" class="form-control" name="country" placeholder="Nhập quốc gia" value="VN">
+                                                <input type="text" class="form-control" name="country" placeholder="Nhập quốc gia" value="Việt Nam">
                                             </div>
                                             <div class="col-md-8 mb16">
-                                                <input type="text" class="form-control" name="address" placeholder="Nhập quốc tịch" value="VN">
+                                                <input type="text" class="form-control" name="address" placeholder="Nhập quốc tịch" value="Việt Nam">
                                             </div>
                                         </div>
                                     </div>
@@ -166,13 +161,11 @@
                             <div class="line-bottom mb16"></div>
                             @if (Model.rooms != null && Model.rooms.Any())
                             {
-                                var count = 0;
                                 var room_group = Model.rooms.GroupBy(s => new { s.room_number, s.room_id, s.room_name, s.adult, s.child, s.infant });
                                 foreach (var item in room_group)
                                 {
-                                    count++;
-                                    <div class="info-room-block-item room" data-room="@count">
-                                        <div class="bold txt_16 mb16">Phòng @count</div>
+                                    <div class="info-room-block-item room" data-room="@item.Key.room_number">
+                                        <div class="bold txt_16 mb16">Phòng @item.Key.room_number</div>
                                         @if (item.Key.adult > 0)
                                         {
                                             @for (int i = 0; i < item.Key.adult; i++)
@@ -404,26 +397,11 @@
                     <ul>
                         <li class="gray mb8">@strMemberOfRoom</li>
                         <li class="flex mb8">
-                            <div class="gray">@Model.arrivalDate - @Model.departureDate</div>
+                            <div class="gray">@FromDate.ToString("dd/MM/yyyy") - @ToDate.ToString("dd/MM/yyyy")</div>
                             <div class="text-right" style="width: calc(100% - 165px);"><strong>@($"{TotalDays} ngày {TotalDays-1} đêm")</strong></div>
                         </li>
                         <li class="gray mb8">@room_total Phòng</li>
                     </ul>
-                    @{
-                        if (Model.extrapackages != null && Model.extrapackages.Any()){
-                            var total_surcharge = Model.extrapackages.Sum(x => x != null && x.Amount != null ? (double)x.Amount : 0);
-                            <ul>
-                            <li class="gray mb8"></li>
-                            <li class="flex mb8">
-                                    <div class="gray" style=" width: calc(100% - 165px); ">
-                                        Phụ thu
-                                    </div>
-                                    <div class="text-right" style="width: calc(100% - 165px);"><strong>@Model.extrapackages.Count dịch vụ</strong></div>
-                            </li>
-                        </ul>
-                        }
-                    }
-                          
                     <div class="line-bottom mb12"></div>
                     <div class="head-title">
                         <div class="title bold mb0">Chính sách đặt phòng</div>
@@ -464,51 +442,10 @@
                                 </ul>
                             }
                         }
-                        @if (Model.extrapackages != null && Model.extrapackages.Any())
-                        {
-                            <ul data-room="">
-                                <li class="gray mb8">
-                                    <strong> Dịch vụ phụ</strong>
-                                </li>
-                                @foreach (var item in Model.extrapackages)
-                                {
-                                    <li class="gray row mb8 package_item">
-                                        <div class="gray col-7">@item.PackageCode</div>
-                           
-                                        <div class="text-right col-5">
-                                            <strong>@(((double)item.Amount).ToString("N0"))  đ</strong>
-                                        </div>
-                                    </li>
-                                  
-                                }
-                            </ul>
-                        }
-                      
-                    </div>
-                    <div class="input-button mb16">
-                        <input type="text" class="form-control  @(Model.voucher != null && Model.voucher.id > 0 ? "voucher-applied" : "")" id="hotel-order-voucher-code" placeholder="Nhập mã giảm giá"
-                               data-id="@(Model.voucher != null && Model.voucher.id > 0 ? Model.voucher.id.ToString() : "")"
-                               data-discount="@(Model.voucher != null && Model.voucher.discount > 0 ? Model.voucher.discount.ToString() : "0")"
-                               value="@(Model.voucher != null && Model.voucher.code != null ? Model.voucher.code : "")"
-                        @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")
-                       >
-                        <button id="hotel-order-voucher-apply" style="display:none;">
-                                Áp dụng
-                          </button>
-                        <button id="hotel-order-voucher-popup"  class="@(Model.voucher != null && Model.voucher.id > 0 ? "gray" : "")" @(Model.voucher != null && Model.voucher.id > 0 ? "disabled" : "")>Chọn Voucher</button>
-
-                    </div>
-                    <div class="flex mb12">
-                        <div class="bold txt_14">Giá cũ</div>
-                        <div id="hotel-order-total-amount-old" class="bold txt_14  text-right" style="width:calc(100% - 50px);">@(((double)TotalMoney + TotalEX).ToString("N0")) VNĐ</div>
-                    </div>
-                    <div class="flex mb12">
-                        <div class="bold txt_14">Chiết khấu</div>
-                        <div id="hotel-order-total-discount" class="bold txt_14 color-red  text-right" style="width:calc(100% - 76px);">@(((double)discount).ToString("N0")) VNĐ</div>
                     </div>
                     <div class="flex mb12">
                         <div class="bold txt_16">Tổng cộng</div>
-                        <div id="hotel-order-total-amount" class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@(((double)TotalMoney + TotalEX - discount).ToString("N0")) VNĐ</div>
+                        <div class="bold txt_18 color-green text-right" style="width:calc(100% - 76px);">@TotalMoney.ToString("N0") VNĐ</div>
                     </div>
                     <div class="gray text-right mb24">Giá đã bao gồm phí dịch vụ và thuế GTGT</div>
                     <button type="button" id="btn_continue_to_payment" class="btn btn-default blue full size">Tiếp tục đơn hàng</button>
@@ -516,8 +453,6 @@
             </div>
         </div>
     </section>
-    @await Component.InvokeAsync("HotelVoucher", new { hotel_id = @Model.hotelID })
-
 }
 else
 {
@@ -525,8 +460,6 @@ else
 }
 
 @section scripts{
-    <script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel-order.js"></script>
-    <script type="text/javascript" src="~/js/modules/hotel-voucher.js"> </script>
-
+<script type="text/javascript" src="~/js/modules/hotel-constants.js"></script>
+<script type="text/javascript" src="~/js/modules/hotel-order.js"></script>
 }
