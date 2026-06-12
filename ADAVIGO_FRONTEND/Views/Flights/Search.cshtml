@@ -93,7 +93,7 @@
                                 </td>
                                 <td class="text-center">
                                     <a class="text-info cursor-pointer" title="Xem chi tiết" onclick="index_b2b.ViewDetail('@item.Id', this)"><i class="fa fa-eye" style="font-size: 18px;"></i> Xem chi tiết</a>
-                                    <a class="text-info" title="Giữ chỗ"><i class="fa fa-eye" style="font-size: 18px;"></i> Giữ chỗ</a>
+                                    <a class="text-info cursor-pointer" title="Giữ chỗ" onclick="index_b2b.HoldBooking('@item.Id', '@item.AmountDL', '@item.CHDAmountDL', '@item.INFAmountDL')"><i class="fa fa-eye" style="font-size: 18px;"></i> Giữ chỗ</a>
                                 </td>
                             </tr>
                         }

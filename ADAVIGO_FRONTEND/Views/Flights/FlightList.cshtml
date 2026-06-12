@@ -2,7 +2,13 @@
     ViewData["Title"] = "Danh sách chuyến bay | Adavigo.com";
 }
 <partial name="_FlightTopNavbar" />
-
+<style>
+    .trip-info.min .lbl {
+        
+        height: 55px !important;
+       
+    }
+</style>
 <section class="main-container clearfix">
     <div class="wrap-search">
         <h2 class="title txt_20 bold mb16">Đặt vé nhanh</h2>
@@ -32,7 +38,7 @@
         </ol>
         <div class="trip-info mb16">
             <div class="trip-info__left">
-                <div class="lbl" id="flight-go-lbl">Chiều đi</div>
+                <div class="lbl" id="flight-go-lbl" style="height">Chiều đi</div>
                 <div class="info">
                     <div class="name">
                         <strong>

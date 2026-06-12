@@ -228,17 +228,23 @@ function fillInfoStepSearch() {
             $('.details-back .fee-child').html(UTILS.formatViCurrency(totalFareObj.back.single.child));
             $('.details-back .fee-baby').html(UTILS.formatViCurrency(totalFareObj.back.single.baby));
 
-            $('.details-total .fee-adt').html(UTILS.formatViCurrency(totalFareObj.back.single.adt + totalFareObj.go.single.adt ));
-            $('.details-total .fee-child').html(UTILS.formatViCurrency(totalFareObj.back.single.child + totalFareObj.go.single.child));
-            $('.details-total .fee-baby').html(UTILS.formatViCurrency(totalFareObj.back.single.baby + totalFareObj.go.single.baby));
+           // $('.details-total .fee-adt').html(UTILS.formatViCurrency(totalFareObj.back.single.adt + totalFareObj.go.single.adt ));
+            $('.details-total .fee-adt').html(UTILS.formatViCurrency( totalFareObj.go.single.adt ));
+           // $('.details-total .fee-child').html(UTILS.formatViCurrency(totalFareObj.back.single.child + totalFareObj.go.single.child));
+            $('.details-total .fee-child').html(UTILS.formatViCurrency( totalFareObj.go.single.child));
+           // $('.details-total .fee-baby').html(UTILS.formatViCurrency(totalFareObj.back.single.baby + totalFareObj.go.single.baby));
+            $('.details-total .fee-baby').html(UTILS.formatViCurrency(totalFareObj.go.single.baby));
 
             $('.details-back .total-adt').html(UTILS.formatViCurrency(totalFareObj.back.total.adt));
             $('.details-back .total-child').html(UTILS.formatViCurrency(totalFareObj.back.total.child));
             $('.details-back .total-baby').html(UTILS.formatViCurrency(totalFareObj.back.total.baby));
 
-            $('.details-total .total-adt').html(UTILS.formatViCurrency(totalFareObj.go.total.adt + totalFareObj.back.total.adt));
-            $('.details-total .total-child').html(UTILS.formatViCurrency(totalFareObj.go.total.child + totalFareObj.back.total.child));
-            $('.details-total .total-baby').html(UTILS.formatViCurrency(totalFareObj.go.total.baby + totalFareObj.back.total.baby));
+            //$('.details-total .total-adt').html(UTILS.formatViCurrency(totalFareObj.go.total.adt + totalFareObj.back.total.adt));
+            //$('.details-total .total-child').html(UTILS.formatViCurrency(totalFareObj.go.total.child + totalFareObj.back.total.child));
+            //$('.details-total .total-baby').html(UTILS.formatViCurrency(totalFareObj.go.total.baby + totalFareObj.back.total.baby));
+            $('.details-total .total-adt').html(UTILS.formatViCurrency( totalFareObj.back.total.adt));
+            $('.details-total .total-child').html(UTILS.formatViCurrency( totalFareObj.back.total.child));
+            $('.details-total .total-baby').html(UTILS.formatViCurrency(totalFareObj.back.total.baby));
 
             var taxAndFeeBack = UTILS.formatViCurrency((backObj.FeeAdt + backObj.TaxAdt) * searchObj.Adt + (backObj.FeeChd + backObj.TaxChd) * searchObj.Child + (backObj.FeeInf + backObj.TaxInf) * searchObj.Baby);
             $('.details-back .tax-airport').html(UTILS.formatViCurrency(

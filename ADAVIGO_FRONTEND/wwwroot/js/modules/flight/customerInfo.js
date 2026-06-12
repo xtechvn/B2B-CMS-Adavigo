@@ -1,18 +1,19 @@
 
 var isGetBaggageInProgress = true;
 var dataListFlightSearch = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.Search));
-var ListFareData = [
-    {
-        "Session": dataListFlightSearch?.Session,
-        "FareDataId": dataListFlightSearch?.go.FareDataId,
+var ListFareData = [];
+if (dataListFlightSearch && dataListFlightSearch.go && dataListFlightSearch.go.ListFlight && dataListFlightSearch.go.ListFlight[0]) {
+    ListFareData.push({
+        "Session": dataListFlightSearch.Session,
+        "FareDataId": dataListFlightSearch.go.FareDataId,
         "ListFlight": [
             {
-                "FlightValue": dataListFlightSearch?.go.ListFlight[0].FlightValue,
+                "FlightValue": dataListFlightSearch.go.ListFlight[0].FlightValue,
                 "Leg": 0
             }
         ]
-    },
-];
+    });
+}
 var ListBaggage = [];
 dataSubmit = {};
 
@@ -112,6 +113,96 @@ function renderChildOrBaby(type) {
 renderItemsInfoAdt();
 renderChildOrBaby('Child');
 renderChildOrBaby('Baby');
+
+function updateB2BTotalPrice() {
+    if (!dataListFlightSearch || !dataListFlightSearch.isB2B) return;
+    
+    var adt = parseInt($('#qty-adt').val()) || 0;
+    var chd = parseInt($('#qty-chd').val()) || 0;
+    var inf = parseInt($('#qty-inf').val()) || 0;
+    
+    var adtPrice = dataListFlightSearch.b2bPrices.adt || 0;
+    var chdPrice = dataListFlightSearch.b2bPrices.chd || 0;
+    var infPrice = dataListFlightSearch.b2bPrices.inf || 0;
+    
+    var total = (adt * adtPrice) + (chd * chdPrice) + (inf * infPrice);
+
+    // Update qty & price display
+    $('.qty-adt').html(adt);
+    $('.fee-adt').html(UTILS.formatViCurrency(adtPrice));
+    $('.total-adt').html(UTILS.formatViCurrency(adt * adtPrice));
+
+    $('.qty-child').html(chd);
+    $('.fee-child').html(UTILS.formatViCurrency(chdPrice));
+    $('.total-child').html(UTILS.formatViCurrency(chd * chdPrice));
+
+    $('.qty-baby').html(inf);
+    $('.fee-baby').html(UTILS.formatViCurrency(infPrice));
+    $('.total-baby').html(UTILS.formatViCurrency(inf * infPrice));
+
+    // Show/hide child rows
+    if (chd > 0) {
+        $('.qty-child').closest('tr').removeClass('d-none');
+        $('.qty-child').closest('li').removeClass('d-none');
+    } else {
+        $('.qty-child').closest('tr').addClass('d-none');
+        $('.qty-child').closest('li').addClass('d-none');
+    }
+
+    // Show/hide baby rows
+    if (inf > 0) {
+        $('.qty-baby').closest('tr').removeClass('d-none');
+        $('.qty-baby').closest('li').removeClass('d-none');
+    } else {
+        $('.qty-baby').closest('tr').addClass('d-none');
+        $('.qty-baby').closest('li').addClass('d-none');
+    }
+
+    $('.total-payment').html(UTILS.formatViCurrency(total));
+    $('.total-payment-final').html(UTILS.formatViCurrency(total));
+    $(".total-payment-hidden").html(total);
+}
+
+window.updateB2BQty = function(type, delta) {
+    var input = $('#qty-' + type);
+    var currentVal = parseInt(input.val()) || 0;
+    var newVal = currentVal + delta;
+    
+    // Limits
+    if (type === 'adt' && newVal < 1) return; // Min 1 adult
+    if (newVal < 0) return;
+    if (newVal > 9) return;
+    
+    input.val(newVal);
+    
+    // Update dataListFlightSearch
+    if (type === 'adt') dataListFlightSearch.search.Adt = newVal;
+    if (type === 'chd') dataListFlightSearch.search.Child = newVal;
+    if (type === 'inf') dataListFlightSearch.search.Baby = newVal;
+    
+    sessionStorage.setItem(CONSTANTS.STORAGE.Search, JSON.stringify(dataListFlightSearch));
+    
+    // Re-render
+    if (type === 'adt') renderItemsInfoAdt();
+    if (type === 'chd') renderChildOrBaby('Child');
+    if (type === 'inf') renderChildOrBaby('Baby');
+    
+    // Re-initialize birthdate pickers if needed
+    if (typeof renderBirthDayPickers === 'function') {
+        renderBirthDayPickers();
+    }
+    
+    // Calculate new price
+    updateB2BTotalPrice();
+};
+
+if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+    $('#b2b-passenger-qty').show();
+    $('#qty-adt').val(dataListFlightSearch.search.Adt);
+    $('#qty-chd').val(dataListFlightSearch.search.Child);
+    $('#qty-inf').val(dataListFlightSearch.search.Baby);
+    updateB2BTotalPrice();
+}
 if (dataListFlightSearch?.isTwoWayFare) {
     ListFareData.push(
         {
@@ -349,6 +440,40 @@ $(".btn-confirm-done").click(function () {
 
     if (tempVoucher)
         sessionStorage.setItem(CONSTANTS.STORAGE.Voucher, JSON.stringify(tempVoucher));
+
+    if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+        var loggedUser = UTILS.getUserLogged();
+        var booking_session = {
+            search: JSON.stringify(dataListFlightSearch),
+            info: JSON.stringify(dataSubmit)
+        };
+        var bookFlightRes = { ListBooking: [] };
+        var saveBookingObj = {
+            booking_data: JSON.stringify(bookFlightRes),
+            booking_order: JSON.stringify(bookData),
+            booking_session: JSON.stringify(booking_session),
+            client_id: loggedUser ? parseInt(loggedUser.clientId) : 0,
+            voucher_name: $("#txt-discount").val(),
+            b2bWarehouseId: dataListFlightSearch.b2bWarehouseId
+        };
+        
+        flightServices.saveBooking(saveBookingObj).then(function (res) {
+            if (res.status == CONSTANTS.RESPONSE_STATUS.success) {
+                sessionStorage.setItem(CONSTANTS.STORAGE.Booked, JSON.stringify(bookFlightRes));
+                UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);
+                location.href = CONSTANTS.FLIGHTS.MVC.payment;
+            } else {
+                toastr.error(res.msg);
+                UTILS.removeLoading();
+                UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);
+            }
+        }).catch(function (err) {
+            UTILS.removeLoading();
+            UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);
+            UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.supportModal);
+        });
+        return;
+    }
 
     flightServices.bookFlight(bookData).then(function (res) {
         if (!res.Status) {
@@ -672,6 +797,7 @@ var basicBirthday = {
 };
 
 function renderBirthDayPickers() {
+    if (!dataListFlightSearch || !dataListFlightSearch.search) return;
     var dateToSetDateRange = dataListFlightSearch.search.StartDate;
 
     $(".field-birthday.datepicker-input-Child").daterangepicker({
@@ -704,10 +830,10 @@ $(document).ready(function () {
     sessionStorage.setItem(CONSTANTS.STORAGE.Path, window.location.pathname);
     UTILS.removeLoading();
 
-    // verify flight
+    // verify flight — skip for B2B warehouse bookings
     var listFareData = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.ListFareData));
 
-    if (listFareData) {
+    if (listFareData && !( dataListFlightSearch && dataListFlightSearch.isB2B)) {
         flightServices.verifyFlight(ListFareData).then(function (res) {
             if (res) {
                 if (res.Status) {
@@ -786,6 +912,12 @@ $(document).ready(function () {
         }).catch(function (err) {
            // console.log(err);
         })
+    }
+
+    // skip baggage API for B2B warehouse bookings
+    if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+        bindSaveContactInfo();
+        return;
     }
 
     flightServices.getBaggageFareChosen(ListFareData).then(function (data) {
