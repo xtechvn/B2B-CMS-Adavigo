@@ -564,6 +564,7 @@ $(".btn-confirm-done").click(function () {
         // save booking data to adavigo
         flightServices.saveBooking(saveBookingObj).then(function (res) {
             if (res.status == CONSTANTS.RESPONSE_STATUS.success) {
+
                 sessionStorage.setItem(CONSTANTS.STORAGE.Booked, JSON.stringify(bookFlightRes));
                 // close modal
                 UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);

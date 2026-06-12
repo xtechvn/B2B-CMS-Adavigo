@@ -80,28 +80,39 @@ function payment(type, getVietQRCodeRequest) {
 
     sessionStorage.setItem(CONSTANTS.STORAGE.Issue, JSON.stringify(issueFlightData));
 
-    // amount
-    var amount = dataListFlightSearch.go.Amount;
-    if (dataListFlightSearch.isTwoWayFare)
-        amount += dataListFlightSearch.back.Amount;
+    // amount — B2B dùng b2bPrices, B2C dùng Amount đã tính
+    var amount = 0;
+    if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+        var info = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.Info));
+        var adt = info ? (info.Adt ? info.Adt.length : 0) : 0;
+        var chd = info ? (info.Child ? info.Child.length : 0) : 0;
+        var inf = info ? (info.Baby ? info.Baby.length : 0) : 0;
+        var b2bPrices = dataListFlightSearch.b2bPrices || {};
+        amount = (adt * (b2bPrices.adt || 0)) + (chd * (b2bPrices.chd || 0)) + (inf * (b2bPrices.inf || 0));
+    } else {
+        amount = dataListFlightSearch.go.Amount;
+        if (dataListFlightSearch.isTwoWayFare)
+            amount += dataListFlightSearch.back.Amount;
+    }
 
     // orderId 
     var orderIdSession = sessionStorage.getItem(CONSTANTS.STORAGE.OrderId)
 
     var user = UTILS.getUserLogged();
+    var b2bOrderId = dataListFlightSearch && dataListFlightSearch.isB2B ? (dataListFlightSearch.b2bWarehouseId || '') : null;
     var objRequest = {
         "payment_type": type.toString(),
-        //"return_url": "https://api-core.adavigo.com/api/onepay/receiver-data",
-        //"return_url": "https://api.adavigo.com/api/onepay/receiver-data",
         "client_id": user ? user.clientId : "",
         "bank_code": bank_code,
-        "order_detail": getBookingBySessionId ? getBookingBySessionId.booking_id.toString() : booked?.BookingId.toString(),
+        "order_detail": getBookingBySessionId ? getBookingBySessionId?.booking_id?.toString()
+                        : (b2bOrderId ? b2bOrderId.toString() : booked?.BookingId?.toString()),
         "booking_verify": JSON.stringify(booking_verify),
         "booking_order": JSON.stringify(booking_order),
-        "session_id": sessionId ? sessionId : booked?.ListBooking[0]?.Session,
+        "session_id": sessionId ? sessionId : (booked?.ListBooking?.length > 0 ? booked.ListBooking[0].Session : ''),
         "amount": amount,
-        "order_id": orderIdSession ? Number(sessionStorage.getItem(CONSTANTS.STORAGE.OrderId)) : - 1,
+        "order_id": orderIdSession ? Number(sessionStorage.getItem(CONSTANTS.STORAGE.OrderId)) : -1,
         "event_status": orderIdSession ? 1 : 0,
+        "b2b_warehouse_id": b2bOrderId ? b2bOrderId : 0
     }
 
     sessionStorage.setItem(CONSTANTS.STORAGE.Payment, JSON.stringify(objRequest));
@@ -147,6 +158,11 @@ function payment(type, getVietQRCodeRequest) {
 }
 
 function paymentFlow(type, getVietQRCodeRequest) {
+    // B2B warehouse: không cần check timer, thanh toán trực tiếp
+    if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+        payment(type, getVietQRCodeRequest);
+        return;
+    }
     // flow booking full 1
     if (!sessionId) {
         // check end time waiting booking
@@ -285,6 +301,25 @@ $(document).ready(function () {
     $(".step-menu .step1").addClass("success");
     $(".step-menu .step2").addClass("active");
 
+    // B2B: ẩn giữ chỗ, ẩn đếm ngược, hiển thị tổng tiền từ b2bPrices
+    if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+        $("#payment-hold").hide();
+        $("#bookflight-success").hide();
+        $("#bookflight-fail").hide();
+        // Hiển thị tổng tiền B2B (lấy từ info session sau khi user đã chọn số lượng)
+        var infoB2B = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.Info));
+        if (infoB2B) {
+            var adtB2B = infoB2B.Adt ? infoB2B.Adt.length : 0;
+            var chdB2B = infoB2B.Child ? infoB2B.Child.length : 0;
+            var infB2B = infoB2B.Baby ? infoB2B.Baby.length : 0;
+            var b2bP = dataListFlightSearch.b2bPrices || {};
+            var totalB2B = (adtB2B * (b2bP.adt || 0)) + (chdB2B * (b2bP.chd || 0)) + (infB2B * (b2bP.inf || 0));
+            $('.total-payment').html(UTILS.formatViCurrency(totalB2B));
+            $('.total-payment-final').html(UTILS.formatViCurrency(totalB2B));
+            $(".total-payment-hidden").html(totalB2B);
+        }
+    }
+
     calculateSavingTime();
 
     // payment button click
@@ -362,26 +397,31 @@ function calculateSavingTime() {
         if (!booked.Status) {
             $("#payment-hold").hide();
         }
-        if (booked.ListBooking.length > 0) {
-            // filter go and back flight
-            var go;
-            var back;
-            for (var b of booked.ListBooking) {
-                if (b.FareData.Leg == 0) {
-                    go = b;
-                }
-                else
-                    back = b;
-            }
-
-            // 2 ticket other airline
-            var savingTimeTxt = TIME_UTILS.formatDateMomentJs(go.ExpiryDate, "HH:mm:ss DD/MM/YYYY");
-            if (back) {
-                savingTimeTxt = new Date(go.ExpiryDate) < new Date(back.ExpiryDate) ? TIME_UTILS.formatDateMomentJs(go.ExpiryDate, "HH:mm:ss DD/MM/YYYY") : TIME_UTILS.formatDateMomentJs(back.ExpiryDate, "HH:mm:ss DD/MM/YYYY")
-            }
-
-            $("#saving-time").text(savingTimeTxt);
+        // B2B: ListBooking rỗng, ẩn giữ chỗ và bỏ qua saving time
+        if (!booked.ListBooking || booked.ListBooking.length === 0) {
+            $("#payment-hold").hide();
+            return;
         }
+        // filter go and back flight
+        var go;
+        var back;
+        for (var b of booked.ListBooking) {
+            if (b.FareData && b.FareData.Leg == 0) {
+                go = b;
+            }
+            else if (b.FareData)
+                back = b;
+        }
+
+        if (!go) return;
+
+        // 2 ticket other airline
+        var savingTimeTxt = TIME_UTILS.formatDateMomentJs(go.ExpiryDate, "HH:mm:ss DD/MM/YYYY");
+        if (back) {
+            savingTimeTxt = new Date(go.ExpiryDate) < new Date(back.ExpiryDate) ? TIME_UTILS.formatDateMomentJs(go.ExpiryDate, "HH:mm:ss DD/MM/YYYY") : TIME_UTILS.formatDateMomentJs(back.ExpiryDate, "HH:mm:ss DD/MM/YYYY")
+        }
+
+        $("#saving-time").text(savingTimeTxt);
     }
 }
 
