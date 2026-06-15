@@ -278,9 +278,9 @@ function fillInfoStepSearch() {
             totalBack = backObj.TotalPrice + profitBack + baggageFee.backFee;
             $('.details-back .total-back').html(UTILS.formatViCurrency(totalBack));
 
-            $('.total-payment').html(UTILS.formatViCurrency(totalGo + totalBack));
-            $('.total-payment-final').html(UTILS.formatViCurrency(totalGo + totalBack));
-            $(".total-payment-hidden").html(totalGo + totalBack)
+            $('.total-payment').html(UTILS.formatViCurrency(totalGo ));
+            $('.total-payment-final').html(UTILS.formatViCurrency(totalGo));
+            $(".total-payment-hidden").html(totalGo )
         }
         else {
             $('.total-payment').html(UTILS.formatViCurrency(totalGo));
@@ -292,7 +292,7 @@ function fillInfoStepSearch() {
         var voucher = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.Voucher));
         if (voucher) {
             $("#discount-value").text(UTILS.formatViCurrency(voucher.discount));
-            $('.total-payment-final').html(UTILS.formatViCurrency(totalGo + totalBack - voucher.discount));
+            $('.total-payment-final').html(UTILS.formatViCurrency(totalGo  - voucher.discount));
         }
     }
 }

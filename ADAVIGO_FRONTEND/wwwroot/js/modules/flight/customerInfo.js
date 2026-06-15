@@ -35,78 +35,86 @@ function renderItemsBaggage(listBaggage, leg) {
 
 function renderItemsInfoAdt() {
     var qtyAdt = Number(dataListFlightSearch?.search.Adt);
-    var htmlAdt = '';
-    for (var i = 0; i < qtyAdt; i++) {
-        htmlAdt +=
-            `<div class="item">
-            <h3 class="title txt_16 bold mb10">Người lớn ${i + 1}</h3>
-            <div class="grid grid__2 grid-form mb20">
-                <div class="form-group mb0">
-                    <label class="" for="fullNameAdt${i}" style="width: 100%;">Họ và tên</label>
-                    <input type="text" class="form-control form-control-CMND field-required" id="fullNameAdt${i}">
-                    <div class="gray mt8">Như trên CMND (không dấu)</div>
-                    <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
-                </div>
-                <div class="form-group mb0">
-                    <label class="" for="genderAdt${i}">Giới tính</label>
-                    <div class="sort-list flex">
-                        <label class="confir_res circle mb0">
-                            Nam
-                        <input type="radio" name="genderAdt${i}" checked="" value="male">
-                        <span class="checkmark"></span>
-                    </label>
-                        <label class="confir_res circle mb0 ml-3">
-                            Nữ
-                        <input type="radio" name="genderAdt${i}" value="female">
-                        <span class="checkmark"></span>
-                    </label>
-                    </div>
-                </div>
-            </div>
-        </div>`
-    }
-    $('.block-info-adt').html(htmlAdt);
-}
+    var current = $('.block-info-adt .item').length;
 
-function renderChildOrBaby(type) {
-    var qty = Number(dataListFlightSearch?.search[type]);
-    var htmlField = '';
-    for (var i = 0; i < qty; i++) {
-        htmlField +=
-            `<div class="item">
-            <h3 class="title txt_16 bold mb10">${type == 'Child' ? 'Trẻ em ' + (i + 1) + ' (2-12 tuổi)' : 'Em bé ' + (i + 1) + ' (<2 tuổi)'}</h3>
-            <div class="grid grid__2 grid-form mb20">
-                <div class="form-group mb0">
-                    <label class="" for="fullName${type}${i}" style="width: 100%;">Họ và tên</label>
-                    <input type="text" class="form-control form-control-CMND field-required" id="fullName${type}${i}">
-                    <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
-                </div>
-                <div class="form-group grid grid__2 mb0">
-                    <div class="date-of-birth">
-                        <label for="birthday${type}${i}">Ngày sinh</label>
-                        <input class="datepicker-input form-control field-birthday datepicker-input-${type}" type="text" id="birthday${type}${i}" name="birthday${type}${i}" placeholder="dd/mm/yyyy">
+    if (qtyAdt > current) {
+        for (var i = current; i < qtyAdt; i++) {
+            $('.block-info-adt').append(
+                `<div class="item">
+                <h3 class="title txt_16 bold mb10">Người lớn ${i + 1}</h3>
+                <div class="grid grid__2 grid-form mb20">
+                    <div class="form-group mb0">
+                        <label for="fullNameAdt${i}" style="width: 100%;">Họ và tên</label>
+                        <input type="text" class="form-control form-control-CMND field-required" id="fullNameAdt${i}">
+                        <div class="gray mt8">Như trên CMND (không dấu)</div>
                         <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
                     </div>
-                    <div class="gender">
-                        <label class="" for="gender${type}${i}">Giới tính</label>
+                    <div class="form-group mb0">
+                        <label for="genderAdt${i}">Giới tính</label>
                         <div class="sort-list flex">
-                            <label class="confir_res circle mb0">
-                            Nam
-                            <input type="radio" name="gender${type}${i}" checked="" value="male">
-                            <span class="checkmark"></span>
-                        </label>
-                            <label class="confir_res circle mb0 ml-3">
-                            Nữ
-                            <input type="radio" name="gender${type}${i}" value="female">
-                            <span class="checkmark"></span>
-                        </label>
+                            <label class="confir_res circle mb0">Nam
+                                <input type="radio" name="genderAdt${i}" checked="" value="male">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="confir_res circle mb0 ml-3">Nữ
+                                <input type="radio" name="genderAdt${i}" value="female">
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>`
+            </div>`
+            );
+        }
+    } else if (qtyAdt < current) {
+        $('.block-info-adt .item').slice(qtyAdt).remove();
     }
-    type == 'Child' ? $('.block-info-child').html(htmlField) : $('.block-info-baby').html(htmlField);
+}
+
+
+function renderChildOrBaby(type) {
+var qty = Number(dataListFlightSearch?.search[type]);
+    var sel = type == 'Child' ? '.block-info-child' : '.block-info-baby';
+    var current = $(sel + ' .item').length;
+
+    if (qty > current) {
+        for (var i = current; i < qty; i++) {
+            $(sel).append(
+                `<div class="item">
+                <h3 class="title txt_16 bold mb10">${type == 'Child' ? 'Trẻ em ' + (i + 1) + ' (2-12 tuổi)' : 'Em bé ' + (i + 1) + ' (<2 tuổi)'}</h3>
+                <div class="grid grid__2 grid-form mb20">
+                    <div class="form-group mb0">
+                        <label for="fullName${type}${i}" style="width: 100%;">Họ và tên</label>
+                        <input type="text" class="form-control form-control-CMND field-required" id="fullName${type}${i}">
+                        <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
+                    </div>
+                    <div class="form-group grid grid__2 mb0">
+                        <div class="date-of-birth">
+                            <label for="birthday${type}${i}">Ngày sinh</label>
+                            <input class="datepicker-input form-control field-birthday datepicker-input-${type}" type="text" id="birthday${type}${i}" name="birthday${type}${i}" placeholder="dd/mm/yyyy">
+                            <div class="error-field">Vui lòng nhập thông tin và nhập đúng định dạng</div>
+                        </div>
+                        <div class="gender">
+                            <label for="gender${type}${i}">Giới tính</label>
+                            <div class="sort-list flex">
+                                <label class="confir_res circle mb0">Nam
+                                    <input type="radio" name="gender${type}${i}" checked="" value="male">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="confir_res circle mb0 ml-3">Nữ
+                                    <input type="radio" name="gender${type}${i}" value="female">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            );
+        }
+    } else if (qty < current) {
+        $(sel + ' .item').slice(qty).remove();
+    }
 }
 
 // load page
@@ -462,7 +470,7 @@ $(".btn-confirm-done").click(function () {
                 sessionStorage.setItem(CONSTANTS.STORAGE.Booked, JSON.stringify(bookFlightRes));
                 UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);
                 // Truyền session_id vào URL để payment page load đúng data từ DB
-                var sessionIdParam = res.session_id ? '?sessionId=' + res.session_id + '&clientId=' + (loggedUser ? loggedUser.clientId : 0) : '';
+                var sessionIdParam = res.data.session_id ? '?sessionId=' + res.data.session_id + '&clientId=' + (res.data.account_client_id ? res.data.account_client_id : 0) : '';
                 location.href = CONSTANTS.FLIGHTS.MVC.payment + sessionIdParam;
             } else {
                 toastr.error(res.msg);
@@ -758,6 +766,11 @@ $("#edit-save-contact").click(function () {
     $('#phoneNumber').prop('readonly', false);
     $('#emailContact').prop('readonly', false);
     $('#select-sort').prop('disabled', false);
+
+    $('#firstName').prop('disabled', false);
+    $('#lastName').prop('disabled', false);
+    $('#phoneNumber').prop('disabled', false);
+    $('#emailContact').prop('disabled', false);
 
     $("#edit-save-contact").toggleClass("d-none")
     $("#save-contact").toggleClass("d-none")
@@ -1273,19 +1286,19 @@ function renderPassengers() {
 // use for check if booked flight and press back button of chrome
 window.onpageshow = function (event) {
     var booked = sessionStorage.getItem(CONSTANTS.STORAGE.Booked);
-    if (booked) {
-        UTILS.removeLoading();
-        $(".btn-payment").removeClass("d-none");
-        $(".btn-sidebar-submit").addClass("d-none");
-        $(".field-required").prop("readonly", true);
-        $('input').prop("disabled", true);
-        renderCustomerContact();
-        $("#myModalBaggage-div").addClass("disabled-div")
-        $("#myModalBaggage-div .add").addClass("disabled-icon")
-        $("#txt-discount").prop('disabled', true);
+    //if (booked) {
+    //    UTILS.removeLoading();
+    //    $(".btn-payment").removeClass("d-none");
+    //    $(".btn-sidebar-submit").addClass("d-none");
+    //    $(".field-required").prop("readonly", true);
+    //   $('input').prop("disabled", true);
+    //    renderCustomerContact();
+    //    $("#myModalBaggage-div").addClass("disabled-div")
+    //    $("#myModalBaggage-div .add").addClass("disabled-icon")
+    //    $("#txt-discount").prop('disabled', true);
 
-        $("#btn-apply-voucher").addClass("disabled-icon")
-    }
+    //    $("#btn-apply-voucher").addClass("disabled-icon")
+    //}
 };
 
 function renderCustomerContact() {

@@ -9,7 +9,7 @@ namespace ADAVIGO_FRONTEND.Models.Flights.Payment
     {
         public string payment_type { get; set; }
         public string return_url { get; set; }
-        public string client_id { get; set; }
+        public int client_id { get; set; }
         public string bank_code { get; set; }
         public string order_detail { get; set; }
         public string booking_verify { get; set; }

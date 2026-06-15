@@ -355,7 +355,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 {
                     payment_type = requestObj.payment_type,
                     return_url = ApplicationSettings.AdavigoSettings.OnePayUrl,
-                    client_id = _UserManager.ClientID.ToString(),
+                    client_id = _UserManager.ClientID,
                     bank_code = requestObj.bank_code,
                     order_detail = requestObj.order_detail,
                     booking_verify = requestObj.booking_verify,

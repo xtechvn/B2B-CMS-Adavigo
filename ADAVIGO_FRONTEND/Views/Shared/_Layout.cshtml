@@ -288,6 +288,35 @@
     <script type="text/javascript" src="~/js/shared/newsservices.js" asp-append-version="true"></script>
     <script src="~/js/modules/flight/sidebar.js" asp-append-version="true"></script>
 
+    @* Lưu thông tin user vào localStorage sau khi đăng nhập *@
+    @if (User.Identity.IsAuthenticated)
+    {
+        @using System.Security.Claims
+        @using ADAVIGO_FRONTEND.Models.Configs
+        
+            var _ci = User.Identity as ClaimsIdentity;
+            var _clientId   = _ci?.FindFirst(nameof(SystemUserModel.ClientID))?.Value ?? "0";
+            var _clientName = _ci?.FindFirst(nameof(SystemUserModel.ClientName))?.Value ?? "";
+            var _clientType = _ci?.FindFirst(nameof(SystemUserModel.ClientType))?.Value ?? "0";
+            var _phone      = _ci?.FindFirst(nameof(SystemUserModel.Phone))?.Value ?? "";
+            var _email      = _ci?.FindFirst(nameof(SystemUserModel.Email))?.Value ?? "";
+            var _parentId   = _ci?.FindFirst(nameof(SystemUserModel.ParentId))?.Value ?? "0";
+        
+        <script type="text/javascript">
+            (function () {
+                var user = {
+                    clientId: @_clientId,
+                    clientName: "@Html.Raw(_clientName)",
+                    clientType: @_clientType,
+                    phone: "@Html.Raw(_phone)",
+                    email: "@Html.Raw(_email)",
+                    parentId: @_parentId
+                };
+                localStorage.setItem(CONSTANTS.STORAGE.User, JSON.stringify(user));
+            })();
+        </script>
+    }
+
     @*<script type="text/javascript">
     window.onload = function () {
     var userAuthorized = '@User.Identity.IsAuthenticated.ToString().ToLower()';

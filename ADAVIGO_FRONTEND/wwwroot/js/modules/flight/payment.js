@@ -235,11 +235,11 @@ $(document).ready(function () {
         }
 
         // check if 2 account, re login
-        if (userLogged) {
-            if (Number(userLogged.clientId) != clientId) {
-                localStorage.removeItem(CONSTANTS.STORAGE.User)
-            }
-        }
+        //if (userLogged) {
+        //    if (Number(userLogged.clientId) != clientId) {
+        //        localStorage.removeItem(CONSTANTS.STORAGE.User)
+        //    }
+        //}
 
         var request = {
             session_id: sessionId,

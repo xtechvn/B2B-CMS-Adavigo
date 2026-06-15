@@ -35,7 +35,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
             return View();
         }
 
-        public IActionResult Payment()
+        public IActionResult Payment(string sessionId,string clientId)
         {
             return View();
         }
