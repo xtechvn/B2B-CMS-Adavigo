@@ -461,7 +461,9 @@ $(".btn-confirm-done").click(function () {
             if (res.status == CONSTANTS.RESPONSE_STATUS.success) {
                 sessionStorage.setItem(CONSTANTS.STORAGE.Booked, JSON.stringify(bookFlightRes));
                 UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm);
-                location.href = CONSTANTS.FLIGHTS.MVC.payment;
+                // Truyền session_id vào URL để payment page load đúng data từ DB
+                var sessionIdParam = res.session_id ? '?sessionId=' + res.session_id + '&clientId=' + (loggedUser ? loggedUser.clientId : 0) : '';
+                location.href = CONSTANTS.FLIGHTS.MVC.payment + sessionIdParam;
             } else {
                 toastr.error(res.msg);
                 UTILS.removeLoading();

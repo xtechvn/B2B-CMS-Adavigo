@@ -263,6 +263,24 @@ $(document).ready(function () {
                 fillInfoStepSearch();
                 renderCustomerList();
                 UTILS.showHideCountdown();
+
+                // B2B: ẩn giữ chỗ, ẩn đếm ngược, hiển thị tổng tiền
+                if (dataListFlightSearch && dataListFlightSearch.isB2B) {
+                    $("#payment-hold").hide();
+                    $("#bookflight-success").hide();
+                    $("#bookflight-fail").hide();
+                    var infoB2B = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.Info));
+                    if (infoB2B) {
+                        var adtB2B = infoB2B.Adt ? infoB2B.Adt.length : 0;
+                        var chdB2B = infoB2B.Child ? infoB2B.Child.length : 0;
+                        var infB2B = infoB2B.Baby ? infoB2B.Baby.length : 0;
+                        var b2bP = dataListFlightSearch.b2bPrices || {};
+                        var totalB2B = (adtB2B * (b2bP.adt || 0)) + (chdB2B * (b2bP.chd || 0)) + (infB2B * (b2bP.inf || 0));
+                        $('.total-payment').html(UTILS.formatViCurrency(totalB2B));
+                        $('.total-payment-final').html(UTILS.formatViCurrency(totalB2B));
+                        $(".total-payment-hidden").html(totalB2B);
+                    }
+                }
             }
         }).catch(function (err) {
         })
@@ -300,25 +318,6 @@ $(document).ready(function () {
     // handle header steps
     $(".step-menu .step1").addClass("success");
     $(".step-menu .step2").addClass("active");
-
-    // B2B: ẩn giữ chỗ, ẩn đếm ngược, hiển thị tổng tiền từ b2bPrices
-    if (dataListFlightSearch && dataListFlightSearch.isB2B) {
-        $("#payment-hold").hide();
-        $("#bookflight-success").hide();
-        $("#bookflight-fail").hide();
-        // Hiển thị tổng tiền B2B (lấy từ info session sau khi user đã chọn số lượng)
-        var infoB2B = JSON.parse(sessionStorage.getItem(CONSTANTS.STORAGE.Info));
-        if (infoB2B) {
-            var adtB2B = infoB2B.Adt ? infoB2B.Adt.length : 0;
-            var chdB2B = infoB2B.Child ? infoB2B.Child.length : 0;
-            var infB2B = infoB2B.Baby ? infoB2B.Baby.length : 0;
-            var b2bP = dataListFlightSearch.b2bPrices || {};
-            var totalB2B = (adtB2B * (b2bP.adt || 0)) + (chdB2B * (b2bP.chd || 0)) + (infB2B * (b2bP.inf || 0));
-            $('.total-payment').html(UTILS.formatViCurrency(totalB2B));
-            $('.total-payment-final').html(UTILS.formatViCurrency(totalB2B));
-            $(".total-payment-hidden").html(totalB2B);
-        }
-    }
 
     calculateSavingTime();
 
