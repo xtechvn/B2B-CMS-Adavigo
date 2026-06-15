@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Thông tin khách hàng";
 
     var claims = User.Claims;
@@ -117,6 +117,37 @@
                         <use xlink:href="../images/icons/icon.svg#warring"></use>
                     </svg> Tên không dấu ( Họ Tên đệm Tên, VD: Nguyen Thi Ngoc Anh)
                 </div>
+
+                <!-- B2B: chọn số lượng hành khách -->
+                <div id="b2b-passenger-qty" class="mb24" style="display:none;">
+                    <div class="grid grid__3 grid-form">
+                        <div class="form-group mb0">
+                            <label>Người lớn</label>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary" onclick="updateB2BQty('adt', -1)">-</button>
+                                <input type="number" id="qty-adt" class="form-control text-center" value="1" min="1" max="9" readonly>
+                                <button type="button" class="btn btn-outline-secondary" onclick="updateB2BQty('adt', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="form-group mb0">
+                            <label>Trẻ em (2-12 tuổi)</label>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary" onclick="updateB2BQty('chd', -1)">-</button>
+                                <input type="number" id="qty-chd" class="form-control text-center" value="0" min="0" max="9" readonly>
+                                <button type="button" class="btn btn-outline-secondary" onclick="updateB2BQty('chd', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="form-group mb0">
+                            <label>Em bé (&lt;2 tuổi)</label>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary" onclick="updateB2BQty('inf', -1)">-</button>
+                                <input type="number" id="qty-inf" class="form-control text-center" value="0" min="0" max="9" readonly>
+                                <button type="button" class="btn btn-outline-secondary" onclick="updateB2BQty('inf', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="block-info-adt"></div>
                 <div class="block-info-child"></div>
                 <div class="block-info-baby"></div>

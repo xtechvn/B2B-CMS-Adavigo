@@ -1,7 +1,7 @@
 ﻿@using ADAVIGO_FRONTEND.ViewModels
 @model FundManageViewModel
 @{
-    bool is_home_page = (bool)ViewBag.IsHomePage;
+    bool is_home_page = (bool)(ViewBag.IsHomePage ?? false);
 }
 <div class="bg-white pd-20 radius10 mb16">
     <div class="head-title">

@@ -111,5 +111,150 @@ var index_b2b = {
                 _msgalert.error(result.msg || 'Có lỗi xảy ra');
             }
         });
+    },
+    HoldBooking: function (id, amountAdt, amountChd, amountInf) {
+        var parsePrice = function (val) {
+            if (!val) return 0;
+            var str = val.toString().replaceAll(",", "");
+            var num = parseFloat(str);
+            return isNaN(num) ? 0 : num;
+        };
+
+        _ajax_caller.post("/Flights/Detail", { id: id }, function (result) {
+            if (result.status !== 0) {
+                _msgalert.error(result.msg || 'Không thể lấy thông tin vé');
+                return;
+            }
+
+            var data = result.data;
+            var booking = data.Booking || {};
+            var segments = data.Segments || [];
+            var segGo = segments.find(function (x) { return x.SegmentType === 0; }) || {};
+            var segBack = segments.find(function (x) { return x.SegmentType === 1; });
+            var isTwoWay = !!segBack;
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            var startDate = dd + '/' + mm + '/' + yyyy;
+
+            // Format date for display
+            var formatDate = function (dateStr) {
+                if (!dateStr) return '';
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return dateStr;
+                return String(d.getDate()).padStart(2, '0') + '/' +
+                    String(d.getMonth() + 1).padStart(2, '0') + '/' +
+                    d.getFullYear();
+            };
+            var formatTime = function (dateStr) {
+                if (!dateStr) return '';
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '';
+                return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+            };
+            var formatDateTime = function (dateStr) {
+                var date = formatDate(dateStr);
+                var time = formatTime(dateStr);
+                return date && time ? date + ' ' + time : (date || '');
+            };
+
+            var adtPrice = parsePrice(amountAdt);
+            var chdPrice = parsePrice(amountChd);
+            var infPrice = parsePrice(amountInf);
+
+            var searchData = {
+                search: {
+                    Adt: 1,
+                    Child: 0,
+                    Baby: 0,
+                    StartDate: segGo.FlightDate ? formatDate(segGo.FlightDate) : startDate,
+                    StartPoint: booking.DeparturePoint || '',
+                    EndPoint: booking.ArrivalPoint || ''
+                },
+                isB2B: true,
+                b2bWarehouseId: id,
+                isTwoWayFare: isTwoWay,
+                Session: '',
+                b2bPrices: {
+                    adt: adtPrice,
+                    chd: chdPrice,
+                    inf: infPrice
+                },
+                extraInfo: {
+                    StartPointName: booking.DeparturePoint || '',
+                    EndPointName: booking.ArrivalPoint || '',
+                    StringDateGoChoosen: formatDate(segGo.FlightDate),
+                    StringDateBackChoosen: isTwoWay ? formatDate(segBack.FlightDate) : '',
+                    FirstTimeGo: formatTime(segGo.FlightDate),
+                    LastTimeGo: formatTime(segGo.FlightDate),
+                    FirstDateGo: formatDate(segGo.FlightDate),
+                    LastDateGo: formatDate(segGo.FlightDate),
+                    FirstTimeBack: isTwoWay ? formatTime(segBack.FlightDate) : '',
+                    LastTimeBack: isTwoWay ? formatTime(segBack.FlightDate) : '',
+                    FirstDateBack: isTwoWay ? formatDate(segBack.FlightDate) : '',
+                    LastDateBack: isTwoWay ? formatDate(segBack.FlightDate) : '',
+                    DurationFlyGo: '',
+                    DurationFlyBack: ''
+                },
+                go: {
+                    FareDataId: 0,
+                    Airline: segGo.Airline || 'B2B',
+                    TotalPrice: adtPrice,
+                    FareAdt: adtPrice, FareChd: chdPrice, FareInf: infPrice,
+                    FeeAdt: 0, FeeChd: 0, FeeInf: 0,
+                    TaxAdt: 0, TaxChd: 0, TaxInf: 0,
+                    AdavigoPrice: { price_id: 0, profit: 0, amount: adtPrice },
+                    AdavigoPriceAdt: { amount: adtPrice },
+                    AirlineObj: { nameVi: segGo.Airline || 'B2B', logo: '' },
+                    ListFlight: [{
+                        FlightValue: segGo.FlightCode || 'B2B',
+                        Leg: 0,
+                        StopNum: 0,
+                        Operating: '',
+                        FareClass: booking.BookingCode || '',
+                        GroupClassObj: { description: '', detailVi: '' },
+                        ListSegment: [{
+                            FlightNumber: segGo.FlightCode || '',
+                            HandBaggage: booking.CarryOnBaggage || '7',
+                            AllowanceBaggage: booking.CheckedBaggage || '0',
+                            Plane: ''
+                        }]
+                    }]
+                }
+            };
+
+            if (isTwoWay) {
+                searchData.back = {
+                    FareDataId: 0,
+                    Airline: segBack.Airline || 'B2B',
+                    TotalPrice: adtPrice,
+                    FareAdt: adtPrice, FareChd: chdPrice, FareInf: infPrice,
+                    FeeAdt: 0, FeeChd: 0, FeeInf: 0,
+                    TaxAdt: 0, TaxChd: 0, TaxInf: 0,
+                    AdavigoPrice: { price_id: 0, profit: 0, amount: adtPrice },
+                    AdavigoPriceAdt: { amount: adtPrice },
+                    AirlineObj: { nameVi: segBack.Airline || 'B2B', logo: '' },
+                    ListFlight: [{
+                        FlightValue: segBack.FlightCode || 'B2B',
+                        Leg: 1,
+                        StopNum: 0,
+                        Operating: '',
+                        FareClass: booking.BookingCode || '',
+                        GroupClassObj: { description: '', detailVi: '' },
+                        ListSegment: [{
+                            FlightNumber: segBack.FlightCode || '',
+                            HandBaggage: booking.CarryOnBaggage || '7',
+                            AllowanceBaggage: booking.CheckedBaggage || '0',
+                            Plane: ''
+                        }]
+                    }]
+                };
+            }
+
+            sessionStorage.setItem(CONSTANTS.STORAGE.Search, JSON.stringify(searchData));
+            window.location.href = '/Flights/CustomerInfo';
+        });
     }
 };

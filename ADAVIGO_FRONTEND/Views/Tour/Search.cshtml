@@ -181,22 +181,19 @@
                                 {
                                     case 1:
                                         {
-                                            list_by_start = listing.data.Where(x => x.startpoint1.Trim().Equals( s.startpoint1.Trim()) && x.groupendpoint1.Trim().Equals( s.groupendpoint1.Trim())).ToList();
-                                            <h2 class="title-cate">Khởi hành từ @s.startpoint1 - @s.groupendpoint1</h2>
+                                            <h2 class="title-cate">Khởi hành từ @listing.data[0].startpoint1 - @listing.data[0].endpoint1</h2>
 
                                         }
                                         break;
                                     case 2:
                                         {
-                                            list_by_start = listing.data.Where(x => x.startpoint2.Trim().Equals(s.startpoint2.Trim()) && x.groupendpoint2.Trim().Equals( s.groupendpoint2.Trim())).ToList();
-                                            <h2 class="title-cate">Khởi hành từ @s.startpoint2 - @s.groupendpoint2</h2>
+                                            <h2 class="title-cate">Khởi hành từ @listing.data[0].startpoint2 - @listing.data[0].endpoint2</h2>
 
                                         }
                                         break;
                                     case 3:
                                         {
-                                            list_by_start = listing.data.Where(x => x.startpoint3.Trim().Equals(s.startpoint3.Trim()) && x.groupendpoint3.Trim().Equals(s.groupendpoint3.Trim())).ToList();
-                                            <h2 class="title-cate">Khởi hành từ @s.startpoint3 - @s.groupendpoint3</h2>
+                                            <h2 class="title-cate">Khởi hành từ @listing.data[0].startpoint3 - @listing.data[0].endpoint3</h2>
 
                                         }
                                         break;
