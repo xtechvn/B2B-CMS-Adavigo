@@ -65,5 +65,26 @@ namespace ADAVIGO_FRONTEND.Models.Services
             }
             return null;
         }
+        public async Task<List<AirPortCode>> GetListAPC(int id)
+        {
+            try
+            {
+                var result = await _ApiConnector.ExecutePostAsync(SystemConstants.AdavigoApiRoutes.GetListAPC, new {id=id});
+
+                var jsonData = JObject.Parse(result);
+                var status = int.Parse(jsonData["status"].ToString());
+                if (status == (int)ENUM_API_RESULT.SUCCESS)
+                {
+                    return JsonConvert.DeserializeObject<List<AirPortCode>>(jsonData["data"].ToString());
+                }
+                
+            }
+            catch (Exception ex)
+            {
+               
+                throw new Exception(ex.Message);
+            }
+            return null;
+        }
     }
 }

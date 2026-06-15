@@ -4,6 +4,8 @@ $(document).ready(function () {
 var index_b2b = {
     init: function () {
         this.GetListFl();
+        $('#search-departure').select2();
+        $('#search-arrival').select2();
     },
     GetListFl: function () {
         var obj = {

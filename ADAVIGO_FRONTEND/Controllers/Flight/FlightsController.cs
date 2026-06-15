@@ -19,8 +19,14 @@ namespace ADAVIGO_FRONTEND.Controllers.Flight
             _B2BFlightService = b2BFlightService;
         }
 
-        public IActionResult Index(string dtcr = null, string dtcp = null)
+        public async Task<IActionResult> Index(string dtcr = null, string dtcp = null)
         {
+            var airline = await _B2BFlightService.GetListAPC(0);
+            if (airline != null )
+            {
+                ViewBag.Airline = airline;
+            }
+
             return View();
 
         }

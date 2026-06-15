@@ -63,6 +63,7 @@
             public const string GetAllCode = "/api/AllCode/service/get-allcode.json";
             public const string GetlistFl = "/api/b2b/flight/get-list";
             public const string GetDetailFl = "/api/b2b/flight/get-detail";
+            public const string GetListAPC = "/api/b2b/flight/get-list-air-port-code";
           
         }
 

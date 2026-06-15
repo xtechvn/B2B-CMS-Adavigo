@@ -1,5 +1,7 @@
+@using ADAVIGO_FRONTEND.ViewModels
 @{
     ViewData["Title"] = "Index";
+    var Airline = (List<AirPortCode>)ViewBag.Airline;
 }
 
 <partial name="_FlightTopNavbar" />
@@ -15,7 +17,7 @@
             </a>
 
         </div>
-@*         <div class="tab-content">
+        @*         <div class="tab-content">
             <div id="tab-flight">
                 <div class="flex-row">
                     <partial name="_SearchFlightBox" />
@@ -288,62 +290,83 @@
         </div>
     </div>
 *@
- <!-- danh sách vé -->
+        <!-- danh sách vé -->
 
-    <div class="">
-        <h2 class="title_page">Kho vé máy bay</h2>
-        <div class="bg_white filter-search">
-            <div class="row">
-                <div class="col-md-2 mb10" style="display:none">
-                    <input type="hidden" class="form-control" id="search-booking-code" placeholder="Mã booking">
-                </div>
-                <div class="col-md-2 mb10">
-                    <select type="text" class="form-control service-fly-select-route-from-departure" id="search-departure"  placeholder="Điểm đi"></select>
-                </div>
-                <div class="col-md-2 mb10">
-                    <select type="text" class="form-control service-fly-select-route-from-arrival" id="search-arrival"  placeholder="Điểm đến"></select>
-                </div>
-                <div class="col-md-2 mb10" style="display:none">
-                    <input type="text" class="form-control" id="search-airline" placeholder="Hãng bay">
-                </div>
-                <div class="col-md-2 mb10">
-                    <select type="text" class="form-control" id="Date">
-                        <option value="0">Chọn Tháng</option>
-                        <option value="1">Tháng 1</option>
-                        <option value="2">Tháng 2</option>
-                        <option value="3">Tháng 3</option>
-                        <option value="4">Tháng 4</option>
-                        <option value="5">Tháng 5</option>
-                        <option value="6">Tháng 6</option>
-                        <option value="7">Tháng 7</option>
-                        <option value="8">Tháng 8</option>
-                        <option value="9">Tháng 9</option>
-                        <option value="10">Tháng 10</option>
-                        <option value="11">Tháng 11</option>
-                        <option value="12">Tháng 12</option>
-                    </select>
-                </div>
-                <div class="col-md-2 mb10" style="display:none">
-                    <select class="form-control" id="search-fund-type">
-                        <option value="0">Tất Quỹ</option>
-                        <option value="1">Quỹ mềm</option>
-                        <option value="2">Quỹ cứng</option>
-                    </select>
-                </div>
-                <div class="col-md-4 mb10">
-                    <button type="button" class="btn btn-default" onclick="index_b2b.GetListFl()">Tìm kiếm</button>
-                   
+        <div class="">
+            <h2 class="title_page">Kho vé máy bay</h2>
+            <div class="bg_white filter-search">
+                <div class="row">
+                    <div class="col-md-2 mb10" style="display:none">
+                        <input type="hidden" class="form-control" id="search-booking-code" placeholder="Mã booking">
+                    </div>
+                    <div class="col-md-2 mb10">
+                        <select type="text" class="form-control  service-fly-select-route-from-departure" id="search-departure" placeholder="Điểm đi">
+                            <option value="">Tất cả điểm đi</option>
+                            @if (Airline != null)
+                            {
+                                foreach (var item in Airline)
+                                {
+                                    <option value="@item.code">@item.districtVi</option>
+                                }
+                            }
+                            
+
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb10">
+                        <select type="text" class="form-control service-fly-select-route-from-arrival" id="search-arrival" placeholder="Điểm đến">
+                            <option value="">Tất cả điếm đến</option>
+                            @if (Airline != null)
+                            {
+                                foreach (var item in Airline)
+                                {
+                                    <option value="@item.code">@item.districtVi</option>
+                                }
+                            }
+                            
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb10" style="display:none">
+                        <input type="text" class="form-control" id="search-airline" placeholder="Hãng bay">
+                    </div>
+                    <div class="col-md-2 mb10">
+                        <select type="text" class="form-control" id="Date">
+                            <option value="0">Chọn Tháng</option>
+                            <option value="1">Tháng 1</option>
+                            <option value="2">Tháng 2</option>
+                            <option value="3">Tháng 3</option>
+                            <option value="4">Tháng 4</option>
+                            <option value="5">Tháng 5</option>
+                            <option value="6">Tháng 6</option>
+                            <option value="7">Tháng 7</option>
+                            <option value="8">Tháng 8</option>
+                            <option value="9">Tháng 9</option>
+                            <option value="10">Tháng 10</option>
+                            <option value="11">Tháng 11</option>
+                            <option value="12">Tháng 12</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb10" style="display:none">
+                        <select class="form-control" id="search-fund-type">
+                            <option value="0">Tất Quỹ</option>
+                            <option value="1">Quỹ mềm</option>
+                            <option value="2">Quỹ cứng</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb10">
+                        <button type="button" class="btn btn-default" onclick="index_b2b.GetListFl()">Tìm kiếm</button>
+
+                    </div>
                 </div>
             </div>
+            <div id="grid-data-b2b">
+                <!-- List data will be loaded here -->
+            </div>
         </div>
-        <div id="grid-data-b2b">
-            <!-- List data will be loaded here -->
-        </div>
-    </div>
 
 </section>
 
-@section scripts{
+@section scripts {
     <script type="text/javascript" src="~/js/modules/flight/index.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/modules/flight/indexB2B.js" asp-append-version="true"></script>
 }
