@@ -30,6 +30,7 @@ namespace ADAVIGO_FRONTEND_B2C.Infrastructure.Utilities.Constants
             public const string TOUR_BY_ACCOUNTID = "api/b2b/order/order-list-tour-by-accountid.json";
             public const string GetBookingPayment = "/api/b2b/tour/get-booking-payment";
             public const string GetListTourItinerary = "/api/b2b/tour/get-tour-itinerary";
+            public const string SearchTourV2 = "/api/b2b/tour/search-tour-v2";
 
         }
         public class Data

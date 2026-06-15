@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     tour_index.Initialization();
 
 })
@@ -20,7 +20,8 @@ var tour_index = {
             var start_point= $('#from').find(':selected').val()
             var end_point= $('#to').find(':selected').val()
             var type = tour_index.GetTourType()
-            window.location.href = '/tour/tim-kiem?start='
+            //window.location.href = '/tour/tim-kiem?start='
+            window.location.href = '/Tour/SearchV2?start='
                 + (start_point == undefined || isNaN(parseInt(start_point)) || parseInt(start_point) < -1 ? '-1' : parseInt(start_point))
                 + '&end=' + (end_point == undefined || isNaN(parseInt(end_point)) || parseInt(end_point) < -1 ? '-1' : parseInt(end_point))
                 + '&type=' + (type == undefined || isNaN(parseInt(type)) || parseInt(type) < 1 ? '1' : parseInt(type))

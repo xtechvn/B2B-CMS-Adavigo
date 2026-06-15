@@ -1,0 +1,231 @@
+@using ADAVIGO_FRONTEND.Models.Tour.TourListing
+@using LIB.Utilities.Common
+@{
+    ViewData["Title"] = "Tìm kiếm Tour V2";
+    int? start = (int?)ViewBag.Start;
+    int? end = (int?)ViewBag.End;
+    int? type = (int?)ViewBag.Type;
+    TourListingResponseExtensionV2 listing = (TourListingResponseExtensionV2)ViewBag.List;
+    string domain = (string)ViewBag.StaticDomain;
+}
+<input id="filter-url" style="display:none;"
+       data-start="@(start == null ? "" : ((int)start).ToString())"
+       data-end="@(end == null ? "" : ((int)end).ToString())"
+       data-type="@(type == null ? "" : ((int)type).ToString())" />
+<section class="main-container clearfix">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Tìm kiếm Tour</li>
+    </ol>
+    <div class="mb-3">
+        <h2 class="title-cate">Danh sách tour</h2>
+    </div>
+    <!-- Filter Bar -->
+    <div class="bg-white radius_10 pd-20 mb-20">
+        <div class="row align-items-center">
+            <div class="col-md-2 mb-2 mb-md-0">
+                <div class="">
+                    <input type="text" id="fromdate" class="datepicker-input form-control" placeholder="Từ ngày">
+                </div>
+            </div>
+            <div class="col-md-2 mb-2 mb-md-0">
+                <div class="">
+                    
+                    <input type="text" id="todate" class="datepicker-input form-control" placeholder="Đến ngày">
+                </div>
+            </div>
+            <div class="col-md-2 mb-2 mb-md-0">
+                <div class="i">
+                    <select id="month" class="form-control" style="width:100%">
+                        <option value="0">Tháng khởi hành</option>
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            <option value="@i">Tháng @i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+             <div class="col-md-2 mb-2 mb-md-0">
+                <div class="">
+                    <select id="to" class="form-control" style="width:100%">
+                    
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 mb-2 mb-md-0" style="display:none;">
+                <div class="">
+                    <input type="text" id="tourname" placeholder="Nhập tên tour hoặc mã tour..." class="form-control">
+                </div>
+            </div>
+            <div class="col-md-2 mb-2 mb-md-0" style="display:none;">
+                <div class="">
+                    <select id="from" class="form-control" style="width:100%;display:none;">
+                    
+                    </select>
+                </div>
+            </div>
+           
+            
+        </div>
+        <div class="row align-items-center mt-2">
+            <div class="col-md-6">
+                <div class="d-flex gap-3">
+                    <label class="confir_res square mb-0">
+                        No shopping
+                        <input type="checkbox" id="noShopping" value="1">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="confir_res square mb-0" style="margin-left: 10px;">
+                        Ngày lễ / Tết
+                        <input type="checkbox" id="isHoliday" value="1">
+                        <span class="checkmark"></span>
+                    </label>
+                   
+                </div>
+            </div>
+            <div class="col-md-6 text-right">
+                <button id="btn-search" class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Header -->
+    
+
+    <!-- Tour List -->
+    <div id="tour-list">
+        @if (listing.data != null && listing.data.Count > 0)
+        {
+            <div class="flex space-between align-items-center mb-20">
+                <div class="bold">Tìm thấy @(listing.data?.Count ?? 0) tour</div>
+    
+             </div>
+            foreach (var item in listing.data)
+            {
+                <div class="bg-white radius_10 mb-16 pd-20">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a class="thumb_img thumb_5x3" href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id">
+                                <img class="img-responsive" src="@(item.avatar.Contains(domain) ? item.avatar : domain + item.avatar)" alt="@item.tourName">
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="title_new mb-2">
+                                <a href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id">
+                                    @item.tourName
+                                </a>
+                            </h4>
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                @if(item.isAllowDepositOnline == 1)
+                                {
+                                    <span class="badge badge-warning">No Shopping</span>
+                                }
+                                @if(item.isAllowReserveOnline == 1)
+                                {
+                                    <span class="badge badge-success"> Ngày lễ / tết</span>
+                                }
+                              
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex gap-3">
+                                        <span><svg class="icon-svg">
+                                    <use xlink:href="/images/icons/icon.svg#clock"></use>
+                                </svg> 
+                                @item.days ngày @(item.days - 1) đêm</span>
+                                </div>
+                            </div>
+                       
+                        </div>
+                        <div class="col-md-3">
+                            <div>
+                                <h5 class="bold mb-2">KHỞI HÀNH</h5>
+                                <div class="mb-1">
+                                    @if (item.startDate.HasValue)
+                                    {
+                                        <div>@item.startDate.Value.ToString("dd/MM/yyyy HH:mm") (@item.startDate.Value.ToString("ddd", new System.Globalization.CultureInfo("vi-VN")))</div>
+                                    }
+                                </div>
+                                @if (item.endDate.HasValue)
+                                {
+                                    <div class="mb-2">@item.endDate.Value.ToString("dd/MM/yyyy HH:mm") (@item.endDate.Value.ToString("ddd", new System.Globalization.CultureInfo("vi-VN")))</div>
+                                }
+                                
+                                <div class="small">
+                                    @if (item.goTransportType == 1) { <i class="fa fa-plane mr-1"></i> }
+                                    else if (item.goTransportType == 2) { <i class="fa fa-train mr-1"></i> }    
+                                    else { <i class="fa fa-bus mr-1"></i> }
+                        
+                                    @item.goTransportProvider @item.goStartPointName → @item.goEndPointName @item.goDepartureDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                </div>
+                                <div class="small">
+                                    @if (item.returnTransportType == 1) { <i class="fa fa-plane mr-1"></i> }
+                                    else if (item.returnTransportType == 2) { <i class="fa fa-train mr-1"></i> }        
+                                    else { <i class="fa fa-bus mr-1"></i> }
+                                    @item.returnTransportProvider @item.returnStartPointName → @item.returnEndPointName @item.returnDepartureDate.Value.ToString("dd/MM/yyyy HH:mm")    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">  
+                            <div class="mb-1">
+                                <span class="text-gray">Giá từ</span>
+                                <div class="price color-red fs-20">
+                                    <strong>@item.minPrice?.ToString("N0")đ</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 ">
+                          
+                            <div class="mb-1">
+                                <span class="text-gray">Còn chỗ</span>
+                                <div class="bold">@item.availableQuantity</div>
+                                <div class="small">/ @item.total <span class="text-gray"> khách</span></div>
+                            </div>
+                        
+                        </div>
+                        <div class=" ">
+                          
+                            <div class="mb-1">
+                                <span class="text-gray">Trạng thái</span>
+                                
+                            </div>
+                            <div class="mb-1">
+                                @if(@item.availableQuantity > 0)
+                                {
+                                    <span class="badge badge-success">Còn chỗ</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-red">Hết chỗ</span>
+                                }
+                            </div>
+                        </div>
+                         <div class="col-md-1 text-right">                        
+                            <a class="btn btn-primary" href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id">Xem chi tiết tour →</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="search-null center mb40">
+                <div class="mb24">
+                    <img src="/images/graphics/icon-search.png" alt="">
+                </div>
+                <h2 class="title txt_24">Không tìm thấy kết quả</h2>
+                <div class="gray">Chúng tôi không tìm thấy thông tin mà bạn cần, vui lòng thử lại</div>
+            </div>
+        }
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="center mb40" style="display:none;">
+        
+        <div>Đang tải thêm...</div>
+    </div>
+</section>
+@section scripts {
+    <script type="text/javascript" src="~/js/modules/tour/constants.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/global.js"></script>
+    <script type="text/javascript" src="~/js/modules/tour/searchV2.js"></script>
+}

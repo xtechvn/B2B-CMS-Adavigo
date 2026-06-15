@@ -1,4 +1,4 @@
-﻿using ADAVIGO_FRONTEND.Controllers.Tour.Bussiness;
+using ADAVIGO_FRONTEND.Controllers.Tour.Bussiness;
 using ADAVIGO_FRONTEND.Infrastructure.Utilities.Constants;
 using ADAVIGO_FRONTEND.Infrastructure.Utilities.Helpers;
 using ADAVIGO_FRONTEND.Infrastructure.Utilities.Settings;
@@ -15,11 +15,14 @@ using B2B.Utilities.Contants;
 using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Requests.Abstractions;
@@ -53,11 +56,11 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
         {
             return View();
         }
-        public async Task<IActionResult> Search(int? start=null, int? end=null, int? type=null,int index=1)
+        public async Task<IActionResult> Search(int? start = null, int? end = null, int? type = null, int index = 1)
         {
-            ViewBag.Start = start; 
-            ViewBag.End=end;
-            ViewBag.Type=type;
+            ViewBag.Start = start;
+            ViewBag.End = end;
+            ViewBag.Type = type;
             ViewBag.List = new TourListingResponseExtension();
             ViewBag.StartPoint = new List<int>();
             ViewBag.StaticDomain = _configuration["API_UPLOAD_IMAGE"];
@@ -66,14 +69,17 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                 //-- memory_cache:
                 var cacheKey = CacheKeys.TourLocationStart + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(new
                 {
-                    start,end,type,index
+                    start,
+                    end,
+                    type,
+                    index
                 }));
                 TourListingResponseExtension listing = new TourListingResponseExtension();
                 // Đặt khóa cho cache
                 if (_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
                 {
                     ViewBag.List = result;
-                    listing = JsonConvert.DeserializeObject<TourListingResponseExtension> (JsonConvert.SerializeObject(result));
+                    listing = JsonConvert.DeserializeObject<TourListingResponseExtension>(JsonConvert.SerializeObject(result));
                 }
                 else
                 {
@@ -99,14 +105,94 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                     //_cache.Set(cacheKey, detail, TimeSpan.FromSeconds(120));
                     listing = detail;
                 }
-                if (listing != null && listing.data != null && listing.data.Count > 0) {
+                ViewBag.StartPoint = new List<TourListingResponse>();
+                if (listing != null && listing.data != null && listing.data.Count > 0)
+                {
+                    List<TourListingResponse> data = (List<TourListingResponse>)listing.data;
+                    if (type == null || type == 1)
+                    {
+                        ViewBag.StartPoint = data.GroupBy(x => new { x.startpoint, x.groupendpoint1 }).Select(g => g.First()).ToList();
 
-                    ViewBag.StartPoint = listing.data.Select(x => x.startpoint).Distinct().ToList();
-                
+                    }
+                    else
+                    {
+                        ViewBag.StartPoint = data.GroupBy(x => new { x.startpoint2, x.groupendpoint2 }).Select(g => g.First()).ToList();
+                    }
+
                 }
             }
-            catch (Exception ex) { 
-            
+            catch (Exception ex)
+            {
+
+            }
+            return View();
+        }
+        public async Task<IActionResult> SearchV2(int? start = null, int? end = null, int? type = null, int index = 1, int month = 0, string tourname = "",string fromdate="",string todate="", int? noShopping = null, int? isHoliday = null, int? holdSlot = null)
+        {
+            ViewBag.Start = start;
+            ViewBag.End = end;
+            ViewBag.Type = type;
+            ViewBag.List = new TourListingResponseExtensionV2();
+            ViewBag.StartPoint = new List<int>();
+            ViewBag.StaticDomain = _configuration["API_UPLOAD_IMAGE"];
+            try
+            {
+                //-- memory_cache:
+                var cacheKey = CacheKeys.TourLocationStartV2 + EncryptionHelper.MD5Hash(JsonConvert.SerializeObject(new
+                {
+                    start,
+                    end,
+                    type,
+                    index,
+                    month,
+                    tourname,
+                    fromdate,
+                    todate,
+                    noShopping,
+                    isHoliday,
+                    holdSlot
+                }));
+                TourListingResponseExtensionV2 listing = new TourListingResponseExtensionV2();
+                // Đặt khóa cho cache
+                if (_cache.TryGetValue(cacheKey, out var result)) // Kiểm tra xem có trong cache không
+                {
+                    ViewBag.List = result;
+                    listing = JsonConvert.DeserializeObject<TourListingResponseExtensionV2>(JsonConvert.SerializeObject(result));
+                }
+                else
+                {
+                    var TaskModel = _AccountService.GetDetail().Result;
+                    TourListingRequestV2 request = new TourListingRequestV2()
+                    {
+                        month = month,
+                        fromdate = fromdate,
+                        todate = todate,
+                        endpoint = (end == null ? -1 : (int)end),
+                        startpoint = (start == null ? -1 : (int)start),
+                        tourtype = (type == null ? 1 : (int)type),
+                        tourname = tourname,
+                        pageindex = index,
+                        pagesize = 20,
+                        noShopping = noShopping,
+                        isHoliday = isHoliday,
+                        holdSlot = holdSlot
+                    };
+                    var detail = await _adavigoTourService.SearchTourV2(request);
+                    if (detail.data != null && detail.data.Count > 0)
+                    {
+                        var listIMG = detail.data.Select(s => s.avatar).ToList();
+                        detail.listimages = listIMG;
+                    }
+                    ViewBag.List = detail;
+                    // Lưu vào cache với thời gian hết hạn 
+                    //_cache.Set(cacheKey, detail, TimeSpan.FromSeconds(120));
+                    listing = detail;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
             }
             return View();
         }
@@ -151,7 +237,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             }
             return Ok(result);
         }
-        public IActionResult Detail( string slug = "", int id = 0)
+        public IActionResult Detail(string slug = "", int id = 0)
         {
             var TaskModel = _AccountService.GetDetail().Result;
             if (id <= 0)
@@ -190,9 +276,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             }
             return View();
         }
-        public async Task<IActionResult> Order(int? id=null, long? package=null)
+        public async Task<IActionResult> Order(int? id = null, long? package = null)
         {
-            if(id==null || package == null|| id <=0 || package <= 0)
+            if (id == null || package == null || id <= 0 || package <= 0)
             {
                 return Redirect("Error");
 
@@ -204,15 +290,15 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             {
                 var TaskModel = await _AccountService.GetDetail();
                 ViewBag.UserManager = TaskModel;
-                var detail = await  _adavigoTourService.GetTourDetail(new TourDetailRequest()
+                var detail = await _adavigoTourService.GetTourDetail(new TourDetailRequest()
                 {
-                    tour_id=(int)id,
+                    tour_id = (int)id,
                     type = TaskModel.client_type
                 });
                 if (detail != null)
                 {
                     ViewBag.Detail = detail;
-                    if(detail.data!=null && detail.data.packages!=null && detail.data.packages.Count > 0)
+                    if (detail.data != null && detail.data.packages != null && detail.data.packages.Count > 0)
                     {
                         ViewBag.Package = detail.data.packages.FirstOrDefault(x => x.Id == (long)package);
                     }
@@ -254,7 +340,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
 
                 var booking_id = await _adavigoTourService.SaveBooking(BookingRequest);
                 model.bookingId = booking_id.data;
-                 //_MemoryCache.Set(model.bookingId, model, TimeSpan.FromMinutes(30));
+                //_MemoryCache.Set(model.bookingId, model, TimeSpan.FromMinutes(30));
                 return new JsonResult(new
                 {
                     isSuccess = true,
@@ -270,7 +356,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             }
 
         }
-        public async Task<IActionResult> Payment(string booking,string order_no)
+        public async Task<IActionResult> Payment(string booking, string order_no)
         {
             ViewBag.Data = new TourPaymentModel();
             ViewBag.Fund = new FundDataModel();
@@ -291,11 +377,12 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                 {
                     ViewBag.Data = model;
                 }
-                if(order_no != null && order_no.Trim()=="")
+                if (order_no != null && order_no.Trim() == "")
                 {
                     ViewBag.OrderNo = order_no;
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
 
             }
@@ -411,7 +498,7 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             });
         }
         [HttpPost]
-        public async Task<IActionResult> GetListTourItinerary(string  id)
+        public async Task<IActionResult> GetListTourItinerary(string id)
         {
             try
             {
@@ -422,8 +509,8 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
                     {
                         isSuccess = true,
                         data = data.data,
-                        
-                    }); 
+
+                    });
                 }
 
             }
@@ -434,9 +521,9 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour
             return new JsonResult(new
             {
                 isSuccess = false,
-               
+
             });
         }
     }
-    
+
 }

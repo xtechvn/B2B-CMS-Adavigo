@@ -18,7 +18,7 @@
         BreadcumbItem: ` <li class="breadcrumb-item {active}"><a href="{url}">{name}</a></li>`,
         Breadcumb: `<ol class="breadcrumb">{items}</ol>`,
         Option: `<option value="{value}">{text}</option>`,
-
+        OptionSelected: `<option selected value="{value}">{text}</option>`,
         StarTemplate: '<svg class="icon-svg"> <use xlink:href="/images/icons/icon.svg#star"> </use> </svg>',
         SearchTourDetailItem: `
 

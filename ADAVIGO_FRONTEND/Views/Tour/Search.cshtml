@@ -6,7 +6,7 @@
     int? end = (int?)ViewBag.End;
     int? type = (int?)ViewBag.Type;
     TourListingResponseExtension listing = (TourListingResponseExtension)ViewBag.List;
-    List<int> start_point = (List<int>)ViewBag.StartPoint;
+    List<TourListingResponse> start_point = (List<TourListingResponse>)ViewBag.StartPoint;
     int count = 0;
     string domain = (string)ViewBag.StaticDomain;
 }
@@ -173,27 +173,30 @@
                 {
                     foreach (var s in start_point)
                     {
-                        var list_by_start = listing.data.Where(x => x.startpoint == s);
-                        if (list_by_start != null && list_by_start.Count() > 0)
+                        var list_by_start = new List<TourListingResponse>();
+                        if (listing.data != null && listing.data.Count() > 0)
                         {
                             <div class="header-title mb16">
                                 @switch (type)
                                 {
                                     case 1:
                                         {
-                                            <h2 class="title-cate">Khởi hành từ @listing.data[0].startpoint1 - @listing.data[0].endpoint1</h2>
+                                            list_by_start = listing.data.Where(x => x.startpoint1.Trim().Equals( s.startpoint1.Trim()) && x.groupendpoint1.Trim().Equals( s.groupendpoint1.Trim())).ToList();
+                                            <h2 class="title-cate">Khởi hành từ @s.startpoint1 - @s.groupendpoint1</h2>
 
                                         }
                                         break;
                                     case 2:
                                         {
-                                            <h2 class="title-cate">Khởi hành từ @listing.data[0].startpoint2 - @listing.data[0].endpoint2</h2>
+                                            list_by_start = listing.data.Where(x => x.startpoint2.Trim().Equals(s.startpoint2.Trim()) && x.groupendpoint2.Trim().Equals( s.groupendpoint2.Trim())).ToList();
+                                            <h2 class="title-cate">Khởi hành từ @s.startpoint2 - @s.groupendpoint2</h2>
 
                                         }
                                         break;
                                     case 3:
                                         {
-                                            <h2 class="title-cate">Khởi hành từ @listing.data[0].startpoint3 - @listing.data[0].endpoint3</h2>
+                                            list_by_start = listing.data.Where(x => x.startpoint3.Trim().Equals(s.startpoint3.Trim()) && x.groupendpoint3.Trim().Equals(s.groupendpoint3.Trim())).ToList();
+                                            <h2 class="title-cate">Khởi hành từ @s.startpoint3 - @s.groupendpoint3</h2>
 
                                         }
                                         break;
@@ -231,19 +234,19 @@
                                             {
                                                 case 1:
                                                     {
-                                                        @listing.data[0].groupendpoint1
+                                                        @item.groupendpoint1
 
                                                     }
                                                     break;
                                                 case 2:
                                                     {
-                                                        @listing.data[0].groupendpoint2
+                                                        @item.groupendpoint2
 
                                                     }
                                                     break;
                                                 case 3:
                                                     {
-                                                        @listing.data[0].groupendpoint3
+                                                        @item.groupendpoint3
 
                                                     }
                                                     break;

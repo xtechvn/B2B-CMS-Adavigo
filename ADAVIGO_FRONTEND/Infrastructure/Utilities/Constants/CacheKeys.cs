@@ -11,6 +11,7 @@ namespace ADAVIGO_FRONTEND.Infrastructure.Utilities.Constants
         public const string Airlines = "airlines";
         public const string VinToken = "VinToken";
         public const string TourLocationStart = "TourLocationStart";
+        public const string TourLocationStartV2 = "TourLocationStartV2";
         public const string TourLocationEnd = "TourLocationEnd";
     }
 }

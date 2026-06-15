@@ -611,5 +611,42 @@ namespace ADAVIGO_FRONTEND.Controllers.Tour.Bussiness
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<TourListingResponseExtensionV2> SearchTourV2(TourListingRequestV2 requestObj)
+        {
+            try
+            {
+                TourListingResponseExtensionV2 result = null;
+
+                var data = JsonConvert.SerializeObject(requestObj);
+
+                var token = AdavigoHelper.Encode(data, _configuration["SecretKey:b2b"]);
+                var request = new[]
+                {
+                    new KeyValuePair<string, string>("token", token),
+                };
+
+                var url = TourConstants.AdavigoApiRoutes.SearchTourV2;
+                HttpResponseMessage response = await _httpClient.PostAsync(url, new FormUrlEncodedContent(request));
+
+                var stringResult = "";
+                if (response.IsSuccessStatusCode)
+                {
+                    stringResult = await response.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<TourListingResponseExtensionV2>(stringResult);
+                    if (result.status != 0)
+                    {
+                        await SendExceptionLogTele(TourConstants.AdavigoApiRoutes.SearchTourV2, "API Call Not Success Token [" + token + "]: " + stringResult);
+
+                    }
+
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await SendExceptionLogTele(TourConstants.AdavigoApiRoutes.SearchTourV2, ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

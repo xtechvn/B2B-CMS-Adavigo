@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADAVIGO_FRONTEND.Models.Common;
 using ADAVIGO_FRONTEND_B2C.Models;
+using Newtonsoft.Json;
 
 namespace ADAVIGO_FRONTEND.Models.Tour.TourListing
 {
@@ -62,6 +63,117 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourListing
         public long packageId { get; set; }
         public string bookingId { get; set; }
 
+
+    }
+    public class TourListingResponseV2
+    {
+
+        public long id { get; set; }
+
+
+        public string tourName { get; set; }
+
+   
+        public string avatar { get; set; }
+
+
+        public int? days { get; set; }
+
+  
+        public int? star { get; set; }
+
+
+        public int? status { get; set; }
+
+      
+        public long tourDepartureId { get; set; }
+
+
+        public DateTime? startDate { get; set; }
+
+
+        public DateTime? endDate { get; set; }
+
+
+        public int? total { get; set; }
+
+ 
+        public int bookedQuantity { get; set; }
+
+        public int availableQuantity { get; set; }
+
+    
+        public DateTime? dookingDeadline { get; set; }
+
+
+        public decimal? minPrice { get; set; }
+
+ 
+        public string destinationNames { get; set; }
+
+
+        public int? goTransportType { get; set; }
+
+        public string goTransportName { get; set; }
+
+        public string goTransportProvider { get; set; }
+
+
+        public string goTransportCode { get; set; }
+
+
+        public DateTime? goDepartureDate { get; set; }
+
+
+        public string goStartPoint { get; set; }
+
+
+        public string goStartPointName { get; set; }
+
+
+        public string goEndPoint { get; set; }
+
+
+        public string goEndPointName { get; set; }
+
+
+        public int? returnTransportType { get; set; }
+
+
+        public string returnTransportName { get; set; }
+
+
+        public string returnTransportProvider { get; set; }
+
+
+        public string returnTransportCode { get; set; }
+
+
+        public DateTime? returnDepartureDate { get; set; }
+
+
+        public string returnStartPoint { get; set; }
+
+
+        public string returnStartPointName { get; set; }
+
+
+        public string returnEndPoint { get; set; }
+
+        public string returnEndPointName { get; set; }
+
+
+        public int? remainDay { get; set; }
+
+
+        public int totalRow { get; set; }
+        public int isAllowDepositOnline { get; set; }
+        public int isAllowReserveOnline { get; set; }
+
+    }
+    public class TourListingResponseExtensionV2 : BaseObjectResponse<List<TourListingResponseV2>>
+    {
+        public List<string> listimages { get; set; }
 
     }
 }
