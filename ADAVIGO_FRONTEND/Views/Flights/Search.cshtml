@@ -47,13 +47,14 @@
                         <tr class="bg-light">
                             <th style="width: 50px;" class="text-center">STT</th>
                             <th>HÀNH TRÌNH</th>
-                            <th class="text-right">GIÁ DL</th>
-                            <th class="text-center">SL</th>
+                       
                             <th class="text-center">ĐỘ DÀI</th>
                             <th class="text-center">SHCB</th>
                             <th class="text-center">NGÀY ĐI</th>
                             <th class="text-center">SHCB(V)</th>
                             <th class="text-center">NGÀY VỀ</th>
+                            <th class="text-right">GIÁ DL</th>
+                            <th class="text-center">SL</th>
                             <th class="text-center" style="width: 100px;">THAO TÁC</th>
                         </tr>
                     </thead>
@@ -67,21 +68,9 @@
                             <tr>
                                 <td class="text-center">@innerStt</td>
                                 <td>
-                                    <span class="text-muted small">@item.Airline</span>
-                                    <div class="badge badge-light border text-primary mb-1 cursor-pointer">@item.FlightPNRCodeGo</div><br />
-                                    @if (item.FundType == 1)
-                                    {
-                                        <span class="badge badge-light border text-primary mb-1 cursor-pointer">Quỹ mềm</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-light border cursor-pointer">Quỹ cứng</span>
-                                    }
+                                    @item.RouteName
                                 </td>
-                                <td class="text-right">
-                                    <div class="bold green">@item.AmountDL</div>
-                                </td>
-                                <td class="text-center font-weight-bold">@item.TotalTicket</td>
+                 
                                 <td class="text-center">@item.TotalDay</td>
                                 <td class="text-center">@item.FlightCodeGo</td>
                                 <td class="text-center">
@@ -91,9 +80,13 @@
                                 <td class="text-center">
                                     @(item.ReturnDate != DateTime.MinValue ? item.ReturnDate.ToString("dd/MM/yyyy HH:mm") : "---")
                                 </td>
+                                <td class="text-right">
+                                    <div class="bold green">@item.AmountDL</div>
+                                </td>
+                                <td class="text-center font-weight-bold">@item.TotalTicket</td>
                                 <td class="text-center">
                                     <a class="text-info cursor-pointer" title="Xem chi tiết" onclick="index_b2b.ViewDetail('@item.Id', this)"><i class="fa fa-eye" style="font-size: 18px;"></i> Xem chi tiết</a>
-                                    <a class="text-info cursor-pointer" title="Giữ chỗ" onclick="index_b2b.HoldBooking('@item.Id', '@item.AmountDL', '@item.CHDAmountDL', '@item.INFAmountDL')"><i class="fa fa-eye" style="font-size: 18px;"></i> Giữ chỗ</a>
+                                    <a class="text-info cursor-pointer" title="Giữ chỗ" onclick="index_b2b.HoldBooking('@item.Id', '@item.AmountDL', '@item.CHDAmountDL', '@item.INFAmountDL')"><i class="fa fa-shopping-cart" style="font-size: 18px;"></i> Giữ chỗ</a>
                                 </td>
                             </tr>
                         }

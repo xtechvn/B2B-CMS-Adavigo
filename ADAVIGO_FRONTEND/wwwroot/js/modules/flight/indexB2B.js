@@ -97,7 +97,7 @@ var index_b2b = {
                 html += `
                     <div class="col-md-3">
                         <h6 class="text-primary font-weight-bold mb-3">Thông tin tồn chỗ</h6>
-                        <p class="mb-2">Tổng số chỗ: <strong>${total}</strong> | Đã bán: <strong>${sold}</strong> | Đã giữ: <strong>${held}</strong> | Còn lại: <strong>${remain}</strong></p>
+                        <p class="mb-2">Số lượng vé: <strong>${remain}</strong></p>
                     </div>
                 `;
 
