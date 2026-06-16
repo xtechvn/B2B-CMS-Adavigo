@@ -455,7 +455,7 @@ $(".btn-confirm-done").click(function () {
             search: JSON.stringify(dataListFlightSearch),
             info: JSON.stringify(dataSubmit)
         };
-        var bookFlightRes = { ListBooking: [] };
+        var bookFlightRes = buildB2BBookingFlyData(bookData);
         var saveBookingObj = {
             booking_data: JSON.stringify(bookFlightRes),
             booking_order: JSON.stringify(bookData),
@@ -560,7 +560,12 @@ $(".btn-confirm-done").click(function () {
 
         // update search session
         sessionStorage.setItem(CONSTANTS.STORAGE.Search, JSON.stringify(dataListFlightSearch));
-
+        booking_session.go.Adt = parseInt($('#qty-adt').val()) || 0;
+        booking_session.go.Chd = parseInt($('#qty-chd').val()) || 0;
+        booking_session.go.Inf = parseInt($('#qty-inf').val()) || 0;
+        booking_session.back.Adt = parseInt($('#qty-adt').val()) || 0;
+        booking_session.back.Chd = parseInt($('#qty-inf').val()) || 0;
+        booking_session.back.Inf = parseInt($('#qty-inf').val()) || 0;
         var loggedUser = UTILS.getUserLogged();
         debugger;
         var saveBookingObj = {
@@ -663,6 +668,162 @@ function getInfoData() {
         }
     }
 }
+function buildB2BBookingFlyData(bookData) {
+    var search = dataListFlightSearch.search;
+    var prices = dataListFlightSearch.b2bPrices || {};
+    var session = dataListFlightSearch.Session || "";
+    var warehouseBookingCode = dataListFlightSearch.warehouseBookingCode || "";
+
+    function calcTotalAmount(fare) {
+        return (search.Adt * (prices.adt || fare.FareAdt || 0))
+            + (search.Child * (prices.chd || fare.FareChd || 0))
+            + (search.Baby * (prices.inf || fare.FareInf || 0));
+    }
+
+    function mapListFareDataSummary(fare) {
+        return {
+            FareDataId: fare.FareDataId || 0,
+            TotalPrice: calcTotalAmount(fare)
+        };
+    }
+
+    function mapSegments(segments, fare) {
+        if (!segments || !segments.length) return [];
+        return segments.map(function (seg, idx) {
+            return {
+                Id: idx + 1,
+                Airline: seg.Airline || fare.Airline || "B2B",
+                MarketingAirline: seg.MarketingAirline || seg.Airline || fare.Airline || "B2B",
+                OperatingAirline: seg.OperatingAirline || seg.Operating || "",
+                StartPoint: seg.StartPoint || search.StartPoint || "",
+                EndPoint: seg.EndPoint || search.EndPoint || "",
+                StartTime: seg.StartTime || seg.StartDate || new Date().toISOString(),
+                EndTime: seg.EndTime || seg.EndDate || new Date().toISOString(),
+                Duration: seg.Duration || "",
+                FlightNumber: seg.FlightNumber || "",
+                Plane: seg.Plane || "",
+                StartTerminal: seg.StartTerminal || null,
+                EndTerminal: seg.EndTerminal || null,
+                HasStop: !!seg.HasStop,
+                StopPoint: seg.StopPoint || null,
+                StopTime: seg.StopTime || null,
+                DayChange: !!seg.DayChange,
+                StopOvernight: !!seg.StopOvernight,
+                ChangeStation: !!seg.ChangeStation,
+                ChangeAirport: !!seg.ChangeAirport,
+                LastItem: idx === segments.length - 1,
+                Cabin: seg.Cabin || "",
+                Class: seg.Class || (fare.ListFlight && fare.ListFlight[0] ? fare.ListFlight[0].FareClass : "") || "",
+                HandBaggage: seg.HandBaggage || "",
+                AllowanceBaggage: seg.AllowanceBaggage || ""
+            };
+        });
+    }
+
+    function mapFareData(fare, leg) {
+        var total = calcTotalAmount(fare);
+        var adavigoPrice = fare.AdavigoPrice || {};
+        return {
+            FareDataId: fare.FareDataId || 0,
+            ListFlight: (fare.ListFlight || []).map(function (f) {
+                var firstSeg = f.ListSegment && f.ListSegment[0];
+                return {
+                    Airline: fare.Airline || "B2B",
+                    Operating: f.Operating || "",
+                    StartPoint: search.StartPoint || "",
+                    Leg: f.Leg != null ? f.Leg : leg,
+                    EndPoint: search.EndPoint || "",
+                    StartDate: f.StartDate || (firstSeg && firstSeg.StartTime) || new Date().toISOString(),
+                    EndDate: f.EndDate || (firstSeg && firstSeg.EndTime) || new Date().toISOString(),
+                    FlightNumber: firstSeg ? firstSeg.FlightNumber : (f.FlightValue || ""),
+                    Duration: f.Duration || 0,
+                    StopNum: f.StopNum || 0,
+                    FlightValue: f.FlightValue || "",
+                    ListSegment: mapSegments(f.ListSegment, fare),
+                    NoRefund: false,
+                    GroupClass: f.GroupClass || "",
+                    FareClass: f.FareClass || "",
+                    SeatRemain: f.SeatRemain || 0
+                };
+            }),
+            Leg: leg,
+            Adt: search.Adt,
+            Chd: search.Child,
+            Inf: search.Baby,
+            FareAdt: prices.adt || fare.FareAdt || 0,
+            FareChd: prices.chd || fare.FareChd || 0,
+            FareInf: prices.inf || fare.FareInf || 0,
+            TaxAdt: fare.TaxAdt || 0,
+            TaxChd: fare.TaxChd || 0,
+            TaxInf: fare.TaxInf || 0,
+            FeeAdt: fare.FeeAdt || 0,
+            FeeChd: fare.FeeChd || 0,
+            FeeInf: fare.FeeInf || 0,
+            ServiceFeeAdt: fare.ServiceFeeAdt || 0,
+            ServiceFeeChd: fare.ServiceFeeChd || 0,
+            ServiceFeeInf: fare.ServiceFeeInf || 0,
+            TotalNetPrice: total,
+            TotalServiceFee: fare.TotalServiceFee || 0,
+            TotalDiscount: fare.TotalDiscount || 0,
+            TotalCommission: fare.TotalCommission || 0,
+            TotalPrice: total,
+            AdavigoPrice: {
+                price: adavigoPrice.price || prices.adt || 0,
+                amount: adavigoPrice.amount || prices.adt || 0,
+                price_id: adavigoPrice.price_id || 0,
+                profit: adavigoPrice.profit || 0
+            }
+        };
+    }
+
+    function buildBookingItem(fare, leg) {
+        var flight = fare.ListFlight && fare.ListFlight[0] ? fare.ListFlight[0] : {};
+        var seg = flight.ListSegment && flight.ListSegment[0] ? flight.ListSegment[0] : {};
+        var total = calcTotalAmount(fare);
+        var bookingCode = warehouseBookingCode || flight.FareClass || "";
+
+        return {
+            Status: "OK",
+            AutoIssue: false,
+            Airline: fare.Airline || "B2B",
+            BookingCode: bookingCode,
+            GdsCode: "",
+            Flight: seg.FlightNumber || flight.FlightValue || "",
+            Route: (search.StartPoint || "") + (search.EndPoint || ""),
+            ExpiryDate: new Date().toISOString(),
+            ExpiryTime: 0,
+            TimePurchase: new Date().toISOString(),
+            ResponseTime: 0,
+            Price: total,
+            Amount: total,
+            PriceId: fare.AdavigoPrice ? (fare.AdavigoPrice.price_id || 0) : 0,
+            Profit: fare.AdavigoPrice ? (fare.AdavigoPrice.profit || 0) : 0,
+            Difference: 0,
+            ListPassenger: bookData.ListPassenger || [],
+            ListFareData: [mapListFareDataSummary(fare)],
+            FareData: mapFareData(fare, leg),
+            Session: session
+        };
+    }
+
+    var listBooking = [];
+    var go = dataListFlightSearch.go;
+    var back = dataListFlightSearch.back;
+
+    if (!dataListFlightSearch.isTwoWayFare) {
+        listBooking.push(buildBookingItem(go, 0));
+    }  else {
+        listBooking.push(buildBookingItem(go, 0));
+        listBooking.push(buildBookingItem(back, 1));
+    }
+
+    return {
+        BookingId: 0,
+        OrderCode: warehouseBookingCode,
+        ListBooking: listBooking
+    };
+}
+
 // case not have booking code , bookflight fail
 function saveBookflightFailData() {
     var listFareData = [];

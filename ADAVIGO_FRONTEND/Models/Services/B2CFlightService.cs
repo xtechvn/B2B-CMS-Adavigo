@@ -543,7 +543,7 @@ namespace ADAVIGO_FRONTEND.Models.Services
                 var request = new[]
                 {
                     new KeyValuePair<string, string>("token", token),
-                    new KeyValuePair<string, string>("source_booking_type", "1")
+                    new KeyValuePair<string, string>("source_booking_type", "0")
                 };
 
                 var url = SystemConstants.AdavigoApiRoutes.GetBookingBySessionId;

@@ -247,6 +247,10 @@ namespace ADAVIGO_FRONTEND.Api
         [Route("payment")]
         public async Task<IActionResult> Payment(PaymentRequest request)
         {
+            if (request.order_id == null || request.order_id == 0)
+            {
+                request.event_status = 0;
+            }
             var result = await _adavigoService.Payment(request);
             return Ok(result);
         }

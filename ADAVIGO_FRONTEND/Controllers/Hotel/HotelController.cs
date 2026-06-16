@@ -1,6 +1,7 @@
 using ADAVIGO_FRONTEND.Models.Flights.TrackingVoucher;
 using ADAVIGO_FRONTEND.Models.Services;
 using ADAVIGO_FRONTEND.ViewModels;
+using B2B.Utilities.Common;
 using LIB.ENTITIES.ViewModels.Hotels;
 using LIB.Utilities.Common;
 using LIB.Utilities.Contants;
@@ -427,15 +428,19 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
             ViewBag.TotalDays = 0;
             if (cache_data != null)
             {
+
+                //LogHelper.InsertLogTelegram($"OrderV1 - (cache_data != null)");
                 model = cache_data;
                 model.orderToken = token;
-                if (model.arrivalDate != null)
-                {
-                    var FromDate = DateTime.Parse(model.arrivalDate);
-                    var ToDate = DateTime.Parse(model.departureDate);
-                    ViewBag.TotalDays = (ToDate - FromDate).TotalDays + 1;
-                }
-
+                //if (model.arrivalDate != null)
+                //{
+                //    LogHelper.InsertLogTelegram($"OrderV1 -  FromDate: {model.arrivalDate}  - ToDate{model.departureDate}");
+                //    var FromDate = DateTime.Parse(model.arrivalDate);
+                //    var ToDate = DateTime.Parse(model.departureDate);
+                //    ViewBag.TotalDays = (ToDate - FromDate).TotalDays + 1;
+                //    LogHelper.InsertLogTelegram($"OrderV1 -  FromDate: {FromDate}  - ToDate{ToDate}");
+                //}
+               
             }
             return View(model);
         }
@@ -561,8 +566,16 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                 {
                     hotelID = cache_data.hotelID,
                     hotelName = cache_data.hotelName,
-                    arrivalDate = DateTime.Parse(cache_data.arrivalDate),
-                    departureDate = DateTime.Parse(cache_data.departureDate),
+                    arrivalDate = DateTime.ParseExact(
+                                        cache_data.arrivalDate,
+                                        new[] { "dd/MM/yyyy", "MM/dd/yyyy", "yyyy-MM-dd" },
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None),
+                    departureDate = DateTime.ParseExact(
+                                        cache_data.departureDate,
+                                        new[] { "dd/MM/yyyy", "MM/dd/yyyy", "yyyy-MM-dd" },
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None) ,
                     numberOfRoom = cache_data.rooms.Count(),
                     numberOfAdult = cache_data.rooms.Sum(s => s.adult),
                     numberOfChild = cache_data.rooms.Sum(s => s.child),
@@ -607,8 +620,16 @@ namespace ADAVIGO_FRONTEND.Controllers.Hotel
                     {
                         hotelID = cache_data.hotelID,
                         hotelName = cache_data.hotelName,
-                        arrivalDate = DateTime.Parse(cache_data.arrivalDate),
-                        departureDate = DateTime.Parse(cache_data.departureDate),
+                        arrivalDate = DateTime.ParseExact(
+                                        cache_data.arrivalDate,
+                                        new[] { "dd/MM/yyyy", "MM/dd/yyyy", "yyyy-MM-dd" },
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None),
+                        departureDate = DateTime.ParseExact(
+                                        cache_data.departureDate,
+                                        new[] { "dd/MM/yyyy", "MM/dd/yyyy", "yyyy-MM-dd" },
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None),
                         numberOfRoom = cache_data.rooms.Count(),
                         numberOfAdult = cache_data.rooms.Sum(s => s.adult),
                         numberOfChild = cache_data.rooms.Sum(s => s.child),
