@@ -184,10 +184,26 @@ window.updateB2BQty = function(type, delta) {
     input.val(newVal);
     
     // Update dataListFlightSearch
-    if (type === 'adt') dataListFlightSearch.search.Adt = newVal;
-    if (type === 'chd') dataListFlightSearch.search.Child = newVal;
-    if (type === 'inf') dataListFlightSearch.search.Baby = newVal;
-    
+    if (type === 'adt') {
+        dataListFlightSearch.go.Adt = dataListFlightSearch.back.Adt = dataListFlightSearch.search.Adt = newVal;
+    } 
+    if (type === 'chd') {
+        dataListFlightSearch.go.Chd = dataListFlightSearch.back.Adt = dataListFlightSearch.search.Child = newVal;
+    } 
+    if (type === 'inf') {
+        dataListFlightSearch.go.Inf = dataListFlightSearch.back.Adt = dataListFlightSearch.search.Baby = newVal;
+} 
+    var adt = parseInt($('#qty-adt').val()) || 0;
+    var chd = parseInt($('#qty-chd').val()) || 0;
+    var inf = parseInt($('#qty-inf').val()) || 0;
+
+    var adtPrice = dataListFlightSearch.b2bPrices.adt || 0;
+    var chdPrice = dataListFlightSearch.b2bPrices.chd || 0;
+    var infPrice = dataListFlightSearch.b2bPrices.inf || 0;
+
+    var total = (adt * adtPrice) + (chd * chdPrice) + (inf * infPrice);
+    dataListFlightSearch.go.TotalPrice = dataListFlightSearch.back.TotalPrice = total;
+
     sessionStorage.setItem(CONSTANTS.STORAGE.Search, JSON.stringify(dataListFlightSearch));
     
     // Re-render
