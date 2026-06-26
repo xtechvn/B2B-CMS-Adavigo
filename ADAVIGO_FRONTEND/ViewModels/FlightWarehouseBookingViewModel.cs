@@ -19,6 +19,7 @@ namespace ADAVIGO_FRONTEND.ViewModels
         public string FlightCodeBack { get; set; }
         public DateTime ReturnDate { get; set; }
         public string Airline { get; set; }
+        public string Airlinelogo { get; set; }
         public int TotalRow { get; set; }
 
         public string TripTypeName { get; set; }

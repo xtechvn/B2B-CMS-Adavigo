@@ -1,0 +1,135 @@
+@using ADAVIGO_FRONTEND.Models.Tour.TourOrders
+@model TourOrderDetailResponse
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng tour";
+}
+
+<section class="tab-menu-folder">
+    <a href="/TourBooking/Index">Đơn hàng</a>
+    <span class="tab-separator">/</span>
+    <a href="#" class="active">Chi tiết đơn hàng</a>
+</section>
+
+<section class="main-container clearfix">
+    <div class="order-detail-header mb24">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <h2 class="order-detail-title">
+                Chi tiết đơn hàng:
+                <span class="color-blue">@(Model?.orderNo ?? "—")</span>
+            </h2>
+            <a href="/TourBooking/Index" class="btn btn-default">
+                ← Quay lại danh sách
+            </a>
+        </div>
+    </div>
+
+    @if (Model == null || Model.orderId == 0)
+    {
+        <div class="search-null center mb40">
+            <p class="gray">Không tìm thấy thông tin đơn hàng.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive table-default bg-white mb24">
+            <table class="table table-nowrap" style="width:100%">
+                <caption>Thông tin đơn hàng</caption>
+                <tbody>
+                    <tr>
+                        <th style="width:220px">Mã đơn hàng</th>
+                        <td>@Model.orderNo</td>
+                    </tr>
+                    <tr>
+                        <th>Tên tour</th>
+                        <td>@Model.tourProductName</td>
+                    </tr>
+                    <tr>
+                        <th>Ngày khởi hành</th>
+                        <td>@Model.dateDeparture</td>
+                    </tr>
+                    <tr>
+                        <th>Số ngày</th>
+                        <td>@Model.Days ngày</td>
+                    </tr>
+                    <tr>
+                        <th>Trạng thái đơn hàng</th>
+                        <td>
+                            <span class="badge badge-status badge-status--@Model.orderStatus">
+                                @Model.orderStatusName
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Trạng thái thanh toán</th>
+                        <td>
+                            <span class="badge badge-status badge-status--@Model.paymentStatus">
+                                @Model.paymentStatusName
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Ngày đặt</th>
+                        <td>@Model.createTime.ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                    <tr>
+                        <th>Ngày khởi hành (startDate)</th>
+                        <td>@Model.startDate.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive table-default bg-white mb24">
+            <table class="table table-nowrap" style="width:100%">
+                <caption>Thông tin hành khách &amp; liên hệ</caption>
+                <tbody>
+                    <tr>
+                        <th style="width:220px">Tên khách hàng</th>
+                        <td>@Model.clientName</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@Model.email</td>
+                    </tr>
+                    <tr>
+                        <th>Số điện thoại</th>
+                        <td>@Model.phone</td>
+                    </tr>
+                    <tr>
+                        <th>Người lớn</th>
+                        <td>@Model.totalAdult</td>
+                    </tr>
+                    <tr>
+                        <th>Trẻ em</th>
+                        <td>@Model.totalChildren</td>
+                    </tr>
+                    <tr>
+                        <th>Em bé</th>
+                        <td>@Model.totalBaby</td>
+                    </tr>
+                    <tr>
+                        <th>Ghi chú</th>
+                        <td>@(string.IsNullOrWhiteSpace(Model.note) ? "—" : Model.note)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive table-default bg-white mb24">
+            <table class="table table-nowrap" style="width:100%">
+                <caption>Thông tin tài chính</caption>
+                <tbody>
+                    <tr>
+                        <th style="width:220px">Giá đại lý (amount)</th>
+                        <td><strong>@Model.amount.ToString("N0") đ</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Tổng tiền đơn hàng</th>
+                        <td><strong class="color-blue">@Model.orderAmount.ToString("N0") đ</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

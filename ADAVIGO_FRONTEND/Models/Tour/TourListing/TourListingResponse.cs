@@ -73,9 +73,10 @@ namespace ADAVIGO_FRONTEND.Models.Tour.TourListing
 
         public string tourName { get; set; }
 
-   
         public string avatar { get; set; }
-
+        public string tourCode { get; set; }
+        public string note { get; set; }
+        public string include { get; set; }
 
         public int? days { get; set; }
 

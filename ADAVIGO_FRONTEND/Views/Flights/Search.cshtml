@@ -46,8 +46,8 @@
                     <thead>
                         <tr class="bg-light">
                             <th style="width: 50px;" class="text-center">STT</th>
-                            <th>HÀNH TRÌNH</th>
-                       
+                            <th class="text-center">Hãng bay</th>
+                            <th>HÀNH TRÌNH</th>                          
                             <th class="text-center">ĐỘ DÀI</th>
                             <th class="text-center">SHCB</th>
                             <th class="text-center">NGÀY ĐI</th>
@@ -67,6 +67,27 @@
                             innerStt++;
                             <tr>
                                 <td class="text-center">@innerStt</td>
+                                <td>
+                                    @if (item.Airline != null && item.Airline != "")
+                                    {
+                                        @item.Airline
+                                        if (item.Airlinelogo!=null && item.Airlinelogo!="")
+                                        {
+                                            <img src="@item.Airlinelogo" alt="@item.Airline" style="height: 65px; margin-left: 5px;" />
+
+                                        }
+                                        else
+                                        {
+                                            <svg class="icon-svg" style="color:blue !important
+                    ">
+                                                <use xlink:href="/images/icons/icon.svg#flight"></use>
+                                            </svg>
+                                        }
+                                      
+                                      
+                                    }
+                                   
+                                </td>
                                 <td>
                                     @item.RouteName
                                 </td>

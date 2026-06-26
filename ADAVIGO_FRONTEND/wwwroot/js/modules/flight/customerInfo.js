@@ -391,17 +391,17 @@ $('.btn-next-step').on('click', function () {
                 fieldsError.push($(fieldsRequired[i]));
             }
             else {
-                // validate name must have 2 word
-                if ($(fieldsRequired[i]).hasClass("form-control-CMND")) {
-                    var fieldsRequiredId = $(fieldsRequired[i]).prop("id");
-                    if (fieldsRequiredId != "firstName" && fieldsRequiredId != "lastName") {
-                        var getFirstAndLastName = UTILS.getFristAndLastName(fieldVal);
-                        if (!getFirstAndLastName.lastName) {
-                            fieldsError.push($(fieldsRequired[i]));
-                            $(fieldsRequired[i]).closest('.form-group').find('.error-field').text("Vui lòng nhập họ và tên có 2 từ trở lên!")
-                        }
-                    }
-                }
+                // validate name CMND  must have 2 word
+                //if ($(fieldsRequired[i]).hasClass("form-control-CMND")) {
+                //    var fieldsRequiredId = $(fieldsRequired[i]).prop("id");
+                //    if (fieldsRequiredId != "firstName" && fieldsRequiredId != "lastName") {
+                //        var getFirstAndLastName = UTILS.getFristAndLastName(fieldVal);
+                //        if (!getFirstAndLastName.lastName) {
+                //            fieldsError.push($(fieldsRequired[i]));
+                //            $(fieldsRequired[i]).closest('.form-group').find('.error-field').text("Vui lòng nhập họ và tên có 2 từ trở lên!")
+                //        }
+                //    }
+                //}
             }
         }
 
@@ -425,25 +425,31 @@ $('.btn-next-step').on('click', function () {
                 fieldsError.push($(fieldBirthday[i]));
             }
         }
-
-        // scroll to error or submit
-        if (fieldsError.length) {
-            fieldsError.forEach(function (field) {
-                field.closest('.form-group').find('.error-field').addClass('has-error');
-            })
-            $('html, body').animate({
-                scrollTop: $(".error-field.has-error").eq(0).offset().top - 100
-            }, 500);
-        } else {
-            // check end time waiting booking
-            var checkEndTimeBooking = UTILS.checkEndTimeBooking();
-            if (!checkEndTimeBooking) {
-                // confirm
-                UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm)
-            }
-            else
-                UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.myModalExpired)
+        var checkEndTimeBooking = UTILS.checkEndTimeBooking();
+        if (!checkEndTimeBooking) {
+            // confirm
+            UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm)
         }
+        else
+            UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.myModalExpired)
+        // scroll to error or submit
+        //if (fieldsError.length) {
+        //    fieldsError.forEach(function (field) {
+        //        field.closest('.form-group').find('.error-field').addClass('has-error');
+        //    })
+        //    $('html, body').animate({
+        //        scrollTop: $(".error-field.has-error").eq(0).offset().top - 100
+        //    }, 500);
+        //} else {
+        //    // check end time waiting booking
+        //    var checkEndTimeBooking = UTILS.checkEndTimeBooking();
+        //    if (!checkEndTimeBooking) {
+        //        // confirm
+        //        UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.customerInfoConfirm)
+        //    }
+        //    else
+        //        UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.myModalExpired)
+        //}
     }
     else {
         UTILS.toggleModal(CONSTANTS.FLIGHTS.MODAL.myModalExpired)

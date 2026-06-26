@@ -1,5 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Quản lý đơn hàng vé máy bay";
+@{
+    ViewData["Title"] = "Quản lý đơn hàng Tour";
 }
 
 <section class="tab-menu-folder">
@@ -12,34 +12,47 @@
             <form autocomplate="off" onsubmit="return false;">
                 <input id="input_search" type="text" class="input_search bg-white onclick-togle active" name="" value="" placeholder="Nhập mã đơn hàng hoặc từ khóa cần tìm ...">
                 <span class="search-btn">
-                    <button type="button" onclick="getDataAndRenderPage()">
+                    <button type="button" onclick="">
                         <svg class="icon-svg">
                             <use xlink:href="../images/icons/icon.svg#search"></use>
                         </svg>
                     </button>
                 </span>
             </form>
-     @*        <button type="button" class="btn_reset">×</button> *@
+          @*   <button type="button" class="btn_reset">×</button> *@
         </div>
         <div id="orderHistoryTotal" class="gray mb16" style="padding-left:16px"></div>
     </div>
 
-    <div class="search-null center mb40">
+    <div class="search-null center mb40" style="display: none;">
         <div class="mb24">
             <img src="~/images/icons/loading.png" alt="">
         </div>
-        
-    </div>   
+    </div>
 
-    <div class="listOrders"></div>
-    <ul class="pagination justify-end mb40">
-    </ul>
+    <div class="table-responsive table-default bg-white mb24">
+        <table class="table table-nowrap" border="1">
+            <caption>
+                Danh sách đơn hàng tour
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col">Mã booking</th>
+                    <th scope="col">Tên tour</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Giá đại lý</th>
+                </tr>
+            </thead>
+            <tbody id="listOrders">
+            </tbody>
+        </table>
+    </div>
 </section>
 
 
 
 @section scripts {
-    <script type="text/javascript" src="~/js/modules/flightBooking/index.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/modules/tourBooking/index.js" asp-append-version="true"></script>
 
 }
 

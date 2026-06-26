@@ -12,6 +12,125 @@
        data-start="@(start == null ? "" : ((int)start).ToString())"
        data-end="@(end == null ? "" : ((int)end).ToString())"
        data-type="@(type == null ? "" : ((int)type).ToString())" />
+
+<style>
+    .tour-table {
+        border: 1px solid #e8e8e8;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .tour-table table {
+        margin-bottom: 0;
+    }
+
+    .tour-table thead th {
+        background: #fafafa;
+        color: #17346b;
+        font-size: 13px;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 600;
+    }
+
+    .tour-table tbody td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .tour-code {
+        color: #2d5bd1;
+        font-weight: 600;
+    }
+
+    .price {
+        color: red;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .commission {
+        color: #2f66d7;
+        font-weight: 600;
+    }
+
+    .detail-row td {
+        padding: 0 !important;
+        background: #fff;
+    }
+
+    .detail-content {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1.2fr 1fr;
+        gap: 25px;
+        padding: 25px;
+        border-top: 1px solid #eee;
+        text-align: left;
+    }
+
+    .detail-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .summary-item {
+        color: #20a745;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .badge-custom {
+        display: inline-block;
+        background: #edf4ff;
+        color: #2f66d7;
+        padding: 8px 15px;
+        border-radius: 6px;
+    }
+
+    .detail-content ul {
+        padding-left: 18px;
+        margin: 0;
+    }
+
+    .detail-content li {
+        margin-bottom: 10px;
+    }
+
+    .flight-title {
+        color: #2d5bd1;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .book-btn {
+        background: #0d6efd;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 45px;
+        font-weight: 600;
+    }
+
+    .book-btn:hover {
+        background: #0b5ed7;
+    }
+
+    .note {
+        color: #555;
+    }
+
+    .action-link {
+        display: block;
+        color: #2d5bd1;
+        text-decoration: none;
+    }
+
+    .action-link:hover {
+        text-decoration: underline;
+    }
+</style>
 <section class="main-container clearfix">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
@@ -102,107 +221,156 @@
              </div>
             foreach (var item in listing.data)
             {
-                <div class="bg-white radius_10 mb-16 pd-20">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <a class="thumb_img thumb_5x3" href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id">
-                                <img class="img-responsive" src="@(item.avatar.Contains(domain) ? item.avatar : domain + item.avatar)" alt="@item.tourName">
-                            </a>
-                        </div>
-                        <div class="col-md-3">
-                            <h4 class="title_new mb-2">
-                                <a href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id">
+                <div class="tour-table mb-4">
+                    <table class="table table-bordered align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>MÃ TOUR</th>
+                                <th>HÀNH TRÌNH TOUR</th>
+                                <th>THỜI GIAN</th>
+                                @* <th>HÃNG BAY</th> *@
+                                <th>NGÀY KHỞI HÀNH</th>
+                                <th>NGÀY KẾT THÚC</th>
+                                <th>GIÁ TOUR</th>
+                                <th>SỐ CHỖ CÒN</th>
+                                <th>THAO TÁC</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr class="tour-item">
+                                <td>@(listing.data.IndexOf(item) + 1)</td>
+
+                                <td>
+                                    @item.tourCode
+                                </td>
+
+                                <td class="text-left">
                                     @item.tourName
-                                </a>
-                            </h4>
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                @if(item.isAllowDepositOnline == 1)
-                                {
-                                    <span class="badge badge-warning">No Shopping</span>
-                                }
-                                @if(item.isAllowReserveOnline == 1)
-                                {
-                                    <span class="badge badge-success"> Ngày lễ / tết</span>
-                                }
-                              
-                            </div>
-                            <div class="mb-3">
-                                <div class="d-flex gap-3">
-                                        <span><svg class="icon-svg">
-                                    <use xlink:href="/images/icons/icon.svg#clock"></use>
-                                </svg> 
-                                @item.days ngày @(item.days - 1) đêm</span>
-                                </div>
-                            </div>
-                       
-                        </div>
-                        <div class="col-md-3">
-                            <div>
-                                <h5 class="bold mb-2">KHỞI HÀNH</h5>
-                                <div class="mb-1">
-                                    @if (item.startDate.HasValue)
-                                    {
-                                        <div>@item.startDate.Value.ToString("dd/MM/yyyy HH:mm") (@item.startDate.Value.ToString("ddd", new System.Globalization.CultureInfo("vi-VN")))</div>
-                                    }
-                                </div>
-                                @if (item.endDate.HasValue)
-                                {
-                                    <div class="mb-2">@item.endDate.Value.ToString("dd/MM/yyyy HH:mm") (@item.endDate.Value.ToString("ddd", new System.Globalization.CultureInfo("vi-VN")))</div>
-                                }
-                                
-                                <div class="small">
-                                    @if (item.goTransportType == 1) { <i class="fa fa-plane mr-1"></i> }
-                                    else if (item.goTransportType == 2) { <i class="fa fa-train mr-1"></i> }    
-                                    else { <i class="fa fa-bus mr-1"></i> }
-                        
-                                    @item.goTransportProvider @item.goStartPointName → @item.goEndPointName @item.goDepartureDate.Value.ToString("dd/MM/yyyy HH:mm")
-                                </div>
-                                <div class="small">
-                                    @if (item.returnTransportType == 1) { <i class="fa fa-plane mr-1"></i> }
-                                    else if (item.returnTransportType == 2) { <i class="fa fa-train mr-1"></i> }        
-                                    else { <i class="fa fa-bus mr-1"></i> }
-                                    @item.returnTransportProvider @item.returnStartPointName → @item.returnEndPointName @item.returnDepartureDate.Value.ToString("dd/MM/yyyy HH:mm")    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1">  
-                            <div class="mb-1">
-                                <span class="text-gray">Giá từ</span>
-                                <div class="price color-red fs-20">
-                                    <strong>@item.minPrice?.ToString("N0")đ</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1 ">
-                          
-                            <div class="mb-1">
-                                <span class="text-gray">Còn chỗ</span>
-                                <div class="bold">@item.availableQuantity</div>
-                                <div class="small">/ @item.total <span class="text-gray"> khách</span></div>
-                            </div>
-                        
-                        </div>
-                        <div class=" ">
-                          
-                            <div class="mb-1">
-                                <span class="text-gray">Trạng thái</span>
-                                
-                            </div>
-                            <div class="mb-1">
-                                @if(@item.availableQuantity > 0)
-                                {
-                                    <span class="badge badge-success">Còn chỗ</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-red">Hết chỗ</span>
-                                }
-                            </div>
-                        </div>
-                         <div class="col-md-1 text-right">                        
-                            <a class="btn btn-primary" href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id">Xem chi tiết tour →</a>
-                        </div>
-                    </div>
+                                </td>
+
+                                <td>
+                                    @item.days N @(item.days - 1) Đ
+                                </td>
+@* 
+                                <td>
+                                    @item.goTransportProvider
+                                </td> *@
+
+                                <td>
+                                    @(item.startDate?.ToString("dd/MM/yyyy"))
+                                </td>
+
+                                <td>
+                                    @(item.endDate?.ToString("dd/MM/yyyy"))
+                                </td>
+
+                                <td class="price">
+                                    @item.minPrice?.ToString("N0")
+                                </td>
+
+                                <td>
+                                    <span class="bold">
+                                        @item.availableQuantity
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a href="javascript:;" class="action-link toggle-detail">
+                                        Xem lịch trình
+                                    </a>
+
+                                   @* <a href="/tour/san-pham/@CommonHelper.RemoveUnicode(item.tourName).Trim().ToLower().Replace(" ","-")--@item.id" class="action-link mt-2">
+                                        Xem chi tiết
+                                    </a> *@ 
+
+                                    <a href="/tour/order?id=@item.id&package=@item.tourDepartureId"
+                                    class="btn btn-primary btn-sm mt-2" style="background: #0d6efd; border-color: #0d6efd;">
+                                        Đặt tour
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="detail-row" style="display:none;">
+                                <td colspan="10">
+                                    <div class="detail-content">
+                                        <!-- Lịch trình -->
+                                        <div>
+                                            <div class="detail-title">Lịch trình tóm tắt</div>
+                                            @if (item.note != null && !string.IsNullOrEmpty(item.note))
+                                            {
+                                                <div class="summary-item">
+                                                    <i class="fa-solid fa-paperclip"></i>
+                                                    <a href="@item.note" style="color: inherit; text-decoration: none;">Chi tiết lịch trình tour</a>
+                                                </div>
+                                            }
+
+                                            @if(item.isAllowDepositOnline == 1)
+                                            {
+                                                <div class="badge-custom mb-2">
+                                                    <i class="fa-solid fa-tag"></i> No shopping
+                                                </div>
+                                            }
+
+                                            @if(item.isAllowReserveOnline == 1)
+                                            {
+                                                <div class="badge-custom mb-2">
+                                                    <i class="fa-solid fa-tag"></i> Ngày lễ / tết
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <!-- Dịch vụ -->
+                                        <div class="service-tabs-container">
+                                            <div class="detail-title">Dịch vụ bao gồm</div>
+                                            
+                                            <ul class="dotted select-tab-tab tab-content-1" style="@(!(item == null || item.include == null || item.include.Trim() == "")?"":"display:none;")">
+                                                @(Html.Raw((item.include == null || item.include.Trim() == "" ? "" : item.include)))
+                                            </ul>
+                                           
+                                        </div>
+
+                                        <!-- Chuyến bay -->
+                                        <div>
+                                            <div class="detail-title">Thông tin chuyến bay / khách sạn</div>
+
+                                            <div class="flight-title">Chuyến đi</div>
+                                            <div>
+                                                @item.goTransportProvider &nbsp; @item.goStartPointName → @item.goEndPointName &nbsp; @(item.goDepartureDate?.ToString("dd/MM/yyyy HH:mm"))
+                                            </div>
+
+                                            <div class="flight-title mt-3">Chuyến về</div>
+                                            <div>
+                                                @item.returnTransportProvider &nbsp; @item.returnStartPointName → @item.returnEndPointName &nbsp; @(item.returnDepartureDate?.ToString("dd/MM/yyyy HH:mm"))
+                                            </div>
+                                        </div>
+
+                                        <!-- Ghi chú -->
+                                        <div class="d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="detail-title">Ghi chú</div>
+                                                <div class="note mb-3">
+                                                    @if(item.availableQuantity > 0)
+                                                    {
+                                                        <span class="badge badge-success" style="font-size: 14px;">Còn chỗ</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-danger" style="font-size: 14px;">Hết chỗ</span>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <a href="/tour/order?id=@item.id&package=@item.tourDepartureId" class="book-btn text-center text-white" style="text-decoration: none;">
+                                                <i class="fa-solid fa-calendar-days"></i> Đặt tour
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             }
         }

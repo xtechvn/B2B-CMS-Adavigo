@@ -81,6 +81,35 @@ var tour_search_v2 = {
                 tour_search_v2.LoadMoreTours(false);
             }
         });
+        
+        $('body').on('click', '.toggle-detail', function(e) {
+            e.preventDefault();
+            var tr = $(this).closest('tr.tour-item');
+            var detailRow = tr.next('.detail-row');
+            
+            // Toggle the display of the next row
+            detailRow.toggle();
+            
+            var icon = $(this).find('i.fa, i.fa-solid');
+            if(icon.length > 0) {
+                if(icon.hasClass('fa-angle-down') || icon.hasClass('fa-chevron-down')) {
+                    icon.removeClass('fa-angle-down fa-chevron-down').addClass('fa-angle-up');
+                } else if(icon.hasClass('fa-angle-up') || icon.hasClass('fa-chevron-up')) {
+                    icon.removeClass('fa-angle-up fa-chevron-up').addClass('fa-angle-down');
+                }
+            }
+        });
+
+        $('body').on('click', '.service-tabs-container .select-tab', function(e) {
+            e.preventDefault();
+            var container = $(this).closest('.service-tabs-container');
+            container.find('.select-tab').removeClass('active');
+            $(this).addClass('active');
+            
+            var id = $(this).attr('data-id');
+            container.find('.select-tab-tab').hide();
+            container.find('.tab-content-' + id).show();
+        });
         // Handle month change
         $('#month').on('change', function(e) {
             var month = $(this).val();

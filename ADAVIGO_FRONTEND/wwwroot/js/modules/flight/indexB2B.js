@@ -1,13 +1,52 @@
 $(document).ready(function () {
     index_b2b.init();
+    index_b2b.SetupInfiniteScroll();
 });
+let currentIndexFL = 2;
+let isLoadingFL = false;
+let hasMoreDataFL = true;
 var index_b2b = {
+
     init: function () {
         this.GetListFl();
         $('#search-departure').select2();
         $('#search-arrival').select2();
     },
+    SetupInfiniteScroll: function () {
+        $(window).scroll(function () {
+            if (!hasMoreDataFL || isLoadingFL) return;
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 200) {
+                isLoadingFL = true;
+                var obj = {
+                    BookingCode: $('#search-booking-code').val(),
+                    DeparturePoint: $('#search-departure').val() ? $('#search-departure').val().toString() : '',
+                    ArrivalPoint: $('#search-arrival').val() ? $('#search-arrival').val().toString() : '',
+                    Airline: $('#search-airline').val(),
+                    Date: $('#Date').val(),
+                    FundType: $('#search-fund-type').val(),
+                    pageIndex: currentIndexFL,
+                    pageSize: 20
+                };
+                _ajax_caller.post("/Flights/Search", { searchModel: obj }, function (result) {
+                    var $parsed = $(result);
+                    if (!result || $parsed.filter('.group-flight-container').length === 0 && $parsed.find('.group-flight-container').length === 0) {
+                        // Không còn data thực (chỉ có block "Không có dữ liệu")
+                        hasMoreDataFL = false;
+                    } else {
+                        $('#grid-data-b2b').append(result);
+                        currentIndexFL++;
+                    }
+                    isLoadingFL = false;
+                });
+            }
+        });
+    },
     GetListFl: function () {
+        // Reset trạng thái infinite scroll khi search lại
+        currentIndexFL = 2;
+        hasMoreDataFL = true;
+        isLoadingFL = false;
+
         var obj = {
             BookingCode: $('#search-booking-code').val(),
             DeparturePoint: $('#search-departure').val() ? $('#search-departure').val().toString() : '',
@@ -16,7 +55,7 @@ var index_b2b = {
             Date: $('#Date').val(),
             FundType: $('#search-fund-type').val(),
             pageIndex: 1,
-            pageSize: 10
+            pageSize: 20
         };
         _ajax_caller.post("/Flights/Search", { searchModel: obj }, function (result) {
             $('#grid-data-b2b').html(result);

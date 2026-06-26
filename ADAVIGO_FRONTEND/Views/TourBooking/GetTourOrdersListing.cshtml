@@ -1,0 +1,27 @@
+@{
+    Layout = null;
+}
+
+@using ADAVIGO_FRONTEND.Models.Tour.TourOrders
+
+@model List<TourOrderListingResponseData>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td><a class="cursor-pointer" href="/TourBooking/TourOrderDetail/?id=@item.orderId"><span class="color-blue">@item.orderNo</span></a></td>
+            <td>@item.tourName</td>
+            <td>@item.orderStatusName</td>
+            <td><span>@item.amount.ToString("N0") đ</span></td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="empty-row">
+        <td colspan="4" class="center gray">Không có đơn hàng nào.</td>
+    </tr>
+}
+

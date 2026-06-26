@@ -111,7 +111,7 @@ function getOrderDetail(orderId) {
     window.location.href = CONSTANTS.FLIGHT_BOOKING.MVC.orderDetail + "?orderId=" + orderId;
 }
 
-getDataAndRenderPage();
+/*getDataAndRenderPage();*/
 function getDataAndRenderPage() {
     var request = {
         "source_type": 2,
@@ -193,4 +193,5 @@ $(document).ready(function () {
     $("body").removeClass("h-100vh");
     UTILS.removeLoading();
     $(".btn_reset").hide();
+    getDataAndRenderPage()
 })
