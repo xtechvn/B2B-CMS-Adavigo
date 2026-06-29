@@ -11,7 +11,7 @@
     foreach (var item in Model)
     {
         <tr>
-            <td><a class="cursor-pointer" href="/TourBooking/TourOrderDetail/?id=@item.orderId"><span class="color-blue">@item.orderNo</span></a></td>
+            <td><a class="cursor-pointer" href="/TourBooking/TourOrderDetail/?id=@item.tourId"><span class="color-blue">@item.orderNo</span></a></td>
             <td>@item.tourName</td>
             <td>@item.orderStatusName</td>
             <td><span>@item.amount.ToString("N0") đ</span></td>

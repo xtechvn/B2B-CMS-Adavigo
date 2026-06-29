@@ -12,10 +12,12 @@ namespace ADAVIGO_FRONTEND.Controllers.TourBooking
     public class TourBookingController : Controller
     {
         private readonly AdavigoTourService _adavigoTourService;
-        public TourBookingController(AdavigoTourService adavigoTourService)
+        private readonly AccountService _AccountService;
+        public TourBookingController(AdavigoTourService adavigoTourService, AccountService AccountService)
         {
            
             _adavigoTourService = adavigoTourService;
+            _AccountService = AccountService
           ;
         }
         public IActionResult Index()
@@ -24,6 +26,11 @@ namespace ADAVIGO_FRONTEND.Controllers.TourBooking
         }
         public async Task<IActionResult> GetTourOrdersListing(TourOrdersListingRequest model)
         {
+
+            var TaskModel = _AccountService.GetDetail();
+            var Account = TaskModel.Result;
+
+            model.account_id = Account.id;
             var data = await _adavigoTourService.GetTourOrdersListing(model);
             if (data != null)
             {
